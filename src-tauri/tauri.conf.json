@@ -12,9 +12,10 @@
   "app": {
     "windows": [
       {
-        "title": "velin",
+        "title": "Velin",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "decorations": false
       }
     ],
     "security": {

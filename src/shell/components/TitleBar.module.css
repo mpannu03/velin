@@ -1,0 +1,31 @@
+.window-btn {
+  width: 45px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  user-select: none;
+
+  color: #1f1f1f;
+}
+
+.window-btn:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.window-btn:active {
+  background-color: rgba(0, 0, 0, 0.16);
+}
+
+/* Close button */
+.window-btn-close:hover {
+  background-color: #e81123; /* Windows close red */
+  color: white;
+}
+
+.window-btn-close:active {
+  background-color: #c50f1f;
+}
