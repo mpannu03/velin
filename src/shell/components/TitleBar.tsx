@@ -1,7 +1,8 @@
 import { Group } from '@mantine/core';
 import { ControlButtons } from './ControlButtons';
+import { ReactNode } from 'react';
 
-export function TitleBar() {
+export function TitleBar(): ReactNode {
   return(
     <Group
     data-tauri-drag-region

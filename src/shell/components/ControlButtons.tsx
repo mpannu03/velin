@@ -2,8 +2,9 @@ import { Button, Group } from "@mantine/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useWindowMaximized } from "../hooks/useWindowMaximized";
 import { VscChromeClose, VscChromeMaximize, VscChromeMinimize, VscChromeRestore } from "react-icons/vsc";
+import { ReactNode } from "react";
 
-export function ControlButtons() {
+export function ControlButtons(): ReactNode {
   const appWindow = getCurrentWindow();
   const isMaximized = useWindowMaximized();
 
@@ -17,6 +18,7 @@ export function ControlButtons() {
         w="45"
         p="0"
         radius="0"
+        color="black"
         onClick={() => appWindow.minimize()}
       >
         <VscChromeMinimize />
@@ -26,6 +28,7 @@ export function ControlButtons() {
         w="45"
         p="0"
         radius="0"
+        color="black"
         onClick={() => appWindow.toggleMaximize()}
       >
         {isMaximized
@@ -37,6 +40,7 @@ export function ControlButtons() {
         w="45"
         p="0"
         radius="0"
+        color="black"
         style={{
           '--button-hover': 'var(--mantine-color-red-7)',
         }}

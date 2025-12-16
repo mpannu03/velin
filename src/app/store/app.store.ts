@@ -1,11 +1,12 @@
 import { create } from 'zustand';
-import { Screen } from '../screen';
+import { Screen } from '../';
 
 interface AppState {
   screen: Screen;
 
   goHome(): void;
-  openEditor(filePath: string): void;
+  openReader(filePath: string): void;
+  openModify(filePath: string): void;
   openTools(): void;
 }
 
@@ -14,8 +15,11 @@ export const useAppStore = create<AppState>((set) => ({
 
   goHome: () => set({ screen: { name: 'home' } }),
 
-  openEditor: (filePath) =>
-    set({ screen: { name: 'editor', filePath } }),
+  openReader: (filePath) =>
+    set({ screen: { name: 'reader', filePath } }),
+
+  openModify: (filePath) => 
+    set({ screen: { name: 'modify', filePath } }),
 
   openTools: () => set({ screen: { name: 'tools' } }),
 }));
