@@ -1,13 +1,13 @@
 import { ReactNode } from "react";
 import { Divider, Group, SegmentedControl, Stack, Text } from "@mantine/core";
-import { useAppStore } from "./store/app.store";
 import { SCREEN_COMPONENTS } from "./screens.registry";
-import { Screen } from './'
+import { Screen } from 'app/types'
 import { FiBookOpen, FiEdit, FiHome, FiTool } from "react-icons/fi";
+import { useScreenState } from "./store/screen.store";
 
 export function ScreenRouter(): ReactNode {
-  const router = useAppStore();
-  const screen = useAppStore((s) => s.screen);
+  const router = useScreenState();
+  const screen = useScreenState((s) => s.screen);
 
   const setScreen = (screenName: Screen['name']) => {
     switch (screenName) {

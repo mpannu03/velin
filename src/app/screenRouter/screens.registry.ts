@@ -1,5 +1,5 @@
-import { HomeScreen, ModifyScreen, ReaderScreen, ToolsScreen } from "../screens";
-import { Screen } from './';
+import { HomeScreen, ModifyScreen, ReaderScreen, ToolsScreen } from 'screens';
+import { Screen } from 'app/types';
 
 export const SCREEN_COMPONENTS: Record<Screen['name'], React.FC> = {
   home: HomeScreen,
