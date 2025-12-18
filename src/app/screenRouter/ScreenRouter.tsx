@@ -1,11 +1,11 @@
-import { ReactNode } from "react";
+import { JSX, ReactNode } from "react";
 import { Divider, Group, SegmentedControl, Stack, Text } from "@mantine/core";
 import { SCREEN_COMPONENTS } from "./screens.registry";
 import { Screen } from 'app/types'
 import { FiBookOpen, FiEdit, FiHome, FiTool } from "react-icons/fi";
 import { useScreenState } from "./store/screen.store";
 
-export function ScreenRouter(): ReactNode {
+export function ScreenRouter(): JSX.Element {
   const router = useScreenState();
   const screen = useScreenState((s) => s.screen);
 
@@ -84,7 +84,7 @@ type SegmentLabelProps = {
   label: string;
 };
 
-function SegmentLabel({ icon, label }: SegmentLabelProps): ReactNode {
+function SegmentLabel({ icon, label }: SegmentLabelProps): JSX.Element {
   return(
     <Group gap={6}>
       {icon}

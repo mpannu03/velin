@@ -1,10 +1,10 @@
-import React from "react";
+import { JSX, ReactNode } from "react";
 import { TitleBar } from "./components/TitleBar";
 import { AppShell } from "@mantine/core";
 
 export function ShellLayout(
-  { children }: { children?: React.ReactNode }
-) {
+  { children }: { children?: ReactNode }
+): JSX.Element {
   return (
     <AppShell
     header={{ height: 36 }}

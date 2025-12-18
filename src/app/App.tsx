@@ -1,11 +1,11 @@
 import '@mantine/core/styles.css';
 import { MantineProvider } from "@mantine/core";
-import { ShellLayout } from "../shell/ShellLayout";
+import { ShellLayout } from "@/shell/ShellLayout";
 import { velinTheme } from './theme/theme';
 import { ScreenRouter } from './screenRouter/ScreenRouter';
-import { ReactNode } from 'react';
+import { JSX } from 'react';
 
-export function App(): ReactNode {
+export function App(): JSX.Element {
   return(
     <MantineProvider
       theme={velinTheme}

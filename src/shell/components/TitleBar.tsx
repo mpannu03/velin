@@ -1,8 +1,9 @@
 import { Group } from '@mantine/core';
 import { ControlButtons } from './ControlButtons';
-import { ReactNode } from 'react';
+import { JSX } from 'react';
+import { PdfTabs } from './PdfTabs';
 
-export function TitleBar(): ReactNode {
+export function TitleBar(): JSX.Element {
   return(
     <Group
     data-tauri-drag-region
@@ -10,12 +11,12 @@ export function TitleBar(): ReactNode {
     h="36px"
     justify="space-between"
     align="center"
-    bg="gray.1"
+    bg="gray.2"
     style={{
       borderBottom: '1px solid var(--mantine-color-gray-3)',
     }}
     >
-      <Group></Group>
+      <PdfTabs />
       <ControlButtons />
     </Group>
   );

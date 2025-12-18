@@ -17,12 +17,18 @@ importers:
       '@mantine/core':
         specifier: ^8.3.10
         version: 8.3.10(@mantine/hooks@8.3.10(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      '@mantine/hooks':
+        specifier: ^8.3.10
+        version: 8.3.10(react@19.2.1)
       '@tabler/icons-react':
         specifier: ^3.35.0
         version: 3.35.0(react@19.2.1)
       '@tauri-apps/api':
         specifier: ^2
         version: 2.9.1
+      '@tauri-apps/plugin-dialog':
+        specifier: ~2.4.2
+        version: 2.4.2
       '@tauri-apps/plugin-opener':
         specifier: ^2
         version: 2.5.2
@@ -42,6 +48,9 @@ importers:
       '@tauri-apps/cli':
         specifier: ^2
         version: 2.9.5
+      '@types/node':
+        specifier: ^25.0.3
+        version: 25.0.3
       '@types/react':
         specifier: ^19.1.8
         version: 19.2.7
@@ -50,16 +59,16 @@ importers:
         version: 19.2.3(@types/react@19.2.7)
       '@vitejs/plugin-react':
         specifier: ^4.6.0
-        version: 4.7.0(vite@7.2.6)
+        version: 4.7.0(vite@7.2.6(@types/node@25.0.3))
       typescript:
         specifier: ~5.8.3
         version: 5.8.3
       vite:
         specifier: ^7.0.4
-        version: 7.2.6
+        version: 7.2.6(@types/node@25.0.3)
       vite-tsconfig-paths:
         specifier: ^6.0.1
-        version: 6.0.1(typescript@5.8.3)(vite@7.2.6)
+        version: 6.0.1(typescript@5.8.3)(vite@7.2.6(@types/node@25.0.3))
 
 packages:
 
@@ -1092,6 +1101,9 @@ packages:
     engines: {node: '>= 10'}
     hasBin: true
 
+  '@tauri-apps/plugin-dialog@2.4.2':
+    resolution: {integrity: sha512-lNIn5CZuw8WZOn8zHzmFmDSzg5zfohWoa3mdULP0YFh/VogVdMVWZPcWSHlydsiJhRQYaTNSYKN7RmZKE2lCYQ==}
+
   '@tauri-apps/plugin-opener@2.5.2':
     resolution: {integrity: sha512-ei/yRRoCklWHImwpCcDK3VhNXx+QXM9793aQ64YxpqVF0BDuuIlXhZgiAkc15wnPVav+IbkYhmDJIv5R326Mew==}
 
@@ -1109,6 +1121,9 @@ packages:
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
+
+  '@types/node@25.0.3':
+    resolution: {integrity: sha512-W609buLVRVmeW693xKfzHeIV6nJGGz98uCPfeXI1ELMLXVeKYZ9m15fAMSaUPBHYLGFsVRcMmSCksQOrZV9BYA==}
 
   '@types/react-dom@19.2.3':
     resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
@@ -1365,6 +1380,9 @@ packages:
     resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  undici-types@7.16.0:
+    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
 
   update-browserslist-db@1.2.2:
     resolution: {integrity: sha512-E85pfNzMQ9jpKkA7+TJAi4TJN+tBCuWh5rUcS/sv6cFi+1q9LYDwDI5dpUL0u/73EElyQ8d3TEaeW4sPedBqYA==}
@@ -3052,6 +3070,10 @@ snapshots:
       '@tauri-apps/cli-win32-ia32-msvc': 2.9.5
       '@tauri-apps/cli-win32-x64-msvc': 2.9.5
 
+  '@tauri-apps/plugin-dialog@2.4.2':
+    dependencies:
+      '@tauri-apps/api': 2.9.1
+
   '@tauri-apps/plugin-opener@2.5.2':
     dependencies:
       '@tauri-apps/api': 2.9.1
@@ -3079,6 +3101,10 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
+  '@types/node@25.0.3':
+    dependencies:
+      undici-types: 7.16.0
+
   '@types/react-dom@19.2.3(@types/react@19.2.7)':
     dependencies:
       '@types/react': 19.2.7
@@ -3087,7 +3113,7 @@ snapshots:
     dependencies:
       csstype: 3.2.3
 
-  '@vitejs/plugin-react@4.7.0(vite@7.2.6)':
+  '@vitejs/plugin-react@4.7.0(vite@7.2.6(@types/node@25.0.3))':
     dependencies:
       '@babel/core': 7.28.5
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.28.5)
@@ -3095,7 +3121,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-beta.27
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 7.2.6
+      vite: 7.2.6(@types/node@25.0.3)
     transitivePeerDependencies:
       - supports-color
 
@@ -3327,6 +3353,8 @@ snapshots:
 
   typescript@5.8.3: {}
 
+  undici-types@7.16.0: {}
+
   update-browserslist-db@1.2.2(browserslist@4.28.1):
     dependencies:
       browserslist: 4.28.1
@@ -3371,18 +3399,18 @@ snapshots:
     dependencies:
       react: 19.2.1
 
-  vite-tsconfig-paths@6.0.1(typescript@5.8.3)(vite@7.2.6):
+  vite-tsconfig-paths@6.0.1(typescript@5.8.3)(vite@7.2.6(@types/node@25.0.3)):
     dependencies:
       debug: 4.4.3
       globrex: 0.1.2
       tsconfck: 3.1.6(typescript@5.8.3)
     optionalDependencies:
-      vite: 7.2.6
+      vite: 7.2.6(@types/node@25.0.3)
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  vite@7.2.6:
+  vite@7.2.6(@types/node@25.0.3):
     dependencies:
       esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.3)
@@ -3391,6 +3419,7 @@ snapshots:
       rollup: 4.53.3
       tinyglobby: 0.2.15
     optionalDependencies:
+      '@types/node': 25.0.3
       fsevents: 2.3.3
 
   yallist@3.1.1: {}

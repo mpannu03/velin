@@ -2,9 +2,9 @@ import { Button, Group } from "@mantine/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useWindowMaximized } from "../hooks/useWindowMaximized";
 import { VscChromeClose, VscChromeMaximize, VscChromeMinimize, VscChromeRestore } from "react-icons/vsc";
-import { ReactNode } from "react";
+import { JSX } from "react";
 
-export function ControlButtons(): ReactNode {
+export function ControlButtons(): JSX.Element {
   const appWindow = getCurrentWindow();
   const isMaximized = useWindowMaximized();
 
