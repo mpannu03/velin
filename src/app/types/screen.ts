@@ -1,5 +1,5 @@
 export type Screen =
   | { name: 'home' }
-  | { name: 'reader'; filePath: string }
-  | { name: 'modify'; filePath: string}
+  | { name: 'reader' }
+  | { name: 'modify' }
   | { name: 'tools' };

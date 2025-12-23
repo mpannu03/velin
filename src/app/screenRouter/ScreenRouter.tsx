@@ -1,7 +1,7 @@
 import { JSX, ReactNode } from "react";
 import { Divider, Group, SegmentedControl, Stack, Text } from "@mantine/core";
 import { SCREEN_COMPONENTS } from "./screens.registry";
-import { Screen } from 'app/types'
+import { Screen } from '../types'
 import { FiBookOpen, FiEdit, FiHome, FiTool } from "react-icons/fi";
 import { useScreenState } from "./store/screen.store";
 
@@ -15,10 +15,10 @@ export function ScreenRouter(): JSX.Element {
         router.goHome();
         break;
       case 'reader':
-        router.openReader('');
+        router.openReader();
         break;
       case 'modify':
-        router.openModify('');
+        router.openModify();
         break;
       case 'tools':
         router.openTools();

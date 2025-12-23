@@ -1,27 +1,23 @@
-import { Screen } from "app/types";
+import { Screen } from "../../types";
 import { create } from "zustand";
 
 interface ScreenState {
   screen: Screen
 
   goHome(): void;
-  openReader(filePath: string): void;
-  openModify(filePath: string): void;
+  openReader(): void;
+  openModify(): void;
   openTools(): void;
 }
 
 export const useScreenState = create<ScreenState>((set) => ({
   screen: { name: 'home' },
-  tabs: [],
-  activeTabIf: null,
 
   goHome: () => set({ screen: { name: 'home' } }),
 
-  openReader: (filePath) =>
-    set({ screen: { name: 'reader', filePath } }),
+  openReader: () => set({ screen: { name: 'reader' } }),
 
-  openModify: (filePath) => 
-    set({ screen: { name: 'modify', filePath } }),
+  openModify: () =>  set({ screen: { name: 'modify' } }),
 
   openTools: () => set({ screen: { name: 'tools' } }),
 }));
