@@ -27,6 +27,8 @@ pdfium-render = "0.8.37"
 tokio = "1.48.0"
 parking_lot = "0.12.5"
 flume = "0.12.0"
+tauri-plugin-devtools = "2.0.0"
+once_cell = "1.21.3"
 
 [dependencies.uuid]
 version = "1.19.0"

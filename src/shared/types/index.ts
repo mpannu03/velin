@@ -1,2 +1,2 @@
-export type { PdfDocument } from './pdfDocument';
-export { createPdfDocument } from './pdfDocument';
+export type * from './pdf';
+export { createPdfDocument, createPdfViewerState, renderKeyToString } from './pdf';

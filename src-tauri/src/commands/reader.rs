@@ -1,7 +1,7 @@
 use flume::bounded;
 use tauri::State;
 
-use crate::{pdf::{document::PdfInfo, worker::PdfEvent}, state::AppState};
+use crate::{pdf::{document::PdfInfo, reader::render::RenderedPage, worker::PdfEvent}, state::AppState};
 
 #[tauri::command]
 pub fn open_pdf(state: State<AppState>, path: String) -> String {
@@ -20,18 +20,17 @@ pub fn render_page(
     id: String,
     page_index: u16,
     scale: f32,
-) -> Vec<u8> {
-    let binding = state
+) -> RenderedPage {
+    let manager = state
         .manager
         .read();
-    let worker = binding
-        .get(id)
-        .expect("Document not found");
+    let worker = manager.worker();
 
     let (tx, rx) = bounded(1);
 
     worker.sender().send(
         PdfEvent::Render {
+            id,
             page_index,
             scale,
             reply: tx,
@@ -43,17 +42,15 @@ pub fn render_page(
 
 #[tauri::command]
 pub fn get_pdf_info(state: State<AppState>, id: String) -> PdfInfo {
-    let binding = state
+    let manager = state
         .manager
         .read();
-    let worker = binding
-        .get(id)
-        .expect("Document not found");
+    let worker = manager.worker();
 
     let (tx, rx) = bounded(1);
 
     worker.sender().send(
-        PdfEvent::Info { reply: tx }
+        PdfEvent::Info { id, reply: tx }
     ).unwrap();
 
     rx.recv().unwrap()
@@ -61,5 +58,12 @@ pub fn get_pdf_info(state: State<AppState>, id: String) -> PdfInfo {
 
 #[tauri::command]
 pub fn close_pdf(state: State<AppState>, id: String) {
-    state.manager.write().close(id);
+    let manager = state
+        .manager
+        .read();
+    let worker = manager.worker();
+
+    worker.sender().send(
+        PdfEvent::Close { id }
+    ).unwrap();
 }

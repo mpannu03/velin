@@ -1,20 +1,20 @@
 import { ActionIcon, Divider, Group, Text } from "@mantine/core";
 import { JSX } from "react";
-import { usePdfTabs } from "@/shared/store";
 import { PdfDocument } from "@/shared/types";
 import { FiPlus, FiX } from "react-icons/fi";
 import { pickPdfFile } from "@/shared/services";
 import { useHover } from "@mantine/hooks";
+import { useDocumentsStore } from "@/app/store/documents.store";
 
 export function PdfTabs(): JSX.Element {
-  const pdfStore = usePdfTabs();
-  const tabs = usePdfTabs((s) => s.tabs);
+  const pdfStore = useDocumentsStore();
+  const docs = useDocumentsStore((s) => s.documents);
 
   const handleOpenPdf = async () => {
     const filePath = await pickPdfFile();
     if (!filePath) return;
 
-    pdfStore.openPdf(filePath);
+    pdfStore.open(filePath);
   }
 
   return(
@@ -22,9 +22,9 @@ export function PdfTabs(): JSX.Element {
       gap={0}
       h="100%"
     >
-      {tabs.map((tab) => (
-        <Group gap={0} h="100%">
-          <Tab key={tab.filePath} tab={tab} />
+      {Object.entries(docs).map(([key, doc]) => (
+        <Group key={key} gap={0} h="100%">
+          <Tab key={key} tab={doc} />
           <Divider
             orientation="vertical"
             my={4}
@@ -49,13 +49,13 @@ type TabProps = {
 
 function Tab({ tab }: TabProps): JSX.Element {
   const { hovered, ref } = useHover();
-  const pdfStore = usePdfTabs();
-  const selectedTab = usePdfTabs((s) => s.activeTab);
+  const pdfStore = useDocumentsStore();
+  const selectedTab = useDocumentsStore((s) => s.activeDocumentId);
 
   return(
     <Group
       ref={ref}
-      bg={selectedTab === tab.filePath
+      bg={selectedTab === tab.id
         ? "var(--mantine-color-body)"
         : hovered
           ? "var(--mantine-primary-color-light-hover)"
@@ -66,7 +66,7 @@ function Tab({ tab }: TabProps): JSX.Element {
       justify="space-between"
       align="center"
       pl="sm"
-      onClick={() => pdfStore.setActivePdf(tab.filePath)}
+      onClick={() => pdfStore.setActive(tab.id)}
       style={{
         cursor: "default",
         userSelect: "none",
@@ -88,7 +88,7 @@ function Tab({ tab }: TabProps): JSX.Element {
       </Text>
       <ActionIcon
         variant="subtle"
-        onClick={() => pdfStore.closePdf(tab.filePath)}
+        onClick={() => pdfStore.close(tab.id)}
       >
         <FiX />
       </ActionIcon>

@@ -4,7 +4,6 @@ use parking_lot::RwLock;
 use crate::pdf::manager::DocumentManager;
 
 /// Global application state shared across Tauri commands
-#[derive(Clone)]
 pub struct AppState {
     pub manager: Arc<RwLock<DocumentManager>>,
 }

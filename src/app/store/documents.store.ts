@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import { PdfDocument } from '@/shared/types/pdf';
 import { openPdf, closePdf } from '@/shared/tauri/reader';
+import { path } from '@tauri-apps/api';
 
 type DocumentsState = {
   documents: Record<string, PdfDocument>;
   activeDocumentId: string | null;
 
-  open: (path: string) => Promise<void>;
+  open: (filePath: string) => Promise<void>;
   close: (id: string) => Promise<void>;
   setActive: (id: string) => void;
 };
@@ -15,17 +16,18 @@ export const useDocumentsStore = create<DocumentsState>((set) => ({
   documents: {},
   activeDocumentId: null,
 
-  async open(path) {
-    const id = await openPdf(path);
+  async open(filePath) {
+    const id = await openPdf(filePath);
+    const title = await path.basename(filePath);
 
-    const title = path.split(/[\\/]/).pop() ?? 'Untitled';
+    // const title = filePath.split(/[\\/]/).pop() ?? 'Untitled';
 
     set(state => ({
       documents: {
         ...state.documents,
         [id]: {
           id,
-          filePath: path,
+          filePath,
           title,
         },
       },
