@@ -4,6 +4,7 @@ import { SCREEN_COMPONENTS } from "./screens.registry";
 import { Screen } from '../types'
 import { FiBookOpen, FiEdit, FiHome, FiTool } from "react-icons/fi";
 import { useScreenState } from "./store/screen.store";
+import { ReaderScreen } from "@/screens";
 
 export function ScreenRouter(): JSX.Element {
   const router = useScreenState();
@@ -74,6 +75,7 @@ export function ScreenRouter(): JSX.Element {
         />
       </Group>
       <Divider />
+      <ReaderScreen visible={screen.name === 'reader'} />
       <ScreenComponent />
     </Stack>
   );

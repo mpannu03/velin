@@ -1,5 +1,9 @@
-export function HomeScreen() {
+import { JSX } from "react";
+
+export function HomeScreen(): JSX.Element {
   return(
-    <div>Home Screen</div>
+    <div>
+      Home Screen
+    </div>
   );
 }
