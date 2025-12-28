@@ -19,7 +19,7 @@ pub fn render_page(
     state: State<AppState>,
     id: String,
     page_index: u16,
-    scale: f32,
+    target_width: i32,
 ) -> RenderedPage {
     let manager = state
         .manager
@@ -32,7 +32,7 @@ pub fn render_page(
         PdfEvent::Render {
             id,
             page_index,
-            scale,
+            target_width,
             reply: tx,
         }
     ).unwrap();

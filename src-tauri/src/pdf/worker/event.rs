@@ -12,7 +12,7 @@ pub enum PdfEvent {
     Render {
         id: DocumentId,
         page_index: u16,
-        scale: f32,
+        target_width: i32,
         reply: Sender<RenderedPage>,
     },
     Info {

@@ -4,8 +4,6 @@ use pdfium_render::prelude::{PdfDocument, PdfRenderConfig, Pdfium};
 
 use crate::pdf::{document::{DocumentId, PdfInfo}, reader::render::RenderedPage, worker::PdfEvent};
 
-type RenderKey = (DocumentId, u16, u32);
-
 pub struct PdfWorker {
     sender: Sender<PdfEvent>
 }
@@ -39,17 +37,17 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                     .expect("Failed to open PDF");
                 documents.insert(id, doc);
             }
-            PdfEvent::Render { id, page_index, scale, reply } => {
+            PdfEvent::Render { id, page_index, target_width, reply } => {
                 println!("rendering {}", {&id});
                 let document = documents.get(&id).unwrap();
                 let page = document.pages().get(page_index).unwrap();
 
-                let target_width = (page.width().value * scale) as i32;
-                let target_height = (page.height().value * scale) as i32;
+                // let target_width = (page.width().value * scale) as i32;
+                // let target_height = (page.height().value * scale) as i32;
 
                 let config = PdfRenderConfig::new()
-                    .set_target_width(target_width)
-                    .set_target_height(target_height);
+                    .set_target_width(target_width);
+                    // .set_target_height(target_height);
 
                 let bitmap = page.render_with_config(&config)
                     .expect("Rendering Error.");
