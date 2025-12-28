@@ -7,6 +7,21 @@ import { useScreenState } from "./store/screen.store";
 import { ReaderScreen } from "@/screens";
 
 export function ScreenRouter(): JSX.Element {
+  const screen = useScreenState((s) => s.screen);
+
+  const ScreenComponent = SCREEN_COMPONENTS[screen.name];
+
+  return(
+    <Stack
+      gap={0}
+    >
+      <ReaderScreen visible={screen.name === 'reader'} />
+      <ScreenComponent />
+    </Stack>
+  );
+};
+
+export function ScreenNavigationBar(): JSX.Element {
   const router = useScreenState();
   const screen = useScreenState((s) => s.screen);
 
@@ -27,8 +42,6 @@ export function ScreenRouter(): JSX.Element {
     }
   }
 
-  const ScreenComponent = SCREEN_COMPONENTS[screen.name];
-
   return(
     <Stack
       gap={0}
@@ -36,6 +49,7 @@ export function ScreenRouter(): JSX.Element {
       <Group
         py="4px"
         px="sm"
+        style={{ overflow: 'hidden' }}
       >
         <SegmentedControl
           w={400}
@@ -75,11 +89,9 @@ export function ScreenRouter(): JSX.Element {
         />
       </Group>
       <Divider />
-      <ReaderScreen visible={screen.name === 'reader'} />
-      <ScreenComponent />
     </Stack>
   );
-}
+};
 
 type SegmentLabelProps = {
   icon: ReactNode;
