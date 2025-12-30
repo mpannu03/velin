@@ -4,6 +4,7 @@ import { ShellLayout } from "@/shell/ShellLayout";
 import { velinTheme } from './theme/theme';
 import { ScreenRouter } from './screenRouter/ScreenRouter';
 import { JSX } from 'react';
+import './styles.css'
 
 export function App(): JSX.Element {
   return(
