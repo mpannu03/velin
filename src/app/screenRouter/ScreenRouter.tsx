@@ -14,9 +14,10 @@ export function ScreenRouter(): JSX.Element {
   return(
     <Stack
       gap={0}
+      style={{ overflow: 'hidden'}}
     >
-      <ReaderScreen visible={screen.name === 'reader'} />
       <ScreenComponent />
+      <ReaderScreen visible={screen.name === 'reader'} />
     </Stack>
   );
 };

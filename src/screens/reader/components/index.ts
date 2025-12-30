@@ -1,2 +1,2 @@
-export * from './PdfPageCanvas';
-export * from './PdfDocumentView';
+export * from './PdfPage';
+export * from './PdfView';

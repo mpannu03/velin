@@ -9,12 +9,12 @@ export const openPdf = async (path: string): Promise<string> => {
 export const renderPage = async (
   id: string,
   pageIndex: number,
-  scale: number
+  targetWidth: number
 ): Promise<RenderedPage> => {
   return invoke('render_page', {
     id,
     pageIndex,
-    scale,
+    targetWidth,
   });
 };
 

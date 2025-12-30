@@ -1,2 +1,2 @@
 export * from './usePdfPage';
-export * from './useActivePdfInfo';
+export * from './usePdfInfo';

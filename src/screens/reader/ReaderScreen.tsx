@@ -1,10 +1,7 @@
-import { ScrollArea, Center, Text } from '@mantine/core';
-import { useReaderStore } from './store';
 import { useDocumentsStore } from '@/app/store/documents.store';
-import { useActivePdfInfo } from './hooks';
-import { PdfDocumentView } from './components';
 import { JSX } from 'react';
 import { ScreenProps } from '../props';
+import { PdfView } from './components/PdfView';
 
 export function ReaderPlaceholder(): JSX.Element {
   return(
@@ -12,40 +9,30 @@ export function ReaderPlaceholder(): JSX.Element {
   );
 }
 
-export function ReaderScreen({ visible }: ScreenProps): JSX.Element {
-  // Tanstack virtualiser for large list
-  useActivePdfInfo();
-
-  const activeDocumentId = useDocumentsStore(
-    state => state.activeDocumentId
+export function ReaderScreen({ visible }: ScreenProps): JSX.Element {  
+  const documents = useDocumentsStore(
+    state => state.documents
   );
 
-  const info = useReaderStore(
-    state => activeDocumentId
-      ? state.pdfInfo[activeDocumentId]
-      : null
-  );
-
-  if (!activeDocumentId) {
+  if (Object.keys(documents).length === 0) {
     return (
-      <Center h="100%" style={{ display: visible ? 'block' : 'none' }}>
-        <Text>No document open</Text>
-      </Center>
-    );
-  }
-
-  if (!info) {
-    return (
-      <Center h="100%" style={{ display: visible ? 'block' : 'none' }}>
-        <Text>Loading document info…</Text>
-      </Center>
+      <div style={{ 
+        display: visible ? 'block' : 'none',
+      }}>No document opened.</div>
     );
   }
 
   return (
-    <ScrollArea type="auto" h="100%" bg="gray.1" style={{ display: visible ? 'block' : 'none' }}>
-      <PdfDocumentView docId={activeDocumentId} pageCount={info.page_count} />
-    </ScrollArea>
+    <div 
+      style={{ 
+        display: visible ? 'block' : 'none',
+        backgroundColor: '#f0f0f0',
+      }}
+    >
+      {Object.values(documents).map((doc) => (
+        <PdfView id={doc.id} />
+      ))}
+    </div>
   );
 }
 
