@@ -1,30 +1,19 @@
-// use crate::pdf::document::PdfDocument;
+use std::collections::HashMap;
 
-// /// Reads and caches the total page count of the document.
-// ///
-// /// Requires the PDF to be loaded via `loader::load_pdf`.
-// pub fn page_count(document: &mut PdfDocument) -> Result<u32, String> {
-//     // If already cached, return it
-//     if let Some(count) = document.page_count {
-//         return Ok(count);
-//     }
+use pdfium_render::prelude::PdfDocument;
 
-//     // Lock inner state for reading
-//     let inner = document.inner.read();
+use crate::pdf::{DocumentId, PdfInfo};
 
-//     let pdfium = inner
-//         .pdfiumHandle
-//         .as_ref()
-//         .ok_or("PDF is not loaded")?;
+pub fn get_info(
+    documents: &HashMap<DocumentId, PdfDocument>,
+    id: &DocumentId,
+) -> Result<PdfInfo, String> {
+    let document = documents
+        .get(id)
+        .ok_or("Document not found")?;
 
-//     // ---- pdfium usage placeholder ----
-//     // Later this will be:
-//     let count = pdfium.doc.pages().len() as u32;
-
-//     drop(inner); // explicit: release lock early
-
-//     // Cache result
-//     document.page_count = Some(count);
-
-//     Ok(count)
-// }
+    let page_count = document.pages().len();
+    let pdf_info = PdfInfo::new(page_count);
+    
+    Ok(pdf_info)
+}

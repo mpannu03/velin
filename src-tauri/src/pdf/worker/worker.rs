@@ -1,8 +1,8 @@
 use std::{collections::HashMap, thread};
 use flume::{Receiver, Sender};
-use pdfium_render::prelude::{PdfDocument, PdfRenderConfig, Pdfium};
+use pdfium_render::prelude::{PdfDocument, Pdfium};
 
-use crate::pdf::{document::{DocumentId, PdfInfo}, reader::render::RenderedPage, worker::PdfEvent};
+use crate::pdf::{document::DocumentId, reader, worker::PdfEvent};
 
 pub struct PdfWorker {
     sender: Sender<PdfEvent>
@@ -31,46 +31,21 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
 
     while let Ok(cmd) = rx.recv() {
         match cmd {
-            PdfEvent::Open { id, path } => {
-                let doc = pdfium
-                    .load_pdf_from_file(&path, None)
-                    .expect("Failed to open PDF");
-                documents.insert(id, doc);
+            PdfEvent::Open { id, path, reply } => {
+                let result = reader::open(id, &path, &mut documents, &pdfium);
+                let _ = reply.send(result);
             }
             PdfEvent::Render { id, page_index, target_width, reply } => {
-                println!("rendering {}", {&id});
-                let document = documents.get(&id).unwrap();
-                let page = document.pages().get(page_index).unwrap();
-
-                // let target_width = (page.width().value * scale) as i32;
-                // let target_height = (page.height().value * scale) as i32;
-
-                let config = PdfRenderConfig::new()
-                    .set_target_width(target_width);
-                    // .set_target_height(target_height);
-
-                let bitmap = page.render_with_config(&config)
-                    .expect("Rendering Error.");
-                // let bitmap = bitmap.as_raw_bytes();
-
-                let rendered_page = RenderedPage{
-                    width: bitmap.width(),
-                    height: bitmap.height(),
-                    pixels: bitmap.as_raw_bytes(),
-                };
-
-                reply.send(rendered_page).expect("Rendering Error.");
-                println!("sent {}", {id});
+                let result = reader::render_page(&documents, &id, page_index, target_width);
+                let _ = reply.send(result);
             },
             PdfEvent::Info {id, reply} => {
-                let document = documents.get(&id).unwrap();
-                let page_count = document.pages().len();
-                let pdf_info = PdfInfo::new(page_count);
-
-                reply.send(pdf_info).expect("Error loading info.");
-            }
-            PdfEvent::Close {id} => {
-                documents.remove(&id);
+                let result = reader::get_info(&documents, &id);
+                let _ = reply.send(result);
+            },
+            PdfEvent::Close {id, reply} => {
+                let result = reader::close(&mut documents, &id);
+                let _ = reply.send(result);
             },
         }
     }

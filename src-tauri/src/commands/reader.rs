@@ -1,17 +1,18 @@
 use flume::bounded;
 use tauri::State;
 
-use crate::{pdf::{document::PdfInfo, reader::render::RenderedPage, worker::PdfEvent}, state::AppState};
+use crate::{pdf::{document::PdfInfo, reader::RenderedPage, worker::PdfEvent}, state::AppState};
 
 #[tauri::command]
-pub fn open_pdf(state: State<AppState>, path: String) -> String {
+pub fn open_pdf(
+    state: State<AppState>, path: String
+) -> Result<String, String> {
     let id = state
         .manager
         .write()
-        .open(path.into())
-        .expect("Error Opening");
+        .open(path.into())?;
 
-    id
+    Ok(id)
 }
 
 #[tauri::command]
@@ -20,7 +21,7 @@ pub fn render_page(
     id: String,
     page_index: u16,
     target_width: i32,
-) -> RenderedPage {
+) -> Result<RenderedPage, String> {
     let manager = state
         .manager
         .read();
@@ -35,13 +36,14 @@ pub fn render_page(
             target_width,
             reply: tx,
         }
-    ).unwrap();
+    ).map_err(|e| format!("Error sending render command: {e}"))?;
 
-    rx.recv().unwrap()
+    rx.recv()
+        .map_err(|e| format!("Error receiving render result: {e}"))?
 }
 
 #[tauri::command]
-pub fn get_pdf_info(state: State<AppState>, id: String) -> PdfInfo {
+pub fn get_pdf_info(state: State<AppState>, id: String) -> Result<PdfInfo, String> {
     let manager = state
         .manager
         .read();
@@ -51,19 +53,25 @@ pub fn get_pdf_info(state: State<AppState>, id: String) -> PdfInfo {
 
     worker.sender().send(
         PdfEvent::Info { id, reply: tx }
-    ).unwrap();
+    ).map_err(|e| format!("Error sending pdf info command: {e}"))?;
 
-    rx.recv().unwrap()
+    rx.recv()
+        .map_err(|e| format!("Error receiving pdf info result: {e}"))?
 }
 
 #[tauri::command]
-pub fn close_pdf(state: State<AppState>, id: String) {
+pub fn close_pdf(state: State<AppState>, id: String) -> Result<(), String> {
     let manager = state
         .manager
         .read();
     let worker = manager.worker();
 
+    let (tx, rx) = bounded(1);
+
     worker.sender().send(
-        PdfEvent::Close { id }
-    ).unwrap();
+        PdfEvent::Close { id, reply: tx }
+    ).map_err(|e| format!("Error sending close command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving close result: {e}"))?
 }
