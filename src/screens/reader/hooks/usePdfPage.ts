@@ -1,6 +1,7 @@
 import { renderPage } from "@/shared/tauri";
 import { RenderedPage } from "../types"
 import { useEffect, useState } from "react";
+import { pdfRenderQueue } from "../renderer/pdfRendererQueue";
 
 type PdfPageState = {
   page: RenderedPage | null;
@@ -24,7 +25,7 @@ export function usePdfPage(
 
     setState({ page: null, error: null, loading: true});
 
-    renderPage(id, pageIndex, targetWidth).then((result) => {
+    pdfRenderQueue.enqueue(() => renderPage(id, pageIndex, targetWidth)).then((result) => {
       if (cancelled) return;
 
       if (result.ok) {

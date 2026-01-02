@@ -40,7 +40,9 @@ export function PdfPage({ id, pageIndex, onRendered }: PdfPageProps): JSX.Elemen
   }, [page]);
 
   if (loading) {
-    return <Center mb={16}><Loader /></Center>
+    return <Center mb={16}>
+      <Center w="250px" h="445px" bg="white"><Loader /></Center>
+    </Center>
   }
 
   if (error) {

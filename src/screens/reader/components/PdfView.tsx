@@ -26,6 +26,7 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
 
   return(
     <div
+      id="pdf-scroll-container"
       style={{
         height: "100vh",
         overflow: "auto",
@@ -33,11 +34,9 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
         display: activeDocumentId === id ? 'block' : 'none',
       }}
     >
-      {
-        info.page_count > 0 && Array.from({ length: info.page_count }).map((_, index) => (
-          <PdfPage key={index} id={id} pageIndex={index} />
-        ))
-      }
+      {Array.from({ length: info.page_count }).map((_, index) => (
+        <PdfPage key={index} id={id} pageIndex={index} />
+      ))}
     </div>
   );
 };
