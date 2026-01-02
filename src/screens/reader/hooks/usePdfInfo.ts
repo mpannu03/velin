@@ -2,31 +2,48 @@ import { fetchPdfInfo } from "@/shared/tauri";
 import { useEffect, useState } from "react";
 import { PdfInfo } from "@/shared/types";
 
+type PdfInfoState = {
+  info: PdfInfo | null;
+  error: string | null;
+  loading: boolean;
+}
+
 export function usePdfInfo(
   id: string,
 ) {
-  const [info, setInfo] = useState<PdfInfo | null>(null)
+  const [state, setState] = useState<PdfInfoState>({
+    info: null,
+    error: null,
+    loading: true,
+  });
 
   useEffect(() => {
     let cancelled = false
 
-    fetchPdfInfo(id)
-      .then((info) => {
-        if (!cancelled) {
-          setInfo(info)
-        }
-      })
-      .catch((err) => {
-        if (!cancelled) {
-          console.error("Failed to fetch PDF info", err)
-          setInfo(null)
-        }
-      })
+    setState({ info: null, error: null, loading: true });
+
+    fetchPdfInfo(id).then((result) => {
+      if (cancelled) return;
+
+      if (result.ok) {
+        setState({
+          info: result.data,
+          error: null,
+          loading: false,
+        });
+      } else {
+        setState({
+          info: null,
+          error: result.error,
+          loading: false,
+        });
+      }
+    });
 
     return () => {
       cancelled = true
     }
-  }, [id])
+  }, [id]);
 
-  return info
+  return state
 }

@@ -5,6 +5,7 @@ import { FiPlus, FiX } from "react-icons/fi";
 import { pickPdfFile } from "@/shared/services";
 import { useHover } from "@mantine/hooks";
 import { useDocumentsStore } from "@/app/store/documents.store";
+import { notifications } from "@mantine/notifications";
 
 export function PdfTabs(): JSX.Element {
   const pdfStore = useDocumentsStore();
@@ -12,9 +13,23 @@ export function PdfTabs(): JSX.Element {
 
   const handleOpenPdf = async () => {
     const filePath = await pickPdfFile();
-    if (!filePath) return;
+    if (!filePath) {
+      notifications.show({
+        title: "Error",
+        message: "Error Opening Pdf",
+      });
 
-    pdfStore.open(filePath);
+      return;
+    };
+
+    const result = await pdfStore.open(filePath);
+
+    if (!result.ok) {
+      notifications.show({
+        title: "Error Opening Pdf.",
+        message: result.error,
+      });
+    }
   }
 
   return(
@@ -52,6 +67,16 @@ function Tab({ tab }: TabProps): JSX.Element {
   const pdfStore = useDocumentsStore();
   const selectedTab = useDocumentsStore((s) => s.activeDocumentId);
 
+  const handleClosePdf = async (id: string) => {
+    const result = await pdfStore.close(id);
+      if (!result.ok) {
+        notifications.show({
+          title: "Error Closing Pdf.",
+          message: result.error,
+        });
+      }
+  }
+
   return(
     <Group
       ref={ref}
@@ -88,7 +113,7 @@ function Tab({ tab }: TabProps): JSX.Element {
       </Text>
       <ActionIcon
         variant="subtle"
-        onClick={() => pdfStore.close(tab.id)}
+        onClick={() => handleClosePdf(tab.id)}
       >
         <FiX />
       </ActionIcon>

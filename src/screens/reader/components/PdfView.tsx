@@ -2,6 +2,7 @@ import { JSX } from "react";
 import { PdfPage } from './PdfPage';
 import { useDocumentsStore } from "@/app";
 import { usePdfInfo } from "../hooks/usePdfInfo";
+import { Loader } from "@mantine/core";
 
 type PdfViewProps = {
   id: string;
@@ -9,7 +10,15 @@ type PdfViewProps = {
 
 export function PdfView({ id }: PdfViewProps): JSX.Element {
   const activeDocumentId = useDocumentsStore((s) => s.activeDocumentId);
-  const info = usePdfInfo(id);
+  const { info, error, loading } = usePdfInfo(id);
+
+  if (loading) {
+    return <Loader />
+  }
+
+  if (error) {
+    return <div>Loading Error: {error}</div>
+  }
 
   if (!info) {
     return <div>Loading PDF info...</div>;
