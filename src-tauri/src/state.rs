@@ -5,8 +5,8 @@
 //! behind an `Arc<RwLock<...>>` so it can be cloned and accessed concurrently
 //! from multiple threads or command handlers.
 
-use std::sync::Arc;
 use parking_lot::RwLock;
+use std::sync::Arc;
 
 use crate::pdf::manager::DocumentManager;
 
@@ -15,6 +15,7 @@ use crate::pdf::manager::DocumentManager;
 /// The `AppState` holds a shared `DocumentManager` wrapped in an `Arc` and
 /// protected by a `RwLock` for concurrent reads/writes. Handlers can clone
 /// the `Arc` or borrow the lock to access or modify documents.
+#[derive(Clone)]
 pub struct AppState {
     /// Shared `DocumentManager` instance protected by a `RwLock`.
     ///
