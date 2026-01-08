@@ -9,7 +9,7 @@ type PdfPageProps = {
 };
 
 export function PdfPage({ id, pageIndex, onRendered }: PdfPageProps): JSX.Element {
-  const { page, error, loading} = usePdfPage(id, pageIndex, 500);
+  const { page, error, loading } = usePdfPage(id, pageIndex, 500);
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -29,7 +29,9 @@ export function PdfPage({ id, pageIndex, onRendered }: PdfPageProps): JSX.Elemen
     ctx.imageSmoothingEnabled = false;
 
     const imageData = new ImageData(
-      new Uint8ClampedArray(page.pixels),
+      page.pixels instanceof Uint8ClampedArray
+        ? (page.pixels as unknown as Uint8ClampedArray<ArrayBuffer>)
+        : new Uint8ClampedArray(page.pixels),
       page.width,
       page.height
     );
@@ -51,10 +53,10 @@ export function PdfPage({ id, pageIndex, onRendered }: PdfPageProps): JSX.Elemen
 
   if (!page) {
     return <div style={{
-        display: "flex",
-        justifyContent: "center",
-        margin: 16
-      }}>Loading page…</div>
+      display: "flex",
+      justifyContent: "center",
+      margin: 16
+    }}>Loading page…</div>
   }
 
   return (

@@ -2,6 +2,7 @@ import { renderPage } from "@/shared/tauri";
 import { RenderedPage } from "../types"
 import { useEffect, useState } from "react";
 import { pdfRenderQueue } from "../renderer/pdfRendererQueue";
+import { usePageCacheStore } from "../stores/usePageCacheStore";
 
 type PdfPageState = {
   page: RenderedPage | null;
@@ -20,15 +21,33 @@ export function usePdfPage(
     loading: true,
   });
 
+  const { addPage, getPage } = usePageCacheStore();
+
   useEffect(() => {
-    let cancelled = false
+    let cancelled = false;
 
-    setState({ page: null, error: null, loading: true});
+    const cached = getPage(id, pageIndex);
+    if (cached) {
+      setState({
+        page: cached,
+        error: null,
+        loading: false,
+      });
+      return;
+    }
 
-    pdfRenderQueue.enqueue(() => renderPage(id, pageIndex, targetWidth)).then((result) => {
-      if (cancelled) return;
+    setState({ page: null, error: null, loading: true });
+
+    const abortController = new AbortController();
+
+    pdfRenderQueue.enqueue(
+      () => renderPage(id, pageIndex, targetWidth),
+      abortController.signal
+    ).then((result) => {
+      if (cancelled || abortController.signal.aborted) return;
 
       if (result.ok) {
+        addPage(id, pageIndex, result.data);
         setState({
           page: result.data,
           error: null,
@@ -41,12 +60,18 @@ export function usePdfPage(
           loading: false,
         });
       }
+    }).catch((err) => {
+      // Ignore abort errors
+      if (err.message !== "Aborted" && !cancelled) {
+        console.error(err);
+      }
     });
 
     return () => {
-      cancelled = true
+      cancelled = true;
+      abortController.abort();
     }
-  }, [id, pageIndex, targetWidth])
+  }, [id, pageIndex, targetWidth, getPage, addPage])
 
   return state;
 }

@@ -2,34 +2,59 @@ type Task<T> = () => Promise<T>;
 
 class PdfRenderQueue {
   private queue: Task<any>[] = [];
-  private running = false;
+  private runningCount = 0;
+  private readonly maxConcurrent: number;
 
-  enqueue<T>(task: Task<T>): Promise<T> {
+  constructor(maxConcurrent = 2) {
+    this.maxConcurrent = maxConcurrent;
+  }
+
+  enqueue<T>(task: Task<T>, signal?: AbortSignal): Promise<T> {
     return new Promise((resolve, reject) => {
-      this.queue.push(async () => {
+      // If already aborted, reject immediately
+      if (signal?.aborted) {
+        return reject(new Error('Aborted'));
+      }
+
+      const queueItem = async () => {
+        if (signal?.aborted) {
+          this.runningCount--;
+          this.runNext();
+          return; // Skip execution if aborted while in queue
+        }
         try {
           const result = await task();
+          if (signal?.aborted) {
+            // If aborted during task execution (though task() itself should handle it ideally)
+            // we can still choose not to resolve.
+            // But usually task() returns the result.
+            // Let's resolve. The caller checks signal.
+          }
           resolve(result);
         } catch (err) {
           reject(err);
+        } finally {
+          this.runningCount--;
+          this.runNext();
         }
-      });
+      };
 
-      this.run();
+      this.queue.push(queueItem);
+      this.runNext();
     });
   }
 
-  private async run() {
-    if (this.running) return;
-    this.running = true;
-
-    while (this.queue.length > 0) {
+  private runNext() {
+    while (
+      this.runningCount < this.maxConcurrent &&
+      this.queue.length > 0
+    ) {
       const task = this.queue.shift();
-      if (!task) continue;
-      await task();
-    }
+      if (!task) return;
 
-    this.running = false;
+      this.runningCount++;
+      task();
+    }
   }
 
   clear() {
@@ -37,4 +62,4 @@ class PdfRenderQueue {
   }
 }
 
-export const pdfRenderQueue = new PdfRenderQueue();
+export const pdfRenderQueue = new PdfRenderQueue(3);

@@ -8,9 +8,20 @@ type PdfViewProps = {
   id: string;
 };
 
+import { useRef } from "react";
+import { useVirtualizer } from '@tanstack/react-virtual';
+
 export function PdfView({ id }: PdfViewProps): JSX.Element {
   const activeDocumentId = useDocumentsStore((s) => s.activeDocumentId);
   const { info, error, loading } = usePdfInfo(id);
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  const rowVirtualizer = useVirtualizer({
+    count: info?.page_count ?? 0,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 800, // Approximate height of a page
+    overscan: 3,
+  });
 
   if (loading) {
     return <Loader />
@@ -24,8 +35,9 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
     return <div>Loading PDF info...</div>;
   }
 
-  return(
+  return (
     <div
+      ref={parentRef}
       id="pdf-scroll-container"
       style={{
         height: "100vh",
@@ -34,9 +46,33 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
         display: activeDocumentId === id ? 'block' : 'none',
       }}
     >
-      {Array.from({ length: info.page_count }).map((_, index) => (
-        <PdfPage key={index} id={id} pageIndex={index} />
-      ))}
+      <div
+        style={{
+          height: `${rowVirtualizer.getTotalSize()}px`,
+          width: '100%',
+          position: 'relative',
+        }}
+      >
+        {rowVirtualizer.getVirtualItems().map((virtualItem) => (
+          <div
+            key={virtualItem.key}
+            data-index={virtualItem.index}
+            ref={rowVirtualizer.measureElement}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              transform: `translateY(${virtualItem.start}px)`,
+            }}
+          >
+            <PdfPage
+              id={id}
+              pageIndex={virtualItem.index}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
