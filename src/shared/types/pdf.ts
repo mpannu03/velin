@@ -25,6 +25,8 @@ export type RenderKey = {
 
 export type PdfInfo = {
   page_count: number;
+  width: number;
+  height: number;
 }
 
 /* ---------- factories ---------- */

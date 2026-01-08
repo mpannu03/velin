@@ -5,11 +5,12 @@ import { Box, Center, Loader } from "@mantine/core";
 type PdfPageProps = {
   id: string;
   pageIndex: number;
+  width: number;
   onRendered?: () => void;
 };
 
-export function PdfPage({ id, pageIndex, onRendered }: PdfPageProps): JSX.Element {
-  const { page, error, loading } = usePdfPage(id, pageIndex, 500);
+export function PdfPage({ id, pageIndex, width, onRendered }: PdfPageProps): JSX.Element {
+  const { page, error, loading } = usePdfPage(id, pageIndex, width);
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -43,7 +44,7 @@ export function PdfPage({ id, pageIndex, onRendered }: PdfPageProps): JSX.Elemen
 
   if (loading) {
     return <Center mb={16}>
-      <Center w="250px" h="445px" bg="white"><Loader /></Center>
+      <Center w={`${width / 2}px`} h={`${(width * 1.41) / 2}px`} bg="white"><Loader /></Center>
     </Center>
   }
 

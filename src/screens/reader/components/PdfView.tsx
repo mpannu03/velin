@@ -3,6 +3,7 @@ import { PdfPage } from './PdfPage';
 import { useDocumentsStore } from "@/app";
 import { usePdfInfo } from "../hooks/usePdfInfo";
 import { Loader } from "@mantine/core";
+import { useViewportSize } from "@mantine/hooks";
 
 type PdfViewProps = {
   id: string;
@@ -14,12 +15,26 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 export function PdfView({ id }: PdfViewProps): JSX.Element {
   const activeDocumentId = useDocumentsStore((s) => s.activeDocumentId);
   const { info, error, loading } = usePdfInfo(id);
+  /* ------------------ Sizing Logic ------------------ */
+  const { width: windowWidth } = useViewportSize();
+
+  // 1/3 of window width logic (with min safety)
+  const displayWidth = Math.max(windowWidth / 3, 400);
+  const renderWidth = displayWidth * 2; // Request 2x resolution for High DPI
+
+  // Aspect ratio fallback to standard A4 (1 / 1.414)
+  const aspectRatio = (info?.height && info?.width)
+    ? (info.height / info.width)
+    : 1.414;
+
+  const estimatedHeight = displayWidth * aspectRatio;
+
   const parentRef = useRef<HTMLDivElement>(null);
 
   const rowVirtualizer = useVirtualizer({
     count: info?.page_count ?? 0,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 800, // Approximate height of a page
+    estimateSize: () => estimatedHeight,
     overscan: 3,
   });
 
@@ -69,6 +84,7 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
             <PdfPage
               id={id}
               pageIndex={virtualItem.index}
+              width={renderWidth}
             />
           </div>
         ))}
