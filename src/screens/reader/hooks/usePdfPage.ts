@@ -26,7 +26,7 @@ export function usePdfPage(
   useEffect(() => {
     let cancelled = false;
 
-    const cached = getPage(id, pageIndex);
+    const cached = getPage(id, pageIndex, targetWidth);
     if (cached) {
       setState({
         page: cached,

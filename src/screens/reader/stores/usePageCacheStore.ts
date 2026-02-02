@@ -4,7 +4,7 @@ import { RenderedPage } from '../types';
 type PageCacheState = {
     pages: Map<string, RenderedPage>;
     addPage: (id: string, pageIndex: number, page: RenderedPage) => void;
-    getPage: (id: string, pageIndex: number) => RenderedPage | undefined;
+    getPage: (id: string, pageIndex: number, width: number) => RenderedPage | undefined;
     clear: () => void;
 };
 
@@ -14,7 +14,7 @@ export const usePageCacheStore = create<PageCacheState>((set, get) => ({
     pages: new Map(),
 
     addPage: (id, pageIndex, page) => {
-        const key = `${id}:${pageIndex}`;
+        const key = `${id}:${pageIndex}:${page.width}x${page.height}`;
         set((state) => {
             const newPages = new Map(state.pages);
 
@@ -38,9 +38,11 @@ export const usePageCacheStore = create<PageCacheState>((set, get) => ({
         });
     },
 
-    getPage: (id, pageIndex) => {
-        const key = `${id}:${pageIndex}`;
-        return get().pages.get(key);
+    getPage: (id, pageIndex, width) => {
+        // Find if we have this page at this specific width
+        // Target height is estimated, but width is the key for PDF rendering
+        const keyPrefix = `${id}:${pageIndex}:${width}x`;
+        return [...get().pages.entries()].find(([k]) => k.startsWith(keyPrefix))?.[1];
     },
 
     clear: () => set({ pages: new Map() }),
