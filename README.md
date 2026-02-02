@@ -68,4 +68,8 @@ Velin is an open-source project, and we welcome help from the community!
 
 ---
 
+## 📄 License
+
+Velin is licensed under the **GNU General Public License v3.0**. See the [LICENSE](LICENSE) file for more details.
+
 Developed with ❤️ using Tauri and Rust.
