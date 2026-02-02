@@ -15,18 +15,22 @@ export function usePdfPage(
   pageIndex: number,
   targetWidth: number
 ) {
-  const [state, setState] = useState<PdfPageState>({
-    page: null,
-    error: null,
-    loading: true,
-  });
+  const { addPage, getPage, getAnyPage } = usePageCacheStore();
 
-  const { addPage, getPage } = usePageCacheStore();
+  const [state, setState] = useState<PdfPageState>(() => {
+    const cached = getPage(id, pageIndex, targetWidth);
+    if (cached) return { page: cached, error: null, loading: false };
+    
+    const fallback = getAnyPage(id, pageIndex);
+    return { page: fallback || null, error: null, loading: true };
+  });
 
   useEffect(() => {
     let cancelled = false;
 
     const cached = getPage(id, pageIndex, targetWidth);
+    const fallback = getAnyPage(id, pageIndex);
+
     if (cached) {
       setState({
         page: cached,
@@ -36,7 +40,12 @@ export function usePdfPage(
       return;
     }
 
-    setState({ page: null, error: null, loading: true });
+    // Update state to loading, but keep fallback page if available
+    setState({
+      page: fallback || null,
+      error: null,
+      loading: true,
+    });
 
     const abortController = new AbortController();
 
@@ -54,11 +63,11 @@ export function usePdfPage(
           loading: false,
         });
       } else {
-        setState({
-          page: null,
+        setState(s => ({
+          ...s,
           error: result.error,
           loading: false,
-        });
+        }));
       }
     }).catch((err) => {
       // Ignore abort errors
@@ -71,7 +80,7 @@ export function usePdfPage(
       cancelled = true;
       abortController.abort();
     }
-  }, [id, pageIndex, targetWidth, getPage, addPage])
+  }, [id, pageIndex, targetWidth, getPage, addPage, getAnyPage])
 
   return state;
 }

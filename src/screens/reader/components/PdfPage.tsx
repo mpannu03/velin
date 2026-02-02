@@ -24,9 +24,6 @@ export function PdfPage({ id, pageIndex, width, onRendered }: PdfPageProps): JSX
     canvas.width = page.width;
     canvas.height = page.height;
 
-    canvas.style.width = `${page.width / 2}px`;
-    canvas.style.height = `${page.height / 2}px`;
-
     ctx.imageSmoothingEnabled = false;
 
     const imageData = new ImageData(
@@ -42,22 +39,18 @@ export function PdfPage({ id, pageIndex, width, onRendered }: PdfPageProps): JSX
     onRendered?.();
   }, [page]);
 
-  if (loading) {
-    return <Center mb={16}>
-      <Center w={`${width / 2}px`} h={`${(width * 1.41) / 2}px`} bg="white"><Loader /></Center>
-    </Center>
+  if (loading && !page) {
+    return (
+      <Center mb={16}>
+        <Center w={`${width / 2}px`} h={`${(width * 1.41) / 2}px`} bg="white">
+          <Loader />
+        </Center>
+      </Center>
+    );
   }
 
-  if (error) {
-    return <Center>Loading Error: {error}</Center>
-  }
-
-  if (!page) {
-    return <div style={{
-      display: "flex",
-      justifyContent: "center",
-      margin: 16
-    }}>Loading page…</div>
+  if (error && !page) {
+    return <Center mb={16}>Loading Error: {error}</Center>;
   }
 
   return (
@@ -68,7 +61,16 @@ export function PdfPage({ id, pageIndex, width, onRendered }: PdfPageProps): JSX
         marginBottom: 16
       }}
     >
-      <canvas ref={canvasRef} />
+      <canvas
+        ref={canvasRef}
+        style={{
+          width: `${width / 2}px`,
+          height: page ? `${(width * (page.height / page.width)) / 2}px` : `${(width * 1.41) / 2}px`,
+          display: page ? 'block' : 'none',
+          backgroundColor: 'white',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+        }}
+      />
     </Box>
   );
 }
