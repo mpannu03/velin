@@ -24,3 +24,19 @@ pub fn get_info(
 
     Ok(pdf_info)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::collections::HashMap;
+
+    #[test]
+    fn test_get_info_document_not_found() {
+        let documents = HashMap::new();
+        let id = "non_existent".to_string();
+
+        let result = get_info(&documents, &id);
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err(), "Document not found");
+    }
+}
