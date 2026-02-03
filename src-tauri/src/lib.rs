@@ -1,9 +1,9 @@
-use crate::state::AppState;
-
-mod state;
 mod commands;
 mod pdf;
 mod service;
+mod state;
+
+pub use state::AppState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
