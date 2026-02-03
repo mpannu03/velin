@@ -7,9 +7,10 @@ type PdfPageProps = {
   pageIndex: number;
   width: number;
   onRendered?: () => void;
+  aspectRatio: number;
 };
 
-export function PdfPage({ id, pageIndex, width, onRendered }: PdfPageProps): JSX.Element {
+export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPageProps): JSX.Element {
   const { page, error, loading } = usePdfPage(id, pageIndex, width);
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -42,7 +43,7 @@ export function PdfPage({ id, pageIndex, width, onRendered }: PdfPageProps): JSX
   if (loading && !page) {
     return (
       <Center mb={16}>
-        <Center w={`${width / 2}px`} h={`${(width * 1.41) / 2}px`} bg="white">
+        <Center w={`${width / 2}px`} h={`${(width * aspectRatio) / 2}px`} bg="white">
           <Loader />
         </Center>
       </Center>
@@ -65,7 +66,7 @@ export function PdfPage({ id, pageIndex, width, onRendered }: PdfPageProps): JSX
         ref={canvasRef}
         style={{
           width: `${width / 2}px`,
-          height: page ? `${(width * (page.height / page.width)) / 2}px` : `${(width * 1.41) / 2}px`,
+          height: page ? `${(width * (page.height / page.width)) / 2}px` : `${(width * aspectRatio) / 2}px`,
           display: page ? 'block' : 'none',
           backgroundColor: 'white',
           boxShadow: '0 1px 3px rgba(0,0,0,0.1)'

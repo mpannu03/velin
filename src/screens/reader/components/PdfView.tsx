@@ -127,6 +127,7 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
                 id={id}
                 pageIndex={virtualItem.index}
                 width={renderWidth}
+                aspectRatio={aspectRatio}
               />
             </div>
           ))}
