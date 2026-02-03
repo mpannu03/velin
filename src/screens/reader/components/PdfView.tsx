@@ -86,7 +86,7 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
         top: 0,
         left: 0,
         width: '100%',
-        height: '100vh',
+        height: '100%',
         pointerEvents: activeDocumentId === id ? 'auto' : 'none',
       }}
     >

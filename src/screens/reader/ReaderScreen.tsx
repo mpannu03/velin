@@ -28,7 +28,7 @@ export function ReaderScreen({ visible }: ScreenProps): JSX.Element {
         display: visible ? 'block' : 'none',
         backgroundColor: '#f0f0f0',
         position: 'relative',
-        height: '100vh',
+        height: 'calc(100vh - var(--app-shell-header-height, 92px))',
         overflow: 'hidden',
       }}
     >
