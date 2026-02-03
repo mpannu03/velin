@@ -2,7 +2,16 @@ import { JSX } from "react";
 
 export function HomeScreen(): JSX.Element {
   return(
-    <div>
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        background: '#f0f0f0',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       Home Screen
     </div>
   );
