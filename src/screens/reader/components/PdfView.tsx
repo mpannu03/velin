@@ -77,10 +77,17 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
   return (
     <div
       style={{
-        height: "100vh",
-        display: activeDocumentId === id ? 'flex' : 'none',
+        display: "flex",
         flexDirection: 'row',
         backgroundColor: '#f1f3f5',
+        // Hiding logic: use visibility and absolute positioning to preserve scroll state
+        visibility: activeDocumentId === id ? 'visible' : 'hidden',
+        position: activeDocumentId === id ? 'relative' : 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        pointerEvents: activeDocumentId === id ? 'auto' : 'none',
       }}
     >
       {/* Scrollable PDF Content */}
@@ -152,6 +159,60 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
 
       {/* Right Sidebar Toolbar */}
       <ReaderToolbar documentId={id} />
+
+      {/* Scroll Position Sync (Fallback & State persistence) */}
+      {activeDocumentId === id && (
+        <ScrollSync 
+          id={id} 
+          active={true} 
+          parentRef={parentRef} 
+          scrollOffset={viewerState.scrollOffset}
+        />
+      )}
     </div>
   );
 };
+
+function ScrollSync({ 
+  id, 
+  active, 
+  parentRef, 
+  scrollOffset 
+}: { 
+  id: string; 
+  active: boolean; 
+  parentRef: React.RefObject<HTMLDivElement | null>;
+  scrollOffset: number;
+}) {
+  const setScrollOffset = usePdfViewerStore(s => s.setScrollOffset);
+
+  // Restore scroll only once on mount if it's different
+  useEffect(() => {
+    if (active && parentRef.current && Math.abs(parentRef.current.scrollTop - scrollOffset) > 1) {
+      parentRef.current.scrollTop = scrollOffset;
+    }
+  }, []); // Only on mount of ScrollSync (which happens when tab becomes active)
+
+  // Periodic save while active
+  useEffect(() => {
+    if (!active || !parentRef.current) return;
+
+    const el = parentRef.current;
+    let frameId: number;
+
+    const handleScroll = () => {
+      cancelAnimationFrame(frameId);
+      frameId = requestAnimationFrame(() => {
+        setScrollOffset(id, el.scrollTop);
+      });
+    };
+
+    el.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      el.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(frameId);
+    };
+  }, [active, id, setScrollOffset]);
+
+  return null;
+}

@@ -27,6 +27,9 @@ export function ReaderScreen({ visible }: ScreenProps): JSX.Element {
       style={{ 
         display: visible ? 'block' : 'none',
         backgroundColor: '#f0f0f0',
+        position: 'relative',
+        height: '100vh',
+        overflow: 'hidden',
       }}
     >
       {Object.values(documents).map((doc) => (
