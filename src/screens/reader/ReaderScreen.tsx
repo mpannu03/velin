@@ -33,7 +33,7 @@ export function ReaderScreen({ visible }: ScreenProps): JSX.Element {
       }}
     >
       {Object.values(documents).map((doc) => (
-        <PdfView id={doc.id} />
+        <PdfView key={doc.id} id={doc.id} />
       ))}
     </div>
   );

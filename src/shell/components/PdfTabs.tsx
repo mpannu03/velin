@@ -6,6 +6,7 @@ import { pickPdfFile } from "@/shared/services";
 import { useHover } from "@mantine/hooks";
 import { useDocumentsStore } from "@/app/store/documents.store";
 import { notifications } from "@mantine/notifications";
+import { usePageCacheStore } from "@/screens/reader/stores/usePageCacheStore";
 
 export function PdfTabs(): JSX.Element {
   const pdfStore = useDocumentsStore();
@@ -74,6 +75,8 @@ function Tab({ tab }: TabProps): JSX.Element {
           title: "Error Closing Pdf.",
           message: result.error,
         });
+      } else {
+        usePageCacheStore.getState().purgeDocument(id);
       }
   }
 

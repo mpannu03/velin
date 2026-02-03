@@ -1,49 +1,21 @@
-import { fetchPdfInfo } from "@/shared/tauri";
-import { useEffect, useState } from "react";
-import { PdfInfo } from "@/shared/types";
+import { useEffect } from "react";
+import { usePdfInfoStore } from "../stores/usePdfInfoStore";
 
-type PdfInfoState = {
-  info: PdfInfo | null;
-  error: string | null;
-  loading: boolean;
-}
-
-export function usePdfInfo(
-  id: string,
-) {
-  const [state, setState] = useState<PdfInfoState>({
-    info: null,
-    error: null,
-    loading: true,
-  });
+export function usePdfInfo(id: string) {
+  const info = usePdfInfoStore(s => s.infoCache[id]);
+  const error = usePdfInfoStore(s => s.errorCache[id]);
+  const loading = usePdfInfoStore(s => s.isLoading[id]);
+  const fetchInfo = usePdfInfoStore(s => s.fetchInfo);
 
   useEffect(() => {
-    let cancelled = false
+    fetchInfo(id);
+  }, [id, fetchInfo]);
 
-    setState({ info: null, error: null, loading: true });
+  const isLoading = loading || (!info && !error);
 
-    fetchPdfInfo(id).then((result) => {
-      if (cancelled) return;
-
-      if (result.ok) {
-        setState({
-          info: result.data,
-          error: null,
-          loading: false,
-        });
-      } else {
-        setState({
-          info: null,
-          error: result.error,
-          loading: false,
-        });
-      }
-    });
-
-    return () => {
-      cancelled = true
-    }
-  }, [id]);
-
-  return state
+  return {
+    info: info || null,
+    error: error || null,
+    loading: isLoading,
+  };
 }
