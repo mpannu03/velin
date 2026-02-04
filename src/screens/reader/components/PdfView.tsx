@@ -1,4 +1,4 @@
-import { JSX, useRef } from "react";
+import { JSX, useEffect, useRef } from "react";
 import { Loader } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useVirtualizer } from '@tanstack/react-virtual';
@@ -20,6 +20,8 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
   const parentRef = useRef<HTMLDivElement>(null);
   const viewerState = usePdfViewerStore(s => s.getState(id));
   const wheelRef = usePdfWheelZoom(id);
+  const gotoPage = usePdfViewerStore((s) => s.getState(id).gotoPage);
+  const clearGotoPage = usePdfViewerStore(s => s.clearGotoPage);
 
   const { width: windowWidth } = useViewportSize();
 
@@ -40,6 +42,16 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
     overscan: 3,
     scrollMargin: 16
   });
+
+  useEffect(() => {
+    if (gotoPage == null) return;
+
+    rowVirtualizer.scrollToIndex(gotoPage, {
+      align: "start",
+    });
+
+    clearGotoPage(id);
+  }, [gotoPage, id, rowVirtualizer, clearGotoPage]);
 
   if (loading) {
     return <Loader />

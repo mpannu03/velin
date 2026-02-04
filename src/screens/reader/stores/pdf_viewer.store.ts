@@ -8,6 +8,8 @@ export type ViewerState = {
   tool: ViewerTool;
   sidebar: SidebarPanel;
   // scrollOffset: number;
+
+  gotoPage: number | null;
 };
 
 type PdfViewerStore = {
@@ -20,6 +22,9 @@ type PdfViewerStore = {
   setTool: (id: string, tool: ViewerTool) => void;
   setSidebar: (id: string, sidebar: SidebarPanel) => void;
 
+  gotoPage: (id: string, page: number) => void;
+  clearGotoPage: (id: string) => void;
+
   getState: (id: string) => ViewerState;
   removeState: (id: string) => void;
 };
@@ -28,6 +33,7 @@ const DEFAULT_STATE: ViewerState = {
   scale: 1.0,
   tool: 'cursor',
   sidebar: 'none',
+  gotoPage: null,
 };
 
 export const usePdfViewerStore = create<PdfViewerStore>((set, get) => ({
@@ -94,6 +100,20 @@ export const usePdfViewerStore = create<PdfViewerStore>((set, get) => ({
         ...(state.states[id] || DEFAULT_STATE),
         sidebar,
       },
+    },
+  })),
+
+  gotoPage: (id, page) => set(s => ({
+    states: {
+      ...s.states,
+      [id]: { ...(s.states[id] ?? DEFAULT_STATE), gotoPage: page },
+    },
+  })),
+
+  clearGotoPage: (id) => set(s => ({
+    states: {
+      ...s.states,
+      [id]: { ...(s.states[id] ?? DEFAULT_STATE), gotoPage: null },
     },
   })),
 

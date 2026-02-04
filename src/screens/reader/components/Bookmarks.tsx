@@ -1,8 +1,9 @@
-import { Box, Collapse, Group, Loader, ScrollArea, Stack, Text } from "@mantine/core";
+import { Box, Button, Collapse, Group, Loader, ScrollArea, Stack, Text } from "@mantine/core";
 import { usePdfBookmarks } from "../hooks";
 import { Bookmark } from "@/shared/types";
 import { useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { usePdfViewerStore } from "../stores";
 
 export function Bookmarks({ id }: { id: string }) {
   const { bookmarks, error, loading } = usePdfBookmarks(id);
@@ -31,7 +32,7 @@ export function Bookmarks({ id }: { id: string }) {
         <ScrollArea h="100%" scrollbars="y">
           <Stack gap={4}>
             {items.map((bm, i) => (
-              <BookmarkItem key={`${bm.title}-${i}`} bookmark={bm} />
+              <BookmarkItem key={`${bm.title}-${i}`} id={id} bookmark={bm} />
             ))}
           </Stack>
         </ScrollArea>
@@ -41,19 +42,21 @@ export function Bookmarks({ id }: { id: string }) {
 }
 
 type BookmarkProps = {
+  id: string;
   bookmark: Bookmark;
   level?: number;
 };
 
-function BookmarkItem({ bookmark, level = 0 }: BookmarkProps) {
+function BookmarkItem({ id, bookmark, level = 0 }: BookmarkProps) {
   const [opened, setOpened] = useState(false);
   const hasChildren = bookmark.children.length > 0;
+
+  const gotoPage = usePdfViewerStore((s) => s.gotoPage);
 
   return (
     <Box>
       <Group
         gap="xs"
-        py={4}
         wrap="nowrap"
         style={{ cursor: hasChildren ? "pointer" : "default" }}
       >
@@ -64,9 +67,16 @@ function BookmarkItem({ bookmark, level = 0 }: BookmarkProps) {
           <Box w={14} style={{ flexShrink: 0 }} />
         )}
 
-        <Text size="sm" style={{ wordBreak: "break-word" }}>
-          {bookmark.title}
-        </Text>
+        <Button variant="subtle"
+          onClick={() => {
+            if (bookmark.page_index !== null) {
+              gotoPage(id, bookmark.page_index);
+            }
+          }}>
+          <Text size="sm" c="black" style={{ wordBreak: "break-word" }}>
+            {bookmark.title}
+          </Text>
+        </Button>
       </Group>
 
       {hasChildren && (
@@ -74,6 +84,7 @@ function BookmarkItem({ bookmark, level = 0 }: BookmarkProps) {
           {bookmark.children.map((child, idx) => (
             <BookmarkItem
               key={`${bookmark.title}-${idx}`}
+              id={id}
               bookmark={child}
               level={level + 1}
             />

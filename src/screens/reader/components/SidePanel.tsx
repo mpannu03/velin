@@ -10,7 +10,7 @@ export function SidePanel({ id }: { id: string }) {
     <>
       {viewerState.sidebar !== 'none' && (
         <Paper
-          w={250}
+          w={350}
           h="100%"
           p="md"
           withBorder
