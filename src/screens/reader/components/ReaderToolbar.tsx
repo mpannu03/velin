@@ -1,4 +1,4 @@
-import { ActionIcon, Paper, Stack, Text, Tooltip } from '@mantine/core';
+import { ActionIcon, Divider, Input, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { useHotkeys } from '@mantine/hooks';
 import { usePdfViewerStore } from '../stores/pdf_viewer.store';
 import {
@@ -9,6 +9,8 @@ import {
   MessageCircle,
   Bookmark
 } from "lucide-react";
+import { usePageIndicator } from '../hooks';
+import { useEffect, useState } from 'react';
 
 type ReaderToolbarProps = {
     documentId: string;
@@ -21,6 +23,7 @@ export function ReaderToolbar({ documentId }: ReaderToolbarProps) {
   const resetZoom = () => usePdfViewerStore.getState().resetZoom(documentId);
   const setTool = usePdfViewerStore.getState().setTool;
   const setSidebar = usePdfViewerStore.getState().setSidebar;
+  const pageIndicator = usePageIndicator(documentId);
 
   useHotkeys([
     ['mod+plus', zoomIn],
@@ -88,6 +91,13 @@ export function ReaderToolbar({ documentId }: ReaderToolbarProps) {
             <ZoomOut size={20} />
           </ActionIcon>
         </Tooltip>
+
+        <PageGotoInput id={documentId} />
+        <Divider w={16} />
+        <Text size="xs" c="dimmed">
+          {pageIndicator?.total}
+        </Text>
+
       </Stack>
 
       <Stack gap="xs" align="center">
@@ -113,3 +123,54 @@ export function ReaderToolbar({ documentId }: ReaderToolbarProps) {
     </Paper>
     );
 }
+
+function PageGotoInput({ id }: { id: string }) {
+  const pageIndicator = usePageIndicator(id);
+  const goToPage = usePdfViewerStore((s) => s.gotoPage);
+
+  const [value, setValue] = useState(
+    pageIndicator?.current.toString() ?? ""
+  );
+
+  useEffect(() => {
+    setValue(pageIndicator?.current.toString() ?? "");
+  }, [pageIndicator?.current]);
+
+  if (!pageIndicator) return null;
+
+  const submit = (element: HTMLInputElement) => {
+    const num = Number(value);
+    if (!Number.isInteger(num)) return;
+
+    const pageIndex = Math.min(
+      Math.max(num - 1, 0),
+      pageIndicator.total - 1
+    );
+
+    goToPage(id, pageIndex);
+    element?.blur();
+  };
+
+  return (
+    <Input
+      size="xs"
+      value={value}
+      onChange={(e) => setValue(e.currentTarget.value)}
+      onBlur={(e) => submit(e.currentTarget)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") submit(e.currentTarget);
+        if (e.key === "Escape") {
+          setValue(pageIndicator.current.toString());
+          e.currentTarget.blur();
+        }
+      }}
+      styles={{
+        input: {
+          textAlign: "center",
+          padding: 4,
+        },
+      }}
+    />
+  );
+}
+

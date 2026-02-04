@@ -7,8 +7,8 @@ export type ViewerState = {
   scale: number;
   tool: ViewerTool;
   sidebar: SidebarPanel;
-  // scrollOffset: number;
 
+  currentPage: number; // Zero based
   gotoPage: number | null;
 };
 
@@ -22,6 +22,7 @@ type PdfViewerStore = {
   setTool: (id: string, tool: ViewerTool) => void;
   setSidebar: (id: string, sidebar: SidebarPanel) => void;
 
+  setCurrentPage: (id: string, page: number) => void;
   gotoPage: (id: string, page: number) => void;
   clearGotoPage: (id: string) => void;
 
@@ -33,6 +34,7 @@ const DEFAULT_STATE: ViewerState = {
   scale: 1.0,
   tool: 'cursor',
   sidebar: 'none',
+  currentPage: 0,
   gotoPage: null,
 };
 
@@ -103,6 +105,17 @@ export const usePdfViewerStore = create<PdfViewerStore>((set, get) => ({
     },
   })),
 
+  setCurrentPage: (id, page) => set(s => {
+    const prev = s.getState(id);
+    if (prev.currentPage === page) return s;
+    return {
+      states: {
+        ...s.states,
+        [id]: { ...(s.states[id] ?? DEFAULT_STATE), currentPage: page },
+      },
+    };
+  }),
+
   gotoPage: (id, page) => set(s => ({
     states: {
       ...s.states,
@@ -116,18 +129,6 @@ export const usePdfViewerStore = create<PdfViewerStore>((set, get) => ({
       [id]: { ...(s.states[id] ?? DEFAULT_STATE), gotoPage: null },
     },
   })),
-
-  // setScrollOffset: (id, offset) => set((state) => ({
-  //   states: {
-  //     ...state.states,
-  //     [id]: {
-  //       ...(state.states[id] || DEFAULT_STATE),
-  //       scrollOffset: offset,
-  //     },
-  //   },
-  // })),
-
-  // getState: (id) => get().states[id] || DEFAULT_STATE,
 }));
 
 const ZOOM_STEPS = [0.1, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0, 4.0, 5.0];

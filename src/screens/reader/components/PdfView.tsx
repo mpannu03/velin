@@ -8,7 +8,7 @@ import { usePdfViewerStore } from "../stores/pdf_viewer.store";
 import { PdfPage } from './PdfPage';
 import { ReaderToolbar } from "./ReaderToolbar";
 import { SidePanel } from "./SidePanel";
-import { usePdfWheelZoom } from "../hooks";
+import { useCurrentPageFromVirtual, usePdfWheelZoom } from "../hooks";
 
 type PdfViewProps = {
   id: string;
@@ -52,6 +52,11 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
 
     clearGotoPage(id);
   }, [gotoPage, id, rowVirtualizer, clearGotoPage]);
+
+  useCurrentPageFromVirtual({
+    virtualizer: rowVirtualizer,
+    id,
+  });
 
   if (loading) {
     return <Loader />
