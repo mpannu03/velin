@@ -38,6 +38,7 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
     getScrollElement: () => parentRef.current,
     estimateSize: () => estimatedHeight,
     overscan: 3,
+    scrollMargin: 16
   });
 
   if (loading) {
