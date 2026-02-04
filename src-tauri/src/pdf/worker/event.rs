@@ -2,7 +2,10 @@ use std::path::PathBuf;
 
 use flume::Sender;
 
-use crate::pdf::{document::{DocumentId, PdfInfo}, reader::RenderedPage};
+use crate::pdf::{
+    document::{Bookmarks, DocumentId, PdfInfo},
+    reader::RenderedPage,
+};
 
 pub enum PdfEvent {
     Open {
@@ -23,5 +26,9 @@ pub enum PdfEvent {
     Close {
         id: DocumentId,
         reply: Sender<Result<(), String>>,
+    },
+    Bookmarks {
+        id: DocumentId,
+        reply: Sender<Result<Bookmarks, String>>,
     },
 }

@@ -1,5 +1,5 @@
 use crate::{
-    pdf::{document::PdfInfo, reader::RenderedPage, worker::PdfEvent},
+    pdf::{document::PdfInfo, reader::RenderedPage, worker::PdfEvent, Bookmarks},
     state::AppState,
 };
 use flume::bounded;
@@ -63,4 +63,19 @@ pub fn close_pdf(state: &AppState, id: String) -> Result<(), String> {
 
     rx.recv()
         .map_err(|e| format!("Error receiving close result: {e}"))?
+}
+
+pub fn get_bookmarks(state: &AppState, id: String) -> Result<Bookmarks, String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::Bookmarks { id, reply: tx })
+        .map_err(|e| format!("Error sending bookmarks command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving bookmarks result: {e}"))?
 }

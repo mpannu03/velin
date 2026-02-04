@@ -19,3 +19,15 @@ impl PdfInfo {
         }
     }
 }
+
+#[derive(Debug, Clone, Serialize)]
+pub struct Bookmark {
+    pub title: String,
+    pub page_index: Option<u16>,
+    pub children: Vec<Bookmark>,
+}
+
+#[derive(Debug, Clone, Serialize, Default)]
+pub struct Bookmarks {
+    pub items: Vec<Bookmark>,
+}
