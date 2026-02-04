@@ -38,7 +38,9 @@ pub fn get_bookmarks(
     let mut items = Vec::new();
 
     for bookmark in pdf_bookmarks.iter() {
-        items.push(convert_bookmark(&bookmark)?);
+        if bookmark.parent().is_none() {
+            items.push(convert_bookmark(&bookmark)?);
+        }
     }
 
     Ok(Bookmarks { items })
