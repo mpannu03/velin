@@ -1,4 +1,4 @@
-import { PdfInfo } from '../types';
+import { Bookmarks, PdfInfo } from '../types';
 import { RenderedPage } from '@/screens/reader/types';
 import { InvokeResult, safeInvoke } from './invoke_result';
 
@@ -51,4 +51,10 @@ export const fetchPdfInfo = async (
   id: string
 ): Promise<InvokeResult<PdfInfo>> => {
   return safeInvoke<PdfInfo>('get_pdf_info', { id });
+}
+
+export const fetchBookmarks = async (
+  id: string
+): Promise<InvokeResult<Bookmarks>> => {
+  return safeInvoke<Bookmarks>('get_bookmarks', { id });
 }

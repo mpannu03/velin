@@ -22,20 +22,6 @@ export function ReaderToolbar({ documentId }: ReaderToolbarProps) {
   const setTool = usePdfViewerStore.getState().setTool;
   const setSidebar = usePdfViewerStore.getState().setSidebar;
 
-  // const ZOOM_STEPS = [0.1, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0, 4.0, 5.0];
-
-  // const zoomIn = () => {
-  //     const nextStep = ZOOM_STEPS.find(s => s > state.scale) || 5.0;
-  //     setScale(documentId, nextStep);
-  // };
-
-  // const zoomOut = () => {
-  //   const prevStep = [...ZOOM_STEPS].reverse().find(s => s < state.scale) || 0.1;
-  //   setScale(documentId, prevStep);
-  // };
-
-  // const resetZoom = () => setScale(documentId, 1.0);
-
   useHotkeys([
     ['mod+plus', zoomIn],
     ['mod+minus', zoomOut],
