@@ -6,7 +6,7 @@ import { pickPdfFile } from "@/shared/services";
 import { useHover } from "@mantine/hooks";
 import { useDocumentsStore } from "@/app/store/documents.store";
 import { notifications } from "@mantine/notifications";
-import { usePageCacheStore } from "@/screens/reader/stores/usePageCacheStore";
+import { usePageCacheStore } from "@/screens/reader/stores/page_cache.store";
 
 export function PdfTabs(): JSX.Element {
   const pdfStore = useDocumentsStore();

@@ -2,7 +2,7 @@ import { renderPage } from "@/shared/tauri";
 import { RenderedPage } from "../types"
 import { useEffect, useState } from "react";
 import { pdfRenderQueue } from "../renderer/pdfRendererQueue";
-import { usePageCacheStore } from "../stores/usePageCacheStore";
+import { usePageCacheStore } from "../stores/page_cache.store";
 
 type PdfPageState = {
   page: RenderedPage | null;

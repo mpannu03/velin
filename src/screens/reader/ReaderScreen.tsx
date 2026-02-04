@@ -16,9 +16,18 @@ export function ReaderScreen({ visible }: ScreenProps): JSX.Element {
 
   if (Object.keys(documents).length === 0) {
     return (
-      <div style={{ 
-        display: visible ? 'block' : 'none',
-      }}>No document opened.</div>
+      <div
+        style={{
+          width: '100%',
+          height: 'calc(100vh - var(--app-shell-header-height, 92px))',
+          background: '#f0f0f0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        No document opened.
+      </div>
     );
   }
 
