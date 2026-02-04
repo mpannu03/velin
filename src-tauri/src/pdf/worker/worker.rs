@@ -52,6 +52,10 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 let result = reader::close(&mut documents, &id);
                 let _ = reply.send(result);
             }
+            PdfEvent::Bookmarks { id, reply } => {
+                let result = reader::get_bookmarks(&documents, &id);
+                let _ = reply.send(result);
+            }
         }
     }
 }
