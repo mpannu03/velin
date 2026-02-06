@@ -9,6 +9,7 @@ type BookmarksCacheState = {
 
   fetchBookmarks: (id: string) => Promise<void>;
   getBookmarks: (id: string) => Bookmarks | undefined;
+  removeBookmerks: (id: string) => void;
 };
 
 export const usePdfBookmarksStore = create<BookmarksCacheState>((set, get) => ({
@@ -47,4 +48,10 @@ export const usePdfBookmarksStore = create<BookmarksCacheState>((set, get) => ({
   },
 
   getBookmarks: (id: string) => get().bookmarksCache[id],
+
+  removeBookmerks: (id: string) => set(state => {
+    const next = { ...state.bookmarksCache };
+    delete next[id];
+    return { bookmarksCache: next };
+  }),
 }));

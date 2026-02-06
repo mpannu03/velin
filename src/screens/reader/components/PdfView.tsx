@@ -4,7 +4,7 @@ import { useViewportSize } from "@mantine/hooks";
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useDocumentsStore } from "@/app";
 import { usePdfInfo } from "../hooks/usePdfInfo";
-import { usePdfViewerStore } from "../stores/pdf_viewer.store";
+import { usePdfViewerStore } from "../stores/pdfViewer.store";
 import { PdfPage } from './PdfPage';
 import { ReaderToolbar } from "./ReaderToolbar";
 import { SidePanel } from "./SidePanel";

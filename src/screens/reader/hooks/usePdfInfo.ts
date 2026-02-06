@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { usePdfInfoStore } from "../stores/pdf_info.store";
+import { usePdfInfoStore } from "../stores/pdfInfo.store";
 
 export function usePdfInfo(id: string) {
   const info = usePdfInfoStore(s => s.infoCache[id]);

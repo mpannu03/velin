@@ -1,6 +1,6 @@
 import { ActionIcon, Divider, Input, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { useHotkeys } from '@mantine/hooks';
-import { usePdfViewerStore } from '../stores/pdf_viewer.store';
+import { usePdfViewerStore } from '../stores/pdfViewer.store';
 import {
   ZoomIn,
   ZoomOut,

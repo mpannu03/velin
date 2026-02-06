@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { usePdfBookmarksStore } from "../stores/pdf_bookmarks.store";
+import { usePdfBookmarksStore } from "../stores/bookmarks.store";
 
 export function usePdfBookmarks(id: string) {
   const bookmarks = usePdfBookmarksStore(s => s.bookmarksCache[id]);

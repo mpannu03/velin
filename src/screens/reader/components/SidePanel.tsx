@@ -1,5 +1,5 @@
 import { Paper } from "@mantine/core";
-import { usePdfViewerStore } from "../stores/pdf_viewer.store";
+import { usePdfViewerStore } from "../stores/pdfViewer.store";
 import { Bookmarks } from "./Bookmarks";
 import { Comments } from "./Comments";
 

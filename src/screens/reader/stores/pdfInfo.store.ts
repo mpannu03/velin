@@ -9,6 +9,7 @@ type PdfInfoCacheState = {
 
   fetchInfo: (id: string) => Promise<void>;
   getInfo: (id: string) => PdfInfo | undefined;
+  removeInfo: (id: string) => void;
 };
 
 export const usePdfInfoStore = create<PdfInfoCacheState>((set, get) => ({
@@ -47,4 +48,10 @@ export const usePdfInfoStore = create<PdfInfoCacheState>((set, get) => ({
   },
 
   getInfo: (id: string) => get().infoCache[id],
+
+  removeInfo: (id: string) => set(state => {
+    const next = { ...state.infoCache };
+    delete next[id];
+    return { infoCache: next };
+  }),
 }));
