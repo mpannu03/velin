@@ -18,26 +18,41 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
   useEffect(() => {
     if (!page || !canvasRef.current) return;
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    let cancelled = false;
 
-    canvas.width = page.width;
-    canvas.height = page.height;
+    (async () => {
+      const canvas = canvasRef.current!;
+      const ctx = canvas.getContext("2d", { willReadFrequently: false });
+      if (!ctx) return;
 
-    ctx.imageSmoothingEnabled = false;
+      canvas.width = page.width;
+      canvas.height = page.height;
 
-    const imageData = new ImageData(
-      page.pixels instanceof Uint8ClampedArray
-        ? (page.pixels as unknown as Uint8ClampedArray<ArrayBuffer>)
-        : new Uint8ClampedArray(page.pixels),
-      page.width,
-      page.height
-    );
+      ctx.imageSmoothingEnabled = false;  
 
-    ctx.putImageData(imageData, 0, 0);
+      const imageData = new ImageData(
+        page.pixels instanceof Uint8ClampedArray
+          ? (page.pixels as unknown as Uint8ClampedArray<ArrayBuffer>)
+          : new Uint8ClampedArray(page.pixels),
+        page.width,
+        page.height
+      );
 
-    onRendered?.();
+      const bitmap = await createImageBitmap(imageData);
+      if (cancelled) {
+        bitmap.close();
+        return;
+      }
+
+      ctx.drawImage(bitmap, 0, 0);
+      bitmap.close();
+
+      onRendered?.();
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [page]);
 
   if (loading && !page) {
