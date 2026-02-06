@@ -1,5 +1,5 @@
 import { JSX, useEffect, useRef } from "react";
-import { Loader } from "@mantine/core";
+import { Center, Loader } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useDocumentsStore } from "@/app";
@@ -59,7 +59,7 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
   });
 
   if (loading) {
-    return <Loader />
+    return <Center h="100%"><Loader /></Center>
   }
 
   if (error) {
@@ -92,7 +92,6 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
         style={{
           flex: 1,
           overflow: "auto",
-          padding: "16px",
           cursor: viewerState.tool === 'hand' ? 'grab' : 'default',
         }}
       >

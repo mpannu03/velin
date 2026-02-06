@@ -14,36 +14,18 @@ export function ScreenRouter(): JSX.Element {
   const isReader = screen.name === 'reader';
 
   return(
-    <Stack
-      gap={0}
+    <div
       style={{
-        position: 'relative',
-        overflow: 'hidden',
         width: '100%',
-        height: '100vh',
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: 0,
       }}
     >
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0,
-        }}
-      >
-        <ReaderScreen visible />
-      </div>
-      {!isReader && (
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            zIndex: 1,
-          }}
-        >
-          <ScreenComponent />
-        </div>
-      )}
-    </Stack>
+      <ReaderScreen />
+      {!isReader && <ScreenComponent />}
+    </div>
   );
 };
 

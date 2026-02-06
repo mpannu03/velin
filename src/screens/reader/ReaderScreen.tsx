@@ -1,7 +1,7 @@
 import { useDocumentsStore } from '@/app/store/documents.store';
 import { JSX } from 'react';
-import { ScreenProps } from '../props';
 import { PdfView } from './components/PdfView';
+import { useScreenState } from '@/app/screenRouter';
 
 export function ReaderPlaceholder(): JSX.Element {
   return(
@@ -9,17 +9,18 @@ export function ReaderPlaceholder(): JSX.Element {
   );
 }
 
-export function ReaderScreen({ visible }: ScreenProps): JSX.Element {  
+export function ReaderScreen(): JSX.Element {  
   const documents = useDocumentsStore(
     state => state.documents
   );
+  const screen = useScreenState(s => s.screen);
 
-  if (Object.keys(documents).length === 0) {
+  if (Object.keys(documents).length === 0 && screen.name === 'reader') {
     return (
       <div
         style={{
           width: '100%',
-          height: 'calc(100vh - var(--app-shell-header-height, 92px))',
+          flex: 1,
           background: '#f0f0f0',
           display: 'flex',
           alignItems: 'center',
@@ -34,10 +35,11 @@ export function ReaderScreen({ visible }: ScreenProps): JSX.Element {
   return (
     <div 
       style={{ 
-        display: visible ? 'block' : 'none',
+        height: "100%",
+        flexDirection: 'column',
         backgroundColor: '#f0f0f0',
         position: 'relative',
-        height: 'calc(100vh - var(--app-shell-header-height, 92px))',
+        flex: 1,
         overflow: 'hidden',
       }}
     >

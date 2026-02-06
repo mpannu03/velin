@@ -1,4 +1,4 @@
-import { Box, Button, Collapse, Group, Loader, ScrollArea, Stack, Text } from "@mantine/core";
+import { Box, Button, Center, Collapse, Group, Loader, ScrollArea, Stack, Text } from "@mantine/core";
 import { usePdfBookmarks } from "../hooks";
 import { Bookmark } from "@/shared/types";
 import { useState } from "react";
@@ -10,14 +10,12 @@ export function Bookmarks({ id }: { id: string }) {
   const items = bookmarks?.items ?? [];
 
   if (loading) {
-    return <Loader />;
+    return <Center h="100%"><Loader /></Center>;
   }
 
   if (error) {
     return <Text>Error: {error}</Text>;
   }
-
-  console.log(items);
 
   return (
     <Stack gap="sm" h="100%">
