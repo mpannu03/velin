@@ -54,6 +54,7 @@ function BookmarkItem({ id, bookmark, level = 0 }: BookmarkProps) {
   return (
     <Box>
       <Group
+        pl={level * 16}
         gap="xs"
         wrap="nowrap"
         style={{ cursor: hasChildren ? "pointer" : "default" }}
@@ -65,13 +66,28 @@ function BookmarkItem({ id, bookmark, level = 0 }: BookmarkProps) {
           <Box w={14} style={{ flexShrink: 0 }} />
         )}
 
-        <Button variant="subtle"
+        <Button
+          variant="subtle"
+          h="auto"
+          py="xs"
+          styles={{
+            inner: {
+              justifyContent: "flex-start",
+              textAlign: "left",
+              whiteSpace: "normal",
+            },
+            label: {
+              whiteSpace: "normal",
+              display: "block",
+            },
+          }}
           onClick={() => {
             if (bookmark.page_index !== null) {
               gotoPage(id, bookmark.page_index);
             }
-          }}>
-          <Text size="sm" c="black" style={{ wordBreak: "break-word" }}>
+          }}
+        >
+          <Text size="sm" c="black">
             {bookmark.title}
           </Text>
         </Button>
