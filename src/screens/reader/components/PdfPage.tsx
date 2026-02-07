@@ -1,6 +1,8 @@
 import { JSX, useEffect, useRef } from "react";
-import { usePdfPage } from "../hooks";
+import { usePdfInfo, usePdfPage } from "../hooks";
+import { usePdfText } from "../hooks/usePdfText";
 import { Box, Center, Loader } from "@mantine/core";
+import { TextLayer } from "./TextLayer";
 
 type PdfPageProps = {
   id: string;
@@ -12,6 +14,8 @@ type PdfPageProps = {
 
 export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPageProps): JSX.Element {
   const { page, error, loading } = usePdfPage(id, pageIndex, width);
+  const { info } = usePdfInfo(id);
+  const { text: textItems } = usePdfText(id, pageIndex);
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -69,6 +73,10 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
     return <Center mb={16}>Loading Error: {error}</Center>;
   }
 
+  const displayWidth = width / 2;
+  const displayHeight = page ? (width * (page.height / page.width)) / 2 : (width * aspectRatio) / 2;
+  const scale = info ? displayWidth / info.width : (page ? displayWidth / page.width : 1);
+
   return (
     <Box
       style={{
@@ -77,16 +85,32 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
         marginBottom: 16
       }}
     >
-      <canvas
-        ref={canvasRef}
+      <Box
         style={{
-          width: `${width / 2}px`,
-          height: page ? `${(width * (page.height / page.width)) / 2}px` : `${(width * aspectRatio) / 2}px`,
-          display: page ? 'block' : 'none',
+          position: "relative",
+          width: `${displayWidth}px`,
+          height: `${displayHeight}px`,
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
           backgroundColor: 'white',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
         }}
-      />
+      >
+        <canvas
+          ref={canvasRef}
+          style={{
+            width: `100%`,
+            height: `100%`,
+            display: page ? 'block' : 'none',
+          }}
+        />
+        {textItems && info && (
+          <TextLayer
+            textItems={textItems}
+            scale={scale}
+            width={displayWidth}
+            height={displayHeight}
+          />
+        )}
+      </Box>
     </Box>
   );
 }

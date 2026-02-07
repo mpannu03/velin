@@ -1,4 +1,4 @@
-import { Bookmarks, PdfInfo } from '../types';
+import { Bookmarks, PdfInfo, TextItem } from '../types';
 import { RenderedPage } from '@/screens/reader/types';
 import { InvokeResult, safeInvoke } from './invoke_result';
 
@@ -57,4 +57,11 @@ export const fetchBookmarks = async (
   id: string
 ): Promise<InvokeResult<Bookmarks>> => {
   return safeInvoke<Bookmarks>('get_bookmarks', { id });
+}
+
+export const fetchTextByPage = async (
+  id: string,
+  pageIndex: number
+): Promise<InvokeResult<TextItem[]>> => {
+  return safeInvoke<TextItem[]>('get_text_by_page', { id, pageIndex });
 }
