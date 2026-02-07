@@ -28,20 +28,19 @@ pub fn get_text_by_page(
 
     for i in 0..chars.len() {
         let ch = chars.get(i).map_err(|e| e.to_string())?;
+
         let unicode = match ch.unicode_char() {
             Some(c) => c,
             None => continue,
         };
 
-        let rect = ch
-            .tight_bounds()
-            .or_else(|_| ch.loose_bounds())
-            .unwrap_or(PdfRect::new(
-                PdfPoints::new(0.0),
-                PdfPoints::new(0.0),
-                PdfPoints::new(0.0),
-                PdfPoints::new(0.0),
-            ));
+        // Use loose_bounds for more consistent selection box heights across characters
+        let rect = ch.loose_bounds().unwrap_or(PdfRect::new(
+            PdfPoints::new(0.0),
+            PdfPoints::new(0.0),
+            PdfPoints::new(0.0),
+            PdfPoints::new(0.0),
+        ));
 
         if unicode.is_whitespace() {
             flush_word(
@@ -54,7 +53,6 @@ pub fn get_text_by_page(
         }
 
         current_word.push(unicode);
-
         current_bbox = Some(match current_bbox {
             Some(existing) => union_rects(&existing, &rect),
             None => rect,
@@ -95,7 +93,6 @@ fn flush_word(
     }
 
     if let Some(rect) = bbox.take() {
-        // PDF → DOM coordinate transform
         let x = rect.left().value;
         let y = page_height - rect.top().value;
 

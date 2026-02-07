@@ -12,6 +12,7 @@ export type TextLayerProps = {
 export function TextLayer({ textItems, scale, width, height }: TextLayerProps): JSX.Element {
   return (
     <Box
+      className="text-layer"
       style={{
         position: "absolute",
         top: 0,
@@ -24,6 +25,12 @@ export function TextLayer({ textItems, scale, width, height }: TextLayerProps): 
         lineHeight: 1,
       }}
     >
+      <style>{`
+        .text-layer span::selection {
+          background: rgba(0, 102, 255, 0.3);
+          color: transparent;
+        }
+      `}</style>
       {textItems.map((item, index) => (
         <span
           key={index}
@@ -31,15 +38,15 @@ export function TextLayer({ textItems, scale, width, height }: TextLayerProps): 
             position: "absolute",
             left: `${item.x * scale}px`,
             top: `${item.y * scale}px`,
+            width: `${item.width * scale}px`,
+            height: `${item.height * scale}px`,
             fontSize: `${item.height * scale}px`,
             fontFamily: "sans-serif",
             color: "transparent",
-            whiteSpace: "pre",
-            transformOrigin: "left top",
-            // We use a small trick to make sure the selection block matches the visual text
-            // even if the font doesn't perfectly match the PDF font.
             display: "inline-block",
             pointerEvents: "auto",
+            lineHeight: 1,
+            whiteSpace: "nowrap",
           }}
         >
           {item.text}
