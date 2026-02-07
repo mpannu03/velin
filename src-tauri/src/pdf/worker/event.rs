@@ -5,6 +5,7 @@ use flume::Sender;
 use crate::pdf::{
     document::{Bookmarks, DocumentId, PdfInfo},
     reader::RenderedPage,
+    TextItem,
 };
 
 pub enum PdfEvent {
@@ -30,5 +31,10 @@ pub enum PdfEvent {
     Bookmarks {
         id: DocumentId,
         reply: Sender<Result<Bookmarks, String>>,
+    },
+    Text {
+        id: DocumentId,
+        page_index: u16,
+        reply: Sender<Result<Vec<TextItem>, String>>,
     },
 }

@@ -1,5 +1,5 @@
 use crate::{
-    pdf::{document::PdfInfo, reader::RenderedPage, worker::PdfEvent, Bookmarks},
+    pdf::{document::PdfInfo, reader::RenderedPage, worker::PdfEvent, Bookmarks, TextItem},
     state::AppState,
 };
 use flume::bounded;
@@ -78,4 +78,27 @@ pub fn get_bookmarks(state: &AppState, id: String) -> Result<Bookmarks, String> 
 
     rx.recv()
         .map_err(|e| format!("Error receiving bookmarks result: {e}"))?
+}
+
+pub fn get_text_by_page(
+    state: &AppState,
+    id: String,
+    page_index: u16,
+) -> Result<Vec<TextItem>, String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::Text {
+            id,
+            page_index,
+            reply: tx,
+        })
+        .map_err(|e| format!("Error sending text command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving text result: {e}"))?
 }

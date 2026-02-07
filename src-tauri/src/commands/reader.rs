@@ -1,7 +1,7 @@
 use tauri::State;
 
 use crate::{
-    pdf::{document::PdfInfo, Bookmarks},
+    pdf::{document::PdfInfo, Bookmarks, TextItem},
     service::reader_service,
     state::AppState,
 };
@@ -47,4 +47,13 @@ pub fn close_pdf(state: State<AppState>, id: String) -> Result<(), String> {
 #[tauri::command]
 pub fn get_bookmarks(state: State<AppState>, id: String) -> Result<Bookmarks, String> {
     reader_service::get_bookmarks(&state, id)
+}
+
+#[tauri::command]
+pub fn get_text_by_page(
+    state: State<AppState>,
+    id: String,
+    page_index: u16,
+) -> Result<Vec<TextItem>, String> {
+    reader_service::get_text_by_page(&state, id, page_index)
 }

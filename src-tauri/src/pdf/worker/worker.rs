@@ -56,6 +56,14 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 let result = reader::get_bookmarks(&documents, &id);
                 let _ = reply.send(result);
             }
+            PdfEvent::Text {
+                id,
+                page_index,
+                reply,
+            } => {
+                let result = reader::get_text_by_page(&documents, &id, page_index);
+                let _ = reply.send(result);
+            }
         }
     }
 }
