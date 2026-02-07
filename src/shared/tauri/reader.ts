@@ -62,6 +62,12 @@ export const fetchBookmarks = async (
 export const fetchTextByPage = async (
   id: string,
   pageIndex: number
-): Promise<InvokeResult<TextItem[]>> => {
-  return safeInvoke<TextItem[]>('get_text_by_page', { id, pageIndex });
+): Promise<InvokeResult<PageText>> => {
+  return safeInvoke<PageText>('get_text_by_page', { id, pageIndex });
 }
+
+export type PageText = {
+  items: TextItem[];
+  width: number;
+  height: number;
+};

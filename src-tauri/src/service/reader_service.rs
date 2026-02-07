@@ -1,5 +1,10 @@
 use crate::{
-    pdf::{document::PdfInfo, reader::RenderedPage, worker::PdfEvent, Bookmarks, TextItem},
+    pdf::{
+        document::PdfInfo,
+        reader::{PageText, RenderedPage},
+        worker::PdfEvent,
+        Bookmarks, TextItem,
+    },
     state::AppState,
 };
 use flume::bounded;
@@ -80,11 +85,7 @@ pub fn get_bookmarks(state: &AppState, id: String) -> Result<Bookmarks, String> 
         .map_err(|e| format!("Error receiving bookmarks result: {e}"))?
 }
 
-pub fn get_text_by_page(
-    state: &AppState,
-    id: String,
-    page_index: u16,
-) -> Result<Vec<TextItem>, String> {
+pub fn get_text_by_page(state: &AppState, id: String, page_index: u16) -> Result<PageText, String> {
     let manager = state.manager.read();
     let worker = manager.worker();
 

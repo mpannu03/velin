@@ -9,6 +9,15 @@ export type TextLayerProps = {
   height: number;
 };
 
+// Helper to measure text width without rendering
+const measureTextWidth = (text: string, font: string): number => {
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  if (!context) return 0;
+  context.font = font;
+  return context.measureText(text).width;
+};
+
 export function TextLayer({ textItems, scale, width, height }: TextLayerProps): JSX.Element {
   return (
     <Box
@@ -31,27 +40,35 @@ export function TextLayer({ textItems, scale, width, height }: TextLayerProps): 
           color: transparent;
         }
       `}</style>
-      {textItems.map((item, index) => (
-        <span
-          key={index}
-          style={{
-            position: "absolute",
-            left: `${item.x * scale}px`,
-            top: `${item.y * scale}px`,
-            width: `${item.width * scale}px`,
-            height: `${item.height * scale}px`,
-            fontSize: `${item.height * scale}px`,
-            fontFamily: "sans-serif",
-            color: "transparent",
-            display: "inline-block",
-            pointerEvents: "auto",
-            lineHeight: 1,
-            whiteSpace: "nowrap",
-          }}
-        >
-          {item.text}
-        </span>
-      ))}
+      {textItems.map((item, index) => {
+        const fontSize = item.height * scale;
+        const targetWidth = item.width * scale;
+        const fontFamily = "sans-serif";
+        const browserWidth = measureTextWidth(item.text, `${fontSize}px ${fontFamily}`);
+        const scaleX = browserWidth > 0 ? targetWidth / browserWidth : 1;
+
+        return (
+          <span
+            key={index}
+            style={{
+              position: "absolute",
+              left: `${item.x * scale}px`,
+              top: `${item.y * scale}px`,
+              fontSize: `${fontSize}px`,
+              fontFamily: fontFamily,
+              color: "transparent",
+              display: "inline-block",
+              pointerEvents: "auto",
+              lineHeight: 1,
+              whiteSpace: "nowrap",
+              transform: `scaleX(${scaleX})`,
+              transformOrigin: "left top",
+            }}
+          >
+            {item.text}
+          </span>
+        );
+      })}
     </Box>
   );
 }

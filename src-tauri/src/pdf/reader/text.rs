@@ -1,14 +1,22 @@
 use std::collections::HashMap;
 
 use pdfium_render::prelude::{PdfDocument, PdfPoints, PdfRect};
+use serde::Serialize;
 
 use crate::pdf::{DocumentId, TextItem};
+
+#[derive(Debug, Clone, Serialize)]
+pub struct PageText {
+    pub items: Vec<TextItem>,
+    pub width: f32,
+    pub height: f32,
+}
 
 pub fn get_text_by_page(
     documents: &HashMap<DocumentId, PdfDocument>,
     id: &DocumentId,
     page_index: u16,
-) -> Result<Vec<TextItem>, String> {
+) -> Result<PageText, String> {
     let document = documents.get(id).ok_or("Document not found")?;
 
     let page = document
@@ -19,9 +27,10 @@ pub fn get_text_by_page(
     let text_page = page.text().map_err(|e| e.to_string())?;
 
     let page_height = page.height().value;
+    let page_width = page.width().value;
 
     let mut items = Vec::new();
-    let mut current_word = String::new();
+    let mut current_line = String::new();
     let mut current_bbox: Option<PdfRect> = None;
 
     let chars = text_page.chars();
@@ -42,31 +51,46 @@ pub fn get_text_by_page(
             PdfPoints::new(0.0),
         ));
 
-        if unicode.is_whitespace() {
-            flush_word(
+        // Detect line break: significantly different vertical position
+        let is_new_line = if let Some(ref prev_bbox) = current_bbox {
+            let prev_bottom = prev_bbox.bottom().value;
+            let current_bottom = rect.bottom().value;
+            let height = rect.height().value;
+
+            // If the jump is more than 30% of the character height, consider it a new line
+            (current_bottom - prev_bottom).abs() > height * 0.3
+        } else {
+            false
+        };
+
+        if is_new_line {
+            flush_text_item(
                 &mut items,
-                &mut current_word,
+                &mut current_line,
                 &mut current_bbox,
                 page_height,
             );
-            continue;
         }
 
-        current_word.push(unicode);
+        current_line.push(unicode);
         current_bbox = Some(match current_bbox {
             Some(existing) => union_rects(&existing, &rect),
             None => rect,
         });
     }
 
-    flush_word(
+    flush_text_item(
         &mut items,
-        &mut current_word,
+        &mut current_line,
         &mut current_bbox,
         page_height,
     );
 
-    Ok(items)
+    Ok(PageText {
+        items,
+        width: page_width,
+        height: page_height,
+    })
 }
 
 fn union_rects(r1: &PdfRect, r2: &PdfRect) -> PdfRect {
@@ -82,13 +106,13 @@ fn union_rects(r1: &PdfRect, r2: &PdfRect) -> PdfRect {
     )
 }
 
-fn flush_word(
+fn flush_text_item(
     items: &mut Vec<TextItem>,
-    word: &mut String,
+    text_content: &mut String,
     bbox: &mut Option<PdfRect>,
     page_height: f32,
 ) {
-    if word.is_empty() {
+    if text_content.trim().is_empty() {
         return;
     }
 
@@ -97,7 +121,7 @@ fn flush_word(
         let y = page_height - rect.top().value;
 
         items.push(TextItem {
-            text: word.clone(),
+            text: text_content.clone(),
             x,
             y,
             width: rect.width().value,
@@ -105,5 +129,5 @@ fn flush_word(
         });
     }
 
-    word.clear();
+    text_content.clear();
 }

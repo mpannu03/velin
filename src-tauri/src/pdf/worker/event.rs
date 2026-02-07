@@ -4,7 +4,7 @@ use flume::Sender;
 
 use crate::pdf::{
     document::{Bookmarks, DocumentId, PdfInfo},
-    reader::RenderedPage,
+    reader::{PageText, RenderedPage},
     TextItem,
 };
 
@@ -35,6 +35,6 @@ pub enum PdfEvent {
     Text {
         id: DocumentId,
         page_index: u16,
-        reply: Sender<Result<Vec<TextItem>, String>>,
+        reply: Sender<Result<PageText, String>>,
     },
 }

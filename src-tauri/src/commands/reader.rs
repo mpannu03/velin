@@ -1,7 +1,7 @@
 use tauri::State;
 
 use crate::{
-    pdf::{document::PdfInfo, Bookmarks, TextItem},
+    pdf::{document::PdfInfo, reader::PageText, Bookmarks},
     service::reader_service,
     state::AppState,
 };
@@ -54,6 +54,6 @@ pub fn get_text_by_page(
     state: State<AppState>,
     id: String,
     page_index: u16,
-) -> Result<Vec<TextItem>, String> {
+) -> Result<PageText, String> {
     reader_service::get_text_by_page(&state, id, page_index)
 }

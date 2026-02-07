@@ -1,14 +1,13 @@
-import { fetchTextByPage } from "@/shared/tauri";
-import { TextItem } from "@/shared/types"
+import { fetchTextByPage, PageText } from "@/shared/tauri";
 import { create } from "zustand";
 
 type TextCacheState = {
-  textCache: Map<string, TextItem[]>;
+  textCache: Map<string, PageText>;
   errorCache: Map<string, string | null>;
   isLoading: Map<string, boolean>;
 
   fetchText: (id: string, page: number) => Promise<void>;
-  getText: (id: string, page: number) => TextItem[] | undefined;
+  getText: (id: string, page: number) => PageText | undefined;
   removeText: (id: string) => void;
 };
 

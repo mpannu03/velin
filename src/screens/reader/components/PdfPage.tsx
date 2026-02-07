@@ -14,8 +14,8 @@ type PdfPageProps = {
 
 export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPageProps): JSX.Element {
   const { page, error, loading } = usePdfPage(id, pageIndex, width);
+  const { text: textItems, pageWidth } = usePdfText(id, pageIndex);
   const { info } = usePdfInfo(id);
-  const { text: textItems } = usePdfText(id, pageIndex);
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -75,7 +75,7 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
 
   const displayWidth = width / 2;
   const displayHeight = page ? (width * (page.height / page.width)) / 2 : (width * aspectRatio) / 2;
-  const scale = info ? displayWidth / info.width : (page ? displayWidth / page.width : 1);
+  const scale = pageWidth ? displayWidth / pageWidth : (info ? displayWidth / info.width : (page ? displayWidth / page.width : 1));
 
   return (
     <Box
