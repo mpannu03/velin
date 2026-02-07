@@ -5,7 +5,6 @@ use flume::Sender;
 use crate::pdf::{
     document::{Bookmarks, DocumentId, PdfInfo},
     reader::{PageText, RenderedPage},
-    TextItem,
 };
 
 pub enum PdfEvent {

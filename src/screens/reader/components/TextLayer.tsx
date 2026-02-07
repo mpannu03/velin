@@ -9,15 +9,6 @@ export type TextLayerProps = {
   height: number;
 };
 
-// Helper to measure text width without rendering
-const measureTextWidth = (text: string, font: string): number => {
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-  if (!context) return 0;
-  context.font = font;
-  return context.measureText(text).width;
-};
-
 export function TextLayer({ textItems, scale, width, height }: TextLayerProps): JSX.Element {
   return (
     <Box
@@ -32,6 +23,7 @@ export function TextLayer({ textItems, scale, width, height }: TextLayerProps): 
         userSelect: "text",
         overflow: "hidden",
         lineHeight: 1,
+        cursor: "text",
       }}
     >
       <style>{`
@@ -42,10 +34,7 @@ export function TextLayer({ textItems, scale, width, height }: TextLayerProps): 
       `}</style>
       {textItems.map((item, index) => {
         const fontSize = item.height * scale;
-        const targetWidth = item.width * scale;
-        const fontFamily = "sans-serif";
-        const browserWidth = measureTextWidth(item.text, `${fontSize}px ${fontFamily}`);
-        const scaleX = browserWidth > 0 ? targetWidth / browserWidth : 1;
+        const charWidth = item.width * scale;
 
         return (
           <span
@@ -54,15 +43,17 @@ export function TextLayer({ textItems, scale, width, height }: TextLayerProps): 
               position: "absolute",
               left: `${item.x * scale}px`,
               top: `${item.y * scale}px`,
+              width: `${charWidth}px`,
+              height: `${fontSize}px`,
               fontSize: `${fontSize}px`,
-              fontFamily: fontFamily,
+              fontFamily: "sans-serif",
               color: "transparent",
               display: "inline-block",
               pointerEvents: "auto",
               lineHeight: 1,
-              whiteSpace: "nowrap",
-              transform: `scaleX(${scaleX})`,
-              transformOrigin: "left top",
+              whiteSpace: "pre",
+              overflow: "hidden",
+              verticalAlign: "top",
             }}
           >
             {item.text}

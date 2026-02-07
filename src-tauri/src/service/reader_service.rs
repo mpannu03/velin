@@ -3,7 +3,7 @@ use crate::{
         document::PdfInfo,
         reader::{PageText, RenderedPage},
         worker::PdfEvent,
-        Bookmarks, TextItem,
+        Bookmarks,
     },
     state::AppState,
 };
