@@ -22,9 +22,11 @@ Velin leverages a modern stack to provide a native-feel desktop experience with 
 
 - [x] **Virtual PDF Rendering**: Supports large documents with minimal memory footprint using virtualization.
 - [x] **Instant Zoom**: Optimized zoom logic with CSS-first scaling for zero-latency feedback (Ctrl + / Mouse Wheel).
-- [x] **Responsive Toolbar**: Vertical sidebar toolbar for quick tool switching.
-- [/] **Sidebar Panels**: Placeholders for Bookmarks and Comments (Under active development).
-- [/] **Performance**: Continual optimizations to PDF pixel rendering and caching.
+- [x] **High-Performance Text Selection**: Precision text selection with minimal DOM overhead.
+- [x] **Text Fragment Extraction**: Backend-optimized text fragmenting for smooth selection and layout alignment.
+- [x] **Sidebar Panels**: Full support for PDF Bookmarks and navigation.
+- [/] **Comments**: Support for PDF comments and annotations (Under active development).
+- [x] **Performance**: Significant optimizations to PDF pixel rendering and caching.
 
 ## 🤝 Open Source & Contributions
 
