@@ -3,6 +3,7 @@ import { usePdfInfo, usePdfPage } from "../hooks";
 import { usePdfText } from "../hooks/usePdfText";
 import { Box, Center, Loader } from "@mantine/core";
 import { TextLayer } from "./TextLayer";
+import { SearchHighlightLayer } from "./SearchHighlightLayer";
 
 type PdfPageProps = {
   id: string;
@@ -134,6 +135,12 @@ useEffect(() => {
             height={displayHeight}
             viewportTop={viewportTop}
             viewportHeight={viewportHeight}
+          />
+        )}
+        {info && (
+          <SearchHighlightLayer
+            pageIndex={pageIndex}
+            scale={scale}
           />
         )}
       </Box>

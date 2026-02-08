@@ -47,6 +47,20 @@ export type TextItem = {
   height: number;
 }
 
+export type PdfRect = {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+export type SearchHit = {
+  page: number;
+  start: number;
+  end: number;
+  rects: PdfRect[];
+}
+
 /* ---------- factories ---------- */
 
 export const createPdfDocument = (

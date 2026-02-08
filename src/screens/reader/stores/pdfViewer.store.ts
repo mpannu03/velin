@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 export type ViewerTool = 'cursor' | 'hand';
-export type SidebarPanel = 'none' | 'comments' | 'bookmarks';
+export type SidebarPanel = 'none' | 'comments' | 'bookmarks' | 'search';
 
 export type ViewerState = {
   scale: number;

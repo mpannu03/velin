@@ -7,7 +7,8 @@ import {
   Hand,
   MousePointer,
   MessageCircle,
-  Bookmark
+  Bookmark,
+  Search
 } from "lucide-react";
 import { usePageIndicator } from '../hooks';
 import { useEffect, useState } from 'react';
@@ -117,6 +118,15 @@ export function ReaderToolbar({ documentId }: ReaderToolbarProps) {
             onClick={() => setSidebar(documentId, state.sidebar === 'bookmarks' ? 'none' : 'bookmarks')}
           >
             <Bookmark size={20} />
+          </ActionIcon>
+        </Tooltip>
+        <Tooltip label="Search" position="left">
+          <ActionIcon
+            variant={state.sidebar === 'search' ? 'filled' : 'light'}
+            size="lg"
+            onClick={() => setSidebar(documentId, state.sidebar === 'search' ? 'none' : 'search')}
+          >
+            <Search size={20} />
           </ActionIcon>
         </Tooltip>
       </Stack>
