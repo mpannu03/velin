@@ -1,11 +1,11 @@
 import { Box, Button, Center, Collapse, Group, Loader, ScrollArea, Stack, Text } from "@mantine/core";
 import { usePdfBookmarks } from "../hooks";
 import { Bookmark } from "@/shared/types";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { usePdfViewerStore } from "../stores";
 
-export function Bookmarks({ id }: { id: string }) {
+export const Bookmarks = memo(function Bookmarks({ id }: { id: string }) {
   const { bookmarks, error, loading } = usePdfBookmarks(id);
   const items = bookmarks?.items ?? [];
 
@@ -37,7 +37,7 @@ export function Bookmarks({ id }: { id: string }) {
       )}
     </Stack>
   );
-}
+});
 
 type BookmarkProps = {
   id: string;
@@ -45,7 +45,7 @@ type BookmarkProps = {
   level?: number;
 };
 
-function BookmarkItem({ id, bookmark, level = 0 }: BookmarkProps) {
+const BookmarkItem = memo(function BookmarkItem({ id, bookmark, level = 0 }: BookmarkProps) {
   const [opened, setOpened] = useState(false);
   const hasChildren = bookmark.children.length > 0;
 
@@ -107,4 +107,4 @@ function BookmarkItem({ id, bookmark, level = 0 }: BookmarkProps) {
       )}
     </Box>
   );
-}
+});
