@@ -6,9 +6,10 @@ import { useDocumentsStore } from "@/app";
 import { usePdfInfo } from "../hooks/usePdfInfo";
 import { usePdfViewerStore } from "../stores/pdfViewer.store";
 import { PdfPage } from './PdfPage';
-import { ReaderToolbar } from "./ReaderToolbar";
+import { SideBarPanel } from "./SideBarPanel";
 import { SidePanel } from "./SidePanel";
 import { useCurrentPageFromVirtual, usePdfWheelZoom } from "../hooks";
+import { ToolsPanel } from "./ToolsPanel";
 
 type PdfViewProps = {
   id: string;
@@ -86,6 +87,7 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
         pointerEvents: activeDocumentId === id ? 'auto' : 'none',
       }}
     >
+      <ToolsPanel documentId={id} />
       <div
         ref={parentRef}
         id="pdf-scroll-container"
@@ -129,7 +131,7 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
       </div>
 
       <SidePanel id={id} />
-      <ReaderToolbar documentId={id} />
+      <SideBarPanel documentId={id} />
     </div>
   );
 };

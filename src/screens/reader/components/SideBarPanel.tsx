@@ -1,11 +1,9 @@
 import { ActionIcon, Divider, Input, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { useHotkeys } from '@mantine/hooks';
-import { usePdfViewerStore } from '../stores/pdfViewer.store';
+import { SidebarPanel, usePdfViewerStore } from '../stores/pdfViewer.store';
 import {
   ZoomIn,
   ZoomOut,
-  Hand,
-  MousePointer,
   MessageCircle,
   Bookmark,
   Search
@@ -13,16 +11,15 @@ import {
 import { usePageIndicator } from '../hooks';
 import { useEffect, useState } from 'react';
 
-type ReaderToolbarProps = {
+type SideBarPanelProps = {
     documentId: string;
 };
 
-export function ReaderToolbar({ documentId }: ReaderToolbarProps) {
+export function SideBarPanel({ documentId }: SideBarPanelProps) {
   const state = usePdfViewerStore(s => s.getState(documentId));
   const zoomIn = () => usePdfViewerStore.getState().zoomIn(documentId);
   const zoomOut = () => usePdfViewerStore.getState().zoomOut(documentId);
   const resetZoom = () => usePdfViewerStore.getState().resetZoom(documentId);
-  const setTool = usePdfViewerStore.getState().setTool;
   const setSidebar = usePdfViewerStore.getState().setSidebar;
   const pageIndicator = usePageIndicator(documentId);
 
@@ -37,39 +34,63 @@ export function ReaderToolbar({ documentId }: ReaderToolbarProps) {
       shadow="xs"
       p="xs"
       withBorder
+      w="50"
+      h="100%"
       style={{
-        width: 50,
-          height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
           justifyContent: 'space-between',
-          backgroundColor: 'var(--mantine-color-body)',
-          borderLeft: '1px solid var(--mantine-color-gray-3)',
       }}
     >
       <Stack gap="xs" align="center">
-        <Tooltip label="Selection Tool" position="left">
+        <Tooltip label="Comments" position="left">
           <ActionIcon
-            variant={state.tool === 'cursor' ? 'filled' : 'light'}
-            onClick={() => setTool(documentId, 'cursor')}
+            variant={state.sidebar === SidebarPanel.Comments ? 'filled' : 'light'}
             size="lg"
+            onClick={() => setSidebar(
+              documentId, state.sidebar === SidebarPanel.Comments 
+                ? SidebarPanel.None 
+                : SidebarPanel.Comments
+            )}
           >
-            <MousePointer size={20} />
+            <MessageCircle size={20} />
           </ActionIcon>
         </Tooltip>
-        <Tooltip label="Hand Tool" position="left">
+        <Tooltip label="Bookmarks" position="left">
           <ActionIcon
-            variant={state.tool === 'hand' ? 'filled' : 'light'}
-            onClick={() => setTool(documentId, 'hand')}
+            variant={state.sidebar === SidebarPanel.Bookmarks ? 'filled' : 'light'}
             size="lg"
+            onClick={() => setSidebar(
+              documentId, state.sidebar === SidebarPanel.Bookmarks 
+                ? SidebarPanel.None 
+                : SidebarPanel.Bookmarks
+            )}
           >
-            <Hand size={20} />
+            <Bookmark size={20} />
+          </ActionIcon>
+        </Tooltip>
+        <Tooltip label="Search" position="left">
+          <ActionIcon
+            variant={state.sidebar === SidebarPanel.Search ? 'filled' : 'light'}
+            size="lg"
+            onClick={() => setSidebar(
+              documentId, state.sidebar === SidebarPanel.Search 
+                ? SidebarPanel.None 
+                : SidebarPanel.Search
+            )}
+          >
+            <Search size={20} />
           </ActionIcon>
         </Tooltip>
       </Stack>
 
       <Stack align="center" gap="xs">
+        <PageGotoInput id={documentId} />
+        <Divider w={16} />
+        <Text size="xs" c="dimmed">
+          {pageIndicator?.total}
+        </Text>
+
         <Tooltip label="Zoom In (Ctrl+Plus)" position="left">
           <ActionIcon variant="light" onClick={zoomIn} size="lg">
             <ZoomIn size={20} />
@@ -90,43 +111,6 @@ export function ReaderToolbar({ documentId }: ReaderToolbarProps) {
         <Tooltip label="Zoom Out (Ctrl+Minus)" position="left">
           <ActionIcon variant="light" onClick={zoomOut} size="lg">
             <ZoomOut size={20} />
-          </ActionIcon>
-        </Tooltip>
-
-        <PageGotoInput id={documentId} />
-        <Divider w={16} />
-        <Text size="xs" c="dimmed">
-          {pageIndicator?.total}
-        </Text>
-
-      </Stack>
-
-      <Stack gap="xs" align="center">
-        <Tooltip label="Comments" position="left">
-          <ActionIcon
-            variant={state.sidebar === 'comments' ? 'filled' : 'light'}
-            size="lg"
-            onClick={() => setSidebar(documentId, state.sidebar === 'comments' ? 'none' : 'comments')}
-          >
-            <MessageCircle size={20} />
-          </ActionIcon>
-        </Tooltip>
-        <Tooltip label="Bookmarks" position="left">
-          <ActionIcon
-            variant={state.sidebar === 'bookmarks' ? 'filled' : 'light'}
-            size="lg"
-            onClick={() => setSidebar(documentId, state.sidebar === 'bookmarks' ? 'none' : 'bookmarks')}
-          >
-            <Bookmark size={20} />
-          </ActionIcon>
-        </Tooltip>
-        <Tooltip label="Search" position="left">
-          <ActionIcon
-            variant={state.sidebar === 'search' ? 'filled' : 'light'}
-            size="lg"
-            onClick={() => setSidebar(documentId, state.sidebar === 'search' ? 'none' : 'search')}
-          >
-            <Search size={20} />
           </ActionIcon>
         </Tooltip>
       </Stack>
