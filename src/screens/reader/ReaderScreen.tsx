@@ -1,7 +1,7 @@
 import { useDocumentsStore } from '@/app/store/documents.store';
 import { JSX } from 'react';
-import { ScreenProps } from '../props';
 import { PdfView } from './components/PdfView';
+import { useScreenState } from '@/app/screenRouter';
 
 export function ReaderPlaceholder(): JSX.Element {
   return(
@@ -9,28 +9,42 @@ export function ReaderPlaceholder(): JSX.Element {
   );
 }
 
-export function ReaderScreen({ visible }: ScreenProps): JSX.Element {  
+export function ReaderScreen(): JSX.Element {  
   const documents = useDocumentsStore(
     state => state.documents
   );
+  const screen = useScreenState(s => s.screen);
 
-  if (Object.keys(documents).length === 0) {
+  if (Object.keys(documents).length === 0 && screen.name === 'reader') {
     return (
-      <div style={{ 
-        display: visible ? 'block' : 'none',
-      }}>No document opened.</div>
+      <div
+        style={{
+          width: '100%',
+          flex: 1,
+          background: '#f0f0f0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        No document opened.
+      </div>
     );
   }
 
   return (
     <div 
       style={{ 
-        display: visible ? 'block' : 'none',
+        height: "100%",
+        flexDirection: 'column',
         backgroundColor: '#f0f0f0',
+        position: 'relative',
+        flex: 1,
+        overflow: 'hidden',
       }}
     >
       {Object.values(documents).map((doc) => (
-        <PdfView id={doc.id} />
+        <PdfView key={doc.id} id={doc.id} />
       ))}
     </div>
   );

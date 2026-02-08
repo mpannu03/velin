@@ -8,7 +8,14 @@ export function ShellLayout(
 ): JSX.Element {
   return (
     <AppShell
-    header={{ height: 92 }}
+      header={{ height: 92 }}
+      styles={{
+        main: {
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+        },
+      }}
     >
       <AppShell.Header>
         <TitleBar />

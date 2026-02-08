@@ -30,6 +30,8 @@ impl AppState {
     /// # Examples
     ///
     /// ```no_run
+    /// use velin_lib::AppState;
+    ///
     /// let state = AppState::new();
     /// let mgr = state.manager.read();
     /// // use `mgr` to inspect documents
@@ -37,6 +39,26 @@ impl AppState {
     pub fn new() -> Self {
         Self {
             manager: Arc::new(RwLock::new(DocumentManager::new())),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_app_state_initialization() {
+        let state = AppState::new();
+
+        // Verify we can get a read lock
+        {
+            let _mgr = state.manager.read();
+        }
+
+        // Verify we can get a write lock
+        {
+            let _mgr = state.manager.write();
         }
     }
 }

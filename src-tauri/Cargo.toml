@@ -1,7 +1,7 @@
 [package]
 name = "velin"
-version = "0.1.0"
-description = "A Tauri App"
+version = "0.2.0"
+description = "A fast, lightweight PDF reader built with Tauri and Rust, optimized for large documents."
 authors = ["you"]
 edition = "2021"
 license = "GPL-3.0-only"

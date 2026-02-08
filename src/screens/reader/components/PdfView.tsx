@@ -1,12 +1,14 @@
 import { JSX, useEffect, useRef } from "react";
-import { Loader, Paper, Stack, Text } from "@mantine/core";
+import { Center, Loader } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useDocumentsStore } from "@/app";
 import { usePdfInfo } from "../hooks/usePdfInfo";
-import { usePdfViewerStore } from "../stores/usePdfViewerStore";
+import { usePdfViewerStore } from "../stores/pdfViewer.store";
 import { PdfPage } from './PdfPage';
 import { ReaderToolbar } from "./ReaderToolbar";
+import { SidePanel } from "./SidePanel";
+import { useCurrentPageFromVirtual, usePdfWheelZoom } from "../hooks";
 
 type PdfViewProps = {
   id: string;
@@ -17,38 +19,16 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
   const { info, error, loading } = usePdfInfo(id);
   const parentRef = useRef<HTMLDivElement>(null);
   const viewerState = usePdfViewerStore(s => s.getState(id));
+  const wheelRef = usePdfWheelZoom(id);
+  const gotoPage = usePdfViewerStore((s) => s.getState(id).gotoPage);
+  const clearGotoPage = usePdfViewerStore(s => s.clearGotoPage);
 
-  useEffect(() => {
-    const el = parentRef.current;
-    if (!el) return;
-
-    const handleWheel = (e: WheelEvent) => {
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault();
-        const ZOOM_STEPS = [0.1, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0, 4.0, 5.0];
-        if (e.deltaY < 0) {
-          const nextStep = ZOOM_STEPS.find(s => s > viewerState.scale) || 5.0;
-          usePdfViewerStore.getState().setScale(id, nextStep);
-        } else {
-          const prevStep = [...ZOOM_STEPS].reverse().find(s => s < viewerState.scale) || 0.1;
-          usePdfViewerStore.getState().setScale(id, prevStep);
-        }
-      }
-    };
-
-    el.addEventListener('wheel', handleWheel, { passive: false });
-    return () => el.removeEventListener('wheel', handleWheel);
-  }, [id, viewerState.scale]);
-
-  /* ------------------ Sizing Logic ------------------ */
   const { width: windowWidth } = useViewportSize();
 
-  // 1/3 of window width logic (with min safety) * ZOOM SCALE
-  const baseWidth = Math.max(windowWidth / 3, 400);
+  const baseWidth = Math.max(windowWidth / 2, 400);
   const displayWidth = baseWidth * viewerState.scale;
-  const renderWidth = displayWidth * 2; // Request 2x resolution for High DPI
+  const renderWidth = displayWidth * 2;
 
-  // Aspect ratio fallback to standard A4 (1 / 1.414)
   const aspectRatio = (info?.height && info?.width)
     ? (info.height / info.width)
     : 1.414;
@@ -60,10 +40,26 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
     getScrollElement: () => parentRef.current,
     estimateSize: () => estimatedHeight,
     overscan: 3,
+    scrollMargin: 16
+  });
+
+  useEffect(() => {
+    if (gotoPage == null) return;
+
+    rowVirtualizer.scrollToIndex(gotoPage, {
+      align: "start",
+    });
+
+    clearGotoPage(id);
+  }, [gotoPage, id, rowVirtualizer, clearGotoPage]);
+
+  useCurrentPageFromVirtual({
+    virtualizer: rowVirtualizer,
+    id,
   });
 
   if (loading) {
-    return <Loader />
+    return <Center h="100%"><Loader /></Center>
   }
 
   if (error) {
@@ -76,21 +72,26 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
 
   return (
     <div
+      ref={wheelRef}
       style={{
-        height: "100vh",
-        display: activeDocumentId === id ? 'flex' : 'none',
+        display: "flex",
         flexDirection: 'row',
         backgroundColor: '#f1f3f5',
+        visibility: activeDocumentId === id ? 'visible' : 'hidden',
+        position: activeDocumentId === id ? 'relative' : 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: activeDocumentId === id ? 'auto' : 'none',
       }}
     >
-      {/* Scrollable PDF Content */}
       <div
         ref={parentRef}
         id="pdf-scroll-container"
         style={{
           flex: 1,
           overflow: "auto",
-          padding: "16px",
           cursor: viewerState.tool === 'hand' ? 'grab' : 'default',
         }}
       >
@@ -120,37 +121,14 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
                 id={id}
                 pageIndex={virtualItem.index}
                 width={renderWidth}
+                aspectRatio={aspectRatio}
               />
             </div>
           ))}
         </div>
       </div>
 
-      {/* Sidebar Panel Content (e.g. Bookmarks/Comments list) */}
-      {viewerState.sidebar !== 'none' && (
-        <Paper
-          w={250}
-          h="100%"
-          p="md"
-          withBorder
-          style={{
-            borderTop: 0,
-            borderBottom: 0,
-            backgroundColor: 'var(--mantine-color-body)',
-          }}
-        >
-          <Stack gap="sm">
-            <Text fw={700} tt="uppercase" size="xs" c="dimmed">
-              {viewerState.sidebar}
-            </Text>
-            <Text size="sm" c="dimmed" fs="italic">
-              No {viewerState.sidebar} yet.
-            </Text>
-          </Stack>
-        </Paper>
-      )}
-
-      {/* Right Sidebar Toolbar */}
+      <SidePanel id={id} />
       <ReaderToolbar documentId={id} />
     </div>
   );

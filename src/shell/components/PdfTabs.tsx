@@ -2,35 +2,12 @@ import { ActionIcon, Divider, Group, Text } from "@mantine/core";
 import { JSX } from "react";
 import { PdfDocument } from "@/shared/types";
 import { FiPlus, FiX } from "react-icons/fi";
-import { pickPdfFile } from "@/shared/services";
 import { useHover } from "@mantine/hooks";
 import { useDocumentsStore } from "@/app/store/documents.store";
-import { notifications } from "@mantine/notifications";
+import { closePdf, openPdf } from "@/screens/reader";
 
 export function PdfTabs(): JSX.Element {
-  const pdfStore = useDocumentsStore();
   const docs = useDocumentsStore((s) => s.documents);
-
-  const handleOpenPdf = async () => {
-    const filePath = await pickPdfFile();
-    if (!filePath) {
-      notifications.show({
-        title: "Error",
-        message: "Error Opening Pdf",
-      });
-
-      return;
-    };
-
-    const result = await pdfStore.open(filePath);
-
-    if (!result.ok) {
-      notifications.show({
-        title: "Error Opening Pdf.",
-        message: result.error,
-      });
-    }
-  }
 
   return(
     <Group
@@ -50,7 +27,7 @@ export function PdfTabs(): JSX.Element {
         w={36}
         h={36}
         variant="subtle"
-        onClick={() => handleOpenPdf()}
+        onClick={() => openPdf()}
       >
         <FiPlus size={18} />
       </ActionIcon>
@@ -66,16 +43,6 @@ function Tab({ tab }: TabProps): JSX.Element {
   const { hovered, ref } = useHover();
   const pdfStore = useDocumentsStore();
   const selectedTab = useDocumentsStore((s) => s.activeDocumentId);
-
-  const handleClosePdf = async (id: string) => {
-    const result = await pdfStore.close(id);
-      if (!result.ok) {
-        notifications.show({
-          title: "Error Closing Pdf.",
-          message: result.error,
-        });
-      }
-  }
 
   return(
     <Group
@@ -113,7 +80,7 @@ function Tab({ tab }: TabProps): JSX.Element {
       </Text>
       <ActionIcon
         variant="subtle"
-        onClick={() => handleClosePdf(tab.id)}
+        onClick={() => closePdf(tab.id)}
       >
         <FiX />
       </ActionIcon>

@@ -20,16 +20,10 @@ class PdfRenderQueue {
         if (signal?.aborted) {
           this.runningCount--;
           this.runNext();
-          return; // Skip execution if aborted while in queue
+          return;
         }
         try {
           const result = await task();
-          if (signal?.aborted) {
-            // If aborted during task execution (though task() itself should handle it ideally)
-            // we can still choose not to resolve.
-            // But usually task() returns the result.
-            // Let's resolve. The caller checks signal.
-          }
           resolve(result);
         } catch (err) {
           reject(err);

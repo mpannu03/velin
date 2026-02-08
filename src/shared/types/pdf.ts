@@ -29,6 +29,24 @@ export type PdfInfo = {
   height: number;
 }
 
+export type Bookmark = {
+  title: string;
+  page_index: number | null;
+  children: Bookmark[];
+}
+
+export type Bookmarks = {
+  items: Bookmark[];
+};
+
+export type TextItem = {
+  text: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 /* ---------- factories ---------- */
 
 export const createPdfDocument = (
