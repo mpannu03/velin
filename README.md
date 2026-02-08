@@ -57,7 +57,7 @@ Velin is an open-source project, and we welcome help from the community!
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/velin.git
+   git clone https://github.com/mpannu03/velin.git
    ```
 2. Install dependencies:
    ```bash
