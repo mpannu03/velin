@@ -1,4 +1,4 @@
-import { Bookmarks, PdfInfo, TextItem } from '../types';
+import { Bookmarks, PageText, PdfInfo } from '../types';
 import { RenderedPage } from '@/screens/reader/types';
 import { InvokeResult, safeInvoke } from './invoke_result';
 
@@ -66,8 +66,8 @@ export const fetchTextByPage = async (
   return safeInvoke<PageText>('get_text_by_page', { id, pageIndex });
 }
 
-export type PageText = {
-  items: TextItem[];
-  width: number;
-  height: number;
-};
+export const generatePreview = async (
+  id: string
+): Promise<InvokeResult<Uint8Array>> => {
+  return safeInvoke<Uint8Array>('generate_preview', { id });
+}

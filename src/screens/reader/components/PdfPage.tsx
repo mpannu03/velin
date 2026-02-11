@@ -59,6 +59,11 @@ useEffect(() => {
 
       ctx.imageSmoothingEnabled = false;  
 
+      if (page.pixels.length === 0) {
+        console.warn("Received empty pixel data for page:", pageIndex);
+        return;
+      }
+
       const imageData = new ImageData(
         page.pixels instanceof Uint8ClampedArray
           ? (page.pixels as unknown as Uint8ClampedArray<ArrayBuffer>)

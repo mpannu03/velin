@@ -1,10 +1,11 @@
 import { create } from 'zustand';
 import { PdfDocument } from '@/shared/types/pdf';
-import { openPdf, closePdf, renderPage, fetchPdfInfo } from '@/shared/tauri/reader';
+import { openPdf, closePdf, fetchPdfInfo } from '@/shared/tauri/reader';
 import { path } from '@tauri-apps/api';
 import { InvokeResult } from '@/shared/tauri';
 import { documentRepository } from '@/shared/storage';
 import { useDocumentRepositoryStore } from './repository.store';
+import { savePreview } from '@/shared/services/previewPng';
 
 type DocumentsState = {
   documents: Record<string, PdfDocument>;
@@ -15,7 +16,7 @@ type DocumentsState = {
   setActive: (id: string) => void;
 };
 
-export const useDocumentsStore = create<DocumentsState>((set) => ({
+export const useDocumentsStore = create<DocumentsState>((set, get) => ({
   documents: {},
   activeDocumentId: null,
 
@@ -41,7 +42,14 @@ export const useDocumentsStore = create<DocumentsState>((set) => ({
       activeDocumentId: id,
     }));
 
-    const preview = await renderPage(id, 1, 100);
+    let previewPath: string | undefined;
+    try {
+      previewPath = await savePreview(get().documents[id]);
+      console.log("try" + previewPath);
+    } catch(e) {
+      previewPath = undefined;
+      console.log("catch: " + e);
+    }
     const pdfInfo = await fetchPdfInfo(id);
     const existing = documentRepository.getByFilePath(filePath);
 
@@ -49,13 +57,15 @@ export const useDocumentsStore = create<DocumentsState>((set) => ({
       ...existing,
       filePath,
       title,
-      lastOpened: new Date(),
+      lastOpened: new Date().getTime(),
       starred: existing?.starred ?? false,
       currentPage: existing?.currentPage ?? 1,
-      preview: preview.ok ? preview.data : undefined,
+      previewPath,
       pagesCount: pdfInfo.ok ? pdfInfo.data.page_count : 0,
       openedCount: existing ? existing.openedCount + 1 : 1,
     });
+
+    console.log(useDocumentRepositoryStore.getState().documents);
 
     return { ok: true, data: id }
   },

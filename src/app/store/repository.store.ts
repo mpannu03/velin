@@ -6,6 +6,7 @@ interface DocumentRepositoryState {
   documents: DocumentMeta[];
   init(): Promise<void>;
   getRecents(): DocumentMeta[];
+  getLastOpened(): DocumentMeta | undefined;
   getStarred(): DocumentMeta[];
   getDocumentByFilePath(filePath: string): DocumentMeta | undefined;
   addDocument(doc: DocumentMeta): Promise<void>;
@@ -23,8 +24,15 @@ export const useDocumentRepositoryStore = create<DocumentRepositoryState>((set, 
 
   getRecents() {
     return get().documents.sort(
-      (a, b) => b.lastOpened.getTime() - a.lastOpened.getTime()
+      (a, b) => b.lastOpened - a.lastOpened
     );
+  },
+
+  getLastOpened() {
+    const sorted = get().documents.sort(
+      (a, b) => b.lastOpened - a.lastOpened
+    );
+    return sorted.length > 0 ? sorted[0] : undefined;
   },
 
   getStarred() {

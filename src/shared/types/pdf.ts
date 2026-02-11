@@ -35,6 +35,12 @@ export type Bookmark = {
   children: Bookmark[];
 }
 
+export type PageText = {
+  items: TextItem[];
+  width: number;
+  height: number;
+};
+
 export type Bookmarks = {
   items: Bookmark[];
 };

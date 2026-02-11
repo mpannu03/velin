@@ -1,12 +1,12 @@
-import { RenderedPage } from "@/screens";
-
 export type DocumentMeta = {
   filePath: string;
   title: string;
-  preview: RenderedPage | undefined;
+  previewPath: string | undefined;
   starred: boolean;
-  lastOpened: Date;
+  lastOpened: number;
   currentPage: number;
   pagesCount: number;
   openedCount: number;
 }
+
+export type DocumentPatch = Partial<Omit<DocumentMeta, "filePath">>;
