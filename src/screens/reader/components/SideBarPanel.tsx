@@ -87,7 +87,7 @@ export function SideBarPanel({ documentId }: SideBarPanelProps) {
       <Stack align="center" gap="xs">
         <PageGotoInput id={documentId} />
         <Divider w={16} />
-        <Text size="xs" c="dimmed">
+        <Text size="xs">
           {pageIndicator?.total}
         </Text>
 
