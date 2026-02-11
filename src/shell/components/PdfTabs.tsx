@@ -5,6 +5,7 @@ import { FiPlus, FiX } from "react-icons/fi";
 import { useHover } from "@mantine/hooks";
 import { useDocumentsStore } from "@/app/store/documents.store";
 import { closePdf, openPdf } from "@/screens/reader";
+import { useScreenState } from "@/app/screenRouter";
 
 export function PdfTabs(): JSX.Element {
   const docs = useDocumentsStore((s) => s.documents);
@@ -43,6 +44,7 @@ function Tab({ tab }: TabProps): JSX.Element {
   const { hovered, ref } = useHover();
   const pdfStore = useDocumentsStore();
   const selectedTab = useDocumentsStore((s) => s.activeDocumentId);
+  const router = useScreenState();
 
   return(
     <Group
@@ -58,7 +60,10 @@ function Tab({ tab }: TabProps): JSX.Element {
       justify="space-between"
       align="center"
       pl="sm"
-      onClick={() => pdfStore.setActive(tab.id)}
+      onClick={() => {
+        pdfStore.setActive(tab.id);
+        router.openReader();
+      }}
       style={{
         cursor: "default",
         userSelect: "none",

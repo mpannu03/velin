@@ -26,7 +26,7 @@ export function HomeScreen(): JSX.Element {
   const lastOpened = useDocumentRepositoryStore((state) => state.getLastOpened());
   
   const [activeTab, setActiveTab] = useState<string | null>("recent");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
   const displayDocs = activeTab === "recent" 
     ? [...documents].sort((a, b) => b.lastOpened - a.lastOpened)
