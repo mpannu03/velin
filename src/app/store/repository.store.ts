@@ -4,19 +4,20 @@ import { create } from "zustand";
 
 interface DocumentRepositoryState {
   documents: DocumentMeta[];
-  init(): void;
+  init(): Promise<void>;
   getRecents(): DocumentMeta[];
   getStarred(): DocumentMeta[];
-  getDocumentById(id: string): DocumentMeta | undefined;
-  addDocument(doc: DocumentMeta): void;
-  updateDocument(doc: DocumentMeta): void;
-  deleteDocument(id: string): void;
+  getDocumentByFilePath(filePath: string): DocumentMeta | undefined;
+  addDocument(doc: DocumentMeta): Promise<void>;
+  updateDocument(doc: DocumentMeta): Promise<void>;
+  deleteDocument(filePath: string): Promise<void>;
 }
 
 export const useDocumentRepositoryStore = create<DocumentRepositoryState>((set, get) => ({
   documents: [],
 
-  init() {
+  async init() {
+    await documentRepository.init();
     set({ documents: documentRepository.getAll() });
   },
 
@@ -30,8 +31,8 @@ export const useDocumentRepositoryStore = create<DocumentRepositoryState>((set, 
     return get().documents.filter((doc) => doc.starred);
   },
 
-  getDocumentById(id: string) {
-    return get().documents.find((doc) => doc.id === id);
+  getDocumentByFilePath(filePath: string) {
+    return get().documents.find((doc) => doc.filePath === filePath);
   },
 
   async addDocument(doc: DocumentMeta) {
@@ -44,8 +45,8 @@ export const useDocumentRepositoryStore = create<DocumentRepositoryState>((set, 
     set({ documents: documentRepository.getAll() });
   },
 
-  async deleteDocument(id: string) {
-    await documentRepository.delete(id);
+  async deleteDocument(filePath: string) {
+    await documentRepository.delete(filePath);
     set({ documents: documentRepository.getAll() });
   },
 }));

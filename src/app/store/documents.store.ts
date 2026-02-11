@@ -1,14 +1,16 @@
 import { create } from 'zustand';
 import { PdfDocument } from '@/shared/types/pdf';
-import { openPdf, closePdf } from '@/shared/tauri/reader';
+import { openPdf, closePdf, renderPage, fetchPdfInfo } from '@/shared/tauri/reader';
 import { path } from '@tauri-apps/api';
 import { InvokeResult } from '@/shared/tauri';
+import { documentRepository } from '@/shared/storage';
+import { useDocumentRepositoryStore } from './repository.store';
 
 type DocumentsState = {
   documents: Record<string, PdfDocument>;
   activeDocumentId: string | null;
 
-  open: (filePath: string) => Promise<InvokeResult<void>>;
+  open: (filePath: string) => Promise<InvokeResult<string>>;
   close: (id: string) => Promise<InvokeResult<void>>;
   setActive: (id: string) => void;
 };
@@ -17,7 +19,7 @@ export const useDocumentsStore = create<DocumentsState>((set) => ({
   documents: {},
   activeDocumentId: null,
 
-  async open(filePath): Promise<InvokeResult<void>> {
+  async open(filePath): Promise<InvokeResult<string>> {
     const result = await openPdf(filePath);
 
     if (!result.ok) {
@@ -39,7 +41,23 @@ export const useDocumentsStore = create<DocumentsState>((set) => ({
       activeDocumentId: id,
     }));
 
-    return { ok: true, data: undefined }
+    const preview = await renderPage(id, 1, 100);
+    const pdfInfo = await fetchPdfInfo(id);
+    const existing = documentRepository.getByFilePath(filePath);
+
+    await useDocumentRepositoryStore.getState().updateDocument({
+      ...existing,
+      filePath,
+      title,
+      lastOpened: new Date(),
+      starred: existing?.starred ?? false,
+      currentPage: existing?.currentPage ?? 1,
+      preview: preview.ok ? preview.data : undefined,
+      pagesCount: pdfInfo.ok ? pdfInfo.data.page_count : 0,
+      openedCount: existing ? existing.openedCount + 1 : 1,
+    });
+
+    return { ok: true, data: id }
   },
 
   async close(id): Promise<InvokeResult<void>> {
