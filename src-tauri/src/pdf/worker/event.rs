@@ -41,4 +41,9 @@ pub enum PdfEvent {
         query: String,
         reply: Sender<Result<Vec<SearchHit>, String>>,
     },
+    Preview {
+        id: DocumentId,
+        save_path: Option<PathBuf>,
+        reply: Sender<Result<Vec<u8>, String>>,
+    },
 }

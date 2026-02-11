@@ -1,4 +1,4 @@
-use tauri::State;
+use tauri::{AppHandle, Manager, State};
 
 use crate::{
     pdf::{
@@ -69,4 +69,20 @@ pub fn search_document(
     query: String,
 ) -> Result<Vec<SearchHit>, String> {
     reader_service::search_document(&state, id, query)
+}
+
+#[tauri::command]
+pub fn generate_preview(
+    app: AppHandle,
+    state: State<AppState>,
+    id: String,
+) -> Result<Vec<u8>, String> {
+    let app_data = app
+        .path()
+        .app_cache_dir()
+        .map_err(|e| format!("Failed to get app cache dir: {e}"))?;
+    let previews_dir = app_data.join("previews");
+    let save_path = previews_dir.join(format!("{}.png", id));
+
+    reader_service::generate_preview(&state, id, Some(save_path))
 }

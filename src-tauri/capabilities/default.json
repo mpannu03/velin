@@ -13,6 +13,13 @@
     "core:window:allow-minimize",
     "core:window:allow-toggle-maximize",
     "dialog:default",
-    "store:default"
+    "store:default",
+    "fs:default",
+    "fs:allow-appcache-write-recursive",
+    "fs:allow-appcache-read-recursive",
+    {
+      "identifier": "fs:scope",
+      "allow": [{ "path": "$APPDATA/previews/*" }]
+    }
   ]
 }

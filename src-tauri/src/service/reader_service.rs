@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use crate::{
     pdf::{
         document::PdfInfo,
@@ -125,4 +127,27 @@ pub fn search_document(
 
     rx.recv()
         .map_err(|e| format!("Error receiving search result: {e}"))?
+}
+
+pub fn generate_preview(
+    state: &AppState,
+    id: String,
+    save_path: Option<PathBuf>,
+) -> Result<Vec<u8>, String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::Preview {
+            id,
+            save_path,
+            reply: tx,
+        })
+        .map_err(|e| format!("Error sending preview command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving preview result: {e}"))?
 }
