@@ -1,2 +1,1 @@
-// export type * from './types';
-export * from '@/app/store/documents.store';
+export * from './store';
