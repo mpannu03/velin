@@ -1,4 +1,4 @@
-import { DocumentMeta } from "../types";
+import { DocumentMeta, DocumentPatch } from "../types";
 import { documentStore } from "./store";
 
 type DocumentMap = Record<string, DocumentMeta>;
@@ -14,7 +14,7 @@ class DocumentRepository {
 		this.documents = Object.entries(data).reduce((acc, [key, doc]) => {
 			acc[key] = {
 				...doc,
-				lastOpened: new Date(doc.lastOpened)
+				lastOpened: new Date(doc.lastOpened).getTime()
 			};
 			return acc;
 		}, {} as DocumentMap);
@@ -35,21 +35,39 @@ class DocumentRepository {
 
 	async add(doc: DocumentMeta) {
 		this.documents[doc.filePath] = doc;
-		if (Object.values(this.documents).filter((doc) => !doc.starred).length > MAX_RECENTS) {
-			const sorted = Object.values(this.documents).sort(
-				(a, b) => b.lastOpened.getTime() - a.lastOpened.getTime()
-			);
-			this.documents = sorted.slice(0, MAX_RECENTS).reduce((acc, doc) => {
-				acc[doc.filePath] = doc;
+		
+		const documentsList = Object.values(this.documents);
+		const unstarred = documentsList.filter(d => !d.starred);
+		
+		if (unstarred.length > MAX_RECENTS) {
+			const keepUnstarred = unstarred
+				.sort((a, b) => b.lastOpened - a.lastOpened)
+				.slice(0, MAX_RECENTS);
+			
+			const keepUnstarredPaths = new Set(keepUnstarred.map(d => d.filePath));
+			
+			this.documents = documentsList.reduce((acc, d) => {
+				if (d.starred || keepUnstarredPaths.has(d.filePath)) {
+					acc[d.filePath] = d;
+				}
 				return acc;
 			}, {} as DocumentMap);
 		}
+		
 		await this.save();
 	}
 
-	async update(doc: DocumentMeta) {
-		this.documents[doc.filePath] = doc;
-		await this.save();
+	async update(patch: DocumentPatch) {
+		const { filePath, ...rest } = patch;
+		if (!filePath) return;
+		
+		if (this.documents[filePath]) {
+			this.documents[filePath] = {
+				...this.documents[filePath],
+				...rest
+			};
+			await this.save();
+		}
 	}
 
 	async delete(filePath: string) {

@@ -41,31 +41,46 @@ export const useDocumentsStore = create<DocumentsState>((set, get) => ({
       },
       activeDocumentId: id,
     }));
+    
+    const existing = documentRepository.getByFilePath(filePath);
+    if (existing) {
+      await useDocumentRepositoryStore.getState().updateDocument(
+        filePath,
+        {
+          openedCount: existing.openedCount + 1,
+          lastOpened: Date.now(),
+        }
+      );
+
+      return { ok: true, data: id };
+    }
 
     let previewPath: string | undefined;
+    let pagesCount = 0;
+
+    const pdfInfo = await fetchPdfInfo(id);
+    if (pdfInfo.ok) {
+      pagesCount = pdfInfo.data.page_count;
+    }
+
     try {
       previewPath = await savePreview(get().documents[id]);
-      console.log("try" + previewPath);
-    } catch(e) {
+    } catch {
       previewPath = undefined;
-      console.log("catch: " + e);
     }
-    const pdfInfo = await fetchPdfInfo(id);
-    const existing = documentRepository.getByFilePath(filePath);
 
-    await useDocumentRepositoryStore.getState().updateDocument({
-      ...existing,
-      filePath,
-      title,
-      lastOpened: new Date().getTime(),
-      starred: existing?.starred ?? false,
-      currentPage: existing?.currentPage ?? 1,
-      previewPath,
-      pagesCount: pdfInfo.ok ? pdfInfo.data.page_count : 0,
-      openedCount: existing ? existing.openedCount + 1 : 1,
-    });
-
-    console.log(useDocumentRepositoryStore.getState().documents);
+    await useDocumentRepositoryStore.getState().addDocument(
+      {
+        filePath,
+        title,
+        previewPath,
+        starred: false,
+        lastOpened: Date.now(),
+        currentPage: 1,
+        pagesCount,
+        openedCount: 1,
+      }
+    );
 
     return { ok: true, data: id }
   },

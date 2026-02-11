@@ -9,4 +9,4 @@ export type DocumentMeta = {
   openedCount: number;
 }
 
-export type DocumentPatch = Partial<Omit<DocumentMeta, "filePath">>;
+export type DocumentPatch = Partial<DocumentMeta>;

@@ -1,6 +1,7 @@
 import { appCacheDir, join } from "@tauri-apps/api/path";
 import { generatePreview } from "../tauri";
-import { PdfDocument } from "../types";
+import { DocumentMeta, PdfDocument } from "../types";
+import { remove, BaseDirectory } from '@tauri-apps/plugin-fs';
 
 export async function savePreview(
   document: PdfDocument
@@ -18,12 +19,18 @@ export async function savePreview(
   return previewPath;
 }
 
-export async function getPreview(
-  documentId: string
-): Promise<string | undefined> {
-  // This might be used elsewhere, but for now we follow the same pattern
-  const appCache = await appCacheDir();
-  const previewPath = await join(appCache, 'previews', `${documentId}.png`);
-  
-  return previewPath;
+export async function deletePreview(
+  document: DocumentMeta
+): Promise<void> {
+  if (!document.previewPath) {
+    return;
+  }
+
+  try {
+    await remove(document.previewPath, {
+      baseDir: BaseDirectory.AppCache
+    })
+  } catch(error) {
+    console.error(error);
+  }
 }

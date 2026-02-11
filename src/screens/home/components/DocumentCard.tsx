@@ -17,9 +17,6 @@ export function DocumentCard({ document, onClick, onDelete, onToggleStar }: Docu
     return convertFileSrc(document.previewPath);
   }, [document.previewPath]);
 
-  console.log(previewUrl);
-  console.log(document.previewPath);
-
   const formattedDate = new Date(document.lastOpened).toLocaleDateString(undefined, {
     month: 'short',
     day: 'numeric',

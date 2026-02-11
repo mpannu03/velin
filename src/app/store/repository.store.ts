@@ -1,5 +1,6 @@
+import { deletePreview } from "@/shared/services/previewPng";
 import { documentRepository } from "@/shared/storage";
-import { DocumentMeta } from "@/shared/types";
+import { DocumentMeta, DocumentPatch } from "@/shared/types";
 import { create } from "zustand";
 
 interface DocumentRepositoryState {
@@ -10,7 +11,7 @@ interface DocumentRepositoryState {
   getStarred(): DocumentMeta[];
   getDocumentByFilePath(filePath: string): DocumentMeta | undefined;
   addDocument(doc: DocumentMeta): Promise<void>;
-  updateDocument(doc: DocumentMeta): Promise<void>;
+  updateDocument(filePath: string, patch: Omit<DocumentPatch, 'filePath'>): Promise<void>;
   deleteDocument(filePath: string): Promise<void>;
 }
 
@@ -23,13 +24,13 @@ export const useDocumentRepositoryStore = create<DocumentRepositoryState>((set, 
   },
 
   getRecents() {
-    return get().documents.sort(
+    return [...get().documents].sort(
       (a, b) => b.lastOpened - a.lastOpened
     );
   },
 
   getLastOpened() {
-    const sorted = get().documents.sort(
+    const sorted = [...get().documents].sort(
       (a, b) => b.lastOpened - a.lastOpened
     );
     return sorted.length > 0 ? sorted[0] : undefined;
@@ -48,13 +49,18 @@ export const useDocumentRepositoryStore = create<DocumentRepositoryState>((set, 
     set({ documents: documentRepository.getAll() });
   },
 
-  async updateDocument(doc: DocumentMeta) {
-    await documentRepository.update(doc);
+  async updateDocument(filePath: string, patch: Omit<DocumentPatch, 'filePath'>) {
+    await documentRepository.update({ ...patch, filePath });
     set({ documents: documentRepository.getAll() });
   },
 
   async deleteDocument(filePath: string) {
+    const doc = get().documents.find((doc) => doc.filePath === filePath);
+    if (!doc) {
+      return;
+    }
     await documentRepository.delete(filePath);
+    await deletePreview(doc);
     set({ documents: documentRepository.getAll() });
   },
 }));
