@@ -1,6 +1,6 @@
-import { Card, Text, Group, Badge, Stack, ActionIcon, Menu, Box } from '@mantine/core';
+import { Card, Text, Group, Badge, Stack, ActionIcon, Box } from '@mantine/core';
 import { DocumentMeta } from '@/shared/types';
-import { FiMoreVertical, FiStar, FiFile, FiClock, FiTrash } from 'react-icons/fi';
+import { FiStar, FiFile, FiClock, FiTrash } from 'react-icons/fi';
 import { JSX, useMemo } from 'react';
 import { convertFileSrc } from '@tauri-apps/api/core';
 
@@ -26,7 +26,6 @@ export function DocumentCard({ document, onClick, onDelete, onToggleStar }: Docu
 
   return (
     <Card 
-      w="256px"
       shadow="sm" 
       padding="md" 
       radius="md" 
@@ -64,21 +63,30 @@ export function DocumentCard({ document, onClick, onDelete, onToggleStar }: Docu
           <Text fw={600} size="sm" truncate="end" style={{ flex: 1 }}>
             {document.title}
           </Text>
-          <Menu shadow="md" width={160} position="bottom-end">
-            <Menu.Target>
-              <ActionIcon variant="subtle" color="gray" onClick={(e) => e.stopPropagation()}>
-                <FiMoreVertical size={16} />
-              </ActionIcon>
-            </Menu.Target>
-            <Menu.Dropdown onClick={(e) => e.stopPropagation()}>
-              <Menu.Item leftSection={<FiStar size={14} />} onClick={onToggleStar}>
-                {document.starred ? 'Unstar' : 'Star'}
-              </Menu.Item>
-              <Menu.Item color="red" leftSection={<FiTrash size={14} />} onClick={onDelete}>
-                Remove
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
+          <Group gap={0}>
+            <ActionIcon 
+              variant="subtle" 
+              color={document.starred ? "yellow" : "gray"} 
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleStar?.();
+              }}
+            >
+              <FiStar size={16} style={{ fill: document.starred ? 'currentColor' : 'none' }} />
+            </ActionIcon>
+            <ActionIcon 
+              variant="subtle" 
+              color="gray" 
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete?.();
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--mantine-color-red-6)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--mantine-color-gray-6)')}
+            >
+              <FiTrash size={16} />
+            </ActionIcon>
+          </Group>
         </Group>
 
         <Group gap={4} wrap="nowrap">
@@ -91,13 +99,6 @@ export function DocumentCard({ document, onClick, onDelete, onToggleStar }: Docu
           </Badge>
         </Group>
       </Stack>
-
-      {document.starred && (
-        <FiStar 
-          style={{ position: 'absolute', top: 10, left: 10, fill: 'var(--mantine-color-yellow-5)', color: 'var(--mantine-color-yellow-5)' }} 
-          size={16} 
-        />
-      )}
     </Card>
   );
 }
