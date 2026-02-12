@@ -24,11 +24,11 @@ import { openPdf, openPdfFromPath } from "../reader/renderer/pdfLifecycle";
 export function HomeScreen(): JSX.Element {
   const { documents, deleteDocument, updateDocument } = useDocumentRepositoryStore();
   const lastOpened = useDocumentRepositoryStore((state) => state.getLastOpened());
-  
+
   const [activeTab, setActiveTab] = useState<string | null>("recent");
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
-  const displayDocs = activeTab === "recent" 
+  const displayDocs = activeTab === "recent"
     ? [...documents].sort((a, b) => b.lastOpened - a.lastOpened)
     : documents.filter(doc => doc.starred).sort((a, b) => b.lastOpened - a.lastOpened);
 

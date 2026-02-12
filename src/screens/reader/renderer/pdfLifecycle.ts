@@ -10,10 +10,10 @@ export async function openPdf() {
   const filePath = await pickPdfFile();
   const router = useScreenState.getState();
   if (!filePath) {
-    notifications.show({
-      title: "Error",
-      message: "Error Opening Pdf",
-    });
+    // notifications.show({
+    //   title: "Error",
+    //   message: "Error Opening Pdf",
+    // });
 
     return;
   };
