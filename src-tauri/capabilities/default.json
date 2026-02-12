@@ -16,10 +16,6 @@
     "store:default",
     "fs:default",
     "fs:allow-appcache-write-recursive",
-    "fs:allow-appcache-read-recursive",
-    {
-      "identifier": "fs:scope",
-      "allow": [{ "path": "$APPDATA/previews/*" }]
-    }
+    "fs:allow-appcache-read-recursive"
   ]
 }

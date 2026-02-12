@@ -19,14 +19,7 @@
       }
     ],
     "security": {
-      "csp": {
-        "default-src": "'self' customprotocol: asset:",
-        "font-src": [
-          "https://fonts.gstatic.com"
-        ],
-        "img-src": "'self' asset: https://asset.localhost blob: data:",
-        "style-src": "'unsafe-inline' 'self' https://fonts.googleapis.com"
-      },
+      "csp": "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost",
       "assetProtocol": {
         "enable": true,
         "scope": ["**/*"]

@@ -38,7 +38,7 @@ pub struct SearchHitRect {
     pub h: f32,
 }
 
-#[derive(serde::Serialize)]
+#[derive(Serialize)]
 pub struct SearchHit {
     pub page: u16,
     pub start: usize,

@@ -85,7 +85,7 @@ export const useDocumentsStore = create<DocumentsState>((set, get) => ({
     return { ok: true, data: id }
   },
 
-  async close(id): Promise<InvokeResult<void>> {
+  async close(id: string): Promise<InvokeResult<void>> {
     const result = await closePdf(id);
 
     if (!result.ok) {
