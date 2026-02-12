@@ -64,6 +64,7 @@ export function ScreenNavigationBar(): JSX.Element {
           h={48}
           radius={24}
           value={screen.name}
+          color="var(--mantine-primary-color-filled)"
           onChange={(value) => setScreen(value as Screen['name'])}
           styles={{
             control: {

@@ -1,4 +1,4 @@
-import { Group, Text, ActionIcon, Box, Paper, Stack, Badge } from '@mantine/core';
+import { Group, Text, ActionIcon, Box, Paper, Stack, Badge, Progress } from '@mantine/core';
 import { DocumentMeta } from '@/shared/types';
 import { FiStar, FiFile, FiClock, FiTrash } from 'react-icons/fi';
 import { JSX, useMemo } from 'react';
@@ -23,6 +23,10 @@ export function DocumentListItem({ document, onClick, onDelete, onToggleStar }: 
     hour: '2-digit',
     minute: '2-digit'
   });
+
+  const progress = document.pagesCount > 0 
+    ? ((document.currentPage + 1) / document.pagesCount) * 100 
+    : 0;
 
   return (
     <Paper
@@ -96,17 +100,23 @@ export function DocumentListItem({ document, onClick, onDelete, onToggleStar }: 
             </Group>
           </Group>
 
+          <Group gap="xs" mt={4} mb={4} w="100%">
+            <Text size="xs" c="dimmed" fw={500}>Progress</Text>
+            <Progress value={progress} size="xs" radius="xl" color="blue" style={{flex: 1}}/>
+            <Text size="xs" c="dimmed">{Math.round(progress)}%</Text>
+          </Group>
+
           <Group gap="md">
             <Group gap={4} wrap="nowrap">
               <FiClock size={12} color="var(--mantine-color-gray-6)" />
-              <Text size="xs" color="dimmed">
+              <Text size="xs" c="dimmed">
                 {formattedDate}
               </Text>
             </Group>
             <Badge variant="light" size="xs">
-              {document.pagesCount} pages
+              {document.currentPage + 1} / {document.pagesCount} pages
             </Badge>
-            <Text size="xs" color="dimmed" truncate="end" style={{ maxWidth: '300px' }}>
+            <Text size="xs" c="dimmed" truncate="end" style={{ maxWidth: '300px' }}>
               {document.filePath}
             </Text>
           </Group>

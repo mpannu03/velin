@@ -1,4 +1,4 @@
-import { Card, Text, Group, Badge, Stack, ActionIcon, Box } from '@mantine/core';
+import { Card, Text, Group, Badge, Stack, ActionIcon, Box, Progress } from '@mantine/core';
 import { DocumentMeta } from '@/shared/types';
 import { FiStar, FiFile, FiClock, FiTrash } from 'react-icons/fi';
 import { JSX, useMemo } from 'react';
@@ -23,6 +23,10 @@ export function DocumentCard({ document, onClick, onDelete, onToggleStar }: Docu
     hour: '2-digit',
     minute: '2-digit'
   });
+
+  const progress = document.pagesCount > 0 
+    ? ((document.currentPage + 1) / document.pagesCount) * 100 
+    : 0;
 
   return (
     <Card 
@@ -89,17 +93,24 @@ export function DocumentCard({ document, onClick, onDelete, onToggleStar }: Docu
           </Group>
         </Group>
 
+        <Stack gap={4} mt={2}>
+          <Group justify="space-between">
+            <Text size="xs" c="dimmed" fw={500}>Progress</Text>
+            <Text size="xs" c="dimmed">{Math.round(progress)}%</Text>
+          </Group>
+          <Progress value={progress} size="xs" radius="xl" color="blue" />
+        </Stack>
+
         <Group gap={4} wrap="nowrap">
           <FiClock size={12} color="var(--mantine-color-gray-6)" />
-          <Text size="xs" color="dimmed">
+          <Text size="xs" c="dimmed">
             {formattedDate}
           </Text>
           <Badge variant="light" size="xs" ml="auto">
-            {document.pagesCount} pages
+            {document.currentPage + 1} / {document.pagesCount} pages
           </Badge>
         </Group>
       </Stack>
     </Card>
   );
 }
-

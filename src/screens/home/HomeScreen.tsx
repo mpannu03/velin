@@ -100,7 +100,7 @@ export function HomeScreen(): JSX.Element {
           {displayDocs.length > 0 ? (
             <Box>
               {viewMode === "grid" ? (
-                <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="lg">
+                <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 4 }} spacing="lg">
                   {displayDocs.map((doc) => (
                     <DocumentCard 
                       key={doc.filePath} 
