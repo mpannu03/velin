@@ -6,7 +6,7 @@ export function ModifyScreen(): JSX.Element {
       style={{
         width: '100%',
         height: '100%',
-        background: '#f0f0f0',
+        background: 'var(--mantine-color-gray-0)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

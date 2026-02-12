@@ -96,7 +96,7 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
       style={{
         display: "flex",
         flexDirection: 'row',
-        backgroundColor: '#f1f3f5',
+        backgroundColor: 'var(--mantine-color-gray-1)',
         visibility: activeDocumentId === id ? 'visible' : 'hidden',
         position: activeDocumentId === id ? 'relative' : 'absolute',
         top: 0,
