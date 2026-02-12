@@ -11,6 +11,7 @@ pub fn run() {
     let devtools = tauri_plugin_devtools::init();
 
     let mut builder = tauri::Builder::default()
+        .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_store::Builder::new().build());
 
@@ -33,6 +34,7 @@ pub fn run() {
             commands::reader::get_text_by_page,
             commands::reader::search_document,
             commands::reader::generate_preview,
+            commands::tools::extract_tar_gz,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

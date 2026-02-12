@@ -16,6 +16,19 @@
     "store:default",
     "fs:default",
     "fs:allow-appcache-write-recursive",
-    "fs:allow-appcache-read-recursive"
+    "fs:allow-appcache-read-recursive",
+    "fs:allow-appdata-write-recursive",
+    "fs:allow-appdata-read-recursive",
+    "http:default",
+    "http:allow-fetch-read-body",
+    "http:allow-fetch-cancel",
+    "http:allow-fetch-send",
+    "http:allow-fetch",
+    {
+      "identifier": "http:allow-fetch",
+      "allow": [
+        { "url": "https://wordnetcode.princeton.edu/3.0/WNdb-3.0.tar.gz" }
+      ]
+    }
   ]
 }
