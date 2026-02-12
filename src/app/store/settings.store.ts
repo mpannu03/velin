@@ -9,6 +9,7 @@ interface SettingsState {
   updateAppearance: (patch: Partial<Settings['appearance']>) => Promise<void>;
   updateReader: (patch: Partial<Settings['reader']>) => Promise<void>;
   updateGeneral: (patch: Partial<Settings['general']>) => Promise<void>;
+  restoreDefaults: () => Promise<void>;
 }
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
@@ -60,6 +61,12 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     };
     set({ settings: nextSettings });
     await settingsStore.set('settings', nextSettings);
+    await settingsStore.save();
+  },
+
+  restoreDefaults: async () => {
+    set({ settings: DEFAULT_SETTINGS });
+    await settingsStore.set('settings', DEFAULT_SETTINGS);
     await settingsStore.save();
   },
 }));

@@ -1,6 +1,6 @@
-import { Modal, Group, Stack, Text, Switch, Select, ColorSwatch, useMantineTheme, Box, NumberInput, ActionIcon, Title, Divider, NavLink, ScrollArea, SegmentedControl } from "@mantine/core";
+import { Modal, Group, Stack, Text, Switch, Select, ColorSwatch, useMantineTheme, Box, NumberInput, ActionIcon, Title, Divider, NavLink, ScrollArea, SegmentedControl, Button } from "@mantine/core";
 import { useSettingsStore } from "@/app/store/settings.store";
-import { FiMonitor, FiMoon, FiSun, FiSettings, FiLayout, FiGlobe, FiCheck } from "react-icons/fi";
+import { FiMonitor, FiMoon, FiSun, FiSettings, FiLayout, FiGlobe, FiCheck, FiRotateCcw } from "react-icons/fi";
 import { JSX, useState } from "react";
 import { Theme } from "@/shared/types";
 
@@ -16,7 +16,7 @@ const ACCENT_COLORS = [
 type SettingsSection = 'appearance' | 'reader' | 'general';
 
 export function SettingsDialog({ opened, onClose }: SettingsDialogProps): JSX.Element {
-  const { settings, updateAppearance, updateReader, updateGeneral } = useSettingsStore();
+  const { settings, updateAppearance, updateReader, updateGeneral, restoreDefaults } = useSettingsStore();
   const theme = useMantineTheme();
   const [activeSection, setActiveSection] = useState<SettingsSection>('appearance');
 
@@ -48,10 +48,12 @@ export function SettingsDialog({ opened, onClose }: SettingsDialogProps): JSX.El
           bg="gray.0" 
           p="md" 
           style={{ 
-            borderRight: '1px solid var(--mantine-color-gray-3)' 
+            borderRight: '1px solid var(--mantine-color-gray-3)',
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
-          <Stack gap="xs">
+          <Stack gap="xs" style={{ flex: 1 }}>
             <NavLink
               label="Appearance"
               leftSection={<FiMonitor size={16} />}
@@ -83,6 +85,17 @@ export function SettingsDialog({ opened, onClose }: SettingsDialogProps): JSX.El
               })}
             />
           </Stack>
+
+          <Button 
+            variant="subtle" 
+            color="gray" 
+            leftSection={<FiRotateCcw size={14} />}
+            onClick={() => restoreDefaults()}
+            fullWidth
+            radius="md"
+          >
+            Restore Defaults
+          </Button>
         </Box>
 
         <Box flex={1} p="xl" style={{ display: 'flex', flexDirection: 'column' }}>
