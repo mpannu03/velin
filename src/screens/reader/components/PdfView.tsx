@@ -10,12 +10,15 @@ import { SideBarPanel } from "./SideBarPanel";
 import { SidePanel } from "./SidePanel";
 import { useCurrentPageFromVirtual, usePdfWheelZoom } from "../hooks";
 import { ToolsPanel } from "./ToolsPanel";
+import { useDocumentRepositoryStore } from "@/app/store/repository.store";
+import { PdfDocument } from "@/shared/types";
 
 type PdfViewProps = {
-  id: string;
+  doc: PdfDocument;
 };
 
-export function PdfView({ id }: PdfViewProps): JSX.Element {
+export function PdfView({ doc }: PdfViewProps): JSX.Element {
+  const id: string = doc.id;
   const activeDocumentId = useDocumentsStore((s) => s.activeDocumentId);
   const { info, error, loading } = usePdfInfo(id);
   const parentRef = useRef<HTMLDivElement>(null);
@@ -23,6 +26,7 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
   const wheelRef = usePdfWheelZoom(id);
   const gotoPage = usePdfViewerStore((s) => s.getState(id).gotoPage);
   const clearGotoPage = usePdfViewerStore(s => s.clearGotoPage);
+  const currentPage = useDocumentRepositoryStore(s => s.getDocumentByFilePath(doc.filePath));
 
   const { width: windowWidth } = useViewportSize();
 
@@ -53,6 +57,21 @@ export function PdfView({ id }: PdfViewProps): JSX.Element {
 
     clearGotoPage(id);
   }, [gotoPage, id, rowVirtualizer, clearGotoPage]);
+
+  const initialScrollDone = useRef(false);
+
+  useEffect(() => {
+    if (loading || !info || !currentPage || initialScrollDone.current) return;
+
+    if (currentPage.currentPage > 0) {
+      setTimeout(() => {
+        rowVirtualizer.scrollToIndex(currentPage.currentPage, {
+          align: "start",
+        });
+      }, 0);
+    }
+    initialScrollDone.current = true;
+  }, [info, loading, currentPage, rowVirtualizer]);
 
   useCurrentPageFromVirtual({
     virtualizer: rowVirtualizer,

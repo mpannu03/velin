@@ -44,7 +44,7 @@ export function ReaderScreen(): JSX.Element {
       }}
     >
       {Object.values(documents).map((doc) => (
-        <PdfView key={doc.id} id={doc.id} />
+        <PdfView key={doc.id} doc={doc} />
       ))}
     </div>
   );

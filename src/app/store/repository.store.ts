@@ -3,6 +3,8 @@ import { documentRepository } from "@/shared/storage";
 import { DocumentMeta, DocumentPatch } from "@/shared/types";
 import { create } from "zustand";
 
+const MAX_RECENTS = 10;
+
 interface DocumentRepositoryState {
   documents: DocumentMeta[];
   init(): Promise<void>;
@@ -26,7 +28,7 @@ export const useDocumentRepositoryStore = create<DocumentRepositoryState>((set, 
   getRecents() {
     return [...get().documents].sort(
       (a, b) => b.lastOpened - a.lastOpened
-    );
+    ).slice(0, MAX_RECENTS);
   },
 
   getLastOpened() {

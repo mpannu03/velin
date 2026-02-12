@@ -3,8 +3,6 @@ import { documentStore } from "./store";
 
 type DocumentMap = Record<string, DocumentMeta>;
 
-const MAX_RECENTS = 10;
-
 class DocumentRepository {
 	private documents: DocumentMap = {};
 
@@ -34,26 +32,7 @@ class DocumentRepository {
 	}
 
 	async add(doc: DocumentMeta) {
-		this.documents[doc.filePath] = doc;
-		
-		const documentsList = Object.values(this.documents);
-		const unstarred = documentsList.filter(d => !d.starred);
-		
-		if (unstarred.length > MAX_RECENTS) {
-			const keepUnstarred = unstarred
-				.sort((a, b) => b.lastOpened - a.lastOpened)
-				.slice(0, MAX_RECENTS);
-			
-			const keepUnstarredPaths = new Set(keepUnstarred.map(d => d.filePath));
-			
-			this.documents = documentsList.reduce((acc, d) => {
-				if (d.starred || keepUnstarredPaths.has(d.filePath)) {
-					acc[d.filePath] = d;
-				}
-				return acc;
-			}, {} as DocumentMap);
-		}
-		
+		this.documents[doc.filePath] = doc;		
 		await this.save();
 	}
 
