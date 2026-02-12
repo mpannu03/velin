@@ -10,15 +10,18 @@ import { savePreview } from '@/shared/services/previewPng';
 type DocumentsState = {
   documents: Record<string, PdfDocument>;
   activeDocumentId: string | null;
+  documentOrder: string[];
 
   open: (filePath: string) => Promise<InvokeResult<string>>;
   close: (id: string) => Promise<InvokeResult<void>>;
   setActive: (id: string) => void;
+  reorder: (activeId: string, overId: string) => void;
 };
 
 export const useDocumentsStore = create<DocumentsState>((set, get) => ({
   documents: {},
   activeDocumentId: null,
+  documentOrder: [],
 
   async open(filePath): Promise<InvokeResult<string>> {
     const result = await openPdf(filePath);
@@ -40,6 +43,7 @@ export const useDocumentsStore = create<DocumentsState>((set, get) => ({
         },
       },
       activeDocumentId: id,
+      documentOrder: [...state.documentOrder, id],
     }));
     
     const existing = documentRepository.getByFilePath(filePath);
@@ -92,19 +96,54 @@ export const useDocumentsStore = create<DocumentsState>((set, get) => ({
       return result;
     }
 
-    set(state => {
-      const { [id]: _, ...rest } = state.documents;
-      return {
-        documents: rest,
-        activeDocumentId:
-          state.activeDocumentId === id ? null : state.activeDocumentId,
-      };
-    });
+    set((state) => {
+      const ids = state.documentOrder;
+      const closingIndex = ids.indexOf(id);
 
-    return { ok: true, data: undefined }
-  },
+      const { [id]: _, ...rest } = state.documents;
+
+      let newActive = state.activeDocumentId;
+
+      if (state.activeDocumentId === id) {
+        if (ids.length > 1) {
+          const prevIndex = closingIndex - 1;
+
+          if (prevIndex >= 0) {
+            newActive = ids[prevIndex];
+          } else {
+            newActive = ids[closingIndex + 1] ?? null;
+          }
+        } else {
+          newActive = null;
+        }
+      }
+
+    return {
+      documents: rest,
+      activeDocumentId: newActive,
+      documentOrder: state.documentOrder.filter(docId => docId !== id),
+    };
+  });
+
+  return { ok: true, data: undefined };
+},
 
   setActive(id) {
     set({ activeDocumentId: id });
+  },
+
+  reorder(activeId, overId) {
+    set((state) => {
+      const oldIndex = state.documentOrder.indexOf(activeId);
+      const newIndex = state.documentOrder.indexOf(overId);
+
+      if (oldIndex === -1 || newIndex === -1) return state;
+
+      const newOrder = [...state.documentOrder];
+      newOrder.splice(oldIndex, 1);
+      newOrder.splice(newIndex, 0, activeId);
+
+      return { documentOrder: newOrder };
+    });
   },
 }));
