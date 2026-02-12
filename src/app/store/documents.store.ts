@@ -76,7 +76,7 @@ export const useDocumentsStore = create<DocumentsState>((set, get) => ({
         previewPath,
         starred: false,
         lastOpened: Date.now(),
-        currentPage: 1,
+        currentPage: 0,
         pagesCount,
         openedCount: 1,
       }
