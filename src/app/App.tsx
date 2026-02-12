@@ -8,10 +8,14 @@ import { ScreenRouter } from './screenRouter/ScreenRouter';
 import { JSX, useEffect } from 'react';
 import { Notifications } from '@mantine/notifications';
 import { useDocumentRepositoryStore } from './store/repository.store';
+import { useSettingsStore } from './store/settings.store';
 
 export function App(): JSX.Element {
+  const settings = useSettingsStore((state) => state.settings);
+
   useEffect(() => {
     const initStorage = async () => {
+      await useSettingsStore.getState().init();
       await useDocumentRepositoryStore.getState().init();
     };
     initStorage();
@@ -19,7 +23,11 @@ export function App(): JSX.Element {
 
   return(
     <MantineProvider
-      theme={velinTheme}
+      theme={{
+        ...velinTheme,
+        primaryColor: settings.appearance.accentColor || 'blue',
+      }}
+      forceColorScheme={settings.appearance.theme === 'system' ? undefined : settings.appearance.theme}
       defaultColorScheme='light'
     >
       <Notifications />

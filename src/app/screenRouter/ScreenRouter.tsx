@@ -1,10 +1,12 @@
 import { JSX, ReactNode } from "react";
-import { Divider, Group, SegmentedControl, Stack, Text } from "@mantine/core";
+import { ActionIcon, Divider, Group, SegmentedControl, Stack, Text, Tooltip } from "@mantine/core";
 import { SCREEN_COMPONENTS } from "./screens.registry";
 import { Screen } from '../types'
-import { FiBookOpen, FiEdit, FiHome, FiTool } from "react-icons/fi";
+import { FiBookOpen, FiEdit, FiHome, FiSettings, FiTool } from "react-icons/fi";
 import { useScreenState } from "./store/screen.store";
 import { ReaderScreen } from "@/screens";
+import { useDisclosure } from "@mantine/hooks";
+import { SettingsDialog } from "@/shared/components/SettingsDialog";
 
 export function ScreenRouter(): JSX.Element {
   const screen = useScreenState((s) => s.screen);
@@ -32,6 +34,7 @@ export function ScreenRouter(): JSX.Element {
 export function ScreenNavigationBar(): JSX.Element {
   const router = useScreenState();
   const screen = useScreenState((s) => s.screen);
+  const [settingsOpened, { open: openSettings, close: closeSettings }] = useDisclosure(false);
 
   const setScreen = (screenName: Screen['name']) => {
     switch (screenName) {
@@ -57,6 +60,7 @@ export function ScreenNavigationBar(): JSX.Element {
       <Group
         py="4px"
         px="sm"
+        justify="space-between"
         style={{ overflow: 'hidden' }}
       >
         <SegmentedControl
@@ -96,8 +100,22 @@ export function ScreenNavigationBar(): JSX.Element {
             },
           ]}
         />
+
+        <Tooltip label="Settings" position="left">
+          <ActionIcon 
+            variant="subtle" 
+            size="lg" 
+            radius="md" 
+            onClick={openSettings}
+            color="gray"
+          >
+            <FiSettings size={20} />
+          </ActionIcon>
+        </Tooltip>
       </Group>
       <Divider />
+      
+      <SettingsDialog opened={settingsOpened} onClose={closeSettings} />
     </Stack>
   );
 };
