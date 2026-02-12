@@ -1,7 +1,7 @@
 import { ActionIcon, Paper, Stack, Tooltip } from "@mantine/core";
 import { JSX } from "react";
 import { usePdfViewerStore, ViewerTool } from "../stores";
-import { MousePointer, Hand } from "lucide-react";
+import { MousePointer, Hand, Book } from "lucide-react";
 
 type ToolsPanelProps = {
 	documentId: string;
@@ -41,6 +41,15 @@ export function ToolsPanel({ documentId }: ToolsPanelProps): JSX.Element {
             size="lg"
           >
             <Hand size={20} />
+          </ActionIcon>
+        </Tooltip>
+        <Tooltip label="Dictionary Tool" position="left">
+          <ActionIcon
+            variant={state.tool === ViewerTool.Dictionary ? 'filled' : 'light'}
+            onClick={() => setTool(documentId, ViewerTool.Dictionary)}
+            size="lg"
+          >
+            <Book size={20} />
           </ActionIcon>
         </Tooltip>
       </Stack>

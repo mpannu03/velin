@@ -6,6 +6,7 @@ import { AppearanceSettings, GeneralSettings, ReaderSettings, Settings, Theme } 
 import { downloadAndInstallWordNet, isDictionaryInstalled } from "../services/dictionary/dictionary";
 import { notifications } from "@mantine/notifications";
 import { Progress, Loader } from "@mantine/core";
+import { createDictionaryEngine } from "../services/dictionary/engine";
 
 interface SettingsDialogProps {
   opened: boolean;
@@ -408,17 +409,13 @@ function DictionarySettingsItem() {
              <Button 
                 size="xs" 
                 variant="light"
-                // onClick={async () => {
-                //     if(!testWord) return;
-                //     console.time('lookup');
-                //     const results = await lookupWord(testWord);
-                //     console.timeEnd('lookup');
-                //     console.log('Lookup Results:', results);
-                //     notifications.show({
-                //         title: `Lookup: ${testWord}`,
-                //         message: `Found ${results.length} definitions. Check console.`,
-                //     })
-                // }}
+                onClick={async () => {
+                    if(!testWord) return;
+                    const engine = await createDictionaryEngine();
+                    console.log(engine);
+                    const results = await engine.lookup(testWord);
+                    console.log(results);
+                }}
              >
                 <FiSearch size={14} />
              </Button>

@@ -3,6 +3,7 @@ import { create } from 'zustand';
 export enum ViewerTool {
   Cursor = 'cursor',
   Hand = 'hand',
+  Dictionary = 'dictionary',
 }
 
 export enum SidebarPanel {
