@@ -11,7 +11,7 @@ import { useDocumentRepositoryStore } from './store/repository.store';
 import { useSettingsStore } from './store/settings.store';
 
 import { DictionaryDownloadPrompt } from '@/shared/components/DictionaryDownloadPrompt';
-import { isDictionaryInstalled } from '@/shared/services/dictionary';
+import { isDictionaryInstalled } from '@/shared/services/dictionary/dictionary';
 
 export function App(): JSX.Element {
   const settings = useSettingsStore((state) => state.settings);

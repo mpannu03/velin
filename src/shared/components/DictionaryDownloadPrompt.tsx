@@ -1,6 +1,6 @@
 import { Modal, Stack, Text, Button, Progress, Group, Title } from '@mantine/core';
 import { useState } from 'react';
-import { downloadAndInstallWordNet } from '../services/dictionary';
+import { downloadAndInstallWordNet } from '../services/dictionary/dictionary';
 import { notifications } from '@mantine/notifications';
 
 interface DictionaryDownloadPromptProps {

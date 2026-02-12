@@ -1,9 +1,9 @@
-import { Modal, Group, Stack, Text, Switch, Select, ColorSwatch, useMantineTheme, Box, NumberInput, ActionIcon, Title, Divider, NavLink, ScrollArea, SegmentedControl, Button, MantineTheme } from "@mantine/core";
+import { Modal, Group, Stack, Text, Switch, Select, ColorSwatch, useMantineTheme, Box, NumberInput, ActionIcon, Title, Divider, NavLink, ScrollArea, SegmentedControl, Button, MantineTheme, TextInput } from "@mantine/core";
 import { useSettingsStore } from "@/app/store/settings.store";
-import { FiMonitor, FiMoon, FiSun, FiSettings, FiLayout, FiGlobe, FiCheck, FiRotateCcw } from "react-icons/fi";
+import { FiMonitor, FiMoon, FiSun, FiSettings, FiLayout, FiGlobe, FiCheck, FiRotateCcw, FiSearch } from "react-icons/fi";
 import { JSX, useState, useEffect } from "react";
 import { AppearanceSettings, GeneralSettings, ReaderSettings, Settings, Theme } from "@/shared/types";
-import { downloadAndInstallWordNet, isDictionaryInstalled } from "../services/dictionary";
+import { downloadAndInstallWordNet, isDictionaryInstalled } from "../services/dictionary/dictionary";
 import { notifications } from "@mantine/notifications";
 import { Progress, Loader } from "@mantine/core";
 
@@ -318,6 +318,7 @@ function DictionarySettingsItem() {
   const [checking, setChecking] = useState(true);
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState<'idle' | 'downloading' | 'extracting'>('idle');
+  const [testWord, setTestWord] = useState('');
 
   useEffect(() => {
     isDictionaryInstalled().then((val) => {
@@ -393,6 +394,35 @@ function DictionarySettingsItem() {
             </Group>
           <Progress value={stage === 'extracting' ? 100 : progress} animated={stage === 'extracting'} size="sm" />
         </Stack>
+      )}
+
+      {installed && (
+        <Group mt="xs" align="flex-end">
+             <TextInput 
+                label="Test Lookup" 
+                placeholder="Enter word..." 
+                size="xs" 
+                value={testWord}
+                onChange={(e) => setTestWord(e.currentTarget.value)}
+             />
+             <Button 
+                size="xs" 
+                variant="light"
+                // onClick={async () => {
+                //     if(!testWord) return;
+                //     console.time('lookup');
+                //     const results = await lookupWord(testWord);
+                //     console.timeEnd('lookup');
+                //     console.log('Lookup Results:', results);
+                //     notifications.show({
+                //         title: `Lookup: ${testWord}`,
+                //         message: `Found ${results.length} definitions. Check console.`,
+                //     })
+                // }}
+             >
+                <FiSearch size={14} />
+             </Button>
+        </Group>
       )}
     </Box>
   );
