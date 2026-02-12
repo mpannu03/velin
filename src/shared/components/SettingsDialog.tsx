@@ -1,8 +1,11 @@
 import { Modal, Group, Stack, Text, Switch, Select, ColorSwatch, useMantineTheme, Box, NumberInput, ActionIcon, Title, Divider, NavLink, ScrollArea, SegmentedControl, Button, MantineTheme } from "@mantine/core";
 import { useSettingsStore } from "@/app/store/settings.store";
 import { FiMonitor, FiMoon, FiSun, FiSettings, FiLayout, FiGlobe, FiCheck, FiRotateCcw } from "react-icons/fi";
-import { JSX, useState } from "react";
+import { JSX, useState, useEffect } from "react";
 import { AppearanceSettings, GeneralSettings, ReaderSettings, Settings, Theme } from "@/shared/types";
+import { downloadAndInstallWordNet, isDictionaryInstalled } from "../services/dictionary";
+import { notifications } from "@mantine/notifications";
+import { Progress, Loader } from "@mantine/core";
 
 interface SettingsDialogProps {
   opened: boolean;
@@ -289,10 +292,7 @@ function GeneralSection({
         />
       </Group>
 
-      <Box>
-        <Text fw={500}>Download Dictionary Data</Text>
-        <Text size="xs" c="dimmed">Download dictionary data to use the app offline.</Text>
-      </Box>
+      <DictionarySettingsItem />
     </Stack>
   );
 }
@@ -312,3 +312,89 @@ function SegmentedControlCustom({ value, onChange }: { value: string, onChange: 
     />
   );
 }
+function DictionarySettingsItem() {
+  const [downloading, setDownloading] = useState(false);
+  const [installed, setInstalled] = useState(false);
+  const [checking, setChecking] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [stage, setStage] = useState<'idle' | 'downloading' | 'extracting'>('idle');
+
+  useEffect(() => {
+    isDictionaryInstalled().then((val) => {
+      setInstalled(val);
+      setChecking(false);
+    });
+  }, []);
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    setStage('downloading');
+    try {
+      await downloadAndInstallWordNet((status) => {
+        if (status.stage === 'downloading') {
+          setProgress(status.percent);
+        } else if (status.stage === 'extracting') {
+          setStage('extracting');
+        }
+      });
+      notifications.show({
+        title: 'Success',
+        message: 'Dictionary downloaded and installed successfully',
+        color: 'green',
+      });
+      setInstalled(true);
+    } catch (error) {
+      console.error(error);
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to download dictionary',
+        color: 'red',
+      });
+    } finally {
+      setDownloading(false);
+      setStage('idle');
+    }
+  };
+
+  return (
+    <Box>
+      <Group justify="space-between" align="flex-start" wrap="nowrap" mb="xs">
+        <Box>
+          <Text fw={500}>Dictionary Data</Text>
+          <Text size="xs" c="dimmed">
+            {installed 
+              ? "Dictionary data is installed and ready for offline use." 
+              : "Download dictionary data (approx. 10MB) to enable offline definitions."}
+          </Text>
+        </Box>
+        {checking ? (
+          <Loader size="sm" />
+        ) : (
+          <Button 
+            w="128px"
+            variant={installed ? "outline" : "filled"} 
+            color={installed ? "green" : "var(--mantine-color-primary)"}
+            onClick={installed ? undefined : handleDownload}
+            disabled={installed || downloading}
+            loading={downloading}
+          >
+            {installed ? "Installed" : "Download"}
+          </Button>
+        )}
+      </Group>
+
+      {downloading && (
+        <Stack gap="xs">
+            <Group justify="space-between">
+              <Text size="xs" c="dimmed">
+                {stage === 'downloading' ? 'Downloading...' : 'Extracting...'}
+              </Text>
+              {stage === 'downloading' && <Text size="xs" c="dimmed">{progress}%</Text>}
+            </Group>
+          <Progress value={stage === 'extracting' ? 100 : progress} animated={stage === 'extracting'} size="sm" />
+        </Stack>
+      )}
+    </Box>
+  );
+}
+

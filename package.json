@@ -18,7 +18,7 @@
     "@mantine/hooks": "^8.3.10",
     "@mantine/notifications": "^8.3.10",
     "@tanstack/react-virtual": "^3.13.18",
-    "@tauri-apps/api": "^2",
+    "@tauri-apps/api": "^2.10.2",
     "@tauri-apps/plugin-dialog": "~2.4.2",
     "@tauri-apps/plugin-fs": "~2.4.5",
     "@tauri-apps/plugin-http": "~2.5.7",
