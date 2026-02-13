@@ -6,7 +6,8 @@ import {
   ZoomOut,
   MessageCircle,
   Bookmark,
-  Search
+  Search,
+  Book
 } from "lucide-react";
 import { usePageIndicator } from '../hooks';
 import { useEffect, useState } from 'react';
@@ -80,6 +81,19 @@ export function SideBarPanel({ documentId }: SideBarPanelProps) {
             )}
           >
             <Search size={20} />
+          </ActionIcon>
+        </Tooltip>
+        <Tooltip label="Dictionary" position="left">
+          <ActionIcon
+            variant={state.sidebar === SidebarPanel.Dictionary ? 'filled' : 'light'}
+            size="lg"
+            onClick={() => setSidebar(
+              documentId, state.sidebar === SidebarPanel.Dictionary 
+                ? SidebarPanel.None 
+                : SidebarPanel.Dictionary
+            )}
+          >
+            <Book size={20} />
           </ActionIcon>
         </Tooltip>
       </Stack>

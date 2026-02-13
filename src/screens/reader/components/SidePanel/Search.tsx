@@ -1,7 +1,7 @@
 import { ActionIcon, Box, Group, Input, Stack, Text, ScrollArea, Loader } from "@mantine/core";
 import { Search as SearchIcon, ChevronLeft, ChevronRight, X } from "lucide-react";
-import { useSearchStore } from "../stores/search.store";
-import { usePdfViewerStore } from "../stores/pdfViewer.store";
+import { useSearchStore } from "../../stores/search.store";
+import { usePdfViewerStore } from "../../stores/pdfViewer.store";
 import { useEffect } from "react";
 
 export function Search({ id }: { id: string }) {
@@ -23,7 +23,9 @@ export function Search({ id }: { id: string }) {
   return (
     <Stack h="100%" gap="md">
       <Group justify="space-between">
-        <Text fw={700}>Search</Text>
+        <Text fw={700} tt="uppercase" size="xs" c="dimmed">
+          Search
+        </Text>
         <ActionIcon variant="subtle" size="sm" onClick={() => clearResults()}>
            <X size={16} />
         </ActionIcon>
@@ -37,7 +39,7 @@ export function Search({ id }: { id: string }) {
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           style={{ flex: 1 }}
           leftSection={<SearchIcon size={16} />}
-          rightSection={isSearching ? <Loader size="xs" /> : null}
+          // rightSection={isSearching ? <Loader size="xs" /> : null}
         />
         <ActionIcon variant="filled" onClick={handleSearch} loading={isSearching}>
           <SearchIcon size={18} />

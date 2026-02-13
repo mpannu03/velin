@@ -7,7 +7,7 @@ import { usePdfInfo } from "../hooks/usePdfInfo";
 import { usePdfViewerStore } from "../stores/pdfViewer.store";
 import { PdfPage } from './PdfPage';
 import { SideBarPanel } from "./SideBarPanel";
-import { SidePanel } from "./SidePanel";
+import { SidePanel } from "./SidePanel/SidePanel";
 import { useCurrentPageFromVirtual, usePdfWheelZoom } from "../hooks";
 import { ToolsPanel } from "./ToolsPanel";
 import { useDocumentRepositoryStore } from "@/app/store/repository.store";
@@ -113,7 +113,7 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
         style={{
           flex: 1,
           overflow: "auto",
-          cursor: viewerState.tool === 'hand' ? 'grab' : 'default',
+          cursor: viewerState.tool === 'hand' ? 'grab' : viewerState.tool === 'dictionary' ? 'default' : 'default',
         }}
       >
         <div
