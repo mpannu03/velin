@@ -68,9 +68,9 @@ class DictionaryEngine {
 
     const parts = metaPart.trim().split(/\s+/);
 
-    const offset = parts[0];
-    const lexFileNum = parts[1]; // can ignore
-    const pos = parts[2];
+    // const offset = parts[0];
+    // const lexFileNum = parts[1]; // can ignore
+    // const pos = parts[2];
     const wordCount = parseInt(parts[3], 10);
 
     // Extract synonyms
