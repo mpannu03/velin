@@ -11,6 +11,7 @@ export enum SidebarPanel {
   Comments = 'comments',
   Bookmarks = 'bookmarks',
   Search = 'search',
+  Dictionary = 'dictionary',
 }
 
 export type ViewerState = {
