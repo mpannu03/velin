@@ -1,8 +1,15 @@
 export type PartOfSpeech = 'noun' | 'verb' | 'adj' | 'adv';
 
-export interface Synset {
-  offset: number;
-  pos: PartOfSpeech;
+export type Synset = {
   synonyms: string[];
-  gloss: string;
+  definition: string;
+  examples?: string[];
+  pointers: { symbol: string; offset: string; pos: string }[];
+};
+
+export type SearchResult = {
+  noun: Synset[];
+  verb: Synset[];
+  adj: Synset[];
+  adv: Synset[];
 }

@@ -1,36 +1,135 @@
-import { lookupOffsets } from "./lookup";
-import { readSynset } from "./data";
-import type { Synset } from "./types";
 import { appDataDir } from "@tauri-apps/api/path";
+import { readFile } from "@tauri-apps/plugin-fs";
+import { SearchResult, Synset } from "./types";
+
+type FileType = "adj" | "adv" | "noun" | "verb";
 
 class DictionaryEngine {
   constructor(private dictPath: string) {}
 
-  async lookup(word: string): Promise<Synset[]> {
-    const lemma = word.toLowerCase().replace(/\s+/g, "_");
+  public async search(lemma: string): Promise<SearchResult> {
+    const FILE_TYPES = ["adj", "adv", "noun", "verb"] as const;
 
-    const posMap = {
-      n: "noun",
-      v: "verb",
-      a: "adj",
-      r: "adv",
+    const result: SearchResult = {
+      adj: [],
+      adv: [],
+      noun: [],
+      verb: [],
     };
 
-    const results: Synset[] = [];
-
-    for (const pos of Object.keys(posMap) as Array<keyof typeof posMap>) {
-      const indexPath = `${this.dictPath}/index.${posMap[pos]}`;
-      const dataPath = `${this.dictPath}/data.${posMap[pos]}`;
-
-      const offsets = await lookupOffsets(indexPath, lemma);
-
-      for (const offset of offsets) {
-        const synset = await readSynset(dataPath, offset);
-        if (synset) results.push(synset);
+    for (const type of FILE_TYPES) { 
+      const search = await this.findLemmaLine(lemma, type);
+      const offset = this.extractSynsetOffsets(search);
+      const data = await this.getData(offset, type, lemma);
+      if (data.length > 0) {
+        result[type] = data;
       }
     }
 
-    return results;
+    return result;
+  }
+
+  private async findLemmaLine(lemma: string, filetype: FileType): Promise<string> {
+    const nounIndex = await this.openFile(filetype);
+
+    return nounIndex.split('\n').find(line => line.startsWith(lemma)) || '';
+  }
+
+  private async openFile(filetype: FileType, isData: boolean = false): Promise<string> {
+    var filePath = `${this.dictPath}/index.${filetype}`;
+    if (isData) {
+      filePath = `${this.dictPath}/data.${filetype}`;
+    }
+
+    try {
+      const bytes = await readFile(filePath);
+      const data = new TextDecoder("utf-8").decode(bytes);
+      console.log(data);
+      return data;
+    } catch (err) {
+      console.error('Error reading file:', err);
+      return '';
+    }
+  }
+
+  private extractSynsetOffsets(line: string): string[] {
+    const parts = line.trim().split(/\s+/);
+
+    const pCount = Number(parts[3]);
+    const offsetStartIndex = 6 + pCount;
+
+    const offsets = parts.slice(offsetStartIndex);
+    return offsets;
+  }
+
+  private parseDataLine(line: string, lemma: string): Synset | null {
+    const [metaPart, glossPart] = line.split(" | ");
+    if (!metaPart || !glossPart) return null;
+
+    const parts = metaPart.trim().split(/\s+/);
+
+    const offset = parts[0];
+    const lexFileNum = parts[1]; // can ignore
+    const pos = parts[2];
+    const wordCount = parseInt(parts[3], 10);
+
+    // Extract synonyms
+    const allSynonyms: string[] = [];
+    for (let i = 0; i < wordCount; i++) {
+      allSynonyms.push(parts[4 + i * 2]); // skip lexical ID
+    }
+
+    const synonyms = allSynonyms.filter(s => s.toLowerCase() !== lemma.toLowerCase());
+
+    // Pointer info
+    const pointerCountIndex = 4 + wordCount * 2;
+    const pointerCount = parseInt(parts[pointerCountIndex], 10);
+
+    const pointers: { symbol: string; offset: string; pos: string }[] = [];
+    for (let i = 0; i < pointerCount; i++) {
+      const base = pointerCountIndex + 1 + i * 4;
+      pointers.push({
+        symbol: parts[base],
+        offset: parts[base + 1],
+        pos: parts[base + 2],
+        // parts[base + 3] is source/target, can ignore for now
+      });
+    }
+
+    const definition = glossPart.trim().split(";")[0];
+    // const exampleMatch = glossPart.trim().match(/"(.*?)"/);
+    // const example = exampleMatch ? exampleMatch[1] : undefined;
+    const exampleMatches = [...glossPart.matchAll(/"(.*?)"/g)];
+    const lemmaRegex = new RegExp(`\\b${lemma}\\b`, "i");
+    const examples = exampleMatches
+        .map(m => m[1])
+        .filter(ex => lemmaRegex.test(ex));
+
+    return {
+      synonyms,
+      definition,
+      examples,
+      pointers,
+    };
+  }
+
+  private async getData(offset: string[], fileType: FileType, lemma: string): Promise<Synset[]> {
+    // const filePath = `data/data.${fileType}`;
+    const nounData = await this.openFile(fileType, true);
+    const lines = nounData.split('\n');
+    const data: Synset[] = [];
+
+    for (const off of offset) {
+      const line = lines.find(line => line.startsWith(off));
+      if (line) {
+        const synset = this.parseDataLine(line, lemma);
+        if (synset) {
+          data.push(synset);
+        }
+      }
+    }
+
+    return data;
   }
 }
 
