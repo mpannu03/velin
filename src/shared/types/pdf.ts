@@ -35,6 +35,12 @@ export type Bookmark = {
   children: Bookmark[];
 }
 
+export type PageText = {
+  items: TextItem[];
+  width: number;
+  height: number;
+};
+
 export type Bookmarks = {
   items: Bookmark[];
 };
@@ -45,6 +51,20 @@ export type TextItem = {
   y: number;
   width: number;
   height: number;
+}
+
+export type PdfRect = {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+export type SearchHit = {
+  page: number;
+  start: number;
+  end: number;
+  rects: PdfRect[];
 }
 
 /* ---------- factories ---------- */

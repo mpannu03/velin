@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useTextCacheStore } from "../stores/textCache.store";
+import { useTextCacheStore } from "../stores";
 
 export function usePdfText(id: string, page: number) {
   const key = `${id}:${page}`;

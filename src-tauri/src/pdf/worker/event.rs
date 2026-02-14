@@ -4,7 +4,7 @@ use flume::Sender;
 
 use crate::pdf::{
     document::{Bookmarks, DocumentId, PdfInfo},
-    reader::{PageText, RenderedPage},
+    reader::{PageText, RenderedPage, SearchHit},
 };
 
 pub enum PdfEvent {
@@ -35,5 +35,15 @@ pub enum PdfEvent {
         id: DocumentId,
         page_index: u16,
         reply: Sender<Result<PageText, String>>,
+    },
+    Search {
+        id: DocumentId,
+        query: String,
+        reply: Sender<Result<Vec<SearchHit>, String>>,
+    },
+    Preview {
+        id: DocumentId,
+        save_path: Option<PathBuf>,
+        reply: Sender<Result<Vec<u8>, String>>,
     },
 }

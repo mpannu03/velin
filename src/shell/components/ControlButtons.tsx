@@ -1,6 +1,6 @@
 import { Button, Group } from "@mantine/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { useWindowMaximized } from "../hooks/useWindowMaximized";
+import { useWindowMaximized } from "../hooks";
 import { VscChromeClose, VscChromeMaximize, VscChromeMinimize, VscChromeRestore } from "react-icons/vsc";
 import { JSX } from "react";
 

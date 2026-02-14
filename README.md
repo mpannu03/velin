@@ -2,41 +2,80 @@
 
 A modern, high-performance PDF reader built with **Tauri**, **Rust**, and **React**. Velin focuses on speed, smooth interactions, and a premium reading experience.
 
-> [!IMPORTANT]
-> **Project Status: Early Development**
-> Velin is currently in active development. While core PDF viewing and navigation are functional, many features are still being implemented. Not everything will be fully functional yet.
+> [!IMPORTANT]  
+> **Project Status: Active Development**
+>
+> Velin is still under active development. Core systems are functional and performance-focused, but the application is evolving rapidly. Some features may change, and minor bugs are expected.
+
+---
 
 ## 🚀 Tech Stack
 
-Velin leverages a modern stack to provide a native-feel desktop experience with web-based flexibility:
+Velin leverages a modern stack to deliver a native-feel desktop experience with web flexibility:
 
-- **Framework**: [Tauri](https://tauri.app/) (v2)
-- **Backend**: [Rust](https://www.rust-lang.org/) (High-performance PDF rendering and OS integration)
-- **Frontend**: [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
-- **UI Architecture**: [Mantine](https://mantine.dev/) (Component library)
-- **State Management**: [Zustand](https://zustand-demo.pmnd.rs/)
-- **Virtualization**: [@tanstack/react-virtual](https://tanstack.com/virtual/latest) (For handling massive PDFs efficiently)
-- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Framework**: Tauri (v2)
+- **Backend**: Rust (High-performance PDF processing and OS integration)
+- **Frontend**: React + TypeScript
+- **UI System**: Mantine
+- **State Management**: Zustand
+- **Virtualization**: @tanstack/react-virtual
+- **Build Tool**: Vite
+
+---
 
 ## 🛠 Features (Current Progress)
 
-- [x] **Virtual PDF Rendering**: Supports large documents with minimal memory footprint using virtualization.
-- [x] **Instant Zoom**: Optimized zoom logic with CSS-first scaling for zero-latency feedback (Ctrl + / Mouse Wheel).
-- [x] **High-Performance Text Selection**: Precision text selection with minimal DOM overhead.
-- [x] **Text Fragment Extraction**: Backend-optimized text fragmenting for smooth selection and layout alignment.
-- [x] **Sidebar Panels**: Full support for PDF Bookmarks and navigation.
-- [/] **Comments**: Support for PDF comments and annotations (Under active development).
-- [x] **Performance**: Significant optimizations to PDF pixel rendering and caching.
+### 📄 Core PDF Engine
+
+- [x] **Virtual PDF Rendering** – Efficient handling of massive PDFs with minimal memory footprint.
+- [x] **Instant Zoom** – CSS-first zoom scaling for zero-latency interaction (Ctrl + Scroll).
+- [x] **High-Performance Text Selection** – Optimized DOM structure for smooth text highlighting.
+- [x] **Text Fragment Extraction** – Backend-optimized text fragment alignment.
+- [x] **Resume Where You Left Off** – Automatically restores the last-read page and position.
+
+### 🏠 Application Experience
+
+- [x] **Modern Home Screen** – Clean landing screen with quick access to documents.
+- [x] **Recent Files** – Automatically tracks recently opened PDFs.
+- [x] **Starred Documents** – Mark important PDFs for quick access.
+- [x] **Persistent Settings** – App preferences are saved across sessions.
+- [x] **Theme Support** – Multiple theme colors with dynamic switching.
+
+### 📚 Integrated Dictionary
+
+- [x] **Built-in Dictionary** – Lookup word meanings directly inside the reader.
+- [x] **Fast Word Detection** – Optimized text selection integration.
+- [x] **Local Processing** – Designed for speed and minimal overhead.
+
+### 🗂 Sidebar & Navigation
+
+- [x] **Bookmarks Panel** – Navigate using embedded PDF bookmarks.
+- [x] **Smooth Navigation** – Jump between pages instantly.
+
+### 💬 In Progress
+
+- [/] **Comments & Annotations** – PDF annotations and inline commenting (under active development).
+- [ ] **Advanced Search**
+- [ ] **Highlight Management**
+- [ ] **Cross-document indexing**
+
+### ⚡ Performance
+
+- [x] Significant optimizations to PDF pixel rendering and caching.
+- [x] Virtualized page rendering for large documents.
+- [x] Reduced unnecessary re-renders across the app.
+
+---
 
 ## 🤝 Open Source & Contributions
 
-Velin is an open-source project, and we welcome help from the community!
+Velin is an open-source project, and contributions are welcome.
 
 ### How You Can Help
 
-- **Testing**: Report bugs or performance issues on different operating systems.
-- **Feedback**: Suggest UI/UX improvements or new features.
-- **Code**: Check out the issues tab or submit a Pull Request.
+- **Testing** – Report bugs or performance issues on different operating systems.
+- **Feedback** – Suggest UI/UX improvements or new features.
+- **Code** – Check open issues or submit a Pull Request.
 
 ### Contribution Protocol
 
@@ -46,32 +85,41 @@ Velin is an open-source project, and we welcome help from the community!
 4. Push to the branch (`git push origin feature/amazing-feature`).
 5. Open a Pull Request.
 
+---
+
 ## 📦 Getting Started
 
 ### Prerequisites
 
-- [Rust](https://www.rust-lang.org/tools/install)
-- [Node.js](https://nodejs.org/) (pnpm recommended)
+- Rust
+- Node.js (pnpm recommended)
 
 ### Setup
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/velin.git
-   ```
+
+```bash
+git clone https://github.com/mpannu03/velin.git
+```
+
 2. Install dependencies:
-   ```bash
-   pnpm install
-   ```
+
+```bash
+pnpm install
+```
+
 3. Run in development mode:
-   ```bash
-   pnpm tauri dev
-   ```
+
+```bash
+pnpm tauri dev
+```
 
 ---
 
 ## 📄 License
 
 Velin is licensed under the **GNU General Public License v3.0**. See the [LICENSE](LICENSE) file for more details.
+
+---
 
 Developed with ❤️ using Tauri and Rust.

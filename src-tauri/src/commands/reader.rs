@@ -1,7 +1,11 @@
-use tauri::State;
+use tauri::{AppHandle, Manager, State};
 
 use crate::{
-    pdf::{document::PdfInfo, reader::PageText, Bookmarks},
+    pdf::{
+        document::PdfInfo,
+        reader::{PageText, SearchHit},
+        Bookmarks,
+    },
     service::reader_service,
     state::AppState,
 };
@@ -56,4 +60,29 @@ pub fn get_text_by_page(
     page_index: u16,
 ) -> Result<PageText, String> {
     reader_service::get_text_by_page(&state, id, page_index)
+}
+
+#[tauri::command]
+pub fn search_document(
+    state: State<AppState>,
+    id: String,
+    query: String,
+) -> Result<Vec<SearchHit>, String> {
+    reader_service::search_document(&state, id, query)
+}
+
+#[tauri::command]
+pub fn generate_preview(
+    app: AppHandle,
+    state: State<AppState>,
+    id: String,
+) -> Result<Vec<u8>, String> {
+    let app_data = app
+        .path()
+        .app_cache_dir()
+        .map_err(|e| format!("Failed to get app cache dir: {e}"))?;
+    let previews_dir = app_data.join("previews");
+    let save_path = previews_dir.join(format!("{}.png", id));
+
+    reader_service::generate_preview(&state, id, Some(save_path))
 }

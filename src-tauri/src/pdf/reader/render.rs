@@ -1,8 +1,11 @@
+use image::{ImageBuffer, Rgba};
 use pdfium_render::prelude::{PdfDocument, PdfRenderConfig, Pdfium};
 use serde::Serialize;
-use std::{collections::HashMap, path::Path};
+use std::{collections::HashMap, io::Cursor, path::Path};
 
 use crate::pdf::DocumentId;
+
+const PREVIEW_WIDTH: i32 = 100;
 
 #[derive(Debug, Serialize)]
 pub struct RenderedPage {
@@ -60,6 +63,48 @@ pub fn render_page(
     };
 
     Ok(rendered_page)
+}
+
+pub fn generate_preview(
+    documents: &HashMap<DocumentId, PdfDocument>,
+    id: &DocumentId,
+    save_path: Option<impl AsRef<Path>>,
+) -> Result<Vec<u8>, String> {
+    let document = documents.get(id).ok_or("Document not found")?;
+
+    let page = document
+        .pages()
+        .get(0)
+        .map_err(|e| format!("Failed to get page: {e}"))?;
+
+    let config = PdfRenderConfig::new().set_target_width(PREVIEW_WIDTH);
+    let bitmap = page
+        .render_with_config(&config)
+        .map_err(|e| format!("Rendering Error: {e}"))?;
+
+    let png_bytes = rgba_to_png_bytes(bitmap.as_raw_bytes(), bitmap.width(), bitmap.height())?;
+
+    if let Some(path) = save_path {
+        let path = path.as_ref();
+        if let Some(parent) = path.parent() {
+            std::fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+        }
+        std::fs::write(path, &png_bytes).map_err(|e| e.to_string())?;
+    }
+
+    Ok(png_bytes)
+}
+
+pub fn rgba_to_png_bytes(pixels: Vec<u8>, width: i32, height: i32) -> Result<Vec<u8>, String> {
+    let img: ImageBuffer<Rgba<u8>, _> = ImageBuffer::from_raw(width as u32, height as u32, pixels)
+        .ok_or("Failed to create image buffer")?;
+
+    let mut png_bytes: Vec<u8> = Vec::new();
+
+    img.write_to(&mut Cursor::new(&mut png_bytes), image::ImageFormat::Png)
+        .map_err(|e| e.to_string())?;
+
+    Ok(png_bytes)
 }
 
 #[cfg(test)]

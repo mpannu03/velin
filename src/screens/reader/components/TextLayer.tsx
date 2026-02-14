@@ -1,7 +1,5 @@
-import { JSX, memo } from "react";
+import { JSX, memo, useMemo, useLayoutEffect, useRef, useState } from "react";
 import { TextItem } from "@/shared/types";
-
-import { useMemo, useLayoutEffect, useRef, useState } from "react";
 
 export type TextLayerProps = {
   textItems: TextItem[];
@@ -12,6 +10,7 @@ export type TextLayerProps = {
 
   viewportTop: number;
   viewportHeight: number;
+  onTextSelected?: (selectedText: string) => void;
 };
 
 const BUFFER_PX = 300;
@@ -72,6 +71,7 @@ export function TextLayer({
   height,
   viewportTop,
   viewportHeight,
+  onTextSelected,
 }: TextLayerProps): JSX.Element {
   const visibleItems = useMemo(() => {
     const minY = viewportTop - BUFFER_PX;
@@ -87,6 +87,12 @@ export function TextLayer({
   return (
     <div
       className="text-layer"
+      onMouseUp={() => {
+        const selected = window.getSelection()?.toString().trim();
+        if (selected) {
+          onTextSelected?.(selected);
+        }
+      }}
       style={{
         position: "absolute",
         top: 0,

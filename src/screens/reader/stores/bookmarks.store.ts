@@ -1,4 +1,4 @@
-import { fetchBookmarks } from '@/shared/tauri';
+import { fetchBookmarks } from '@/services/tauri';
 import { Bookmarks } from '@/shared/types';
 import { create } from 'zustand';
 

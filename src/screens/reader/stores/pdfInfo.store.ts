@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { PdfInfo } from '@/shared/types';
-import { fetchPdfInfo } from '@/shared/tauri';
+import { fetchPdfInfo } from '@/services/tauri';
 
 type PdfInfoCacheState = {
   infoCache: Record<string, PdfInfo>;

@@ -1,7 +1,18 @@
 import { create } from 'zustand';
 
-export type ViewerTool = 'cursor' | 'hand';
-export type SidebarPanel = 'none' | 'comments' | 'bookmarks';
+export enum ViewerTool {
+  Cursor = 'cursor',
+  Hand = 'hand',
+  Dictionary = 'dictionary',
+}
+
+export enum SidebarPanel {
+  None = 'none',
+  Comments = 'comments',
+  Bookmarks = 'bookmarks',
+  Search = 'search',
+  Dictionary = 'dictionary',
+}
 
 export type ViewerState = {
   scale: number;
@@ -32,8 +43,8 @@ type PdfViewerStore = {
 
 const DEFAULT_STATE: ViewerState = {
   scale: 1.0,
-  tool: 'cursor',
-  sidebar: 'none',
+  tool: ViewerTool.Cursor,
+  sidebar: SidebarPanel.None,
   currentPage: 0,
   gotoPage: null,
 };

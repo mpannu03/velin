@@ -1,8 +1,8 @@
-import { renderPage } from "@/shared/tauri";
-import { RenderedPage } from "../types"
 import { useEffect, useState } from "react";
-import { pdfRenderQueue } from "../renderer/pdfRendererQueue";
-import { usePageCacheStore } from "../stores/pageCache.store";
+import { renderPage } from "@/services/tauri";
+import { pdfRenderQueue } from "../renderer";
+import { usePageCacheStore } from "../stores";
+import { RenderedPage } from "../types"
 
 type PdfPageState = {
   page: RenderedPage | null;

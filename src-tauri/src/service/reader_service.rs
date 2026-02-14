@@ -1,7 +1,9 @@
+use std::path::PathBuf;
+
 use crate::{
     pdf::{
         document::PdfInfo,
-        reader::{PageText, RenderedPage},
+        reader::{PageText, RenderedPage, SearchHit},
         worker::PdfEvent,
         Bookmarks,
     },
@@ -102,4 +104,50 @@ pub fn get_text_by_page(state: &AppState, id: String, page_index: u16) -> Result
 
     rx.recv()
         .map_err(|e| format!("Error receiving text result: {e}"))?
+}
+
+pub fn search_document(
+    state: &AppState,
+    id: String,
+    query: String,
+) -> Result<Vec<SearchHit>, String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::Search {
+            id,
+            query,
+            reply: tx,
+        })
+        .map_err(|e| format!("Error sending search command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving search result: {e}"))?
+}
+
+pub fn generate_preview(
+    state: &AppState,
+    id: String,
+    save_path: Option<PathBuf>,
+) -> Result<Vec<u8>, String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::Preview {
+            id,
+            save_path,
+            reply: tx,
+        })
+        .map_err(|e| format!("Error sending preview command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving preview result: {e}"))?
 }

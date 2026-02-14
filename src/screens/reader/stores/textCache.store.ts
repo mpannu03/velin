@@ -1,5 +1,6 @@
-import { fetchTextByPage, PageText } from "@/shared/tauri";
 import { create } from "zustand";
+import { fetchTextByPage } from "@/services/tauri";
+import { PageText } from "@/shared/types";
 
 type TextCacheState = {
   textCache: Map<string, PageText>;
@@ -34,7 +35,7 @@ export const useTextCacheStore = create<TextCacheState>((set, get) => ({
       const isLoading = new Map(state.isLoading);
       const textCache = new Map(state.textCache);
       const errorCache = new Map(state.errorCache);
-      
+
       isLoading.delete(key);
 
       if (result.ok) {
@@ -49,21 +50,22 @@ export const useTextCacheStore = create<TextCacheState>((set, get) => ({
 
   getText: (id: string, page: number) => get().textCache.get(`${id}:${page}`),
 
-  removeText: (id: string) => set(state => {
-    const textCache = new Map(state.textCache);
-    const errorCache = new Map(state.errorCache);
-    const isLoading = new Map(state.isLoading);
-    
-    const prefix = `${id}:`;
-    
-    [textCache, errorCache, isLoading].forEach(map => {
-      for (const key of map.keys()) {
-        if (key.startsWith(prefix)) {
-          map.delete(key);
-        }
-      }
-    });
+  removeText: (id: string) =>
+    set((state) => {
+      const textCache = new Map(state.textCache);
+      const errorCache = new Map(state.errorCache);
+      const isLoading = new Map(state.isLoading);
 
-    return { textCache, errorCache, isLoading };
-  }),
+      const prefix = `${id}:`;
+
+      [textCache, errorCache, isLoading].forEach((map) => {
+        for (const key of map.keys()) {
+          if (key.startsWith(prefix)) {
+            map.delete(key);
+          }
+        }
+      });
+
+      return { textCache, errorCache, isLoading };
+    }),
 }));

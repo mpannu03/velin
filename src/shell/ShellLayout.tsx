@@ -1,7 +1,7 @@
 import { JSX, ReactNode } from "react";
-import { TitleBar } from "./components/TitleBar";
 import { AppShell } from "@mantine/core";
-import { ScreenNavigationBar } from "@/app/screenRouter/ScreenRouter";
+import { ScreenNavigationBar } from "@/app/screenRouter";
+import { TitleBar } from "./components";
 
 export function ShellLayout(
   { children }: { children?: ReactNode }

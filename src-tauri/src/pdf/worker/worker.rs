@@ -64,6 +64,18 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 let result = reader::get_text_by_page(&documents, &id, page_index);
                 let _ = reply.send(result);
             }
+            PdfEvent::Search { id, query, reply } => {
+                let result = reader::search_document(&documents, &id, &query);
+                let _ = reply.send(result);
+            }
+            PdfEvent::Preview {
+                id,
+                save_path,
+                reply,
+            } => {
+                let result = reader::generate_preview(&documents, &id, save_path);
+                let _ = reply.send(result);
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { PdfInfo } from '@/shared/types/pdf';
+import type { PdfInfo } from '@/shared/types';
 
 type ReaderState = {
   pdfInfo: Record<string, PdfInfo>;
