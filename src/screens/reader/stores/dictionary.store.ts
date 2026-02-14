@@ -2,24 +2,25 @@ import { create } from "zustand";
 import { SearchResult, createDictionaryEngine } from "@/services/dictionary";
 
 interface DictionaryState {
-    query: string;
+    queries: Record<string, string>;
     results: Record<string, SearchResult>;
     isSearching: boolean;
     error: string | null;
 
-    setQuery: (query: string) => void;
+    setQuery: (id: string, query: string) => void;
     search: (id: string, query: string) => Promise<void>;
+    clearResult: (id: string) => void;
     clearResults: () => void;
 }
 
 export const useDictionaryStore = create<DictionaryState>((set, get) => {
     return {
-        query: "",
+        queries: {},
         results: {},
         isSearching: false,
         error: null,
 
-        setQuery: (query: string) => set({ query }),
+        setQuery: (id: string, query: string) => set({ queries: { ...get().queries, [id]: query } }),
 
         search: async (id: string, query: string) => {
           const engine = await createDictionaryEngine();
@@ -33,6 +34,11 @@ export const useDictionaryStore = create<DictionaryState>((set, get) => {
           }
         },
 
-        clearResults: () => set({ query: "", results: {}, isSearching: false, error: null }),
+        clearResult: (id: string) => set({ 
+            results: { ...get().results, [id]: { noun: [], verb: [], adj: [], adv: [] } },
+            queries: { ...get().queries, [id]: "" } 
+        }),
+
+        clearResults: () => set({ queries: {}, results: {}, isSearching: false, error: null }),
     };
 })

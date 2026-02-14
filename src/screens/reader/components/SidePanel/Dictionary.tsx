@@ -5,7 +5,9 @@ import { SearchResult, Synset } from "@/services/dictionary";
 import { useDictionaryStore } from "../../stores";
 
 export function Dictionary({id}: {id: string}): JSX.Element {
-  const { query, results, isSearching, error, setQuery, search, clearResults } = useDictionaryStore();
+  const { queries, results, isSearching, error, setQuery, search, clearResult } = useDictionaryStore();
+  const query = queries[id] || "";
+  const result = results[id] || null;
 
   const handleSearch = () => {
     if (query !== "") {
@@ -23,7 +25,7 @@ export function Dictionary({id}: {id: string}): JSX.Element {
         <Text fw={700} tt="uppercase" size="xs" c="dimmed">
         Dictionary
       </Text>
-      <ActionIcon variant="subtle" size="sm" onClick={() => clearResults()}>
+      <ActionIcon variant="subtle" size="sm" onClick={() => clearResult(id)}>
         <X size={16} />
       </ActionIcon>
       </Group>
@@ -32,7 +34,8 @@ export function Dictionary({id}: {id: string}): JSX.Element {
         <Input
           placeholder="Search dictionary"
           value={query}
-          onChange={(e) => setQuery(e.currentTarget.value)}
+          onChange={(e) => setQuery(id, e.currentTarget.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           style={{ flex: 1 }}
           leftSection={<SearchIcon size={16} />}
         />
@@ -41,7 +44,7 @@ export function Dictionary({id}: {id: string}): JSX.Element {
         </ActionIcon>
       </Group>
       {error && <Text c="red">{error}</Text>}
-      {results[id] && <SearchResultsView result={results[id]} />}
+      {result && <SearchResultsView result={result} />}
     </Stack>
   );
 }
