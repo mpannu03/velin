@@ -40,7 +40,7 @@ export function HomeScreen(): JSX.Element {
             p="xl" 
             radius="md" 
             withBorder 
-            bg="var(--mantine-color-blue-light)"
+            bg="var(--mantine-primary-color-light)"
             style={{ borderStyle: 'dashed', borderWidth: 2 }}
           >
             <Group justify="space-between" align="center">

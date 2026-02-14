@@ -1,23 +1,26 @@
-import { createTheme, MantineColorsTuple } from '@mantine/core';
+import { createTheme, MantineThemeOverride } from '@mantine/core';
 
-const velinColor: MantineColorsTuple = [
-  "#ecf4ff",
-  "#dce4f5",
-  "#b9c7e2",
-  "#94a8d0",
-  "#748dc0",
-  "#5f7cb7",
-  "#5474b4",
-  "#44639f",
-  "#3a5890",
-  "#2c4b80"
-];
+export const THEME_COLORS = [
+  'red',
+  'pink',
+  'grape',
+  'violet',
+  'indigo',
+  'blue',
+  'cyan',
+  'teal',
+  'green',
+  'lime',
+  'yellow',
+  'orange',
+]
 
-export const velinTheme = createTheme({
-  primaryColor: 'velinColor',
-  defaultRadius: 'md',
-  focusRing: 'auto',
-  colors: {
-    velinColor
-  },
-});
+export function velinTheme(
+  colorKey: string
+): MantineThemeOverride {
+  return createTheme({
+    primaryColor: colorKey,
+    defaultRadius: 'md',
+    focusRing: 'auto',
+  });
+}

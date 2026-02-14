@@ -7,7 +7,8 @@ type FileType = "adj" | "adv" | "noun" | "verb";
 class DictionaryEngine {
   constructor(private dictPath: string) {}
 
-  public async search(lemma: string): Promise<SearchResult> {
+  public async search(query: string): Promise<SearchResult> {
+    const lemma = query.toLowerCase();
     const FILE_TYPES = ["adj", "adv", "noun", "verb"] as const;
 
     const result: SearchResult = {
@@ -17,7 +18,7 @@ class DictionaryEngine {
       verb: [],
     };
 
-    for (const type of FILE_TYPES) { 
+    for (const type of FILE_TYPES) {
       const search = await this.findLemmaLine(lemma, type);
       const offset = this.extractSynsetOffsets(search);
       const data = await this.getData(offset, type, lemma);
@@ -29,13 +30,19 @@ class DictionaryEngine {
     return result;
   }
 
-  private async findLemmaLine(lemma: string, filetype: FileType): Promise<string> {
+  private async findLemmaLine(
+    lemma: string,
+    filetype: FileType,
+  ): Promise<string> {
     const nounIndex = await this.openFile(filetype);
 
-    return nounIndex.split('\n').find(line => line.startsWith(lemma)) || '';
+    return nounIndex.split("\n").find((line) => line.startsWith(lemma)) || "";
   }
 
-  private async openFile(filetype: FileType, isData: boolean = false): Promise<string> {
+  private async openFile(
+    filetype: FileType,
+    isData: boolean = false,
+  ): Promise<string> {
     var filePath = `${this.dictPath}/index.${filetype}`;
     if (isData) {
       filePath = `${this.dictPath}/data.${filetype}`;
@@ -44,11 +51,10 @@ class DictionaryEngine {
     try {
       const bytes = await readFile(filePath);
       const data = new TextDecoder("utf-8").decode(bytes);
-      console.log(data);
       return data;
     } catch (err) {
-      console.error('Error reading file:', err);
-      return '';
+      console.error("Error reading file:", err);
+      return "";
     }
   }
 
@@ -68,20 +74,17 @@ class DictionaryEngine {
 
     const parts = metaPart.trim().split(/\s+/);
 
-    // const offset = parts[0];
-    // const lexFileNum = parts[1]; // can ignore
-    // const pos = parts[2];
     const wordCount = parseInt(parts[3], 10);
 
-    // Extract synonyms
     const allSynonyms: string[] = [];
     for (let i = 0; i < wordCount; i++) {
-      allSynonyms.push(parts[4 + i * 2]); // skip lexical ID
+      allSynonyms.push(parts[4 + i * 2]);
     }
 
-    const synonyms = allSynonyms.filter(s => s.toLowerCase() !== lemma.toLowerCase());
+    const synonyms = allSynonyms.filter(
+      (s) => s.toLowerCase() !== lemma.toLowerCase(),
+    );
 
-    // Pointer info
     const pointerCountIndex = 4 + wordCount * 2;
     const pointerCount = parseInt(parts[pointerCountIndex], 10);
 
@@ -92,18 +95,15 @@ class DictionaryEngine {
         symbol: parts[base],
         offset: parts[base + 1],
         pos: parts[base + 2],
-        // parts[base + 3] is source/target, can ignore for now
       });
     }
 
     const definition = glossPart.trim().split(";")[0];
-    // const exampleMatch = glossPart.trim().match(/"(.*?)"/);
-    // const example = exampleMatch ? exampleMatch[1] : undefined;
     const exampleMatches = [...glossPart.matchAll(/"(.*?)"/g)];
     const lemmaRegex = new RegExp(`\\b${lemma}\\b`, "i");
     const examples = exampleMatches
-        .map(m => m[1])
-        .filter(ex => lemmaRegex.test(ex));
+      .map((m) => m[1])
+      .filter((ex) => lemmaRegex.test(ex));
 
     return {
       synonyms,
@@ -113,14 +113,17 @@ class DictionaryEngine {
     };
   }
 
-  private async getData(offset: string[], fileType: FileType, lemma: string): Promise<Synset[]> {
-    // const filePath = `data/data.${fileType}`;
+  private async getData(
+    offset: string[],
+    fileType: FileType,
+    lemma: string,
+  ): Promise<Synset[]> {
     const nounData = await this.openFile(fileType, true);
-    const lines = nounData.split('\n');
+    const lines = nounData.split("\n");
     const data: Synset[] = [];
 
     for (const off of offset) {
-      const line = lines.find(line => line.startsWith(off));
+      const line = lines.find((line) => line.startsWith(off));
       if (line) {
         const synset = this.parseDataLine(line, lemma);
         if (synset) {
@@ -138,4 +141,3 @@ export async function createDictionaryEngine(): Promise<DictionaryEngine> {
   const dictPath = `${base}/wordnet/WNdb-3.0/dict`;
   return new DictionaryEngine(dictPath);
 }
-

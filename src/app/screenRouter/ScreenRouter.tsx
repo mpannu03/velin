@@ -6,7 +6,7 @@ import { FiBookOpen, FiEdit, FiHome, FiSettings, FiTool } from "react-icons/fi";
 import { useScreenState } from "./store/screen.store";
 import { ReaderScreen } from "@/screens";
 import { useDisclosure } from "@mantine/hooks";
-import { SettingsDialog } from "@/shared/components/SettingsDialog";
+import { SettingsDialog } from "@/dialog/settings";
 
 export function ScreenRouter(): JSX.Element {
   const screen = useScreenState((s) => s.screen);

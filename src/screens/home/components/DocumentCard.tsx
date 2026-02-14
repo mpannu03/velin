@@ -98,7 +98,7 @@ export function DocumentCard({ document, onClick, onDelete, onToggleStar }: Docu
             <Text size="xs" c="dimmed" fw={500}>Progress</Text>
             <Text size="xs" c="dimmed">{Math.round(progress)}%</Text>
           </Group>
-          <Progress value={progress} size="xs" radius="xl" color="blue" />
+          <Progress value={progress} size="xs" radius="xl" />
         </Stack>
 
         <Group gap={4} wrap="nowrap">

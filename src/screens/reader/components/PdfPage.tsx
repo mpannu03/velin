@@ -4,6 +4,8 @@ import { usePdfText } from "../hooks/usePdfText";
 import { Box, Center, Loader } from "@mantine/core";
 import { TextLayer } from "./TextLayer";
 import { SearchHighlightLayer } from "./SearchHighlightLayer";
+import { SidebarPanel, usePdfViewerStore } from "../stores/pdfViewer.store";
+import { useDictionaryStore } from "../stores/dictionary.store";
 
 type PdfPageProps = {
   id: string;
@@ -22,27 +24,39 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
 
   const viewerRef = useRef<HTMLDivElement>(null);
 
-const [viewportTop, setViewportTop] = useState(0);
-const [viewportHeight, setViewportHeight] = useState(0);
+  const [viewportTop, setViewportTop] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
 
-useEffect(() => {
-  const el = viewerRef.current;
-  if (!el) return;
+  const currentToolbar = usePdfViewerStore((state) => state.states[id].tool);
+  const setSidebar = usePdfViewerStore((state) => state.setSidebar);
+  const { setQuery, search } = useDictionaryStore();
 
-  const update = () => {
-    setViewportTop(el.scrollTop);
-    setViewportHeight(el.clientHeight);
+  const onTextSelected = (selectedText: string) => {
+    if (currentToolbar !== "dictionary") return;
+
+    setQuery(selectedText);
+    search(id, selectedText);
+    setSidebar(id, SidebarPanel.Dictionary);
   };
 
-  update();
-  el.addEventListener("scroll", update);
-  window.addEventListener("resize", update);
+  useEffect(() => {
+    const el = viewerRef.current;
+    if (!el) return;
 
-  return () => {
-    el.removeEventListener("scroll", update);
+    const update = () => {
+      setViewportTop(el.scrollTop);
+      setViewportHeight(el.clientHeight);
+    };
+
+    update();
+    el.addEventListener("scroll", update);
+    window.addEventListener("resize", update);
+
+    return () => {
+      el.removeEventListener("scroll", update);
     window.removeEventListener("resize", update);
-  };
-}, []);
+    };
+  }, []);
 
   useEffect(() => {
     if (!page || !canvasRef.current) return;
@@ -140,6 +154,7 @@ useEffect(() => {
             height={displayHeight}
             viewportTop={viewportTop}
             viewportHeight={viewportHeight}
+            onTextSelected={onTextSelected}
           />
         )}
         {info && (

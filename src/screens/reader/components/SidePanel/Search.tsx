@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Group, Input, Stack, Text, ScrollArea, Loader } from "@mantine/core";
+import { ActionIcon, Box, Group, Input, Stack, Text, ScrollArea } from "@mantine/core";
 import { Search as SearchIcon, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useSearchStore } from "../../stores/search.store";
 import { usePdfViewerStore } from "../../stores/pdfViewer.store";

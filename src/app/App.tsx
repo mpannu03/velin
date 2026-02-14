@@ -10,8 +10,8 @@ import { Notifications } from '@mantine/notifications';
 import { useDocumentRepositoryStore } from './store/repository.store';
 import { useSettingsStore } from './store/settings.store';
 
-import { DictionaryDownloadPrompt } from '@/shared/components/DictionaryDownloadPrompt';
-import { isDictionaryInstalled } from '@/shared/services/dictionary/dictionary';
+import { DictionaryDownloadPrompt } from '@/dialog/dictionaryPrompt';
+import { isDictionaryInstalled } from '@/shared/services/dictionary';
 
 export function App(): JSX.Element {
   const settings = useSettingsStore((state) => state.settings);
@@ -32,21 +32,17 @@ export function App(): JSX.Element {
 
   return(
     <MantineProvider
-      theme={{
-        ...velinTheme,
-        primaryColor: settings.appearance.accentColor || 'blue',
-      }}
-      forceColorScheme={settings.appearance.theme === 'system' ? undefined : settings.appearance.theme}
-      defaultColorScheme='light'
+      theme={velinTheme(settings.appearance.color)}
+      defaultColorScheme={settings.appearance.colorScheme}
     >
       <Notifications />
+      <DictionaryDownloadPrompt 
+        opened={showDictionaryPrompt} 
+        onClose={() => setShowDictionaryPrompt(false)}
+        onComplete={() => setShowDictionaryPrompt(false)}
+      />
       <ShellLayout>
         <ScreenRouter />
-        <DictionaryDownloadPrompt 
-          opened={showDictionaryPrompt} 
-          onClose={() => setShowDictionaryPrompt(false)}
-          onComplete={() => setShowDictionaryPrompt(false)}
-        />
       </ShellLayout>
     </MantineProvider>
   );

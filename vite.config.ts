@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import packageJson from "./package.json";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
@@ -10,6 +11,10 @@ const host = process.env.TAURI_DEV_HOST;
 
 // https://vite.dev/config/
 export default defineConfig(async () => ({
+  define: {
+    __APP_VERSION__: JSON.stringify(packageJson.version),
+  },
+
   plugins: [react(), tsconfigPaths()],
 
   resolve: {

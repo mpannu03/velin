@@ -1,9 +1,9 @@
-export type Theme = 'light' | 'dark' | 'system';
+import { MantineColorScheme } from "@mantine/core";
 
 export interface AppearanceSettings {
-  theme: Theme;
-  accentColor: string;
-}
+  colorScheme: MantineColorScheme;
+  color: string;
+} 
 
 export interface ReaderSettings {
   defaultZoom: number;
@@ -24,8 +24,8 @@ export interface Settings {
 
 export const DEFAULT_SETTINGS: Settings = {
   appearance: {
-    theme: 'system',
-    accentColor: 'velinColor',
+    colorScheme: "auto",
+    color: 'red',
   },
   reader: {
     defaultZoom: 1.0,

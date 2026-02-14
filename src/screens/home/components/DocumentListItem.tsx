@@ -102,7 +102,7 @@ export function DocumentListItem({ document, onClick, onDelete, onToggleStar }: 
 
           <Group gap="xs" mt={4} mb={4} w="100%">
             <Text size="xs" c="dimmed" fw={500}>Progress</Text>
-            <Progress value={progress} size="xs" radius="xl" color="blue" style={{flex: 1}}/>
+            <Progress value={progress} size="xs" radius="xl" style={{flex: 1}}/>
             <Text size="xs" c="dimmed">{Math.round(progress)}%</Text>
           </Group>
 
