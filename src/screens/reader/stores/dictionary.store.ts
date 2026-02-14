@@ -1,6 +1,5 @@
-import { SearchResult } from "@/shared/services/dictionary";
-import { createDictionaryEngine } from "@/shared/services/dictionary/engine";
 import { create } from "zustand";
+import { SearchResult, createDictionaryEngine } from "@/services/dictionary";
 
 interface DictionaryState {
     query: string;

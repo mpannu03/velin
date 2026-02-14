@@ -1,8 +1,8 @@
 import { ActionIcon, Badge, Card, Group, Input, ScrollArea, Stack, Text } from "@mantine/core";
 import { JSX } from "react";
-import { useDictionaryStore } from "../../stores/dictionary.store";
 import { SearchIcon, X } from "lucide-react";
-import { SearchResult, Synset } from "@/shared/services/dictionary";
+import { SearchResult, Synset } from "@/services/dictionary";
+import { useDictionaryStore } from "../../stores";
 
 export function Dictionary({id}: {id: string}): JSX.Element {
   const { query, results, isSearching, error, setQuery, search, clearResults } = useDictionaryStore();

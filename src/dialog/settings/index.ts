@@ -1,1 +1,1 @@
-export * from './SettingsDialog'
+export * from './SettingsDialog';

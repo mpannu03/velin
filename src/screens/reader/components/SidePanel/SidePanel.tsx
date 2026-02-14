@@ -1,10 +1,7 @@
 import { memo } from "react";
 import { Paper } from "@mantine/core";
-import { usePdfViewerStore } from "../../stores/pdfViewer.store";
-import { Bookmarks } from "./Bookmarks";
-import { Comments } from "./Comments";
-import { Search } from "./Search";
-import { Dictionary } from "./Dictionary";
+import { usePdfViewerStore } from "../../stores";
+import { Bookmarks, Comments, Search, Dictionary } from "./";
 
 export const SidePanel = memo(function SidePanel({ id }: { id: string }) {
   const sidebar = usePdfViewerStore(s => s.states[id]?.sidebar ?? 'none');

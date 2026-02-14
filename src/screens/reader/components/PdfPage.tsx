@@ -1,11 +1,8 @@
 import { JSX, useEffect, useRef, useState } from "react";
-import { usePdfInfo, usePdfPage } from "../hooks";
-import { usePdfText } from "../hooks/usePdfText";
 import { Box, Center, Loader } from "@mantine/core";
-import { TextLayer } from "./TextLayer";
-import { SearchHighlightLayer } from "./SearchHighlightLayer";
-import { SidebarPanel, usePdfViewerStore } from "../stores/pdfViewer.store";
-import { useDictionaryStore } from "../stores/dictionary.store";
+import { usePdfInfo, usePdfPage, usePdfText } from "../hooks";
+import { TextLayer, SearchHighlightLayer } from "./";
+import { SidebarPanel, usePdfViewerStore, useDictionaryStore } from "../stores";
 
 type PdfPageProps = {
   id: string;

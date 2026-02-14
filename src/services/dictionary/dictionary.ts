@@ -1,11 +1,11 @@
 import { appDataDir, BaseDirectory, join } from "@tauri-apps/api/path";
 import { exists, mkdir, remove, writeFile } from "@tauri-apps/plugin-fs";
 import { fetch } from '@tauri-apps/plugin-http';
-import { safeInvoke } from "../../tauri/invoke_result";
+import { safeInvoke } from "@/services/tauri";
 
 const WORDNET_URL = "https://wordnetcode.princeton.edu/3.0/WNdb-3.0.tar.gz";
 
-type WordnetInstallStatus =
+export type WordnetInstallStatus =
   | { stage: "downloading"; percent: number }
   | { stage: "extracting" }
   | { stage: "completed" };

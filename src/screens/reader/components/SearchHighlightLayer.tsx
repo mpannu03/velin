@@ -1,5 +1,5 @@
 import { JSX, memo } from "react";
-import { useSearchStore } from "../stores/search.store";
+import { useSearchStore } from "../stores";
 
 type SearchHighlightLayerProps = {
   pageIndex: number;

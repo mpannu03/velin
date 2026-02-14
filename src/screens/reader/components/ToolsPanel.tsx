@@ -1,7 +1,7 @@
 import { ActionIcon, Paper, Stack, Tooltip } from "@mantine/core";
 import { JSX } from "react";
-import { usePdfViewerStore, ViewerTool } from "../stores";
 import { MousePointer, Hand, Book } from "lucide-react";
+import { usePdfViewerStore, ViewerTool } from "../stores";
 
 type ToolsPanelProps = {
 	documentId: string;

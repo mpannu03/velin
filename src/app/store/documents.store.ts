@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import { PdfDocument } from '@/shared/types/pdf';
-import { openPdf, closePdf, fetchPdfInfo } from '@/shared/tauri/reader';
+import { openPdf, closePdf, fetchPdfInfo } from '@/services/tauri';
 import { path } from '@tauri-apps/api';
-import { InvokeResult } from '@/shared/tauri';
-import { documentRepository } from '@/shared/storage';
-import { useDocumentRepositoryStore } from './repository.store';
-import { savePreview } from '@/shared/services/previewPng';
+import { InvokeResult } from '@/services/tauri';
+import { documentRepository } from '@/services/storage';
+import { useDocumentRepositoryStore } from '@/app/store';
+import { savePreview } from '@/services/image/previewPng';
 
 type DocumentsState = {
   documents: Record<string, PdfDocument>;

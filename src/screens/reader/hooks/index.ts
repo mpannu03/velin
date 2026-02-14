@@ -4,3 +4,4 @@ export * from './usePdfWheelZoom';
 export * from './usePdfBookmarks';
 export * from './useCurrentPageFromVirtual';
 export * from './usePageIndicator';
+export * from './usePdfText';

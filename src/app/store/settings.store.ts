@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { Settings, DEFAULT_SETTINGS } from '@/shared/types';
-import { settingsStore } from '@/shared/storage/store';
+import { settingsStore } from '@/services/storage/store';
 
 interface SettingsState {
   settings: Settings;

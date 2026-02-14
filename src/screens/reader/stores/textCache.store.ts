@@ -1,6 +1,6 @@
-import { fetchTextByPage } from "@/shared/tauri";
-import { PageText } from "@/shared/types";
 import { create } from "zustand";
+import { fetchTextByPage } from "@/services/tauri";
+import { PageText } from "@/shared/types";
 
 type TextCacheState = {
   textCache: Map<string, PageText>;

@@ -6,12 +6,9 @@ import {
   Divider,
   ScrollArea,
 } from "@mantine/core";
-import { useSettingsStore } from "@/app/store/settings.store";
+import { useSettingsStore } from "@/app";
 import { JSX, useState } from "react";
-import { NavigationSection } from "./components/NavigationSection";
-import { AppearanceSection } from "./components/AppearanceSection";
-import { ReaderSection } from "./components/ReaderSection";
-import { GeneralSection } from "./components/GeneralSection";
+import { NavigationSection, AppearanceSection, ReaderSection, GeneralSection } from "./components";
 
 interface SettingsDialogProps {
   opened: boolean;

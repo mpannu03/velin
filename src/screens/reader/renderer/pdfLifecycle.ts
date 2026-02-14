@@ -1,9 +1,9 @@
-import { pickPdfFile } from "@/shared/services";
 import { notifications } from "@mantine/notifications";
-import { useDocumentsStore } from "@/app/store/documents.store";
-import { usePageCacheStore, usePdfInfoStore, usePdfViewerStore } from "../stores";
 import { useScreenState } from "@/app/screenRouter";
+import { useDocumentsStore } from "@/app/store/documents.store";
 import { useDocumentRepositoryStore } from "@/app/store/repository.store";
+import { usePageCacheStore, usePdfInfoStore, usePdfViewerStore } from "../stores";
+import { pickPdfFile } from "@/services/file";
 
 export async function openPdf() {
   const pdfStore = useDocumentsStore.getState();

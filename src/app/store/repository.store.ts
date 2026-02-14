@@ -1,5 +1,5 @@
-import { deletePreview } from "@/shared/services/previewPng";
-import { documentRepository } from "@/shared/storage";
+import { deletePreview } from "@/services/image/previewPng";
+import { documentRepository } from "@/services/storage";
 import { DocumentMeta, DocumentPatch } from "@/shared/types";
 import { create } from "zustand";
 

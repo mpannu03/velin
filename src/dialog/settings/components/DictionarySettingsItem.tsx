@@ -1,4 +1,4 @@
-import { downloadAndInstallWordNet, isDictionaryInstalled } from "@/shared/services/dictionary";
+import { downloadAndInstallWordNet, isDictionaryInstalled, WordnetInstallStatus } from "@/services/dictionary";
 import { Box, Button, Group, Loader, Progress, Stack, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ export function DictionarySettingsItem() {
   );
 
   useEffect(() => {
-    isDictionaryInstalled().then((val) => {
+    isDictionaryInstalled().then((val: boolean) => {
       setInstalled(val);
       setChecking(false);
     });
@@ -23,7 +23,7 @@ export function DictionarySettingsItem() {
     setDownloading(true);
     setStage("downloading");
     try {
-      await downloadAndInstallWordNet((status) => {
+      await downloadAndInstallWordNet((status: WordnetInstallStatus) => {
         if (status.stage === "downloading") {
           setProgress(status.percent);
         } else if (status.stage === "extracting") {

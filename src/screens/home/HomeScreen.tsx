@@ -17,9 +17,8 @@ import {
 } from "@mantine/core";
 import { JSX, useState } from "react";
 import { FiPlus, FiBookOpen, FiFileText, FiClock, FiStar, FiGrid, FiList } from "react-icons/fi";
-import { DocumentCard } from "./components/DocumentCard";
-import { DocumentListItem } from "./components/DocumentListItem";
-import { openPdf, openPdfFromPath } from "../reader/renderer/pdfLifecycle";
+import { DocumentCard, DocumentListItem } from "./components";
+import { openPdf, openPdfFromPath } from "@/screens/reader";
 
 export function HomeScreen(): JSX.Element {
   const { documents, deleteDocument, updateDocument } = useDocumentRepositoryStore();

@@ -1,9 +1,9 @@
 import { Box, Button, Center, Collapse, Group, Loader, ScrollArea, Stack, Text } from "@mantine/core";
-import { usePdfBookmarks } from "../../hooks";
 import { Bookmark } from "@/shared/types";
 import { memo, useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { usePdfViewerStore } from "../../stores";
+import { usePdfBookmarks } from "../../hooks";
 
 export const Bookmarks = memo(function Bookmarks({ id }: { id: string }) {
   const { bookmarks, error, loading } = usePdfBookmarks(id);

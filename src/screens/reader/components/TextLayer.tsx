@@ -1,7 +1,5 @@
-import { JSX, memo } from "react";
+import { JSX, memo, useMemo, useLayoutEffect, useRef, useState } from "react";
 import { TextItem } from "@/shared/types";
-
-import { useMemo, useLayoutEffect, useRef, useState } from "react";
 
 export type TextLayerProps = {
   textItems: TextItem[];

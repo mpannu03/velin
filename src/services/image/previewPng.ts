@@ -1,6 +1,6 @@
 import { appCacheDir, join } from "@tauri-apps/api/path";
-import { generatePreview } from "../tauri";
-import { DocumentMeta, PdfDocument } from "../types";
+import { generatePreview } from "@/services/tauri";
+import { DocumentMeta, PdfDocument } from "@/shared/types";
 import { remove, BaseDirectory } from '@tauri-apps/plugin-fs';
 
 export async function savePreview(

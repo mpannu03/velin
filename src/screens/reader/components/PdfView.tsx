@@ -2,16 +2,11 @@ import { JSX, useEffect, useRef } from "react";
 import { Center, Loader } from "@mantine/core";
 import { useViewportSize } from "@mantine/hooks";
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { useDocumentsStore } from "@/app";
-import { usePdfInfo } from "../hooks/usePdfInfo";
-import { usePdfViewerStore } from "../stores/pdfViewer.store";
-import { PdfPage } from './PdfPage';
-import { SideBarPanel } from "./SideBarPanel";
-import { SidePanel } from "./SidePanel/SidePanel";
-import { useCurrentPageFromVirtual, usePdfWheelZoom } from "../hooks";
-import { ToolsPanel } from "./ToolsPanel";
-import { useDocumentRepositoryStore } from "@/app/store/repository.store";
+import { useDocumentsStore, useDocumentRepositoryStore } from "@/app";
 import { PdfDocument } from "@/shared/types";
+import { usePdfInfo, usePdfWheelZoom, useCurrentPageFromVirtual } from "../hooks";
+import { usePdfViewerStore } from "../stores";
+import { PdfPage, ToolsPanel, SidePanel, SideBarPanel } from './';
 
 type PdfViewProps = {
   doc: PdfDocument;

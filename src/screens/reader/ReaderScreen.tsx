@@ -4,7 +4,7 @@ import { PdfView } from './components/PdfView';
 import { useScreenState } from '@/app/screenRouter';
 import { Button, Stack, Text, Title, ThemeIcon, Center } from '@mantine/core';
 import { FiPlus, FiFileText } from 'react-icons/fi';
-import { openPdf } from './renderer/pdfLifecycle';
+import { openPdf } from './renderer/';
 
 export function ReaderPlaceholder(): JSX.Element {
   return (

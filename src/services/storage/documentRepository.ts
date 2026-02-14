@@ -1,5 +1,5 @@
-import { DocumentMeta, DocumentPatch } from "../types";
-import { documentStore } from "./store";
+import { DocumentMeta, DocumentPatch } from "@/shared/types";
+import { documentStore } from "@/services/storage";
 
 type DocumentMap = Record<string, DocumentMeta>;
 

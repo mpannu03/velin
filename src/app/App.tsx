@@ -1,17 +1,14 @@
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import './styles.css'
-import { MantineProvider } from "@mantine/core";
-import { ShellLayout } from "@/shell/ShellLayout";
-import { velinTheme } from './theme/theme';
-import { ScreenRouter } from './screenRouter/ScreenRouter';
 import { JSX, useEffect, useState } from 'react';
 import { Notifications } from '@mantine/notifications';
-import { useDocumentRepositoryStore } from './store/repository.store';
-import { useSettingsStore } from './store/settings.store';
-
-import { DictionaryDownloadPrompt } from '@/dialog/dictionaryPrompt';
-import { isDictionaryInstalled } from '@/shared/services/dictionary';
+import { MantineProvider } from "@mantine/core";
+import { ShellLayout } from "@/shell";
+import { velinTheme } from './theme';
+import { ScreenRouter } from './screenRouter';
+import { useDocumentRepositoryStore, useSettingsStore } from './store';
+import { DictionaryDownloadPrompt, isDictionaryInstalled } from '@/services/dictionary';
 
 export function App(): JSX.Element {
   const settings = useSettingsStore((state) => state.settings);

@@ -1,5 +1,5 @@
 import { Group } from '@mantine/core';
-import { ControlButtons } from './ControlButtons';
+import { ControlButtons } from './';
 import { JSX } from 'react';
 import { PdfTabs } from './PdfTabs';
 

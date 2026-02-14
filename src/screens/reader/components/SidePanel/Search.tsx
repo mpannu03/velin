@@ -1,8 +1,7 @@
+import { useEffect } from "react";
 import { ActionIcon, Box, Group, Input, Stack, Text, ScrollArea } from "@mantine/core";
 import { Search as SearchIcon, ChevronLeft, ChevronRight, X } from "lucide-react";
-import { useSearchStore } from "../../stores/search.store";
-import { usePdfViewerStore } from "../../stores/pdfViewer.store";
-import { useEffect } from "react";
+import { useSearchStore, usePdfViewerStore } from "../../stores";
 
 export function Search({ id }: { id: string }) {
   const { query, setQuery, search, results, currentIndex, nextResult, prevResult, isSearching, clearResults } = useSearchStore();

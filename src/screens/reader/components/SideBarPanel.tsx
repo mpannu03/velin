@@ -1,6 +1,6 @@
+import { useEffect, useState } from 'react';
 import { ActionIcon, Divider, Input, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { useHotkeys } from '@mantine/hooks';
-import { SidebarPanel, usePdfViewerStore } from '../stores/pdfViewer.store';
 import {
   ZoomIn,
   ZoomOut,
@@ -10,7 +10,7 @@ import {
   Book
 } from "lucide-react";
 import { usePageIndicator } from '../hooks';
-import { useEffect, useState } from 'react';
+import { SidebarPanel, usePdfViewerStore } from '../stores';
 
 type SideBarPanelProps = {
     documentId: string;

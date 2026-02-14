@@ -1,9 +1,9 @@
 import { JSX, ReactNode } from "react";
 import { ActionIcon, Divider, Group, SegmentedControl, Stack, Text, Tooltip } from "@mantine/core";
 import { SCREEN_COMPONENTS } from "./screens.registry";
-import { Screen } from '../types'
+import { Screen } from '@/app/types';
 import { FiBookOpen, FiEdit, FiHome, FiSettings, FiTool } from "react-icons/fi";
-import { useScreenState } from "./store/screen.store";
+import { useScreenState } from "@/app/screenRouter";
 import { ReaderScreen } from "@/screens";
 import { useDisclosure } from "@mantine/hooks";
 import { SettingsDialog } from "@/dialog/settings";
