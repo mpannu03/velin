@@ -31,7 +31,7 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
   const onTextSelected = (selectedText: string) => {
     if (currentToolbar !== "dictionary") return;
 
-    setQuery(selectedText);
+    setQuery(id, selectedText);
     search(id, selectedText);
     setSidebar(id, SidebarPanel.Dictionary);
   };
@@ -156,6 +156,7 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
         )}
         {info && (
           <SearchHighlightLayer
+            id={id}
             pageIndex={pageIndex}
             scale={scale}
           />

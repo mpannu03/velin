@@ -2,18 +2,20 @@ import { JSX, memo } from "react";
 import { useSearchStore } from "../stores";
 
 type SearchHighlightLayerProps = {
+  id: string;
   pageIndex: number;
   scale: number;
 };
 
 export const SearchHighlightLayer = memo(function SearchHighlightLayer({
+  id,
   pageIndex,
   scale,
 }: SearchHighlightLayerProps): JSX.Element | null {
-  const results = useSearchStore((s) => s.results);
+  const result = useSearchStore((s) => s.results[id]);
   const currentIndex = useSearchStore((s) => s.currentIndex);
 
-  const pageHits = results.filter((hit) => hit.page === pageIndex);
+  const pageHits = result?.filter((hit) => hit.page === pageIndex) ?? [];
 
   if (pageHits.length === 0) return null;
 
@@ -31,7 +33,7 @@ export const SearchHighlightLayer = memo(function SearchHighlightLayer({
       }}
     >
       {pageHits.map((hit, hitIndex) => {
-        const isCurrent = results.indexOf(hit) === currentIndex;
+        const isCurrent = result.indexOf(hit) === currentIndex;
         return hit.rects.map((rect, rectIndex) => (
           <div
             key={`${hitIndex}-${rectIndex}`}

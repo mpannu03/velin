@@ -4,14 +4,15 @@ import { Search as SearchIcon, ChevronLeft, ChevronRight, X } from "lucide-react
 import { useSearchStore, usePdfViewerStore } from "../../stores";
 
 export function Search({ id }: { id: string }) {
-  const { query, setQuery, search, results, currentIndex, nextResult, prevResult, isSearching, clearResults } = useSearchStore();
+  const { query, setQuery, search, results, currentIndex, nextResult, prevResult, isSearching, clearResult } = useSearchStore();
   const gotoPage = usePdfViewerStore(s => s.gotoPage);
+  const result = results[id] ?? [];
 
   const handleSearch = () => {
     search(id, query);
   };
 
-  const currentHit = results[currentIndex];
+  const currentHit = result[currentIndex];
 
   useEffect(() => {
      if (currentHit) {
@@ -25,7 +26,7 @@ export function Search({ id }: { id: string }) {
         <Text fw={700} tt="uppercase" size="xs" c="dimmed">
           Search
         </Text>
-        <ActionIcon variant="subtle" size="sm" onClick={() => clearResults()}>
+        <ActionIcon variant="subtle" size="sm" onClick={() => clearResult(id)}>
            <X size={16} />
         </ActionIcon>
       </Group>
@@ -38,22 +39,21 @@ export function Search({ id }: { id: string }) {
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           style={{ flex: 1 }}
           leftSection={<SearchIcon size={16} />}
-          // rightSection={isSearching ? <Loader size="xs" /> : null}
         />
         <ActionIcon variant="filled" onClick={handleSearch} loading={isSearching}>
           <SearchIcon size={18} />
         </ActionIcon>
       </Group>
 
-      {results.length > 0 && (
+      {result.length > 0 && (
         <Group justify="center" gap="xs">
-          <ActionIcon variant="light" onClick={prevResult}>
+          <ActionIcon variant="light" onClick={() => prevResult(id)}>
             <ChevronLeft size={18} />
           </ActionIcon>
           <Text size="sm">
-            {currentIndex + 1} of {results.length}
+            {currentIndex + 1} of {result.length}
           </Text>
-          <ActionIcon variant="light" onClick={nextResult}>
+          <ActionIcon variant="light" onClick={() => nextResult(id)}>
             <ChevronRight size={18} />
           </ActionIcon>
         </Group>
@@ -61,7 +61,7 @@ export function Search({ id }: { id: string }) {
 
       <ScrollArea style={{ flex: 1 }}>
         <Stack gap="xs">
-          {results.map((hit, index) => (
+          {result.map((hit, index) => (
             <Box
               key={index}
               p="xs"
@@ -78,7 +78,7 @@ export function Search({ id }: { id: string }) {
               {/* Future: Add preview snippet here */}
             </Box>
           ))}
-          {results.length === 0 && !isSearching && query && (
+          {result.length === 0 && !isSearching && query && (
              <Text size="sm" c="dimmed" ta="center" mt="xl">No results found</Text>
           )}
         </Stack>
