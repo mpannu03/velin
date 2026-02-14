@@ -1,34 +1,60 @@
 import { appDataDir } from "@tauri-apps/api/path";
 import { readFile } from "@tauri-apps/plugin-fs";
-import { SearchResult, Synset } from "./types";
+import { PartOfSpeech, SearchResult, Synset } from "./types";
+import { createMorphy, exceptionMap, hasIndexEntry } from "./morphy";
 
 type FileType = "adj" | "adv" | "noun" | "verb";
 
 class DictionaryEngine {
-  constructor(private dictPath: string) {}
+  private morphy: (word: string, pos: PartOfSpeech) => string[];
 
-  public async search(query: string): Promise<SearchResult> {
-    const lemma = query.toLowerCase();
-    const FILE_TYPES = ["adj", "adv", "noun", "verb"] as const;
+  constructor(private dictPath: string) {
+    this.morphy = createMorphy({
+      hasIndexEntry,
+      exceptionMap,
+    })
+  }
 
-    const result: SearchResult = {
-      adj: [],
-      adv: [],
-      noun: [],
-      verb: [],
-    };
+public async search(query: string): Promise<SearchResult> {
+  const word = query.toLowerCase();
+  const FILE_TYPES = ["adj", "adv", "noun", "verb"] as const;
 
-    for (const type of FILE_TYPES) {
-      const search = await this.findLemmaLine(lemma, type);
-      const offset = this.extractSynsetOffsets(search);
-      const data = await this.getData(offset, type, lemma);
+  const result: SearchResult = {
+    adj: [],
+    adv: [],
+    noun: [],
+    verb: [],
+  };
+
+  for (const type of FILE_TYPES) {
+    const searchLine = await this.findLemmaLine(word, type);
+
+    if (searchLine) {
+      const offsets = this.extractSynsetOffsets(searchLine);
+      const data = await this.getData(offsets, type, word);
       if (data.length > 0) {
         result[type] = data;
+        continue;
       }
     }
 
-    return result;
+    const lemmas = this.morphy(word, type);
+
+    for (const lemma of lemmas) {
+      const lemmaLine = await this.findLemmaLine(lemma, type);
+      if (!lemmaLine) continue;
+
+      const offsets = this.extractSynsetOffsets(lemmaLine);
+      const data = await this.getData(offsets, type, lemma);
+
+      if (data.length > 0) {
+        result[type].push(...data);
+      }
+    }
   }
+
+  return result;
+}
 
   private async findLemmaLine(
     lemma: string,
