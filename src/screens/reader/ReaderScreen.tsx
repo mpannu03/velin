@@ -27,7 +27,7 @@ export function ReaderScreen(): JSX.Element {
       style={{ 
         height: "100%",
         flexDirection: 'column',
-        backgroundColor: 'var(--mantine-color-gray-0)',
+        background: 'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))',
         position: 'relative',
         flex: 1,
         overflow: 'hidden',
@@ -46,18 +46,20 @@ function NoDocumentOpened(): JSX.Element {
       style={{
         width: '100%',
         flex: 1,
-        background: 'radial-gradient(circle at center, var(--mantine-color-white) 0%, var(--mantine-primary-color-light-hover) 100%)',
+        background: 'radial-gradient(circle at center, light-dark(var(--mantine-color-white), var(--mantine-color-dark-6)) 0%, var(--mantine-primary-color-light-hover) 100%)',
       }}
     >
       <Stack align="center" gap="xl">
-        <ThemeIcon size={120} radius={100} variant="light" color="var(--mantine-primary-color-filled)" style={{
-          boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
-        }}>
+        <ThemeIcon size={120} radius={100} variant="light" color="var(--mantine-primary-color-filled)" 
+          style={{
+            boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+          }}
+        >
           <FiFileText size={60} />
         </ThemeIcon>
 
         <Stack gap="xs" align="center">
-          <Title order={2} fw={800} c="dark.5" ta="center">
+          <Title order={2} fw={800} c="brightness(1.2)" ta="center">
             No Open Documents
           </Title>
           <Text c="dimmed" size="lg" maw={320} ta="center" fw={500}>

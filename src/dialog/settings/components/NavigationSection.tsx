@@ -15,10 +15,10 @@ export function NavigationSection({
   return (
     <Box
       w={220}
-      bg="gray.0"
+      bg="light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))"
       p="md"
       style={{
-        borderRight: "1px solid var(--mantine-color-gray-3)",
+        borderRight: "1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4))",
         display: "flex",
         flexDirection: "column",
       }}

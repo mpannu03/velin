@@ -1,4 +1,4 @@
-import { Group, Text, ActionIcon, Box, Paper, Stack, Badge, Progress } from '@mantine/core';
+import { Group, Text, ActionIcon, Box, Stack, Badge, Progress, Card } from '@mantine/core';
 import { DocumentMeta } from '@/shared/types';
 import { FiStar, FiFile, FiClock, FiTrash } from 'react-icons/fi';
 import { JSX, useMemo } from 'react';
@@ -29,14 +29,14 @@ export function DocumentListItem({ document, onClick, onDelete, onToggleStar }: 
     : 0;
 
   return (
-    <Paper
+    <Card
       withBorder
       p="sm"
       radius="md"
       className="document-list-item"
       style={{ cursor: 'pointer', transition: 'background-color 0.2s ease' }}
       onClick={onClick}
-      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--mantine-color-gray-0)')}
+      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--mantine-color-default-hover)')}
       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
     >
       <Group wrap="nowrap" gap="md">
@@ -65,7 +65,7 @@ export function DocumentListItem({ document, onClick, onDelete, onToggleStar }: 
               loading="lazy"
             />
           ) : (
-            <FiFile size={24} stroke="var(--mantine-color-gray-4)" />
+            <FiFile size={24} />
           )}
         </Box>
 
@@ -122,6 +122,6 @@ export function DocumentListItem({ document, onClick, onDelete, onToggleStar }: 
           </Group>
         </Stack>
       </Group>
-    </Paper>
+    </Card>
   );
 }

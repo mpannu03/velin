@@ -1,5 +1,5 @@
 import { AppearanceSettings, Settings } from "@/shared/types";
-import { Box, Stack, Text, SegmentedControl, ActionIcon, ColorSwatch, Divider, Group, MantineColorScheme, useMantineTheme } from "@mantine/core";
+import { Box, Stack, Text, SegmentedControl, ActionIcon, ColorSwatch, Divider, Group, MantineColorScheme, useMantineTheme, useMantineColorScheme } from "@mantine/core";
 import { JSX } from "react";
 import { FiCheck, FiMonitor, FiMoon, FiSun } from "react-icons/fi";
 import { THEME_COLORS } from "@/app/theme";
@@ -12,6 +12,7 @@ export function AppearanceSection({
   updateAppearance: (settings: Partial<AppearanceSettings>) => void;
 }): JSX.Element {
   const theme = useMantineTheme();
+  const { setColorScheme } = useMantineColorScheme();
   
   return (
     <Stack gap="xl">
@@ -21,7 +22,10 @@ export function AppearanceSection({
         </Text>
         <SegmentedControlCustom
           value={settings.appearance.colorScheme}
-          onChange={(val) => updateAppearance({ colorScheme: val as MantineColorScheme })}
+          onChange={(val) => {
+            updateAppearance({ colorScheme: val as MantineColorScheme });
+            setColorScheme(val as MantineColorScheme);
+          }}
         />
       </Box>
 
@@ -95,7 +99,7 @@ function SegmentedControlCustom({
               <FiMonitor size={14} /> System
             </Group>
           ),
-          value: "system",
+          value: "auto",
         },
       ]}
     />

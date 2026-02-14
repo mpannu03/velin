@@ -1,4 +1,4 @@
-import { ActionIcon, Divider, Group, Text } from "@mantine/core";
+import { ActionIcon, Divider, Group, Text, Tooltip } from "@mantine/core";
 import { JSX, useEffect } from "react";
 import { PdfDocument } from "@/shared/types";
 import { FiPlus, FiX } from "react-icons/fi";
@@ -71,14 +71,16 @@ export function PdfTabs(): JSX.Element {
             );
           })}
         </SortableContext>
-        <ActionIcon
-          w={36}
-          h={36}
-          variant="subtle"
-          onClick={() => openPdf()}
-        >
-          <FiPlus size={18} />
-        </ActionIcon>
+        <Tooltip label="Open PDF" position="bottom" withArrow>
+          <ActionIcon
+            w={36}
+            h={36}
+            variant="subtle"
+            onClick={() => openPdf()}
+          >
+            <FiPlus size={18} />
+          </ActionIcon>
+        </Tooltip>
       </Group>
     </DndContext>
   );
@@ -150,7 +152,6 @@ function Tab({ tab }: TabProps): JSX.Element {
         truncate
         size="xs"
         fw={500}
-        c="dark.7"
         style={{
           flex: 1,
           minWidth: 0,

@@ -6,7 +6,7 @@ export function ToolsScreen(): JSX.Element {
       style={{
         width: '100%',
         height: '100%',
-        background: 'var(--mantine-color-gray-0)',
+        background: 'light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6))',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

@@ -18,7 +18,7 @@ export function ControlButtons(): JSX.Element {
         w="45"
         p="0"
         radius="0"
-        color="black"
+        color="var(--mantine-color-text)"
         onClick={() => appWindow.minimize()}
       >
         <VscChromeMinimize />
@@ -28,7 +28,7 @@ export function ControlButtons(): JSX.Element {
         w="45"
         p="0"
         radius="0"
-        color="black"
+        color="var(--mantine-color-text)"
         onClick={() => appWindow.toggleMaximize()}
       >
         {isMaximized
@@ -40,7 +40,7 @@ export function ControlButtons(): JSX.Element {
         w="45"
         p="0"
         radius="0"
-        color="black"
+        color="var(--mantine-color-text)"
         style={{
           '--button-hover': 'var(--mantine-color-red-7)',
         }}
