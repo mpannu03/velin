@@ -1,5 +1,5 @@
 import { AppearanceSettings, Settings } from "@/shared/types";
-import { Box, Stack, Text, SegmentedControl, ActionIcon, ColorSwatch, Divider, Group, MantineColorScheme } from "@mantine/core";
+import { Box, Stack, Text, SegmentedControl, ActionIcon, ColorSwatch, Divider, Group, MantineColorScheme, useMantineTheme } from "@mantine/core";
 import { JSX } from "react";
 import { FiCheck, FiMonitor, FiMoon, FiSun } from "react-icons/fi";
 import { THEME_COLORS } from "@/app/theme";
@@ -11,6 +11,8 @@ export function AppearanceSection({
   settings: Settings;
   updateAppearance: (settings: Partial<AppearanceSettings>) => void;
 }): JSX.Element {
+  const theme = useMantineTheme();
+  
   return (
     <Stack gap="xl">
       <Box>
@@ -45,7 +47,7 @@ export function AppearanceSection({
                 <FiCheck size={18} />
               ) : (
                 <ColorSwatch
-                  color={color}
+                  color={theme.colors[color][6]}
                   size={24}
                 />
               )}
