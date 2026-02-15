@@ -46,7 +46,6 @@ function NoDocumentOpened(): JSX.Element {
       style={{
         width: '100%',
         flex: 1,
-        background: 'radial-gradient(circle at center, light-dark(var(--mantine-color-white), var(--mantine-color-dark-6)) 0%, var(--mantine-primary-color-light-hover) 100%)',
       }}
     >
       <Stack align="center" gap="xl">
