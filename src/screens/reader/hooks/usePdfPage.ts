@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { renderPage } from "@/services/tauri";
 import { pdfRenderQueue } from "../renderer";
-import { usePageCacheStore } from "../stores";
+import { useDocumentCacheStore } from "../stores";
 import { RenderedPage } from "../types"
 
 type PdfPageState = {
@@ -16,7 +16,7 @@ export function usePdfPage(
   targetWidth: number,
   isVisible: boolean = true // Add visibility hint
 ) {
-  const { addPage, getPage, getAnyPage } = usePageCacheStore();
+  const { addPage, getPage, getAnyPage } = useDocumentCacheStore();
 
   const [state, setState] = useState<PdfPageState>(() => {
     const cached = getPage(id, pageIndex, targetWidth);

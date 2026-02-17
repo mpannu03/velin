@@ -1,12 +1,12 @@
-import { usePdfInfoStore, usePdfViewerStore } from "../stores";
+import { useDocumentCacheStore, usePdfViewerStore } from "../stores";
 
 export function usePageIndicator(id: string) {
   const currentPage = usePdfViewerStore(
     (s) => s.getState(id).currentPage
   );
 
-  const pageCount = usePdfInfoStore(
-    (s) => s.infoCache[id]?.page_count
+  const pageCount = useDocumentCacheStore(
+    (s) => s.getInfo(id)?.page_count
   );
 
   if (pageCount == null) {

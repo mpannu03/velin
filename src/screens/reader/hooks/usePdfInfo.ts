@@ -1,21 +1,20 @@
 import { useEffect } from "react";
-import { usePdfInfoStore } from "../stores";
+import { useDocumentCacheStore } from "../stores";
 
 export function usePdfInfo(id: string) {
-  const info = usePdfInfoStore(s => s.infoCache[id]);
-  const error = usePdfInfoStore(s => s.errorCache[id]);
-  const loading = usePdfInfoStore(s => s.isLoading[id]);
-  const fetchInfo = usePdfInfoStore(s => s.fetchInfo);
+  const getInfo = useDocumentCacheStore(s => s.getInfo);
+  const fetchInfo = useDocumentCacheStore(s => s.fetchInfo);
+  const info = getInfo(id);
 
   useEffect(() => {
     fetchInfo(id);
   }, [id, fetchInfo]);
 
-  const isLoading = loading || (!info && !error);
+  const isLoading = !info;
 
   return {
     info: info || null,
-    error: error || null,
+    error: null,
     loading: isLoading,
   };
 }
