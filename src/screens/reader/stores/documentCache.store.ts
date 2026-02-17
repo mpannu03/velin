@@ -2,6 +2,9 @@ import { create } from 'zustand';
 import { RenderedPage } from '../types';
 import { PdfInfo, PageText } from '@/shared/types';
 
+const MAX_CACHE_MB = 256;
+const MAX_TEXT_CACHE_PAGES = 100;
+
 // Document-level cache containing all related data
 type DocumentCache = {
   // Metadata about the PDF
@@ -46,10 +49,6 @@ type DocumentCacheState = {
   clear: () => void;
 };
 
-const MAX_CACHE_MB = 256;
-const MAX_TEXT_CACHE_PAGES = 100;
-
-// Estimate memory for a rendered page (WebP compressed)
 function estimatePageMB(page: RenderedPage): number {
   if (page.pixels && page.pixels.length > 0) {
     return page.pixels.length / (1024 * 1024);
@@ -58,12 +57,10 @@ function estimatePageMB(page: RenderedPage): number {
   return (page.width * page.height * 4 * 0.08) / (1024 * 1024);
 }
 
-// Estimate memory for text data (very small, ~10KB per page)
 function estimateTextMB(_text: PageText): number {
   return 0.01; // 10KB
 }
 
-// Get or create document cache
 function getOrCreateDocCache(documents: Map<string, DocumentCache>, id: string): DocumentCache {
   if (!documents.has(id)) {
     const newCache: DocumentCache = {
@@ -84,37 +81,30 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
   documents: new Map(),
   totalMemoryMb: 0,
   maxMemoryMb: MAX_CACHE_MB,
-
-  // ==================== PAGE OPERATIONS ====================
   
-  addPage: (id, _pageIndex, page) => {
+  addPage: (id, pageIndex, page) => {
     set((state) => {
       const newDocuments = new Map(state.documents);
       const docCache = getOrCreateDocCache(newDocuments, id);
       
-      const key = `${page.width}x${page.height}`;
+      const key = `${pageIndex}:${page.width}x${page.height}`;
       const pageMb = estimatePageMB(page);
       
-      // If page already exists, subtract its old size
       const existingPage = docCache.pages.get(key);
       if (existingPage) {
         const oldMb = estimatePageMB(existingPage);
         docCache.memoryMb -= oldMb;
       }
-      
-      // Add new page
+
       docCache.pages.set(key, page);
       docCache.memoryMb += pageMb;
       
-      // Recalculate total memory
       let totalMemoryMb = 0;
       for (const cache of newDocuments.values()) {
         totalMemoryMb += cache.memoryMb;
       }
       
-      // LRU eviction if over limit
       while (totalMemoryMb > MAX_CACHE_MB && newDocuments.size > 0) {
-        // Find oldest document
         let oldestId: string | undefined;
         let oldestTime = Infinity;
         
@@ -140,15 +130,14 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
     });
   },
 
-  getPage: (id, _pageIndex, width) => {
+  getPage: (id, pageIndex, width) => {
     const docCache = get().documents.get(id);
     if (!docCache) return undefined;
     
     docCache.lastAccessed = Date.now();
     
-    // Find exact match
-    for (const [_key, page] of docCache.pages) {
-      if (Math.abs(page.width - width) < 1) {
+    for (const [key, page] of docCache.pages) {
+      if (key.startsWith(`${pageIndex}:`) && Math.abs(page.width - width) < 1) {
         return page;
       }
     }
@@ -156,18 +145,22 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
     return undefined;
   },
 
-  getAnyPage: (id, _pageIndex) => {
+  getAnyPage: (id, pageIndex) => {
     const docCache = get().documents.get(id);
     if (!docCache || docCache.pages.size === 0) return undefined;
-    
+
     docCache.lastAccessed = Date.now();
     
-    // Return any cached page for this document
-    return docCache.pages.values().next().value;
+    // Try to find any cached version of this specific page
+    for (const [key, page] of docCache.pages) {
+      if (key.startsWith(`${pageIndex}:`)) {
+        return page;
+      }
+    }
+    
+    return undefined;
   },
 
-  // ==================== TEXT OPERATIONS ====================
-  
   addText: (id, pageIndex, text) => {
     set((state) => {
       const newDocuments = new Map(state.documents);
@@ -175,19 +168,15 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
       
       const textMb = estimateTextMB(text);
       
-      // If text already exists, subtract old size
       if (docCache.text.has(pageIndex)) {
         docCache.memoryMb -= estimateTextMB(docCache.text.get(pageIndex)!);
       }
       
-      // Add new text
       docCache.text.set(pageIndex, text);
       docCache.memoryMb += textMb;
       
-      // Evict LRU text entries if too many
       if (docCache.text.size > MAX_TEXT_CACHE_PAGES) {
         const entries = Array.from(docCache.text.entries());
-        // Remove first (oldest) entry
         const [oldestPage, oldestText] = entries[0];
         docCache.text.delete(oldestPage);
         docCache.memoryMb -= estimateTextMB(oldestText);
@@ -214,7 +203,6 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
   fetchText: async (id, pageIndex) => {
     const { getText, addText } = get();
     
-    // Return if already cached
     if (getText(id, pageIndex)) return;
     
     try {
@@ -231,8 +219,6 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
     }
   },
 
-  // ==================== INFO OPERATIONS ====================
-  
   setInfo: (id, info) => {
     set((state) => {
       const newDocuments = new Map(state.documents);
@@ -253,7 +239,6 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
   fetchInfo: async (id) => {
     const { getInfo, setInfo } = get();
     
-    // Return if already cached
     if (getInfo(id)) return;
     
     try {
@@ -269,8 +254,6 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
       console.error('Error fetching PDF info:', error);
     }
   },
-
-  // ==================== CLEANUP OPERATIONS ====================
   
   purgeDocument: (id) => {
     set((state) => {
@@ -278,7 +261,6 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
       const docCache = newDocuments.get(id);
       
       if (docCache) {
-        // Subtract memory
         const totalMemoryMb = state.totalMemoryMb - docCache.memoryMb;
         newDocuments.delete(id);
         return { documents: newDocuments, totalMemoryMb };
