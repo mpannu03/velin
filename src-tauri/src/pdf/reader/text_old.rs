@@ -1,9 +1,19 @@
 use std::collections::HashMap;
 
-use pdfium_render::prelude::{PdfDocument, PdfPoints, PdfRect};
+use pdfium_render::prelude::{PdfDocument, PdfPageObjectsCommon, PdfPoints, PdfRect};
 use serde::Serialize;
 
-use crate::pdf::{DocumentId, TextItem};
+use crate::pdf::DocumentId;
+
+#[derive(Debug, Clone, Serialize)]
+pub struct TextItem {
+    pub text: String,
+    pub x: f32,
+    pub y: f32,
+    pub width: f32,
+    pub height: f32,
+    pub font_size: f32,
+}
 
 #[derive(Debug, Clone, Serialize)]
 pub struct PageText {
@@ -63,63 +73,80 @@ pub fn get_text_by_page(
     let page_height = page.height().value;
     let page_width = page.width().value;
 
-    let mut items: Vec<TextItem> = Vec::new();
-    let chars = text_page.chars();
+    let mut items = Vec::new();
 
-    let mut current_fragment: Option<TextItem> = None;
-    let spacing_threshold = 2.0;
+    for object in page.objects().iter() {
+        if let Some(text_object) = object.as_text_object() {
+            let chars = match text_page.chars_for_object(text_object) {
+                Ok(c) => c,
+                Err(_) => continue,
+            };
 
-    for i in 0..chars.len() {
-        let ch = chars.get(i).map_err(|e| e.to_string())?;
-        let unicode = match ch.unicode_char() {
-            Some(c) => c,
-            None => continue,
-        };
+            let mut current_word = String::new();
+            let mut start_rect: Option<PdfRect> = None;
+            let mut last_rect: Option<PdfRect> = None;
+            let mut font_size: f32 = 0.0;
 
-        let rect = ch.loose_bounds().unwrap_or(PdfRect::new(
-            PdfPoints::new(0.0),
-            PdfPoints::new(0.0),
-            PdfPoints::new(0.0),
-            PdfPoints::new(0.0),
-        ));
+            for ch in chars.iter() {
+                let unicode = match ch.unicode_string() {
+                    Some(s) => s,
+                    None => continue,
+                };
 
-        let x = rect.left().value;
-        let y = page_height - rect.top().value;
-        let width = rect.width().value;
-        let height = rect.height().value;
+                let rect = match ch.loose_bounds() {
+                    Ok(r) => r,
+                    Err(_) => continue,
+                };
 
-        if let Some(mut fragment) = current_fragment.take() {
-            let same_line = (y - fragment.y).abs() < 0.1 && (height - fragment.height).abs() < 0.1;
-            let is_near = x >= fragment.x + fragment.width - spacing_threshold
-                && x <= fragment.x + fragment.width + spacing_threshold;
+                font_size = ch.scaled_font_size().value;
 
-            if same_line && is_near {
-                fragment.text.push(unicode);
-                fragment.width = x + width - fragment.x;
-                current_fragment = Some(fragment);
-            } else {
-                items.push(fragment);
-                current_fragment = Some(TextItem {
-                    text: unicode.to_string(),
+                if unicode == " " {
+                    if let (Some(start), Some(end)) = (start_rect, last_rect) {
+                        let x = start.left().value;
+                        let y = page_height - start.top().value;
+                        let width = end.right().value - start.left().value;
+                        let height = start.height().value;
+
+                        items.push(TextItem {
+                            text: current_word.clone(),
+                            x,
+                            y,
+                            width,
+                            height,
+                            font_size,
+                        });
+                    }
+
+                    current_word.clear();
+                    start_rect = None;
+                    last_rect = None;
+                } else {
+                    if start_rect.is_none() {
+                        start_rect = Some(rect);
+                    }
+
+                    current_word.push_str(&unicode);
+                    last_rect = Some(rect);
+                }
+            }
+
+            // Push final word in object
+            if let (Some(start), Some(end)) = (start_rect, last_rect) {
+                let x = start.left().value;
+                let y = page_height - start.top().value;
+                let width = end.right().value - start.left().value;
+                let height = start.height().value;
+
+                items.push(TextItem {
+                    text: current_word.clone(),
                     x,
                     y,
                     width,
                     height,
+                    font_size,
                 });
             }
-        } else {
-            current_fragment = Some(TextItem {
-                text: unicode.to_string(),
-                x,
-                y,
-                width,
-                height,
-            });
         }
-    }
-
-    if let Some(fragment) = current_fragment {
-        items.push(fragment);
     }
 
     Ok(PageText {

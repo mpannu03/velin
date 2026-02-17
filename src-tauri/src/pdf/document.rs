@@ -31,12 +31,3 @@ pub struct Bookmark {
 pub struct Bookmarks {
     pub items: Vec<Bookmark>,
 }
-
-#[derive(Debug, Clone, Serialize)]
-pub struct TextItem {
-    pub text: String,
-    pub x: f32,
-    pub y: f32,
-    pub width: f32,
-    pub height: f32,
-}
