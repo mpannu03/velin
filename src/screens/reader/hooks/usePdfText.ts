@@ -3,7 +3,8 @@ import { useTextCacheStore } from "../stores";
 
 export function usePdfText(id: string, page: number) {
   const key = `${id}:${page}`;
-  const data = useTextCacheStore(s => s.textCache.get(key));
+  const getText = useTextCacheStore(s => s.getText);
+  const data = getText(id, page); // Use getText() method instead of direct cache access
   const error = useTextCacheStore(s => s.errorCache.get(key));
   const loading = useTextCacheStore(s => s.isLoading.get(key));
   const fetchText = useTextCacheStore(s => s.fetchText);
