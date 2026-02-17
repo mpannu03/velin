@@ -36,6 +36,7 @@ image = "0.25.9"
 tauri-plugin-http = "2.5.7"
 tar = "0.4.44"
 flate2 = "1.1.9"
+webp = "0.3.1"
 
 [dependencies.uuid]
 version = "1.19.0"

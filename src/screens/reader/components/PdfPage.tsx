@@ -38,34 +38,38 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
 
     (async () => {
       const canvas = canvasRef.current!;
-      const ctx = canvas.getContext("2d", { willReadFrequently: false });
+      const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
       canvas.width = page.width;
       canvas.height = page.height;
 
-      ctx.imageSmoothingEnabled = false;  
+      ctx.imageSmoothingEnabled = false;
 
-      if (page.pixels.length === 0) {
-        console.warn("Received empty pixel data for page:", pageIndex);
+      if (!page.pixels || page.pixels.length === 0) {
+        console.warn("Received empty image data for page:", pageIndex);
         return;
       }
 
-      const imageData = new ImageData(
-        page.pixels instanceof Uint8ClampedArray
-          ? (page.pixels as unknown as Uint8ClampedArray<ArrayBuffer>)
-          : new Uint8ClampedArray(page.pixels),
-        page.width,
-        page.height
-      );
+      // Convert to Uint8Array if needed
+      const bytes =
+        page.pixels instanceof Uint8Array
+          ? page.pixels
+          : new Uint8Array(page.pixels);
 
-      const bitmap = await createImageBitmap(imageData);
+      const byteCopy = new Uint8Array(bytes);
+      const blob = new Blob([byteCopy], { type: "image/webp" });
+
+      const bitmap = await createImageBitmap(blob);
+
       if (cancelled) {
         bitmap.close();
         return;
       }
 
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(bitmap, 0, 0);
+
       bitmap.close();
 
       onRendered?.();

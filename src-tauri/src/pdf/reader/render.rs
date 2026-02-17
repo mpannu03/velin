@@ -2,6 +2,7 @@ use image::{ImageBuffer, Rgba};
 use pdfium_render::prelude::{PdfDocument, PdfRenderConfig, Pdfium};
 use serde::Serialize;
 use std::{collections::HashMap, io::Cursor, path::Path};
+use webp::Encoder;
 
 use crate::pdf::DocumentId;
 
@@ -56,10 +57,16 @@ pub fn render_page(
         .render_with_config(&config)
         .map_err(|e| format!("Rendering Error: {}", e))?;
 
+    let width = bitmap.width();
+    let height = bitmap.height();
+    let rgba = bitmap.as_raw_bytes();
+
+    let webp_bytes = rgba_to_webp(&rgba, width as u32, height as u32, 90.0)?;
+
     let rendered_page = RenderedPage {
-        width: bitmap.width(),
-        height: bitmap.height(),
-        pixels: bitmap.as_raw_bytes(),
+        width,
+        height,
+        pixels: webp_bytes,
     };
 
     Ok(rendered_page)
@@ -95,7 +102,7 @@ pub fn generate_preview(
     Ok(png_bytes)
 }
 
-pub fn rgba_to_png_bytes(pixels: Vec<u8>, width: i32, height: i32) -> Result<Vec<u8>, String> {
+fn rgba_to_png_bytes(pixels: Vec<u8>, width: i32, height: i32) -> Result<Vec<u8>, String> {
     let img: ImageBuffer<Rgba<u8>, _> = ImageBuffer::from_raw(width as u32, height as u32, pixels)
         .ok_or("Failed to create image buffer")?;
 
@@ -105,6 +112,19 @@ pub fn rgba_to_png_bytes(pixels: Vec<u8>, width: i32, height: i32) -> Result<Vec
         .map_err(|e| e.to_string())?;
 
     Ok(png_bytes)
+}
+
+fn rgba_to_webp(
+    rgba: &[u8],
+    width: u32,
+    height: u32,
+    quality: f32, // 0.0 - 100.0
+) -> Result<Vec<u8>, String> {
+    let encoder = Encoder::from_rgba(rgba, width, height);
+
+    let webp = encoder.encode(quality);
+
+    Ok(webp.to_vec())
 }
 
 #[cfg(test)]
