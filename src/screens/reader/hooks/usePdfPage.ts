@@ -13,7 +13,8 @@ type PdfPageState = {
 export function usePdfPage(
   id: string,
   pageIndex: number,
-  targetWidth: number
+  targetWidth: number,
+  isVisible: boolean = true // Add visibility hint
 ) {
   const { addPage, getPage, getAnyPage } = usePageCacheStore();
 
@@ -48,10 +49,14 @@ export function usePdfPage(
     });
 
     const abortController = new AbortController();
+    
+    // Visible pages get higher priority (100), offscreen pages get lower (0)
+    const priority = isVisible ? 100 : 0;
 
     pdfRenderQueue.enqueue(
       () => renderPage(id, pageIndex, targetWidth),
-      abortController.signal
+      abortController.signal,
+      priority
     ).then((result) => {
       if (cancelled || abortController.signal.aborted) return;
 
@@ -80,7 +85,7 @@ export function usePdfPage(
       cancelled = true;
       abortController.abort();
     }
-  }, [id, pageIndex, targetWidth, getPage, addPage, getAnyPage])
+  }, [id, pageIndex, targetWidth, isVisible, getPage, addPage, getAnyPage])
 
   return state;
 }

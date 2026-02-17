@@ -10,10 +10,11 @@ type PdfPageProps = {
   width: number;
   onRendered?: () => void;
   aspectRatio: number;
+  isVisible?: boolean; // Track if page is currently visible
 };
 
-export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPageProps): JSX.Element {
-  const { page, error, loading } = usePdfPage(id, pageIndex, width);
+export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisible = true }: PdfPageProps): JSX.Element {
+  const { page, error, loading } = usePdfPage(id, pageIndex, width, isVisible);
   const { text: textItems, pageWidth } = usePdfText(id, pageIndex);
   const { info } = usePdfInfo(id);
 
@@ -39,11 +40,25 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
 
     (async () => {
       const canvas = canvasRef.current!;
-      const ctx = canvas.getContext("2d");
+      
+      // Try to use OffscreenCanvas for better performance if available
+      const useOffscreen = typeof OffscreenCanvas !== 'undefined' && !isVisible;
+      
+      let ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | null;
+      let offscreenCanvas: OffscreenCanvas | null = null;
+      
+      if (useOffscreen) {
+        // Use offscreen canvas for background rendering
+        offscreenCanvas = new OffscreenCanvas(page.width, page.height);
+        ctx = offscreenCanvas.getContext("2d");
+      } else {
+        // Use regular canvas
+        canvas.width = page.width;
+        canvas.height = page.height;
+        ctx = canvas.getContext("2d");
+      }
+      
       if (!ctx) return;
-
-      canvas.width = page.width;
-      canvas.height = page.height;
 
       ctx.imageSmoothingEnabled = false;
 
@@ -77,8 +92,20 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
       // Store bitmap reference for cleanup
       bitmapRef.current = bitmap;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, page.width, page.height);
       ctx.drawImage(bitmap, 0, 0);
+
+      // If we used offscreen canvas, transfer to main canvas
+      if (useOffscreen && offscreenCanvas) {
+        const mainCtx = canvas.getContext("2d");
+        if (mainCtx) {
+          canvas.width = page.width;
+          canvas.height = page.height;
+          const transferBitmap = await createImageBitmap(offscreenCanvas as any);
+          mainCtx.drawImage(transferBitmap, 0, 0);
+          transferBitmap.close();
+        }
+      }
 
       onRendered?.();
     })();
@@ -91,7 +118,7 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
         bitmapRef.current = null;
       }
     };
-  }, [page, pageIndex, onRendered]);
+  }, [page, pageIndex, onRendered, isVisible]);
 
   if (loading && !page) {
     return (
@@ -134,6 +161,9 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
             width: `100%`,
             height: `100%`,
             display: page ? 'block' : 'none',
+            // Subtle opacity reduction while loading higher res
+            opacity: loading && page ? 0.95 : 1,
+            transition: 'opacity 0.2s ease-in-out',
           }}
         />
         {textItems && info && (

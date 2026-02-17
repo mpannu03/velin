@@ -138,6 +138,7 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
                 pageIndex={virtualItem.index}
                 width={renderWidth}
                 aspectRatio={aspectRatio}
+                isVisible={true} // All virtual items are considered visible
               />
             </div>
           ))}
