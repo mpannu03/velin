@@ -82,7 +82,7 @@ pub fn generate_preview(
         .app_cache_dir()
         .map_err(|e| format!("Failed to get app cache dir: {e}"))?;
     let previews_dir = app_data.join("previews");
-    let save_path = previews_dir.join(format!("{}.png", id));
+    let save_path = previews_dir.join(format!("{}.webp", id));
 
     reader_service::generate_preview(&state, id, Some(save_path))
 }

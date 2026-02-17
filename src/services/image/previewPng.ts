@@ -7,7 +7,7 @@ export async function savePreview(
   document: PdfDocument
 ): Promise<string> {
   const appCache = await appCacheDir();
-  const previewPath = await join(appCache, 'previews', `${document.id}.png`);
+  const previewPath = await join(appCache, 'previews', `${document.id}.webp`);
 
   const data = await generatePreview(document.id);
 

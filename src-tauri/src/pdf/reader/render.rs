@@ -1,7 +1,6 @@
-use image::{ImageBuffer, Rgba};
 use pdfium_render::prelude::{PdfDocument, PdfRenderConfig, Pdfium};
 use serde::Serialize;
-use std::{collections::HashMap, io::Cursor, path::Path};
+use std::{collections::HashMap, path::Path};
 use webp::Encoder;
 
 use crate::pdf::DocumentId;
@@ -89,29 +88,23 @@ pub fn generate_preview(
         .render_with_config(&config)
         .map_err(|e| format!("Rendering Error: {e}"))?;
 
-    let png_bytes = rgba_to_png_bytes(bitmap.as_raw_bytes(), bitmap.width(), bitmap.height())?;
+    // let png_bytes = rgba_to_png_bytes(bitmap.as_raw_bytes(), bitmap.width(), bitmap.height())?;
+    let webp_bytes = rgba_to_webp(
+        &bitmap.as_raw_bytes(),
+        bitmap.width() as u32,
+        bitmap.height() as u32,
+        90.0,
+    )?;
 
     if let Some(path) = save_path {
         let path = path.as_ref();
         if let Some(parent) = path.parent() {
             std::fs::create_dir_all(parent).map_err(|e| e.to_string())?;
         }
-        std::fs::write(path, &png_bytes).map_err(|e| e.to_string())?;
+        std::fs::write(path, &webp_bytes).map_err(|e| e.to_string())?;
     }
 
-    Ok(png_bytes)
-}
-
-fn rgba_to_png_bytes(pixels: Vec<u8>, width: i32, height: i32) -> Result<Vec<u8>, String> {
-    let img: ImageBuffer<Rgba<u8>, _> = ImageBuffer::from_raw(width as u32, height as u32, pixels)
-        .ok_or("Failed to create image buffer")?;
-
-    let mut png_bytes: Vec<u8> = Vec::new();
-
-    img.write_to(&mut Cursor::new(&mut png_bytes), image::ImageFormat::Png)
-        .map_err(|e| e.to_string())?;
-
-    Ok(png_bytes)
+    Ok(webp_bytes)
 }
 
 fn rgba_to_webp(

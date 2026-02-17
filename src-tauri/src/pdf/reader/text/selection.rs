@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use pdfium_render::prelude::{PdfDocument, PdfFontWeight, PdfPoints, PdfRect};
+use pdfium_render::prelude::{PdfDocument, PdfPoints, PdfRect};
 use serde::Serialize;
 
 use crate::pdf::DocumentId;
