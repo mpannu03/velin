@@ -1,4 +1,4 @@
-import { JSX, useEffect, useRef, useState } from "react";
+import { JSX, useEffect, useRef } from "react";
 import { Box, Center, Loader } from "@mantine/core";
 import { usePdfInfo, usePdfPage, usePdfText } from "../hooks";
 import { TextLayer, SearchHighlightLayer } from "./";
@@ -19,11 +19,6 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const viewerRef = useRef<HTMLDivElement>(null);
-
-  const [viewportTop, setViewportTop] = useState(0);
-  const [viewportHeight, setViewportHeight] = useState(0);
-
   const currentToolbar = usePdfViewerStore((state) => state.states[id].tool);
   const setSidebar = usePdfViewerStore((state) => state.setSidebar);
   const { setQuery, search } = useDictionaryStore();
@@ -35,25 +30,6 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
     search(id, selectedText);
     setSidebar(id, SidebarPanel.Dictionary);
   };
-
-  useEffect(() => {
-    const el = viewerRef.current;
-    if (!el) return;
-
-    const update = () => {
-      setViewportTop(el.scrollTop);
-      setViewportHeight(el.clientHeight);
-    };
-
-    update();
-    el.addEventListener("scroll", update);
-    window.addEventListener("resize", update);
-
-    return () => {
-      el.removeEventListener("scroll", update);
-    window.removeEventListener("resize", update);
-    };
-  }, []);
 
   useEffect(() => {
     if (!page || !canvasRef.current) return;
@@ -149,8 +125,6 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
             scale={scale}
             width={displayWidth}
             height={displayHeight}
-            viewportTop={viewportTop}
-            viewportHeight={viewportHeight}
             onTextSelected={onTextSelected}
           />
         )}

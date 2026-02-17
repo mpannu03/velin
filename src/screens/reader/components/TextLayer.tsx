@@ -1,4 +1,4 @@
-import { JSX, memo, useMemo, useLayoutEffect, useRef, useState } from "react";
+import { JSX, memo, useLayoutEffect, useRef, useState } from "react";
 import { TextItem } from "@/shared/types";
 
 export type TextLayerProps = {
@@ -8,12 +8,8 @@ export type TextLayerProps = {
   width: number;
   height: number;
 
-  viewportTop: number;
-  viewportHeight: number;
   onTextSelected?: (selectedText: string) => void;
 };
-
-const BUFFER_PX = 300;
 
 /**
  * Grouped text fragment (memoized for performance)
@@ -69,21 +65,8 @@ export function TextLayer({
   scale,
   width,
   height,
-  viewportTop,
-  viewportHeight,
   onTextSelected,
 }: TextLayerProps): JSX.Element {
-  const visibleItems = useMemo(() => {
-    const minY = viewportTop - BUFFER_PX;
-    const maxY = viewportTop + viewportHeight + BUFFER_PX;
-
-    return textItems.filter((item) => {
-      const y = item.y * scale;
-      const h = item.height * scale;
-      return y + h >= minY && y <= maxY;
-    });
-  }, [textItems, scale, viewportTop, viewportHeight]);
-
   return (
     <div
       className="text-layer"
@@ -121,11 +104,9 @@ export function TextLayer({
         }
       `}</style>
 
-      {visibleItems.map((item, index) => (
+      {textItems.map((item, index) => (
         <TextFragment key={index} item={item} scale={scale} />
       ))}
     </div>
   );
 }
-
-
