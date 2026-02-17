@@ -2,7 +2,7 @@ import { notifications } from "@mantine/notifications";
 import { useScreenState } from "@/app/screenRouter";
 import { useDocumentsStore } from "@/app/store/documents.store";
 import { useDocumentRepositoryStore } from "@/app/store/repository.store";
-import { usePageCacheStore, usePdfInfoStore, usePdfViewerStore } from "../stores";
+import { usePageCacheStore, usePdfInfoStore, usePdfViewerStore, useTextCacheStore } from "../stores";
 import { pickPdfFile } from "@/services/file";
 
 export async function openPdf() {
@@ -69,5 +69,6 @@ export async function closePdf(id: string) {
     usePageCacheStore.getState().purgeDocument(id);
     usePdfInfoStore.getState().removeInfo(id);
     usePdfViewerStore.getState().removeState(id);
+    useTextCacheStore.getState().removeText(id);
   }
 }

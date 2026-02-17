@@ -1,4 +1,4 @@
-import { JSX, memo, useLayoutEffect, useRef, useState } from "react";
+import { JSX, memo } from "react";
 import { TextItem } from "@/shared/types";
 
 export type TextLayerProps = {
@@ -21,22 +21,15 @@ const TextFragment = memo(function TextFragment({
   item: TextItem;
   scale: number;
 }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const [scaleX, setScaleX] = useState(1);
-
-  useLayoutEffect(() => {
-    if (ref.current) {
-      const naturalWidth = ref.current.getBoundingClientRect().width;
-      const targetWidth = item.width * scale;
-      if (naturalWidth > 0 && Math.abs(naturalWidth - targetWidth) > 0.1) {
-        setScaleX(targetWidth / naturalWidth);
-      }
-    }
-  }, [item.text, item.width, scale]);
+  // Pre-calculate approximate scaleX based on target width
+  // This avoids expensive getBoundingClientRect and useLayoutEffect
+  // The browser's font rendering naturally handles most of the alignment
+  const targetWidth = item.width * scale;
+  const approximateFontWidth = item.text.length * item.height * scale * 0.5;
+  const scaleX = approximateFontWidth > 0 ? targetWidth / approximateFontWidth : 1;
 
   return (
     <span
-      ref={ref}
       className="text-fragment"
       style={{
         position: "absolute",

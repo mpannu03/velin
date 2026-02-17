@@ -1,35 +1,53 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Virtualizer } from "@tanstack/react-virtual";
 import { usePdfViewerStore } from "../stores";
+import { useDocumentRepositoryStore, useDocumentsStore } from "@/app";
 
-export function useCurrentPageFromVirtual<
-  TScroll extends Element,
-  TItem extends Element
->({
+type UseCurrentPageFromVirtualParams = {
+  virtualizer: Virtualizer<HTMLDivElement, Element>;
+  id: string;
+};
+
+export function useCurrentPageFromVirtual({
   virtualizer,
   id,
-}: {
-  virtualizer: Virtualizer<TScroll, TItem>;
-  id: string;
-}) {
+}: UseCurrentPageFromVirtualParams) {
   const setCurrentPage = usePdfViewerStore((s) => s.setCurrentPage);
+  const updateDocument = useDocumentRepositoryStore((s) => s.updateDocument);
+  const filePath = useDocumentsStore((s) => s.documents[id]?.filePath);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-  const scrollTop = virtualizer.scrollOffset;
-  const items = virtualizer.getVirtualItems();
+    const handleScroll = () => {
+      // Cancel previous RAF if it exists
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
 
-  if (!items.length) return;
+      // Schedule update for next animation frame
+      rafRef.current = requestAnimationFrame(() => {
+        const items = virtualizer.getVirtualItems();
+        if (items.length > 0) {
+          const currentPage = items[0].index;
+          setCurrentPage(id, currentPage);
+          if (filePath) {
+            updateDocument(filePath, { currentPage });
+          }
+        }
+        rafRef.current = null;
+      });
+    };
 
-  let current = items[0].index;
-
-  for (const item of items) {
-    if (scrollTop !== null && item.start <= scrollTop + 1) {
-      current = item.index;
-    } else {
-      break;
+    const element = virtualizer.scrollElement;
+    if (element) {
+      element.addEventListener("scroll", handleScroll, { passive: true });
+      return () => {
+        element.removeEventListener("scroll", handleScroll);
+        // Cleanup pending RAF on unmount
+        if (rafRef.current !== null) {
+          cancelAnimationFrame(rafRef.current);
+        }
+      };
     }
-  }
-
-  setCurrentPage(id, current);
-}, [virtualizer.scrollOffset]);
+  }, [virtualizer, id, setCurrentPage, updateDocument, filePath]);
 }

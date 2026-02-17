@@ -2,8 +2,16 @@ import { create } from "zustand";
 import { fetchTextByPage } from "@/services/tauri";
 import { PageText } from "@/shared/types";
 
+// Maximum number of pages to cache (prevents unbounded growth)
+const MAX_TEXT_CACHE_PAGES = 100;
+
+type TextCacheEntry = {
+  data: PageText;
+  lastAccessed: number;
+};
+
 type TextCacheState = {
-  textCache: Map<string, PageText>;
+  textCache: Map<string, TextCacheEntry>;
   errorCache: Map<string, string | null>;
   isLoading: Map<string, boolean>;
 
@@ -39,7 +47,32 @@ export const useTextCacheStore = create<TextCacheState>((set, get) => ({
       isLoading.delete(key);
 
       if (result.ok) {
-        textCache.set(key, result.data);
+        // Add new entry with timestamp
+        const entry: TextCacheEntry = {
+          data: result.data,
+          lastAccessed: Date.now(),
+        };
+        textCache.set(key, entry);
+
+        // Evict LRU entries if cache is too large
+        while (textCache.size > MAX_TEXT_CACHE_PAGES) {
+          let oldestKey: string | undefined;
+          let oldestTime = Infinity;
+
+          // Find least recently used entry
+          for (const [k, v] of textCache.entries()) {
+            if (v.lastAccessed < oldestTime) {
+              oldestTime = v.lastAccessed;
+              oldestKey = k;
+            }
+          }
+
+          if (oldestKey) {
+            textCache.delete(oldestKey);
+          } else {
+            break;
+          }
+        }
       } else {
         errorCache.set(key, result.error);
       }
@@ -48,7 +81,18 @@ export const useTextCacheStore = create<TextCacheState>((set, get) => ({
     });
   },
 
-  getText: (id: string, page: number) => get().textCache.get(`${id}:${page}`),
+  getText: (id: string, page: number) => {
+    const key = `${id}:${page}`;
+    const entry = get().textCache.get(key);
+    
+    if (entry) {
+      // Update last accessed time for LRU tracking
+      entry.lastAccessed = Date.now();
+      return entry.data;
+    }
+    
+    return undefined;
+  },
 
   removeText: (id: string) =>
     set((state) => {

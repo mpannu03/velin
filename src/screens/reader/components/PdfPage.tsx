@@ -18,6 +18,7 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
   const { info } = usePdfInfo(id);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const bitmapRef = useRef<ImageBitmap | null>(null);
 
   const currentToolbar = usePdfViewerStore((state) => state.states[id].tool);
   const setSidebar = usePdfViewerStore((state) => state.setSidebar);
@@ -60,6 +61,12 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
       const byteCopy = new Uint8Array(bytes);
       const blob = new Blob([byteCopy], { type: "image/webp" });
 
+      // Close previous bitmap if it exists
+      if (bitmapRef.current) {
+        bitmapRef.current.close();
+        bitmapRef.current = null;
+      }
+
       const bitmap = await createImageBitmap(blob);
 
       if (cancelled) {
@@ -67,18 +74,24 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio }: PdfPa
         return;
       }
 
+      // Store bitmap reference for cleanup
+      bitmapRef.current = bitmap;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(bitmap, 0, 0);
-
-      bitmap.close();
 
       onRendered?.();
     })();
 
     return () => {
       cancelled = true;
+      // Cleanup bitmap on unmount or when page changes
+      if (bitmapRef.current) {
+        bitmapRef.current.close();
+        bitmapRef.current = null;
+      }
     };
-  }, [page]);
+  }, [page, pageIndex, onRendered]);
 
   if (loading && !page) {
     return (
