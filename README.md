@@ -9,6 +9,25 @@ A modern, high-performance PDF reader built with **Tauri**, **Rust**, and **Reac
 
 ---
 
+## 📸 Showcase
+
+### Modern Home Screen
+
+A clean and intuitive landing page to manage and access your PDF collection.
+![Home Screen](assets/images/home-screen.png)
+
+### High-Performance Reader
+
+Experience lag-free reading, instant zooming, and smooth text interactions.
+![Reader Screen](assets/images/reader-screen.png)
+
+### Personalized Themes
+
+Switch between various themes to match your workspace and reduce eye strain.
+![Multiple Themes](assets/images/multiple-themes.png)
+
+---
+
 ## 🚀 Tech Stack
 
 Velin leverages a modern stack to deliver a native-feel desktop experience with web flexibility:
