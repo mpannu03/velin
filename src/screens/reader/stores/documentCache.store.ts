@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { RenderedPage } from '../types';
 import { PdfInfo, PageText } from '@/shared/types';
+import { fetchPdfInfo, fetchTextByPage } from '@/services/tauri';
 
 const MAX_CACHE_MB = 256;
 const MAX_TEXT_CACHE_PAGES = 100;
@@ -151,7 +152,6 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
 
     docCache.lastAccessed = Date.now();
     
-    // Try to find any cached version of this specific page
     for (const [key, page] of docCache.pages) {
       if (key.startsWith(`${pageIndex}:`)) {
         return page;
@@ -182,7 +182,6 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
         docCache.memoryMb -= estimateTextMB(oldestText);
       }
       
-      // Recalculate total
       let totalMemoryMb = 0;
       for (const cache of newDocuments.values()) {
         totalMemoryMb += cache.memoryMb;
@@ -206,7 +205,6 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
     if (getText(id, pageIndex)) return;
     
     try {
-      const { fetchTextByPage } = await import('@/services/tauri');
       const result = await fetchTextByPage(id, pageIndex);
       
       if (result.ok) {
@@ -242,7 +240,6 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
     if (getInfo(id)) return;
     
     try {
-      const { fetchPdfInfo } = await import('@/services/tauri');
       const result = await fetchPdfInfo(id);
       
       if (result.ok) {

@@ -41,18 +41,15 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
     (async () => {
       const canvas = canvasRef.current!;
       
-      // Try to use OffscreenCanvas for better performance if available
       const useOffscreen = typeof OffscreenCanvas !== 'undefined' && !isVisible;
       
       let ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | null;
       let offscreenCanvas: OffscreenCanvas | null = null;
       
       if (useOffscreen) {
-        // Use offscreen canvas for background rendering
         offscreenCanvas = new OffscreenCanvas(page.width, page.height);
         ctx = offscreenCanvas.getContext("2d");
       } else {
-        // Use regular canvas
         canvas.width = page.width;
         canvas.height = page.height;
         ctx = canvas.getContext("2d");
@@ -67,7 +64,6 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
         return;
       }
 
-      // Convert to Uint8Array if needed
       const bytes =
         page.pixels instanceof Uint8Array
           ? page.pixels
@@ -76,7 +72,6 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
       const byteCopy = new Uint8Array(bytes);
       const blob = new Blob([byteCopy], { type: "image/webp" });
 
-      // Close previous bitmap if it exists
       if (bitmapRef.current) {
         bitmapRef.current.close();
         bitmapRef.current = null;
@@ -89,13 +84,11 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
         return;
       }
 
-      // Store bitmap reference for cleanup
       bitmapRef.current = bitmap;
 
       ctx.clearRect(0, 0, page.width, page.height);
       ctx.drawImage(bitmap, 0, 0);
 
-      // If we used offscreen canvas, transfer to main canvas
       if (useOffscreen && offscreenCanvas) {
         const mainCtx = canvas.getContext("2d");
         if (mainCtx) {
@@ -112,7 +105,6 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
 
     return () => {
       cancelled = true;
-      // Cleanup bitmap on unmount or when page changes
       if (bitmapRef.current) {
         bitmapRef.current.close();
         bitmapRef.current = null;
@@ -136,7 +128,13 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
 
   const displayWidth = width / 2;
   const displayHeight = page ? (width * (page.height / page.width)) / 2 : (width * aspectRatio) / 2;
-  const scale = pageWidth ? displayWidth / pageWidth : (info ? displayWidth / info.width : (page ? displayWidth / page.width : 1));
+  const scale = pageWidth 
+    ? displayWidth / pageWidth 
+    : (info 
+      ? displayWidth / info.width 
+      : (page 
+        ? displayWidth / page.width 
+        : 1));
 
   return (
     <Box
@@ -161,7 +159,6 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
             width: `100%`,
             height: `100%`,
             display: page ? 'block' : 'none',
-            // Subtle opacity reduction while loading higher res
             opacity: loading && page ? 0.95 : 1,
             transition: 'opacity 0.2s ease-in-out',
           }}

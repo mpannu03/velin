@@ -51,7 +51,7 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
     });
 
     clearGotoPage(id);
-  }, [gotoPage, id, rowVirtualizer, clearGotoPage]);
+  }, [gotoPage, rowVirtualizer, clearGotoPage]);
 
   const initialScrollDone = useRef(false);
 
