@@ -11,7 +11,7 @@ type PdfPageProps = {
   width: number;
   onRendered?: () => void;
   aspectRatio: number;
-  isVisible?: boolean; // Track if page is currently visible
+  isVisible?: boolean;
 };
 
 export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisible = true }: PdfPageProps): JSX.Element {
@@ -23,7 +23,6 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
   ) || [];
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const bitmapRef = useRef<ImageBitmap | null>(null);
 
   const currentToolbar = usePdfViewerStore((state) => state.states[id].tool);
   const setSidebar = usePdfViewerStore((state) => state.setSidebar);
@@ -43,77 +42,43 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
 
     (async () => {
       const canvas = canvasRef.current!;
-
-      const useOffscreen = typeof OffscreenCanvas !== 'undefined' && !isVisible;
-
-      let ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | null;
-      let offscreenCanvas: OffscreenCanvas | null = null;
-
-      if (useOffscreen) {
-        offscreenCanvas = new OffscreenCanvas(page.width, page.height);
-        ctx = offscreenCanvas.getContext("2d");
-      } else {
-        canvas.width = page.width;
-        canvas.height = page.height;
-        ctx = canvas.getContext("2d");
-      }
-
+      const ctx = canvas.getContext("2d", { willReadFrequently: false });
       if (!ctx) return;
 
-      ctx.imageSmoothingEnabled = false;
+      canvas.width = page.width;
+      canvas.height = page.height;
 
-      if (!page.pixels || page.pixels.length === 0) {
-        console.warn("Received empty image data for page:", pageIndex);
+      ctx.imageSmoothingEnabled = false;  
+
+      if (page.pixels.length === 0) {
+        console.warn("Received empty pixel data for page:", pageIndex);
         return;
       }
 
-      const bytes =
-        page.pixels instanceof Uint8Array
-          ? page.pixels
-          : new Uint8Array(page.pixels);
+      const imageData = new ImageData(
+        page.pixels instanceof Uint8ClampedArray
+          ? (page.pixels as unknown as Uint8ClampedArray<ArrayBuffer>)
+          : new Uint8ClampedArray(page.pixels),
+        page.width,
+        page.height
+      );
 
-      const byteCopy = new Uint8Array(bytes);
-      const blob = new Blob([byteCopy], { type: "image/webp" });
-
-      if (bitmapRef.current) {
-        bitmapRef.current.close();
-        bitmapRef.current = null;
-      }
-
-      const bitmap = await createImageBitmap(blob);
-
+      const bitmap = await createImageBitmap(imageData);
       if (cancelled) {
         bitmap.close();
         return;
       }
 
-      bitmapRef.current = bitmap;
-
-      ctx.clearRect(0, 0, page.width, page.height);
       ctx.drawImage(bitmap, 0, 0);
-
-      if (useOffscreen && offscreenCanvas) {
-        const mainCtx = canvas.getContext("2d");
-        if (mainCtx) {
-          canvas.width = page.width;
-          canvas.height = page.height;
-          const transferBitmap = await createImageBitmap(offscreenCanvas as any);
-          mainCtx.drawImage(transferBitmap, 0, 0);
-          transferBitmap.close();
-        }
-      }
+      bitmap.close();
 
       onRendered?.();
     })();
 
     return () => {
       cancelled = true;
-      if (bitmapRef.current) {
-        bitmapRef.current.close();
-        bitmapRef.current = null;
-      }
     };
-  }, [page, pageIndex, onRendered, isVisible]);
+  }, [page]);
 
   if (loading && !page) {
     return (

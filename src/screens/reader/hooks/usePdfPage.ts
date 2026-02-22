@@ -14,7 +14,7 @@ export function usePdfPage(
   id: string,
   pageIndex: number,
   targetWidth: number,
-  isVisible: boolean = true // Add visibility hint
+  isVisible: boolean = true
 ) {
   const { addPage, getPage, getAnyPage } = useDocumentCacheStore();
 

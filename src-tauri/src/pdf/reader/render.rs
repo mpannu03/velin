@@ -58,14 +58,11 @@ pub fn render_page(
 
     let width = bitmap.width();
     let height = bitmap.height();
-    let rgba = bitmap.as_raw_bytes();
-
-    let webp_bytes = rgba_to_webp(&rgba, width as u32, height as u32, 90.0)?;
 
     let rendered_page = RenderedPage {
         width,
         height,
-        pixels: webp_bytes,
+        pixels: bitmap.as_raw_bytes(),
     };
 
     Ok(rendered_page)
