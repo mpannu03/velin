@@ -48,9 +48,9 @@ fn process_markup_annotation<'a>(
 
     let rect = PdfRect {
         left: bounds.left().value,
-        top: bounds.top().value,
+        top: page_height - bounds.top().value,
         right: bounds.right().value,
-        bottom: bounds.bottom().value,
+        bottom: page_height - bounds.bottom().value,
     };
 
     let attachment_points = annotation.attachment_points();
@@ -60,19 +60,19 @@ fn process_markup_annotation<'a>(
         .map(|qp| Quad {
             p1: Point {
                 x: qp.x1.value,
-                y: qp.y1.value,
+                y: page_height - qp.y1.value,
             },
             p2: Point {
                 x: qp.x2.value,
-                y: qp.y2.value,
+                y: page_height - qp.y2.value,
             },
             p3: Point {
                 x: qp.x3.value,
-                y: qp.y3.value,
+                y: page_height - qp.y3.value,
             },
             p4: Point {
                 x: qp.x4.value,
-                y: qp.y4.value,
+                y: page_height - qp.y4.value,
             },
         })
         .collect::<Vec<_>>();
@@ -103,7 +103,7 @@ fn process_markup_annotation<'a>(
         border_width: None,
     };
 
-    let author = annotation.name();
+    let author = annotation.creator();
     let contents = annotation.contents();
     let creation_date = annotation.creation_date();
     let modified_date = annotation.modification_date();

@@ -260,7 +260,6 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
             transition: 'opacity 0.2s ease-in-out',
           }}
         />
-        {/* Render Annotations */}
         {pageAnnotations.length > 0 && (
             <AnnotationLayer 
                 annotations={pageAnnotations}

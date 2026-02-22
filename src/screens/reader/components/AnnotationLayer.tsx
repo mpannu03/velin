@@ -36,12 +36,13 @@ export function AnnotationLayer({
             return (
                 <Fragment key={id}>
                 {geometry.data.map((quad, idx) => {
-                    // Quad points are counter-clockwise: p1(bottom-left), p2(bottom-right), p3(top-right), p4(top-left)
-                    // We can use the bounding box of each quad for highlighting.
-                    const left = Math.min(quad.p1.x, quad.p4.x);
-                    const top = Math.min(quad.p3.y, quad.p4.y);
-                    const right = Math.max(quad.p2.x, quad.p3.x);
-                    const bottom = Math.max(quad.p1.y, quad.p2.y);
+                    const xs = [quad.p1.x, quad.p2.x, quad.p3.x, quad.p4.x];
+                    const ys = [quad.p1.y, quad.p2.y, quad.p3.y, quad.p4.y];
+
+                    const left = Math.min(...xs);
+                    const right = Math.max(...xs);
+                    const top = Math.min(...ys);
+                    const bottom = Math.max(...ys);
 
                     const style: React.CSSProperties = {
                         position: "absolute",
@@ -71,7 +72,6 @@ export function AnnotationLayer({
             );
         }
 
-        // Fallback to bounding rect if not quadpoints (e.g. for simple shapes)
         const { rect } = annotation;
         const style: React.CSSProperties = {
             position: "absolute",
