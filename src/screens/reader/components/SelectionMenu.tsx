@@ -22,12 +22,14 @@ export function SelectionMenu({
     
     // detect click outside to close
     useEffect(() => {
-        const handleClick = (e: MouseEvent) => {
-            // Logic to check if click is outside could be here, but parent handles it via onMouseDown
-        };
-        // window.addEventListener('mousedown', handleClick);
-        // return ...
-    }, []);
+      const handleClick = (e: MouseEvent) => {
+        if (e.target instanceof Node) {
+            onClose();
+        }
+      };
+      window.addEventListener('mousedown', handleClick);
+      return () => window.removeEventListener('mousedown', handleClick);
+    }, [onClose]);
 
   return (
     <Paper

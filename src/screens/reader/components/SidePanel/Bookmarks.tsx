@@ -7,7 +7,7 @@ import { usePdfBookmarks } from "../../hooks";
 
 export const Bookmarks = memo(function Bookmarks({ id }: { id: string }) {
   const { bookmarks, error, loading } = usePdfBookmarks(id);
-  const items = bookmarks?.items ?? [];
+  const items = bookmarks ?? [];
 
   if (loading) {
     return <Center h="100%"><Loader /></Center>;

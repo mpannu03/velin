@@ -1,21 +1,23 @@
-import { useEffect } from "react";
-import { usePdfBookmarksStore } from "../stores";
+import { useEffect, useState } from "react";
+import { useDocumentCacheStore } from "../stores";
 
 export function usePdfBookmarks(id: string) {
-  const bookmarks = usePdfBookmarksStore(s => s.bookmarksCache[id]);
-  const error = usePdfBookmarksStore(s => s.errorCache[id]);
-  const loading = usePdfBookmarksStore(s => s.isLoading[id]);
-  const fetchBookmarks = usePdfBookmarksStore(s => s.fetchBookmarks);
+  const bookmarks = useDocumentCacheStore(s => s.documents[id]?.bookmarks);
+  const fetchBookmarks = useDocumentCacheStore(s => s.fetchBookmarks);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchBookmarks(id);
+    (async () => {
+      const result = await fetchBookmarks(id);
+      if (!result.ok) {
+        setError(result.error);
+      }
+    })();
   }, [id, fetchBookmarks]);
 
-  const isLoading = loading || (!bookmarks && !error);
-
   return {
-    bookmarks: bookmarks || null,
-    error: error || null,
-    loading: isLoading,
+    bookmarks: bookmarks ?? null,
+    error: error,
+    loading: !bookmarks,
   };
 }

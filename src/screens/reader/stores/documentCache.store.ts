@@ -1,10 +1,14 @@
 import { create } from 'zustand';
-import { RenderedPage } from '../types';
-import { PdfInfo, PageText } from '@/shared/types';
-import { fetchPdfInfo, fetchTextByPage } from '@/services/tauri';
+import { Annotation, RenderedPage } from '../types';
+import { PdfInfo, PageText, Bookmark } from '@/shared/types';
+import { fetchAnnotations, fetchBookmarks, fetchPdfInfo, fetchTextByPage } from '@/services/tauri';
 
 const MAX_CACHE_MB = 256;
 const MAX_TEXT_CACHE_PAGES = 100;
+
+type Result<T> =
+  | { ok: true; data: T }
+  | { ok: false; error: string };
 
 // Document-level cache containing all related data
 type DocumentCache = {
@@ -12,10 +16,16 @@ type DocumentCache = {
   info?: PdfInfo;
   
   // Rendered pages (keyed by resolution: "width x height")
-  pages: Map<string, RenderedPage>;
+  pages: Record<string, RenderedPage>;
   
   // Text data (keyed by page number)
-  text: Map<number, PageText>;
+  text: Record<number, PageText>;
+
+  // Annotations data (keyed by page number)
+  annotations: Annotation[];
+
+  // Bookmarks data
+  bookmarks: Bookmark[];
   
   // Statistics
   lastAccessed: number;
@@ -24,7 +34,7 @@ type DocumentCache = {
 
 type DocumentCacheState = {
   // Cache per document ID
-  documents: Map<string, DocumentCache>;
+  documents: Record<string, DocumentCache>;
   
   // Global memory tracking
   totalMemoryMb: number;
@@ -39,6 +49,14 @@ type DocumentCacheState = {
   addText: (id: string, pageIndex: number, text: PageText) => void;
   getText: (id: string, pageIndex: number) => PageText | undefined;
   fetchText: (id: string, pageIndex: number) => Promise<void>;
+
+  // Bookmarks operations
+  getBookmarks: (id: string) => Bookmark[] | undefined;
+  fetchBookmarks: (id: string) => Promise<Result<Bookmark[]>>;
+
+  // Annotations operations
+  getAnnotations: (id: string) => Annotation[] | undefined;
+  fetchAnnotations: (id: string) => Promise<Result<Annotation[]>>;
   
   // Info operations
   setInfo: (id: string, info: PdfInfo) => void;
@@ -62,54 +80,56 @@ function estimateTextMB(_text: PageText): number {
   return 0.01; // 10KB
 }
 
-function getOrCreateDocCache(documents: Map<string, DocumentCache>, id: string): DocumentCache {
-  if (!documents.has(id)) {
+function getOrCreateDocCache(documents: Record<string, DocumentCache>, id: string): DocumentCache {
+  if (!documents[id]) {
     const newCache: DocumentCache = {
-      pages: new Map(),
-      text: new Map(),
+      pages: {},
+      text: {},
+      annotations: [],
+      bookmarks: [],
       lastAccessed: Date.now(),
       memoryMb: 0,
     };
-    documents.set(id, newCache);
+    documents[id] = newCache;
   }
   
-  const cache = documents.get(id)!;
+  const cache = documents[id]!;
   cache.lastAccessed = Date.now();
   return cache;
 }
 
 export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
-  documents: new Map(),
+  documents: {},
   totalMemoryMb: 0,
   maxMemoryMb: MAX_CACHE_MB,
   
   addPage: (id, pageIndex, page) => {
     set((state) => {
-      const newDocuments = new Map(state.documents);
+      const newDocuments = { ...state.documents };
       const docCache = getOrCreateDocCache(newDocuments, id);
       
       const key = `${pageIndex}:${page.width}x${page.height}`;
       const pageMb = estimatePageMB(page);
       
-      const existingPage = docCache.pages.get(key);
+      const existingPage = docCache.pages[key];
       if (existingPage) {
         const oldMb = estimatePageMB(existingPage);
         docCache.memoryMb -= oldMb;
       }
 
-      docCache.pages.set(key, page);
+      docCache.pages[key] = page;
       docCache.memoryMb += pageMb;
       
       let totalMemoryMb = 0;
-      for (const cache of newDocuments.values()) {
+      for (const cache of Object.values(newDocuments)) {
         totalMemoryMb += cache.memoryMb;
       }
       
-      while (totalMemoryMb > MAX_CACHE_MB && newDocuments.size > 0) {
+      while (totalMemoryMb > MAX_CACHE_MB && Object.keys(newDocuments).length > 0) {
         let oldestId: string | undefined;
         let oldestTime = Infinity;
         
-        for (const [docId, cache] of newDocuments) {
+        for (const [docId, cache] of Object.entries(newDocuments)) {
           if (cache.lastAccessed < oldestTime) {
             oldestTime = cache.lastAccessed;
             oldestId = docId;
@@ -117,11 +137,11 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
         }
         
         if (oldestId) {
-          const removedCache = newDocuments.get(oldestId);
+          const removedCache = newDocuments[oldestId];
           if (removedCache) {
             totalMemoryMb -= removedCache.memoryMb;
           }
-          newDocuments.delete(oldestId);
+          delete newDocuments[oldestId];
         } else {
           break;
         }
@@ -132,12 +152,14 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
   },
 
   getPage: (id, pageIndex, width) => {
-    const docCache = get().documents.get(id);
+    const docCache = get().documents[id];
     if (!docCache) return undefined;
     
     docCache.lastAccessed = Date.now();
     
-    for (const [key, page] of docCache.pages) {
+    for (const key in  docCache.pages) {
+      const page = docCache.pages[key];
+
       if (key.startsWith(`${pageIndex}:`) && Math.abs(page.width - width) < 1) {
         return page;
       }
@@ -147,12 +169,14 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
   },
 
   getAnyPage: (id, pageIndex) => {
-    const docCache = get().documents.get(id);
-    if (!docCache || docCache.pages.size === 0) return undefined;
+    const docCache = get().documents[id];
+    if (!docCache || Object.keys(docCache.pages).length === 0) return undefined;
 
     docCache.lastAccessed = Date.now();
     
-    for (const [key, page] of docCache.pages) {
+    for (const key in docCache.pages) {
+      const page = docCache.pages[key];
+
       if (key.startsWith(`${pageIndex}:`)) {
         return page;
       }
@@ -163,27 +187,29 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
 
   addText: (id, pageIndex, text) => {
     set((state) => {
-      const newDocuments = new Map(state.documents);
+      const newDocuments = { ...state.documents };
       const docCache = getOrCreateDocCache(newDocuments, id);
       
       const textMb = estimateTextMB(text);
       
-      if (docCache.text.has(pageIndex)) {
-        docCache.memoryMb -= estimateTextMB(docCache.text.get(pageIndex)!);
+      if (pageIndex in docCache.text) {
+        docCache.memoryMb -= estimateTextMB(docCache.text[pageIndex]);
       }
       
-      docCache.text.set(pageIndex, text);
+      docCache.text[pageIndex] = text;
       docCache.memoryMb += textMb;
-      
-      if (docCache.text.size > MAX_TEXT_CACHE_PAGES) {
-        const entries = Array.from(docCache.text.entries());
-        const [oldestPage, oldestText] = entries[0];
-        docCache.text.delete(oldestPage);
+
+      const keys = Object.keys(docCache.text);
+      if (keys.length > MAX_TEXT_CACHE_PAGES) {
+        const oldestKey = Number(keys[0]);
+        const oldestText = docCache.text[oldestKey];
+
+        delete docCache.text[oldestKey];
         docCache.memoryMb -= estimateTextMB(oldestText);
       }
       
       let totalMemoryMb = 0;
-      for (const cache of newDocuments.values()) {
+      for (const cache of Object.values(newDocuments)) {
         totalMemoryMb += cache.memoryMb;
       }
       
@@ -192,11 +218,11 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
   },
 
   getText: (id, pageIndex) => {
-    const docCache = get().documents.get(id);
+    const docCache = get().documents[id];
     if (!docCache) return undefined;
     
     docCache.lastAccessed = Date.now();
-    return docCache.text.get(pageIndex);
+    return docCache.text[pageIndex];
   },
 
   fetchText: async (id, pageIndex) => {
@@ -217,9 +243,77 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
     }
   },
 
+  getBookmarks: (id: string): Bookmark[] | undefined => {
+    const docCache = get().documents[id];
+    if (!docCache) return undefined;
+
+    docCache.lastAccessed = Date.now();
+    return docCache.bookmarks;
+  },
+
+  fetchBookmarks: async (id: string): Promise<Result<Bookmark[]>> => {
+    const existing = get().documents[id]?.bookmarks;
+
+    if (existing && existing.length > 0) {
+      return { ok: true, data: existing };
+    }
+
+    const result = await fetchBookmarks(id);
+
+    if (!result.ok) {
+      return { ok: false, error: result.error };
+    }
+
+    set((state) => {
+      const newDocuments = { ...state.documents };
+      const docCache = getOrCreateDocCache(newDocuments, id);
+      docCache.bookmarks = result.data.items;
+      docCache.lastAccessed = Date.now();
+      newDocuments[id] = docCache;
+
+      return { documents: newDocuments };
+    });
+
+    return { ok: true, data: result.data.items };
+  },
+
+  getAnnotations: (id: string) => {
+    const docCache = get().documents[id];
+    if (!docCache) return undefined;
+
+    docCache.lastAccessed = Date.now();
+    return docCache.annotations;
+  },
+
+  fetchAnnotations: async (id: string): Promise<Result<Annotation[]>> => {
+    const existing = get().documents[id]?.annotations;
+
+    if (existing && existing.length > 0) {
+      return { ok: true, data: existing };
+    }
+
+    const result = await fetchAnnotations(id);
+
+    if (!result.ok) {
+      return { ok: false, error: result.error };
+    }
+
+    set((state) => {
+      const newDocuments = { ...state.documents };
+      const docCache = getOrCreateDocCache(newDocuments, id);
+      docCache.annotations = result.data;
+      docCache.lastAccessed = Date.now();
+      newDocuments[id] = docCache;
+
+      return { documents: newDocuments };
+    });
+
+    return { ok: true, data: result.data };
+  },
+
   setInfo: (id, info) => {
     set((state) => {
-      const newDocuments = new Map(state.documents);
+      const newDocuments = { ...state.documents };
       const docCache = getOrCreateDocCache(newDocuments, id);
       docCache.info = info;
       return { documents: newDocuments };
@@ -227,7 +321,7 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
   },
 
   getInfo: (id) => {
-    const docCache = get().documents.get(id);
+    const docCache = get().documents[id];
     if (!docCache) return undefined;
     
     docCache.lastAccessed = Date.now();
@@ -254,12 +348,12 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
   
   purgeDocument: (id) => {
     set((state) => {
-      const newDocuments = new Map(state.documents);
-      const docCache = newDocuments.get(id);
+      const newDocuments = { ...state.documents };
+      const docCache = newDocuments[id];
       
       if (docCache) {
         const totalMemoryMb = state.totalMemoryMb - docCache.memoryMb;
-        newDocuments.delete(id);
+        delete newDocuments[id];
         return { documents: newDocuments, totalMemoryMb };
       }
       
@@ -268,6 +362,6 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
   },
 
   clear: () => {
-    set({ documents: new Map(), totalMemoryMb: 0 });
+    set({ documents: {}, totalMemoryMb: 0 });
   },
 }));

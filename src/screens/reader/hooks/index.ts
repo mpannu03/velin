@@ -5,3 +5,4 @@ export * from './usePdfBookmarks';
 export * from './useCurrentPageFromVirtual';
 export * from './usePageIndicator';
 export * from './usePdfText';
+export * from './usePdfAnnotations';
