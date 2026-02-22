@@ -76,6 +76,27 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 let result = reader::generate_preview(&documents, &id, save_path);
                 let _ = reply.send(result);
             }
+            PdfEvent::GetAnnotations { id, reply } => {
+                let result = reader::get_annotations(&documents, &id);
+                let _ = reply.send(result);
+            }
+            PdfEvent::AddAnnotation {
+                id,
+                annotation,
+                reply,
+            } => {
+                let result = reader::add_annotation(&documents, &id, annotation);
+                let _ = reply.send(result);
+            }
+            PdfEvent::RemoveAnnotation {
+                id,
+                page_index,
+                annotation_id,
+                reply,
+            } => {
+                let result = reader::delete_annotation(&documents, &id, page_index, annotation_id);
+                let _ = reply.send(result);
+            }
         }
     }
 }

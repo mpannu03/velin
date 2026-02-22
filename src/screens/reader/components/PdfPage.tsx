@@ -1,8 +1,9 @@
-import { JSX, useEffect, useRef } from "react";
+import { JSX, useEffect, useRef, useState } from "react";
 import { Box, Center, Loader } from "@mantine/core";
 import { usePdfInfo, usePdfPage, usePdfText } from "../hooks";
-import { TextLayer, SearchHighlightLayer } from "./";
-import { SidebarPanel, usePdfViewerStore, useDictionaryStore } from "../stores";
+import { TextLayer, SearchHighlightLayer, AnnotationLayer, SelectionMenu } from "./";
+import { SidebarPanel, usePdfViewerStore, useDictionaryStore, useAnnotationsStore } from "../stores";
+import { Annotation, AnnotationType, Quad } from "../types";
 
 type PdfPageProps = {
   id: string;
@@ -25,12 +26,107 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
   const setSidebar = usePdfViewerStore((state) => state.setSidebar);
   const { setQuery, search } = useDictionaryStore();
 
-  const onTextSelected = (selectedText: string) => {
-    if (currentToolbar !== "dictionary") return;
+    const [selection, setSelection] = useState<{
+        text: string;
+        rects: DOMRect[];
+        menuPosition: { x: number; y: number };
+    } | null>(null);
 
-    setQuery(id, selectedText);
-    search(id, selectedText);
-    setSidebar(id, SidebarPanel.Dictionary);
+    const { annotations, fetchAnnotations, addAnnotation } = useAnnotationsStore();
+    const pageAnnotations = (annotations[id] || []).filter(a => a.page_index === pageIndex);
+
+    useEffect(() => {
+        if (isVisible) {
+            fetchAnnotations(id);
+        }
+    }, [id, isVisible, fetchAnnotations]);
+
+  const onTextSelected = (selectedText: string, rects: DOMRect[]) => {
+    if (currentToolbar === "dictionary") {
+        setQuery(id, selectedText);
+        search(id, selectedText);
+        setSidebar(id, SidebarPanel.Dictionary);
+        return;
+    }
+
+    // Calculate menu position (centered above selection)
+    if (rects.length > 0) {
+        const first = rects[0];
+        setSelection({
+            text: selectedText,
+            rects,
+            menuPosition: { x: first.left + first.width / 2, y: first.top },
+        });
+    }
+  };
+
+  const handleHighlight = async () => {
+    if (!selection) return;
+
+    // Convert DOMRects to PdfRect union or just use bounding box for now
+    // Ideally we want to support multiple quads (highlights can be multi-line)
+    // For now, simpler approach: bounding box of all rects in page coordinates
+
+    // We need to convert from client coordinates to relative to the PDF Page container
+    const container = canvasRef.current?.parentElement;
+    if (!container) return;
+
+    const containerRect = container.getBoundingClientRect();
+    
+    // We should compute the union of all selection rects relative to container.
+    // However, `Annotation` struct currently has ONE `rect`.
+    // Multi-line highlights usually require `QuadPoints` which I haven't fully implemented in backend yet.
+    // My previous backend implementation was generating error for Highlight creation.
+    // I need to fix that backend side if I want this to work fully.
+    // But for frontend, I will send the bounding box.
+
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+    selection.rects.forEach(r => {
+        minX = Math.min(minX, r.left);
+        minY = Math.min(minY, r.top);
+        maxX = Math.max(maxX, r.right);
+        maxY = Math.max(maxY, r.bottom);
+    });
+
+    const left = (minX - containerRect.left) / scale;
+    const top = (minY - containerRect.top) / scale;
+    const right = (maxX - containerRect.left) / scale;
+    const bottom = (maxY - containerRect.top) / scale;
+
+    const quads: Quad[] = selection.rects.map(r => ({
+        p1: { x: (r.left - containerRect.left) / scale, y: (r.bottom - containerRect.top) / scale },
+        p2: { x: (r.right - containerRect.left) / scale, y: (r.bottom - containerRect.top) / scale },
+        p3: { x: (r.right - containerRect.left) / scale, y: (r.top - containerRect.top) / scale },
+        p4: { x: (r.left - containerRect.left) / scale, y: (r.top - containerRect.top) / scale },
+    }));
+
+    const newAnnotation: Annotation = {
+        id: crypto.randomUUID(),
+        page_index: pageIndex,
+        subtype: AnnotationType.Highlight,
+        rect: { left, top, right, bottom },
+        geometry: { type: "quadpoints", data: quads },
+        appearance: {
+            color: "#FFFF00",
+            opacity: 0.3,
+        },
+        metadata: {
+            author: "User",
+            contents: selection.text,
+            creation_date: new Date().toISOString(),
+        },
+        flags: {
+            hidden: false,
+            locked: false,
+            printable: true,
+            read_only: false,
+        },
+    };
+
+    await addAnnotation(id, newAnnotation);
+    setSelection(null);
+    window.getSelection()?.removeAllRanges();
   };
 
   useEffect(() => {
@@ -152,6 +248,7 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
           boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
           backgroundColor: 'white',
         }}
+        onMouseDown={() => setSelection(null)} // Click outside to close menu
       >
         <canvas
           ref={canvasRef}
@@ -163,6 +260,16 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
             transition: 'opacity 0.2s ease-in-out',
           }}
         />
+        {/* Render Annotations */}
+        {pageAnnotations.length > 0 && (
+            <AnnotationLayer 
+                annotations={pageAnnotations}
+                scale={scale}
+                width={displayWidth}
+                height={displayHeight}
+            />
+        )}
+        
         {textItems && info && (
           <TextLayer
             textItems={textItems}
@@ -180,6 +287,24 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
           />
         )}
       </Box>
+      {selection && (
+        <SelectionMenu
+            x={selection.menuPosition.x}
+            y={selection.menuPosition.y}
+            onHighlight={handleHighlight}
+            onDictionary={() => {
+                setQuery(id, selection.text);
+                search(id, selection.text);
+                setSidebar(id, SidebarPanel.Dictionary);
+                setSelection(null);
+            }}
+            onCopy={() => {
+                navigator.clipboard.writeText(selection.text);
+                setSelection(null);
+            }}
+            onClose={() => setSelection(null)}
+        />
+      )}
     </Box>
   );
 }

@@ -3,7 +3,7 @@ use tauri::{AppHandle, Manager, State};
 use crate::{
     pdf::{
         document::PdfInfo,
-        reader::{PageText, SearchHit},
+        reader::{Annotation, PageText, SearchHit},
         Bookmarks,
     },
     service::reader_service,
@@ -85,4 +85,28 @@ pub fn generate_preview(
     let save_path = previews_dir.join(format!("{}.webp", id));
 
     reader_service::generate_preview(&state, id, Some(save_path))
+}
+
+#[tauri::command]
+pub fn get_annotations(state: State<AppState>, id: String) -> Result<Vec<Annotation>, String> {
+    reader_service::get_annotations(&state, id)
+}
+
+#[tauri::command]
+pub fn add_annotation(
+    state: State<AppState>,
+    id: String,
+    annotation: Annotation,
+) -> Result<(), String> {
+    reader_service::add_annotation(&state, id, annotation)
+}
+
+#[tauri::command]
+pub fn remove_annotation(
+    state: State<AppState>,
+    id: String,
+    page_index: u16,
+    annotation_id: String,
+) -> Result<(), String> {
+    reader_service::remove_annotation(&state, id, page_index, annotation_id)
 }

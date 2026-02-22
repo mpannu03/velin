@@ -1,5 +1,5 @@
 import { Bookmarks, PageText, PdfInfo } from '@/shared/types';
-import { RenderedPage } from '@/screens/reader/types';
+import { Annotation, RenderedPage } from '@/screens/reader/types';
 import { InvokeResult, safeInvoke } from '@/services/tauri';
 
 export const openPdf = async (
@@ -70,4 +70,10 @@ export const generatePreview = async (
   id: string
 ): Promise<InvokeResult<Uint8Array>> => {
   return safeInvoke<Uint8Array>('generate_preview', { id });
+}
+
+export const fetchAnnotations = async (
+  id: string
+): Promise<InvokeResult<Annotation[]>> => {
+  return safeInvoke<Annotation[]>('get_annotations', { id });
 }

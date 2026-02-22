@@ -4,4 +4,6 @@ export * from './SideBarPanel';
 export * from './SidePanel';
 export * from './SearchHighlightLayer';
 export * from './TextLayer';
+export * from './AnnotationLayer';
+export * from './SelectionMenu';
 export * from './ToolsPanel';

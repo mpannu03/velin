@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use crate::{
     pdf::{
         document::PdfInfo,
-        reader::{PageText, RenderedPage, SearchHit},
+        reader::{Annotation, PageText, RenderedPage, SearchHit},
         worker::PdfEvent,
         Bookmarks,
     },
@@ -150,4 +150,63 @@ pub fn generate_preview(
 
     rx.recv()
         .map_err(|e| format!("Error receiving preview result: {e}"))?
+}
+
+pub fn get_annotations(state: &AppState, id: String) -> Result<Vec<Annotation>, String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::GetAnnotations { id, reply: tx })
+        .map_err(|e| format!("Error sending get annotations command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving get annotations result: {e}"))?
+}
+
+pub fn add_annotation(state: &AppState, id: String, annotation: Annotation) -> Result<(), String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::AddAnnotation {
+            id,
+            annotation,
+            reply: tx,
+        })
+        .map_err(|e| format!("Error sending add annotation command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving add annotation result: {e}"))?
+}
+
+pub fn remove_annotation(
+    state: &AppState,
+    id: String,
+    page_index: u16,
+    annotation_id: String,
+) -> Result<(), String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::RemoveAnnotation {
+            id,
+            page_index,
+            annotation_id,
+            reply: tx,
+        })
+        .map_err(|e| format!("Error sending remove annotation command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving remove annotation result: {e}"))?
 }

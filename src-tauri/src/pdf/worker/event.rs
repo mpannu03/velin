@@ -2,6 +2,7 @@ use std::path::PathBuf;
 
 use flume::Sender;
 
+use crate::pdf::reader::Annotation;
 use crate::pdf::{
     document::{Bookmarks, DocumentId, PdfInfo},
     reader::{PageText, RenderedPage, SearchHit},
@@ -45,5 +46,20 @@ pub enum PdfEvent {
         id: DocumentId,
         save_path: Option<PathBuf>,
         reply: Sender<Result<Vec<u8>, String>>,
+    },
+    GetAnnotations {
+        id: DocumentId,
+        reply: Sender<Result<Vec<Annotation>, String>>,
+    },
+    AddAnnotation {
+        id: DocumentId,
+        annotation: Annotation,
+        reply: Sender<Result<(), String>>,
+    },
+    RemoveAnnotation {
+        id: DocumentId,
+        page_index: u16,
+        annotation_id: String,
+        reply: Sender<Result<(), String>>,
     },
 }

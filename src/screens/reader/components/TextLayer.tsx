@@ -8,7 +8,7 @@ export type TextLayerProps = {
   width: number;
   height: number;
 
-  onTextSelected?: (selectedText: string) => void;
+  onTextSelected?: (selectedText: string, rects: DOMRect[]) => void;
 };
 
 /**
@@ -71,9 +71,12 @@ export function TextLayer({
     <div
       className="text-layer"
       onMouseUp={() => {
-        const selected = window.getSelection()?.toString().trim();
-        if (selected) {
-          onTextSelected?.(selected);
+        const selection = window.getSelection();
+        const selected = selection?.toString().trim();
+        if (selection && selected && selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            const rects = Array.from(range.getClientRects());
+            onTextSelected?.(selected, rects);
         }
       }}
       style={{
@@ -100,7 +103,7 @@ export function TextLayer({
           color: transparent;
         }
         .text-fragment {
-          pointer-events: auto;
+            pointer-events: auto;
         }
       `}</style>
 

@@ -34,6 +34,9 @@ pub fn run() {
             commands::reader::get_text_by_page,
             commands::reader::search_document,
             commands::reader::generate_preview,
+            commands::reader::get_annotations,
+            commands::reader::add_annotation,
+            commands::reader::remove_annotation,
             commands::tools::extract_tar_gz,
         ])
         .run(tauri::generate_context!())

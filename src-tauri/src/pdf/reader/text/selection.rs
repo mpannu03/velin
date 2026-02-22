@@ -12,9 +12,6 @@ pub struct TextItem {
     pub y: f32,
     pub width: f32,
     pub height: f32,
-    // pub font_size: f32,
-    // pub font_name: String,
-    // pub font_weight: u32,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -23,77 +20,6 @@ pub struct PageText {
     pub width: f32,
     pub height: f32,
 }
-
-// pub fn get_text_by_page(
-//     documents: &HashMap<DocumentId, PdfDocument>,
-//     id: &DocumentId,
-//     page_index: u16,
-// ) -> Result<PageText, String> {
-//     let document = documents.get(id).ok_or("Document not found")?;
-
-//     let page = document
-//         .pages()
-//         .get(page_index)
-//         .map_err(|e| e.to_string())?;
-
-//     let text_page = page.text().map_err(|e| e.to_string())?;
-
-//     let page_height = page.height().value;
-//     let page_width = page.width().value;
-
-//     let mut items = Vec::new();
-
-//     for ch in text_page.chars().iter() {
-//         // Safe unicode extraction
-//         let text = match ch.unicode_string() {
-//             Some(s) => match s.chars().next() {
-//                 Some(c) => c,
-//                 None => continue, // skip empty strings
-//             },
-//             None => continue, // skip if no unicode
-//         };
-
-//         // Safe bounds extraction
-//         let bounds = match ch.loose_bounds() {
-//             Ok(b) => b,
-//             Err(_) => continue, // skip character if bounds fail
-//         };
-
-//         let font_weight = ch.font_weight().map(pdf_font_weight_to_u32).unwrap_or(400); // default normal weight
-
-//         items.push(TextItem {
-//             text,
-//             x: bounds.left().value,
-//             y: page_height - bounds.top().value,
-//             width: bounds.width().value,
-//             height: bounds.height().value,
-//             font_size: ch.scaled_font_size().value,
-//             font_name: ch.font_name(),
-//             font_weight,
-//         });
-//     }
-
-//     Ok(PageText {
-//         items,
-//         width: page_width,
-//         height: page_height,
-//     })
-// }
-
-// fn pdf_font_weight_to_u32(font_weight: PdfFontWeight) -> u32 {
-//     match font_weight {
-//         PdfFontWeight::Weight100 => 100,
-//         PdfFontWeight::Weight200 => 200,
-//         PdfFontWeight::Weight300 => 300,
-//         PdfFontWeight::Weight400Normal => 400,
-//         PdfFontWeight::Weight500 => 500,
-//         PdfFontWeight::Weight600 => 600,
-//         PdfFontWeight::Weight700Bold => 700,
-//         PdfFontWeight::Weight800 => 800,
-//         PdfFontWeight::Weight900 => 900,
-//         PdfFontWeight::Custom(other) => other,
-//     }
-// }
 
 pub fn get_text_by_page(
     documents: &HashMap<DocumentId, PdfDocument>,

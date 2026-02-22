@@ -4,3 +4,4 @@ export * from './bookmarks.store';
 export * from './dictionary.store';
 export * from './search.store';
 export * from './documentCache.store';
+export * from './annotations.store';
