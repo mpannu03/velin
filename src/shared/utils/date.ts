@@ -35,7 +35,10 @@ export function parsePdfDate(pdfDate?: string | null): Date | null {
   return isNaN(date.getTime()) ? null : date;
 }
 
-export function formatPdfDateTime(pdfDate?: string | null, locale = undefined) {
+export function formatPdfDateTime(
+  pdfDate?: string | null,
+  locale?: string | undefined
+) {
   const date = parsePdfDate(pdfDate);
   if (!date) return "";
 
