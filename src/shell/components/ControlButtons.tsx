@@ -20,6 +20,7 @@ export function ControlButtons(): JSX.Element {
         radius="0"
         color="var(--mantine-color-text)"
         onClick={() => appWindow.minimize()}
+        aria-label="Minimize"
       >
         <VscChromeMinimize />
       </Button>
@@ -30,6 +31,7 @@ export function ControlButtons(): JSX.Element {
         radius="0"
         color="var(--mantine-color-text)"
         onClick={() => appWindow.toggleMaximize()}
+        aria-label={isMaximized ? "Restore" : "Maximize"}
       >
         {isMaximized
           ? <VscChromeRestore />
@@ -45,6 +47,7 @@ export function ControlButtons(): JSX.Element {
           '--button-hover': 'var(--mantine-color-red-7)',
         }}
         onClick={() => appWindow.close()}
+        aria-label="Close"
       >
         <VscChromeClose />
       </Button>

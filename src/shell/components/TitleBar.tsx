@@ -6,6 +6,7 @@ import { PdfTabs } from './PdfTabs';
 export function TitleBar(): JSX.Element {
   return(
     <Group
+      data-testid="title-bar"
       data-tauri-drag-region
       w="100%"
       h="36px"

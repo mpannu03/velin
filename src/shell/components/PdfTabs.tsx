@@ -77,6 +77,7 @@ export function PdfTabs(): JSX.Element {
             h={36}
             variant="subtle"
             onClick={() => openPdf()}
+            aria-label="Open PDF"
           >
             <FiPlus size={18} />
           </ActionIcon>
@@ -124,6 +125,8 @@ function Tab({ tab }: TabProps): JSX.Element {
   return (
     <Group
       ref={ref}
+      data-active={selectedTab === tab.id}
+      data-testid={`pdf-tab-${tab.id}`}
       bg={
         selectedTab === tab.id
           ? "var(--mantine-color-body)"
@@ -161,6 +164,7 @@ function Tab({ tab }: TabProps): JSX.Element {
       </Text>
       <ActionIcon
         variant="subtle"
+        aria-label={`Close ${tab.title}`}
         onClick={(e) => {
           e.stopPropagation();
           closePdf(tab.id);
