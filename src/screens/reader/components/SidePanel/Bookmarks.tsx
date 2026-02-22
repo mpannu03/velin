@@ -87,7 +87,7 @@ const BookmarkItem = memo(function BookmarkItem({ id, bookmark, level = 0 }: Boo
             }
           }}
         >
-          <Text size="sm" c="black">
+          <Text size="sm" c="var(--mantine-color-text)">
             {bookmark.title}
           </Text>
         </Button>
