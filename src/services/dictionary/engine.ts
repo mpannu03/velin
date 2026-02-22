@@ -5,7 +5,7 @@ import { createMorphy, exceptionMap, hasIndexEntry } from "./morphy";
 
 type FileType = "adj" | "adv" | "noun" | "verb";
 
-class DictionaryEngine {
+export class DictionaryEngine {
   private morphy: (word: string, pos: PartOfSpeech) => string[];
 
   constructor(private dictPath: string) {
