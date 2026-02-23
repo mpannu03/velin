@@ -1,9 +1,13 @@
 import { JSX, useEffect, useRef } from "react";
 import { Box, Center, Loader } from "@mantine/core";
-import { usePdfAnnotations, usePdfInfo, usePdfPage, usePdfText } from "../hooks";
+import {
+  usePdfAnnotations,
+  usePdfInfo,
+  usePdfPage,
+  usePdfText,
+} from "../hooks";
 import { TextLayer, SearchHighlightLayer, AnnotationLayer } from "./";
 import { SidebarPanel, usePdfViewerStore, useDictionaryStore } from "../stores";
-
 
 type PdfPageProps = {
   id: string;
@@ -14,13 +18,21 @@ type PdfPageProps = {
   isVisible?: boolean;
 };
 
-export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisible = true }: PdfPageProps): JSX.Element {
+export function PdfPage({
+  id,
+  pageIndex,
+  width,
+  onRendered,
+  aspectRatio,
+  isVisible = true,
+}: PdfPageProps): JSX.Element {
   const { page, error, loading } = usePdfPage(id, pageIndex, width, isVisible);
   const { text: textItems, pageWidth } = usePdfText(id, pageIndex);
   const { info } = usePdfInfo(id);
-  const annotations = usePdfAnnotations(id).annotations?.filter(
-    (a) => a.page_index === pageIndex
-  ) || [];
+  const annotations =
+    usePdfAnnotations(id).annotations?.filter(
+      (a) => a.page_index === pageIndex,
+    ) || [];
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -48,7 +60,7 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
       canvas.width = page.width;
       canvas.height = page.height;
 
-      ctx.imageSmoothingEnabled = false;  
+      ctx.imageSmoothingEnabled = false;
 
       if (page.pixels.length === 0) {
         console.warn("Received empty pixel data for page:", pageIndex);
@@ -60,7 +72,7 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
           ? (page.pixels as unknown as Uint8ClampedArray<ArrayBuffer>)
           : new Uint8ClampedArray(page.pixels),
         page.width,
-        page.height
+        page.height,
       );
 
       const bitmap = await createImageBitmap(imageData);
@@ -83,7 +95,11 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
   if (loading && !page) {
     return (
       <Center mb={16}>
-        <Center w={`${width / 2}px`} h={`${(width * aspectRatio) / 2}px`} bg="white">
+        <Center
+          w={`${width / 2}px`}
+          h={`${(width * aspectRatio) / 2}px`}
+          bg="white"
+        >
           <Loader />
         </Center>
       </Center>
@@ -95,21 +111,23 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
   }
 
   const displayWidth = width / 2;
-  const displayHeight = page ? (width * (page.height / page.width)) / 2 : (width * aspectRatio) / 2;
-  const scale = pageWidth 
-    ? displayWidth / pageWidth 
-    : (info 
-      ? displayWidth / info.width 
-      : (page 
-        ? displayWidth / page.width 
-        : 1));
+  const displayHeight = page
+    ? (width * (page.height / page.width)) / 2
+    : (width * aspectRatio) / 2;
+  const scale = pageWidth
+    ? displayWidth / pageWidth
+    : info
+      ? displayWidth / info.width
+      : page
+        ? displayWidth / page.width
+        : 1;
 
   return (
     <Box
       style={{
         display: "flex",
         justifyContent: "center",
-        marginBottom: 16
+        marginBottom: 16,
       }}
     >
       <Box
@@ -117,8 +135,8 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
           position: "relative",
           width: `${displayWidth}px`,
           height: `${displayHeight}px`,
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          backgroundColor: 'white',
+          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+          backgroundColor: "white",
         }}
       >
         <canvas
@@ -126,19 +144,19 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
           style={{
             width: `100%`,
             height: `100%`,
-            display: page ? 'block' : 'none',
+            display: page ? "block" : "none",
             opacity: loading && page ? 0.95 : 1,
-            transition: 'opacity 0.2s ease-in-out',
+            transition: "opacity 0.2s ease-in-out",
           }}
         />
-        {annotations && 
+        {annotations && (
           <AnnotationLayer
             annotations={annotations}
             scale={scale}
             width={displayWidth}
             height={displayHeight}
           />
-        }
+        )}
         {textItems && info && (
           <TextLayer
             textItems={textItems}
@@ -149,11 +167,7 @@ export function PdfPage({ id, pageIndex, width, onRendered, aspectRatio, isVisib
           />
         )}
         {info && (
-          <SearchHighlightLayer
-            id={id}
-            pageIndex={pageIndex}
-            scale={scale}
-          />
+          <SearchHighlightLayer id={id} pageIndex={pageIndex} scale={scale} />
         )}
       </Box>
     </Box>
