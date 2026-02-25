@@ -24,9 +24,8 @@ export function PdfPage({
   width,
   onRendered,
   aspectRatio,
-  isVisible = true,
 }: PdfPageProps): JSX.Element {
-  const { page, error, loading } = usePdfPage(id, pageIndex, width, isVisible);
+  const { page, error, loading } = usePdfPage(id, pageIndex, width);
   const { text: textItems, pageWidth } = usePdfText(id, pageIndex);
   const { info } = usePdfInfo(id);
   const annotations =

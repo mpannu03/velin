@@ -17,11 +17,15 @@ class PdfRenderQueue {
     this.maxConcurrent = maxConcurrent;
   }
 
-  enqueue<T>(task: Task<T>, signal?: AbortSignal, priority: number = 0): Promise<T> {
+  enqueue<T>(
+    task: Task<T>,
+    signal?: AbortSignal,
+    priority: number = 0,
+  ): Promise<T> {
     return new Promise((resolve, reject) => {
       // If already aborted, reject immediately
       if (signal?.aborted) {
-        return reject(new Error('Aborted'));
+        return reject(new Error("Aborted"));
       }
 
       const queueTask: QueueTask<T> = {
@@ -41,7 +45,7 @@ class PdfRenderQueue {
           break;
         }
       }
-      
+
       if (!inserted) {
         this.queue.push(queueTask);
       }
@@ -51,22 +55,20 @@ class PdfRenderQueue {
   }
 
   private runNext() {
-    while (
-      this.runningCount < this.maxConcurrent &&
-      this.queue.length > 0
-    ) {
+    while (this.runningCount < this.maxConcurrent && this.queue.length > 0) {
       const queueTask = this.queue.shift();
       if (!queueTask) return;
 
       // Skip aborted tasks
       if (queueTask.signal?.aborted) {
-        queueTask.reject(new Error('Aborted'));
+        queueTask.reject(new Error("Aborted"));
         continue;
       }
 
       this.runningCount++;
-      
-      queueTask.task()
+
+      queueTask
+        .task()
         .then((result) => {
           if (!queueTask.signal?.aborted) {
             queueTask.resolve(result);
@@ -90,8 +92,8 @@ class PdfRenderQueue {
 
   // Cancel all pending tasks with lower priority
   cancelLowerPriority(minPriority: number) {
-    this.queue = this.queue.filter(task => task.priority >= minPriority);
+    this.queue = this.queue.filter((task) => task.priority >= minPriority);
   }
 }
 
-export const pdfRenderQueue = new PdfRenderQueue(3);
+export const pdfRenderQueue = new PdfRenderQueue(2);

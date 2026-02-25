@@ -74,9 +74,9 @@ export function TextLayer({
         const selection = window.getSelection();
         const selected = selection?.toString().trim();
         if (selection && selected && selection.rangeCount > 0) {
-            const range = selection.getRangeAt(0);
-            const rects = Array.from(range.getClientRects());
-            onTextSelected?.(selected, rects);
+          const range = selection.getRangeAt(0);
+          const rects = Array.from(range.getClientRects());
+          onTextSelected?.(selected, rects);
         }
       }}
       style={{

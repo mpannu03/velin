@@ -1,7 +1,15 @@
 import { JSX, ReactNode } from "react";
-import { ActionIcon, Divider, Group, SegmentedControl, Stack, Text, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Divider,
+  Group,
+  SegmentedControl,
+  Stack,
+  Text,
+  Tooltip,
+} from "@mantine/core";
 import { SCREEN_COMPONENTS } from "./screens.registry";
-import { Screen } from '@/app/types';
+import { Screen } from "@/app/types";
 import { FiBookOpen, FiEdit, FiHome, FiSettings, FiTool } from "react-icons/fi";
 import { useScreenState } from "@/app/screenRouter";
 import { ReaderScreen } from "@/screens";
@@ -13,15 +21,15 @@ export function ScreenRouter(): JSX.Element {
 
   const ScreenComponent = SCREEN_COMPONENTS[screen.name];
 
-  const isReader = screen.name === 'reader';
+  const isReader = screen.name === "reader";
 
-  return(
+  return (
     <div
       style={{
-        width: '100%',
+        width: "100%",
         flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
+        display: "flex",
+        flexDirection: "column",
         minHeight: 0,
       }}
     >
@@ -29,39 +37,38 @@ export function ScreenRouter(): JSX.Element {
       {!isReader && <ScreenComponent />}
     </div>
   );
-};
+}
 
 export function ScreenNavigationBar(): JSX.Element {
   const router = useScreenState();
   const screen = useScreenState((s) => s.screen);
-  const [settingsOpened, { open: openSettings, close: closeSettings }] = useDisclosure(false);
+  const [settingsOpened, { open: openSettings, close: closeSettings }] =
+    useDisclosure(false);
 
-  const setScreen = (screenName: Screen['name']) => {
+  const setScreen = (screenName: Screen["name"]) => {
     switch (screenName) {
-      case 'home':
+      case "home":
         router.goHome();
         break;
-      case 'reader':
+      case "reader":
         router.openReader();
         break;
-      case 'modify':
+      case "modify":
         router.openModify();
         break;
-      case 'tools':
+      case "tools":
         router.openTools();
         break;
     }
-  }
+  };
 
-  return(
-    <Stack
-      gap={0}
-    >
+  return (
+    <Stack gap={0}>
       <Group
         py="4px"
         px="sm"
         justify="space-between"
-        style={{ overflow: 'hidden' }}
+        style={{ overflow: "hidden" }}
       >
         <SegmentedControl
           w={400}
@@ -69,43 +76,47 @@ export function ScreenNavigationBar(): JSX.Element {
           radius={24}
           value={screen.name}
           color="var(--mantine-primary-color-filled)"
-          onChange={(value) => setScreen(value as Screen['name'])}
+          onChange={(value) => setScreen(value as Screen["name"])}
           styles={{
             control: {
-              height: '100%',
+              height: "100%",
             },
             label: {
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             },
           }}
           data={[
             {
-              value: 'home',
-              label: <SegmentLabel icon={<FiHome size={16} />} label="Home" />
+              value: "home",
+              label: <SegmentLabel icon={<FiHome size={16} />} label="Home" />,
             },
             {
-              value: 'reader',
-              label: <SegmentLabel icon={<FiBookOpen size={16} />} label="Reader" />
+              value: "reader",
+              label: (
+                <SegmentLabel icon={<FiBookOpen size={16} />} label="Reader" />
+              ),
             },
             {
-              value: 'modify',
-              label: <SegmentLabel icon={<FiEdit size={16} />} label="Modify" />
+              value: "modify",
+              label: (
+                <SegmentLabel icon={<FiEdit size={16} />} label="Modify" />
+              ),
             },
             {
-              value: 'tools',
-              label: <SegmentLabel icon={<FiTool size={16} />} label="Tools" />
+              value: "tools",
+              label: <SegmentLabel icon={<FiTool size={16} />} label="Tools" />,
             },
           ]}
         />
 
         <Tooltip label="Settings" position="left">
-          <ActionIcon 
-            variant="subtle" 
-            size="lg" 
-            radius="md" 
+          <ActionIcon
+            variant="subtle"
+            size="lg"
+            radius="md"
             onClick={openSettings}
             color="gray"
           >
@@ -114,11 +125,11 @@ export function ScreenNavigationBar(): JSX.Element {
         </Tooltip>
       </Group>
       <Divider />
-      
+
       <SettingsDialog opened={settingsOpened} onClose={closeSettings} />
     </Stack>
   );
-};
+}
 
 type SegmentLabelProps = {
   icon: ReactNode;
@@ -126,7 +137,7 @@ type SegmentLabelProps = {
 };
 
 function SegmentLabel({ icon, label }: SegmentLabelProps): JSX.Element {
-  return(
+  return (
     <Group gap={6}>
       {icon}
       <Text size="sm">{label}</Text>

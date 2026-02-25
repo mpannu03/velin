@@ -9,8 +9,10 @@ import {
   usePdfWheelZoom,
   useCurrentPageFromVirtual,
 } from "../hooks";
-import { usePdfViewerStore } from "../stores";
+import { useDocumentCacheStore, usePdfViewerStore } from "../stores";
 import { PdfPage, ToolsPanel, SidePanel, SideBarPanel } from "./";
+import { pdfRenderQueue } from "../renderer";
+import { renderPage } from "@/services/tauri";
 
 type PdfViewProps = {
   doc: PdfDocument;
@@ -28,6 +30,7 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
   const currentPage = useDocumentRepositoryStore((s) =>
     s.getDocumentByFilePath(doc.filePath),
   );
+  // const { addPage, getPage } = useDocumentCacheStore.getState();
 
   const { width: windowWidth } = useViewportSize();
 
@@ -47,6 +50,49 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
     overscan: 3,
     scrollMargin: 16,
   });
+
+  // useEffect(() => {
+  //   if (!info) return;
+
+  //   let index = 0;
+  //   const total = info.page_count;
+  //   let cancelled = false;
+
+  //   const interval = setInterval(() => {
+  //     if (cancelled) return;
+
+  //     if (index >= total) {
+  //       clearInterval(interval);
+  //       return;
+  //     }
+
+  //     // Skip if already cached
+  //     const alreadyCached = getPage(id, index, renderWidth);
+  //     if (!alreadyCached) {
+  //       pdfRenderQueue
+  //         .enqueue(
+  //           () => renderPage(id, index, renderWidth),
+  //           undefined,
+  //           1, // low priority
+  //         )
+  //         .then((result) => {
+  //           if (cancelled) return;
+
+  //           if (result.ok) {
+  //             addPage(id, index, result.data);
+  //           }
+  //         })
+  //         .catch(() => {});
+  //     }
+
+  //     index++;
+  //   }, 200);
+
+  //   return () => {
+  //     cancelled = true;
+  //     clearInterval(interval);
+  //   };
+  // }, [info, id, renderWidth]);
 
   useEffect(() => {
     if (gotoPage == null) return;
@@ -153,7 +199,7 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
                 pageIndex={virtualItem.index}
                 width={renderWidth}
                 aspectRatio={aspectRatio}
-                isVisible={true}
+                isVisible={virtualItem.index === viewerState.currentPage}
               />
             </div>
           ))}
