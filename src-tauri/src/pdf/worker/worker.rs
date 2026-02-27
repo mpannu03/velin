@@ -12,9 +12,12 @@ impl PdfWorker {
     pub fn spawn() -> Self {
         let (tx, rx) = flume::unbounded::<PdfEvent>();
 
-        thread::spawn(move || {
-            worker_loop(rx);
-        });
+        for _ in 0..4 {
+            let rx = rx.clone();
+            thread::spawn(move || {
+                worker_loop(rx);
+            });
+        }
 
         Self { sender: tx }
     }
@@ -26,14 +29,19 @@ impl PdfWorker {
 
 fn worker_loop(rx: Receiver<PdfEvent>) {
     let pdfium = Pdfium::default();
-
     let mut documents: HashMap<DocumentId, PdfDocument> = HashMap::new();
+    let mut paths: HashMap<DocumentId, std::path::PathBuf> = HashMap::new();
 
     while let Ok(cmd) = rx.recv() {
         match cmd {
             PdfEvent::Open { id, path, reply } => {
-                let result = reader::open(id, &path, &mut documents, &pdfium);
-                let _ = reply.send(result);
+                // Just store the path and verify it exists
+                if path.exists() {
+                    paths.insert(id, path);
+                    let _ = reply.send(Ok(()));
+                } else {
+                    let _ = reply.send(Err("File not found".to_string()));
+                }
             }
             PdfEvent::Render {
                 id,
@@ -41,19 +49,54 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 target_width,
                 reply,
             } => {
-                let result = reader::render_page(&documents, &id, page_index, target_width);
+                let result = match ensure_doc(&pdfium, &mut documents, &paths, &id) {
+                    Ok(_) => reader::render_page(&documents, &id, page_index, target_width),
+                    Err(e) => Err(e),
+                };
+                let _ = reply.send(result);
+            }
+            PdfEvent::RenderTile {
+                id,
+                page_index,
+                target_width,
+                tile_x,
+                tile_y,
+                tile_width,
+                tile_height,
+                reply,
+            } => {
+                let result = match ensure_doc(&pdfium, &mut documents, &paths, &id) {
+                    Ok(_) => reader::render_tile(
+                        &documents,
+                        &id,
+                        page_index,
+                        target_width,
+                        tile_x,
+                        tile_y,
+                        tile_width,
+                        tile_height,
+                    ),
+                    Err(e) => Err(e),
+                };
                 let _ = reply.send(result);
             }
             PdfEvent::Info { id, reply } => {
-                let result = reader::get_info(&documents, &id);
+                let result = match ensure_doc(&pdfium, &mut documents, &paths, &id) {
+                    Ok(_) => reader::get_info(&documents, &id),
+                    Err(e) => Err(e),
+                };
                 let _ = reply.send(result);
             }
             PdfEvent::Close { id, reply } => {
-                let result = reader::close(&mut documents, &id);
-                let _ = reply.send(result);
+                documents.remove(&id);
+                paths.remove(&id);
+                let _ = reply.send(Ok(()));
             }
             PdfEvent::Bookmarks { id, reply } => {
-                let result = reader::get_bookmarks(&documents, &id);
+                let result = match ensure_doc(&pdfium, &mut documents, &paths, &id) {
+                    Ok(_) => reader::get_bookmarks(&documents, &id),
+                    Err(e) => Err(e),
+                };
                 let _ = reply.send(result);
             }
             PdfEvent::Text {
@@ -61,11 +104,17 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 page_index,
                 reply,
             } => {
-                let result = reader::get_text_by_page(&documents, &id, page_index);
+                let result = match ensure_doc(&pdfium, &mut documents, &paths, &id) {
+                    Ok(_) => reader::get_text_by_page(&documents, &id, page_index),
+                    Err(e) => Err(e),
+                };
                 let _ = reply.send(result);
             }
             PdfEvent::Search { id, query, reply } => {
-                let result = reader::search_document(&documents, &id, &query);
+                let result = match ensure_doc(&pdfium, &mut documents, &paths, &id) {
+                    Ok(_) => reader::search_document(&documents, &id, &query),
+                    Err(e) => Err(e),
+                };
                 let _ = reply.send(result);
             }
             PdfEvent::Preview {
@@ -73,11 +122,17 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 save_path,
                 reply,
             } => {
-                let result = reader::generate_preview(&documents, &id, save_path);
+                let result = match ensure_doc(&pdfium, &mut documents, &paths, &id) {
+                    Ok(_) => reader::generate_preview(&documents, &id, save_path),
+                    Err(e) => Err(e),
+                };
                 let _ = reply.send(result);
             }
             PdfEvent::GetAnnotations { id, reply } => {
-                let result = reader::get_annotations(&documents, &id);
+                let result = match ensure_doc(&pdfium, &mut documents, &paths, &id) {
+                    Ok(_) => reader::get_annotations(&documents, &id),
+                    Err(e) => Err(e),
+                };
                 let _ = reply.send(result);
             }
             PdfEvent::AddAnnotation {
@@ -85,7 +140,10 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 annotation,
                 reply,
             } => {
-                let result = reader::add_annotation(&documents, &id, annotation);
+                let result = match ensure_doc(&pdfium, &mut documents, &paths, &id) {
+                    Ok(_) => reader::add_annotation(&documents, &id, annotation),
+                    Err(e) => Err(e),
+                };
                 let _ = reply.send(result);
             }
             PdfEvent::RemoveAnnotation {
@@ -94,11 +152,31 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 annotation_id,
                 reply,
             } => {
-                let result = reader::delete_annotation(&documents, &id, page_index, annotation_id);
+                let result = match ensure_doc(&pdfium, &mut documents, &paths, &id) {
+                    Ok(_) => reader::delete_annotation(&documents, &id, page_index, annotation_id),
+                    Err(e) => Err(e),
+                };
                 let _ = reply.send(result);
             }
         }
     }
+}
+
+fn ensure_doc<'a>(
+    pdfium: &'a Pdfium,
+    documents: &mut HashMap<DocumentId, PdfDocument<'a>>,
+    paths: &HashMap<DocumentId, std::path::PathBuf>,
+    id: &DocumentId,
+) -> Result<(), String> {
+    if documents.contains_key(id) {
+        return Ok(());
+    }
+
+    let path = paths
+        .get(id)
+        .ok_or_else(|| "Document path not found".to_string())?;
+
+    reader::open(id.clone(), path, documents, pdfium)
 }
 
 #[cfg(test)]
