@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, memo } from "react";
 import { usePdfPage, usePdfTile } from "../hooks";
 
-const TILE_SIZE = 512;
+const TILE_SIZE = 256;
 const OVERSCAN_PAGES = 1.0; // Render 100% more than visible area for smooth scrolling
 
 type Props = {
@@ -33,6 +33,7 @@ export function TileLayer({
   const { page: lowResPage } = usePdfPage(id, pageIndex, lowResWidth);
 
   useEffect(() => {
+    let rafId: number;
     const update = () => {
       if (!containerRef.current) return;
 
@@ -55,25 +56,48 @@ export function TileLayer({
       const startY = Math.floor((visibleTop * dpr) / TILE_SIZE) * TILE_SIZE;
       const endY = Math.ceil((visibleBottom * dpr) / TILE_SIZE) * TILE_SIZE;
 
-      // Final rounding for state stability
-      setVisibleRange({
-        startY: Math.round(startY),
-        endY: Math.round(endY),
-        viewportTop,
-        viewportBottom,
+      const nextStartY = Math.round(startY);
+      const nextEndY = Math.round(endY);
+
+      // ⚡ STABILIZATION:
+      // 1. High hysteresis for startY/endY (actual component mounting)
+      // 2. Low hysteresis for viewportTop/Bottom (priority escalation speed)
+      setVisibleRange((prev) => {
+        const boundsChanged =
+          prev.startY !== nextStartY || prev.endY !== nextEndY;
+        const viewportShifted =
+          Math.abs(prev.viewportTop - viewportTop) > 10 || // Low hysteresis for snap!
+          Math.abs(prev.viewportBottom - viewportBottom) > 10;
+
+        if (!boundsChanged && !viewportShifted) {
+          return prev;
+        }
+
+        return {
+          startY: nextStartY,
+          endY: nextEndY,
+          viewportTop,
+          viewportBottom,
+        };
       });
     };
 
-    update();
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(update);
+    };
+
+    onScroll();
     const scrollContainer = document.getElementById("pdf-scroll-container");
     const target = scrollContainer || window;
 
-    target.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update, { passive: true });
+    target.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
 
     return () => {
-      target.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      cancelAnimationFrame(rafId);
+      target.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
   }, [dpr, renderWidth, renderHeight]);
 
@@ -182,48 +206,64 @@ function LowResFallback({ pixels, width, height }: any) {
   );
 }
 
-function TileCanvas({ id, pageIndex, renderWidth, tile, dpr, priority }: any) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { tile: renderedTile, loading } = usePdfTile(
-    id,
-    pageIndex,
-    renderWidth,
-    tile.x,
-    tile.y,
-    tile.width,
-    tile.height,
-    priority,
-  );
+// 💎 Optimization: Memoize the TileCanvas to prevent re-renders when brothers update
+const TileCanvas = memo(
+  ({ id, pageIndex, renderWidth, tile, dpr, priority }: any) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const { tile: renderedTile, loading } = usePdfTile(
+      id,
+      pageIndex,
+      renderWidth,
+      tile.x,
+      tile.y,
+      tile.width,
+      tile.height,
+      priority,
+    );
 
-  useEffect(() => {
-    if (!renderedTile || !canvasRef.current) return;
+    useEffect(() => {
+      if (!renderedTile || !canvasRef.current) return;
 
-    const canvas = canvasRef.current;
+      const canvas = canvasRef.current;
 
-    // Only resize if necessary (prevents flickering/clearing)
-    if (canvas.width !== tile.width || canvas.height !== tile.height) {
-      canvas.width = tile.width;
-      canvas.height = tile.height;
-    }
+      // Only resize if necessary (prevents flickering/clearing)
+      if (canvas.width !== tile.width || canvas.height !== tile.height) {
+        canvas.width = tile.width;
+        canvas.height = tile.height;
+      }
 
-    const ctx = canvas.getContext("2d", { alpha: false });
+      const ctx = canvas.getContext("2d", { alpha: false });
 
-    // ⚡ SUPER FAST: pixels is already an ImageBitmap from reader.ts
-    ctx?.drawImage(renderedTile.pixels as any as ImageBitmap, 0, 0);
-  }, [renderedTile, tile]);
+      // ⚡ SUPER FAST: pixels is already an ImageBitmap from reader.ts
+      ctx?.drawImage(renderedTile.pixels as any as ImageBitmap, 0, 0);
+    }, [renderedTile, tile]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: "absolute",
-        left: `${tile.x / dpr}px`,
-        top: `${tile.y / dpr}px`,
-        width: `${tile.width / dpr}px`,
-        height: `${tile.height / dpr}px`,
-        opacity: loading ? 0 : 1,
-        transition: "opacity 0.2s ease-in-out",
-      }}
-    />
-  );
-}
+    return (
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          left: `${tile.x / dpr}px`,
+          top: `${tile.y / dpr}px`,
+          width: `${tile.width / dpr}px`,
+          height: `${tile.height / dpr}px`,
+          opacity: loading ? 0 : 1,
+          transition: "opacity 0.2s ease-in-out",
+        }}
+      />
+    );
+  },
+  (prev, next) => {
+    // Custom equality check for deep tile comparison
+    return (
+      prev.id === next.id &&
+      prev.pageIndex === next.pageIndex &&
+      prev.renderWidth === next.renderWidth &&
+      prev.priority === next.priority &&
+      prev.tile.x === next.tile.x &&
+      prev.tile.y === next.tile.y &&
+      prev.tile.width === next.tile.width &&
+      prev.tile.height === next.tile.height
+    );
+  },
+);

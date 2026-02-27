@@ -30,7 +30,7 @@ class PdfRenderQueue {
       const existingInQueue = this.queue.find((t) => t.key === key);
       if (existingInQueue && priority > existingInQueue.priority) {
         existingInQueue.priority = priority;
-        // Re-sort the queue to reflect the new priority
+        // ⚡ Optimization: Only sort if priority actually changed
         this.queue.sort((a, b) => b.priority - a.priority);
       }
       return this.pendingTasks.get(key)!;

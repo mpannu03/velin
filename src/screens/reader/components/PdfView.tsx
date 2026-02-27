@@ -39,7 +39,9 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
   const renderWidth = Math.floor(displayWidth * dpr);
 
   const aspectRatio =
-    info?.height && info?.width ? info.height / info.width : 1.414;
+    info?.height && info?.width && info.width > 0
+      ? info.height / info.width
+      : 1.414;
 
   const estimatedHeight = displayWidth * aspectRatio;
 

@@ -55,7 +55,8 @@ export function PdfPage({ id, pageIndex, width }: PdfPageProps): JSX.Element {
 
   // Render pixel dimensions (Rust target_width MUST match this)
   const renderWidth = Math.floor(displayWidth * dpr);
-  const renderHeight = Math.floor(renderWidth * (pdfHeight / pdfWidth));
+  const safePdfWidth = pdfWidth > 0 ? pdfWidth : 1;
+  const renderHeight = Math.floor(renderWidth * (pdfHeight / safePdfWidth));
 
   // CSS display height
   const displayHeight = renderHeight / dpr;
