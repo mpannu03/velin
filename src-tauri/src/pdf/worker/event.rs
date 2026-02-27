@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use flume::Sender;
 
-use crate::pdf::reader::Annotation;
+use crate::pdf::reader::{Annotation, RenderedTile};
 use crate::pdf::{
     document::{Bookmarks, DocumentId, PdfInfo},
     reader::{PageText, RenderedPage, SearchHit},
@@ -19,6 +19,16 @@ pub enum PdfEvent {
         page_index: u16,
         target_width: i32,
         reply: Sender<Result<RenderedPage, String>>,
+    },
+    RenderTile {
+        id: DocumentId,
+        page_index: u16,
+        target_width: i32,
+        tile_x: i32,
+        tile_y: i32,
+        tile_width: i32,
+        tile_height: i32,
+        reply: Sender<Result<RenderedTile, String>>,
     },
     Info {
         id: DocumentId,

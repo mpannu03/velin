@@ -37,6 +37,7 @@ pub fn run() {
             commands::reader::get_annotations,
             commands::reader::add_annotation,
             commands::reader::remove_annotation,
+            commands::reader::render_tile,
             commands::tools::extract_tar_gz,
         ])
         .run(tauri::generate_context!())

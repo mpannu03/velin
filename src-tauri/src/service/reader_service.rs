@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use crate::{
     pdf::{
         document::PdfInfo,
-        reader::{Annotation, PageText, RenderedPage, SearchHit},
+        reader::{Annotation, PageText, RenderedPage, RenderedTile, SearchHit},
         worker::PdfEvent,
         Bookmarks,
     },
@@ -40,6 +40,39 @@ pub fn render_page(
 
     rx.recv()
         .map_err(|e| format!("Error receiving render result: {e}"))?
+}
+
+pub fn render_tile(
+    state: &AppState,
+    id: String,
+    page_index: u16,
+    target_width: i32,
+    tile_x: i32,
+    tile_y: i32,
+    tile_width: i32,
+    tile_height: i32,
+) -> Result<RenderedTile, String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::RenderTile {
+            id,
+            page_index,
+            target_width,
+            tile_x,
+            tile_y,
+            tile_width,
+            tile_height,
+            reply: tx,
+        })
+        .map_err(|e| format!("Error sending render tile command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving render tile result: {e}"))?
 }
 
 pub fn get_pdf_info(state: &AppState, id: String) -> Result<PdfInfo, String> {

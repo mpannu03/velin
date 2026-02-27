@@ -39,6 +39,44 @@ pub async fn render_page(
 }
 
 #[tauri::command]
+pub async fn render_tile(
+    state: State<'_, AppState>,
+    id: String,
+    page_index: u16,
+    target_width: i32,
+    tile_x: i32,
+    tile_y: i32,
+    tile_width: i32,
+    tile_height: i32,
+) -> Result<tauri::ipc::Response, String> {
+    let app_state = state.inner().clone();
+
+    let tile = tauri::async_runtime::spawn_blocking(move || {
+        reader_service::render_tile(
+            &app_state,
+            id,
+            page_index,
+            target_width,
+            tile_x,
+            tile_y,
+            tile_width,
+            tile_height,
+        )
+    })
+    .await
+    .map_err(|e| e.to_string())??;
+
+    let mut data = Vec::with_capacity(16 + tile.pixels.len());
+    data.extend_from_slice(&(tile.x as i32).to_be_bytes());
+    data.extend_from_slice(&(tile.y as i32).to_be_bytes());
+    data.extend_from_slice(&(tile.width as i32).to_be_bytes());
+    data.extend_from_slice(&(tile.height as i32).to_be_bytes());
+    data.extend_from_slice(&tile.pixels);
+
+    Ok(tauri::ipc::Response::new(data))
+}
+
+#[tauri::command]
 pub fn get_pdf_info(state: State<AppState>, id: String) -> Result<PdfInfo, String> {
     reader_service::get_pdf_info(&state, id)
 }
