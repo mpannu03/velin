@@ -50,14 +50,16 @@ export function usePdfPage(
 
     const abortController = new AbortController();
 
-    // Visible pages get higher priority (100), offscreen pages get lower (0)
-    const priority = isVisible ? 100 : 0;
+    // Low priority for background thumbnails (10)
+    const priority = 10;
+    const taskKey = `${id}:${pageIndex}:lowres:${targetWidth}`;
 
     pdfRenderQueue
       .enqueue(
         () => renderPage(id, pageIndex, targetWidth),
         abortController.signal,
         priority,
+        taskKey,
       )
       .then((result) => {
         if (cancelled || abortController.signal.aborted) return;

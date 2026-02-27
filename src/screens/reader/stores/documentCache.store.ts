@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Annotation, RenderedPage } from "../types";
+import { Annotation, RenderedPage, RenderedTile } from "../types";
 import { PdfInfo, PageText, Bookmark } from "@/shared/types";
 import {
   fetchAnnotations,
@@ -8,7 +8,7 @@ import {
   fetchTextByPage,
 } from "@/services/tauri";
 
-const MAX_CACHE_MB = 256;
+const MAX_CACHE_MB = 512;
 const MAX_TEXT_CACHE_PAGES = 100;
 
 type Result<T> = { ok: true; data: T } | { ok: false; error: string };
@@ -20,6 +20,9 @@ type DocumentCache = {
 
   // Rendered pages (keyed by resolution: "width x height")
   pages: Record<string, RenderedPage>;
+
+  // Rendered tiles (keyed by resolution and position: "targetWidth:x_y_wxh")
+  tiles: Record<string, RenderedTile>;
 
   // Text data (keyed by page number)
   text: Record<number, PageText>;
@@ -52,6 +55,23 @@ type DocumentCacheState = {
   ) => RenderedPage | undefined;
   getAnyPage: (id: string, pageIndex: number) => RenderedPage | undefined;
 
+  // Tile operations
+  addTile: (
+    id: string,
+    pageIndex: number,
+    targetWidth: number,
+    tile: RenderedTile,
+  ) => void;
+  getTile: (
+    id: string,
+    pageIndex: number,
+    targetWidth: number,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+  ) => RenderedTile | undefined;
+
   // Text operations
   addText: (id: string, pageIndex: number, text: PageText) => void;
   getText: (id: string, pageIndex: number) => PageText | undefined;
@@ -82,6 +102,18 @@ function estimatePageMB(page: RenderedPage): number {
   return (page.width * page.height * 4) / (1024 * 1024);
 }
 
+function estimateTileMB(tile: RenderedTile): number {
+  if (tile.pixels instanceof ImageBitmap) {
+    // ImageBitmap is on GPU. Conservative estimate: 2 bytes per pixel
+    return (tile.width * tile.height * 2) / (1024 * 1024);
+  }
+
+  if (tile.pixels && (tile.pixels as any).length > 0) {
+    return (tile.pixels as any).length / (1024 * 1024);
+  }
+  return (tile.width * tile.height * 4) / (1024 * 1024);
+}
+
 function estimateTextMB(_text: PageText): number {
   return 0.01;
 }
@@ -93,6 +125,7 @@ function getOrCreateDocCache(
   if (!documents[id]) {
     const newCache: DocumentCache = {
       pages: {},
+      tiles: {},
       text: {},
       annotations: [],
       bookmarks: [],
@@ -112,7 +145,7 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
   totalMemoryMb: 0,
   maxMemoryMb: MAX_CACHE_MB,
 
-  addPage: (id, pageIndex, page) => {
+  addPage: (id: string, pageIndex: number, page: RenderedPage) => {
     set((state) => {
       const newDocuments = { ...state.documents };
       const docCache = getOrCreateDocCache(newDocuments, id);
@@ -195,6 +228,67 @@ export const useDocumentCacheStore = create<DocumentCacheState>((set, get) => ({
     }
 
     return undefined;
+  },
+
+  addTile: (id, pageIndex, targetWidth, tile) => {
+    set((state) => {
+      const newDocuments = { ...state.documents };
+      const docCache = getOrCreateDocCache(newDocuments, id);
+
+      const key = `${pageIndex}:${targetWidth}:${tile.x}_${tile.y}_${tile.width}x${tile.height}`;
+      const tileMb = estimateTileMB(tile);
+
+      const existingTile = docCache.tiles[key];
+      if (existingTile) {
+        const oldMb = estimateTileMB(existingTile);
+        docCache.memoryMb -= oldMb;
+      }
+
+      docCache.tiles[key] = tile;
+      docCache.memoryMb += tileMb;
+
+      let totalMemoryMb = 0;
+      for (const cache of Object.values(newDocuments)) {
+        totalMemoryMb += cache.memoryMb;
+      }
+
+      // Memory pressure cleanup
+      while (
+        totalMemoryMb > MAX_CACHE_MB &&
+        Object.keys(newDocuments).length > 0
+      ) {
+        let oldestId: string | undefined;
+        let oldestTime = Infinity;
+
+        for (const [docId, cache] of Object.entries(newDocuments)) {
+          if (cache.lastAccessed < oldestTime) {
+            oldestTime = cache.lastAccessed;
+            oldestId = docId;
+          }
+        }
+
+        if (oldestId) {
+          const removedCache = newDocuments[oldestId];
+          if (removedCache) {
+            totalMemoryMb -= removedCache.memoryMb;
+          }
+          delete newDocuments[oldestId];
+        } else {
+          break;
+        }
+      }
+
+      return { documents: newDocuments, totalMemoryMb };
+    });
+  },
+
+  getTile: (id, pageIndex, targetWidth, x, y, width, height) => {
+    const docCache = get().documents[id];
+    if (!docCache) return undefined;
+
+    docCache.lastAccessed = Date.now();
+    const key = `${pageIndex}:${targetWidth}:${x}_${y}_${width}x${height}`;
+    return docCache.tiles[key];
   },
 
   addText: (id, pageIndex, text) => {

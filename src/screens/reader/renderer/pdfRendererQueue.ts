@@ -6,14 +6,16 @@ type QueueTask<T> = {
   resolve: (value: T) => void;
   reject: (reason: any) => void;
   signal?: AbortSignal;
+  key?: string; // Cache key for priority escalation
 };
 
 class PdfRenderQueue {
   private queue: QueueTask<any>[] = [];
+  private pendingTasks = new Map<string, Promise<any>>();
   private runningCount = 0;
   private readonly maxConcurrent: number;
 
-  constructor(maxConcurrent = 2) {
+  constructor(maxConcurrent = 6) {
     this.maxConcurrent = maxConcurrent;
   }
 
@@ -21,11 +23,24 @@ class PdfRenderQueue {
     task: Task<T>,
     signal?: AbortSignal,
     priority: number = 0,
+    key?: string,
   ): Promise<T> {
-    return new Promise((resolve, reject) => {
+    // 🚀 Priority Escalation: If task already pending and still in queue, bump its priority
+    if (key && this.pendingTasks.has(key)) {
+      const existingInQueue = this.queue.find((t) => t.key === key);
+      if (existingInQueue && priority > existingInQueue.priority) {
+        existingInQueue.priority = priority;
+        // Re-sort the queue to reflect the new priority
+        this.queue.sort((a, b) => b.priority - a.priority);
+      }
+      return this.pendingTasks.get(key)!;
+    }
+
+    const promise = new Promise<T>((resolve, reject) => {
       // If already aborted, reject immediately
       if (signal?.aborted) {
-        return reject(new Error("Aborted"));
+        Promise.resolve().then(() => reject(new Error("Aborted")));
+        return;
       }
 
       const queueTask: QueueTask<T> = {
@@ -34,6 +49,7 @@ class PdfRenderQueue {
         resolve,
         reject,
         signal,
+        key,
       };
 
       // Insert task in priority order (higher priority first)
@@ -49,9 +65,15 @@ class PdfRenderQueue {
       if (!inserted) {
         this.queue.push(queueTask);
       }
-
-      this.runNext();
     });
+
+    if (key) {
+      this.pendingTasks.set(key, promise);
+      promise.finally(() => this.pendingTasks.delete(key)).catch(() => {});
+    }
+
+    this.runNext();
+    return promise;
   }
 
   private runNext() {
@@ -61,7 +83,7 @@ class PdfRenderQueue {
 
       // Skip aborted tasks
       if (queueTask.signal?.aborted) {
-        queueTask.reject(new Error("Aborted"));
+        Promise.resolve().then(() => queueTask.reject(new Error("Aborted")));
         continue;
       }
 
@@ -70,14 +92,10 @@ class PdfRenderQueue {
       queueTask
         .task()
         .then((result) => {
-          if (!queueTask.signal?.aborted) {
-            queueTask.resolve(result);
-          }
+          queueTask.resolve(result);
         })
         .catch((err) => {
-          if (!queueTask.signal?.aborted) {
-            queueTask.reject(err);
-          }
+          queueTask.reject(err);
         })
         .finally(() => {
           this.runningCount--;
@@ -88,12 +106,27 @@ class PdfRenderQueue {
 
   clear() {
     this.queue = [];
+    this.pendingTasks.clear();
   }
 
-  // Cancel all pending tasks with lower priority
   cancelLowerPriority(minPriority: number) {
-    this.queue = this.queue.filter((task) => task.priority >= minPriority);
+    const remaining: QueueTask<any>[] = [];
+    const cancelled: QueueTask<any>[] = [];
+
+    for (const task of this.queue) {
+      if (task.priority >= minPriority) {
+        remaining.push(task);
+      } else {
+        cancelled.push(task);
+      }
+    }
+
+    this.queue = remaining;
+
+    for (const task of cancelled) {
+      Promise.resolve().then(() => task.reject(new Error("Aborted")));
+    }
   }
 }
 
-export const pdfRenderQueue = new PdfRenderQueue(2);
+export const pdfRenderQueue = new PdfRenderQueue(6);
