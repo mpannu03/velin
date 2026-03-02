@@ -11,6 +11,7 @@ import {
 } from "../hooks";
 import { usePdfViewerStore } from "../stores";
 import { PdfPage, ToolsPanel, SidePanel, SideBarPanel } from "./";
+import { pdfRenderQueue } from "../renderer";
 
 type PdfViewProps = {
   doc: PdfDocument;
@@ -59,8 +60,9 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
       align: "start",
     });
 
+    pdfRenderQueue.clear();
     clearGotoPage(id);
-  }, [gotoPage, rowVirtualizer, clearGotoPage]);
+  }, [gotoPage, rowVirtualizer, clearGotoPage, id]);
 
   const initialScrollDone = useRef(false);
 
@@ -158,6 +160,7 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
                 width={renderWidth}
                 aspectRatio={aspectRatio}
                 isVisible={virtualItem.index === viewerState.currentPage}
+                isScrolling={rowVirtualizer.isScrolling}
               />
             </div>
           ))}

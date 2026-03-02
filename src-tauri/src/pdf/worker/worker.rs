@@ -12,7 +12,7 @@ impl PdfWorker {
     pub fn spawn() -> Self {
         let (tx, rx) = flume::unbounded::<PdfEvent>();
 
-        for _ in 0..4 {
+        for _ in 0..2 {
             let rx = rx.clone();
             thread::spawn(move || {
                 worker_loop(rx);

@@ -10,6 +10,7 @@ type Props = {
   renderWidth: number;
   renderHeight: number;
   dpr: number;
+  isScrolling?: boolean;
 };
 
 export function TileLayer({
@@ -18,6 +19,7 @@ export function TileLayer({
   renderWidth,
   renderHeight,
   dpr,
+  isScrolling,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [visibleRange, setVisibleRange] = useState({
@@ -133,6 +135,9 @@ export function TileLayer({
       )}
 
       {tiles.map((tile) => {
+        // Skip hi-res rendering while scrolling fast
+        if (isScrolling) return null;
+
         const isVisible =
           tile.y + tile.height > visibleRange.viewportTop * dpr &&
           tile.y < visibleRange.viewportBottom * dpr;

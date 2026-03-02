@@ -11,9 +11,15 @@ type PdfPageProps = {
   width: number;
   aspectRatio: number;
   isVisible?: boolean;
+  isScrolling?: boolean;
 };
 
-export function PdfPage({ id, pageIndex, width }: PdfPageProps): JSX.Element {
+export function PdfPage({
+  id,
+  pageIndex,
+  width,
+  isScrolling,
+}: PdfPageProps): JSX.Element {
   const { text: textItems, pageWidth } = usePdfText(id, pageIndex);
   const { info } = usePdfInfo(id);
   const annotations =
@@ -84,6 +90,7 @@ export function PdfPage({ id, pageIndex, width }: PdfPageProps): JSX.Element {
           renderWidth={renderWidth}
           renderHeight={renderHeight}
           dpr={dpr}
+          isScrolling={isScrolling}
         />
 
         {annotations && (

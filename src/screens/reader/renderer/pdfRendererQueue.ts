@@ -105,8 +105,13 @@ class PdfRenderQueue {
   }
 
   clear() {
+    const allTasks = [...this.queue];
     this.queue = [];
     this.pendingTasks.clear();
+
+    for (const task of allTasks) {
+      Promise.resolve().then(() => task.reject(new Error("Aborted")));
+    }
   }
 
   cancelLowerPriority(minPriority: number) {
