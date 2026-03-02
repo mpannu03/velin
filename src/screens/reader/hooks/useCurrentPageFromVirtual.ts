@@ -19,12 +19,10 @@ export function useCurrentPageFromVirtual({
 
   useEffect(() => {
     const handleScroll = () => {
-      // Cancel previous RAF if it exists
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
       }
 
-      // Schedule update for next animation frame
       rafRef.current = requestAnimationFrame(() => {
         const items = virtualizer.getVirtualItems();
         if (items.length > 0) {
@@ -43,7 +41,6 @@ export function useCurrentPageFromVirtual({
       element.addEventListener("scroll", handleScroll, { passive: true });
       return () => {
         element.removeEventListener("scroll", handleScroll);
-        // Cleanup pending RAF on unmount
         if (rafRef.current !== null) {
           cancelAnimationFrame(rafRef.current);
         }

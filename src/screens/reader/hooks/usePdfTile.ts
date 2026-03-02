@@ -23,7 +23,6 @@ export function usePdfTile(
   const addTile = useDocumentCacheStore((s) => s.addTile);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // 👇 Optimized: Extract ONLY the specific tile needed
   const cachedTile = useDocumentCacheStore((s) => {
     const doc = s.documents[id];
     if (!doc) return undefined;
@@ -37,7 +36,6 @@ export function usePdfTile(
     loading: !cachedTile,
   }));
 
-  // Update state if cache changes (Zustand side)
   useEffect(() => {
     if (cachedTile && (state.loading || state.tile !== cachedTile)) {
       setState({ tile: cachedTile, error: null, loading: false });
@@ -49,9 +47,6 @@ export function usePdfTile(
 
     const taskKey = `${id}:${pageIndex}:${targetWidth}:${x}_${y}_${width}x${height}`;
 
-    // 🚀 PERSISTENCE FIX: If we have an active controller, don't abort it
-    // just because priority changed. Only abort if component unmounts
-    // or if the identity of the tile changes (handled by deps).
     if (!abortControllerRef.current) {
       abortControllerRef.current = new AbortController();
     }
@@ -86,12 +81,8 @@ export function usePdfTile(
           console.error(err);
         }
       });
-
-    // We only clean up on UNMOUNT or IDENTITY CHANGE.
-    // We do NOT abort on priority change anymore.
   }, [id, pageIndex, targetWidth, x, y, width, height, addTile, cachedTile]);
 
-  // Handle Abort on IDENTITY CHANGE or UNMOUNT
   useEffect(() => {
     return () => {
       abortControllerRef.current?.abort();
@@ -99,8 +90,6 @@ export function usePdfTile(
     };
   }, [id, pageIndex, targetWidth, x, y, width, height]);
 
-  // 🚀 SEPARATE: When priority changes, we simply re-enqueue.
-  // pdfRendererQueue already handles escalation if taskKey is the same.
   useEffect(() => {
     if (cachedTile || !abortControllerRef.current) return;
 

@@ -41,7 +41,6 @@ export function usePdfPage(
       return;
     }
 
-    // Update state to loading, but keep fallback page if available
     setState({
       page: fallback || null,
       error: null,
@@ -50,7 +49,6 @@ export function usePdfPage(
 
     const abortController = new AbortController();
 
-    // Low priority for background thumbnails (10)
     const priority = 10;
     const taskKey = `${id}:${pageIndex}:lowres:${targetWidth}`;
 
@@ -80,7 +78,6 @@ export function usePdfPage(
         }
       })
       .catch((err) => {
-        // Ignore abort errors
         if (err.message !== "Aborted" && !cancelled) {
           console.error(err);
         }

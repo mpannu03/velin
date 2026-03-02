@@ -8,7 +8,7 @@ import { TileLayer } from "./TileLayer";
 type PdfPageProps = {
   id: string;
   pageIndex: number;
-  width: number; // this is your renderWidth from parent
+  width: number;
   aspectRatio: number;
   isVisible?: boolean;
 };
@@ -39,10 +39,6 @@ export function PdfPage({ id, pageIndex, width }: PdfPageProps): JSX.Element {
       </Center>
     );
   }
-
-  // =============================
-  // 🔥 SINGLE SOURCE OF TRUTH SCALE
-  // =============================
 
   const dpr = window.devicePixelRatio || 1;
 
@@ -82,7 +78,6 @@ export function PdfPage({ id, pageIndex, width }: PdfPageProps): JSX.Element {
           overflow: "hidden",
         }}
       >
-        {/* 🔥 TILE LAYER (bitmap rendering will go here) */}
         <TileLayer
           id={id}
           pageIndex={pageIndex}
@@ -91,7 +86,6 @@ export function PdfPage({ id, pageIndex, width }: PdfPageProps): JSX.Element {
           dpr={dpr}
         />
 
-        {/* Annotation Layer */}
         {annotations && (
           <AnnotationLayer
             annotations={annotations}
@@ -101,7 +95,6 @@ export function PdfPage({ id, pageIndex, width }: PdfPageProps): JSX.Element {
           />
         )}
 
-        {/* Text Layer */}
         {textItems && (
           <TextLayer
             textItems={textItems}
@@ -112,7 +105,6 @@ export function PdfPage({ id, pageIndex, width }: PdfPageProps): JSX.Element {
           />
         )}
 
-        {/* Search Highlights */}
         <SearchHighlightLayer id={id} pageIndex={pageIndex} scale={scale} />
       </Box>
     </Box>

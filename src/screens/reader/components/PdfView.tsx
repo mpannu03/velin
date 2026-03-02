@@ -33,7 +33,6 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
 
   const baseWidth = Math.max(windowWidth / 2, 400);
   const displayWidth = baseWidth * viewerState.scale;
-  // const renderWidth = displayWidth * 2;
 
   const dpr = window.devicePixelRatio || 1;
   const renderWidth = Math.floor(displayWidth * dpr);

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, memo } from "react";
 import { usePdfPage, usePdfTile } from "../hooks";
 
 const TILE_SIZE = 256;
-const OVERSCAN_PAGES = 1.0; // Render 100% more than visible area for smooth scrolling
+const OVERSCAN_PAGES = 1.0;
 
 type Props = {
   id: string;
@@ -27,8 +27,6 @@ export function TileLayer({
     viewportBottom: window.innerHeight,
   });
 
-  // 👇 Tiered Rendering: Fetch low-res version of the entire page
-  // We use a fixed low target width (e.g., 256 or 512) for the thumbnail
   const lowResWidth = Math.min(renderWidth, 512);
   const { page: lowResPage } = usePdfPage(id, pageIndex, lowResWidth);
 
@@ -44,11 +42,9 @@ export function TileLayer({
         ? scrollContainer.clientHeight
         : window.innerHeight;
 
-      // Viewport bounds relative to the page container
       const viewportTop = -rect.top;
       const viewportBottom = viewportHeight - rect.top;
 
-      // Add overscan
       const overscan = viewportHeight * OVERSCAN_PAGES;
       const visibleTop = Math.max(0, viewportTop - overscan);
       const visibleBottom = Math.min(rect.height, viewportBottom + overscan);
@@ -59,14 +55,11 @@ export function TileLayer({
       const nextStartY = Math.round(startY);
       const nextEndY = Math.round(endY);
 
-      // ⚡ STABILIZATION:
-      // 1. High hysteresis for startY/endY (actual component mounting)
-      // 2. Low hysteresis for viewportTop/Bottom (priority escalation speed)
       setVisibleRange((prev) => {
         const boundsChanged =
           prev.startY !== nextStartY || prev.endY !== nextEndY;
         const viewportShifted =
-          Math.abs(prev.viewportTop - viewportTop) > 10 || // Low hysteresis for snap!
+          Math.abs(prev.viewportTop - viewportTop) > 10 ||
           Math.abs(prev.viewportBottom - viewportBottom) > 10;
 
         if (!boundsChanged && !viewportShifted) {
@@ -107,7 +100,6 @@ export function TileLayer({
     for (let y = visibleRange.startY; y < visibleRange.endY; y += TILE_SIZE) {
       if (y >= renderHeight) break;
       for (let x = 0; x < renderWidth; x += TILE_SIZE) {
-        // Round dimensions to prevent sub-pixel cache misses
         const width = Math.round(Math.min(TILE_SIZE, renderWidth - x));
         const height = Math.round(Math.min(TILE_SIZE, renderHeight - y));
 
@@ -132,7 +124,6 @@ export function TileLayer({
         backgroundColor: "white",
       }}
     >
-      {/* 🚀 Low-res Fallback Layer */}
       {lowResPage && (
         <LowResFallback
           pixels={lowResPage.pixels}
@@ -141,12 +132,10 @@ export function TileLayer({
         />
       )}
 
-      {/* 💎 High-res Tile Layer */}
       {tiles.map((tile) => {
-        // High priority for tiles strictly within the pixel viewport
         const isVisible =
-          tile.y + tile.height > visibleRange.viewportTop &&
-          tile.y < visibleRange.viewportBottom;
+          tile.y + tile.height > visibleRange.viewportTop * dpr &&
+          tile.y < visibleRange.viewportBottom * dpr;
         const priority = isVisible ? 1000 : 100;
 
         return (
@@ -206,7 +195,6 @@ function LowResFallback({ pixels, width, height }: any) {
   );
 }
 
-// 💎 Optimization: Memoize the TileCanvas to prevent re-renders when brothers update
 const TileCanvas = memo(
   ({ id, pageIndex, renderWidth, tile, dpr, priority }: any) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -226,7 +214,6 @@ const TileCanvas = memo(
 
       const canvas = canvasRef.current;
 
-      // Only resize if necessary (prevents flickering/clearing)
       if (canvas.width !== tile.width || canvas.height !== tile.height) {
         canvas.width = tile.width;
         canvas.height = tile.height;
@@ -234,7 +221,6 @@ const TileCanvas = memo(
 
       const ctx = canvas.getContext("2d", { alpha: false });
 
-      // ⚡ SUPER FAST: pixels is already an ImageBitmap from reader.ts
       ctx?.drawImage(renderedTile.pixels as any as ImageBitmap, 0, 0);
     }, [renderedTile, tile]);
 
@@ -254,7 +240,6 @@ const TileCanvas = memo(
     );
   },
   (prev, next) => {
-    // Custom equality check for deep tile comparison
     return (
       prev.id === next.id &&
       prev.pageIndex === next.pageIndex &&

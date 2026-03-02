@@ -1,4 +1,4 @@
-use pdfium_render::prelude::{PdfBitmap, PdfBitmapFormat, PdfDocument, PdfRenderConfig, Pdfium};
+use pdfium_render::prelude::{PdfDocument, PdfPoints, PdfRenderConfig, Pdfium};
 use serde::Serialize;
 use std::{collections::HashMap, path::Path};
 use webp::Encoder;
@@ -33,16 +33,6 @@ pub fn open<'a>(
         .load_pdf_from_file(path, None)
         .map_err(|e| format!("Failed to open PDF: {}", e))?;
     documents.insert(id, document);
-    Ok(())
-}
-
-pub fn close(
-    documents: &mut HashMap<DocumentId, PdfDocument>,
-    id: &DocumentId,
-) -> Result<(), String> {
-    documents
-        .remove(id)
-        .ok_or("Document not found".to_string())?;
     Ok(())
 }
 
@@ -83,11 +73,7 @@ pub fn render_tile(
     documents: &HashMap<DocumentId, PdfDocument>,
     id: &DocumentId,
     page_index: u16,
-
-    // FULL PAGE render width (not tile width!)
     target_width: i32,
-
-    // Tile position in RENDER PIXELS (Top-Left origin, screen-space)
     tile_x: i32,
     tile_y: i32,
     tile_width: i32,
@@ -100,18 +86,17 @@ pub fn render_tile(
         .get(page_index)
         .map_err(|e| format!("Failed to get page: {e}"))?;
 
-    // 🚀 THE FIX: If set_target_width is used, .clip() expects pixel coordinates
-    // in the final rendered buffer (Top-Left origin).
-    // NO PDF MATH NEEDED. Just use tile_x, tile_y directly.
+    let scale = target_width as f32 / page.width().value;
 
-    let config = PdfRenderConfig::new().set_target_width(target_width).clip(
-        tile_x,
-        tile_y,
-        tile_x + tile_width,
-        tile_y + tile_height,
-    );
+    let config = PdfRenderConfig::new()
+        .set_fixed_size(tile_width as i32, tile_height as i32)
+        .scale_page_by_factor(scale)
+        .translate(
+            PdfPoints::new(-tile_x as f32 / scale),
+            PdfPoints::new(-tile_y as f32 / scale),
+        )
+        .map_err(|e| format!("Matrix error: {e}"))?;
 
-    // render_with_config automatically handles translation when clipping is applied.
     let bitmap = page
         .render_with_config(&config)
         .map_err(|e| format!("Rendering Error: {e}"))?;
@@ -120,7 +105,7 @@ pub fn render_tile(
         &bitmap.as_raw_bytes(),
         bitmap.width() as u32,
         bitmap.height() as u32,
-        85.0, // Sharp quality for tiles
+        85.0,
     )?;
 
     Ok(RenderedTile {
@@ -198,16 +183,6 @@ mod tests {
     use super::*;
     use pdfium_render::prelude::Pdfium;
     use std::{collections::HashMap, path::PathBuf};
-
-    #[test]
-    fn test_render_close_not_found() {
-        let mut documents = HashMap::new();
-        let id = "non_existent".to_string();
-
-        let result = close(&mut documents, &id);
-        assert!(result.is_err());
-        assert_eq!(result.unwrap_err(), "Document not found");
-    }
 
     #[test]
     fn test_render_page_not_found() {
