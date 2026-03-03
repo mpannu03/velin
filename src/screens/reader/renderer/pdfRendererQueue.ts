@@ -2,16 +2,20 @@ type Task<T> = () => Promise<T>;
 
 type QueueTask<T> = {
   task: Task<T>;
-  priority: number; // Higher = more important
+  priority: number;
   resolve: (value: T) => void;
   reject: (reason: any) => void;
   signal?: AbortSignal;
-  key?: string; // Cache key for priority escalation
+  key?: string;
 };
 
 class PdfRenderQueue {
   private queue: QueueTask<any>[] = [];
+
   private pendingTasks = new Map<string, Promise<any>>();
+
+  private queuedByKey = new Map<string, QueueTask<any>>();
+
   private runningCount = 0;
   private readonly maxConcurrent: number;
 
@@ -25,21 +29,24 @@ class PdfRenderQueue {
     priority: number = 0,
     key?: string,
   ): Promise<T> {
-    // 🚀 Priority Escalation: If task already pending and still in queue, bump its priority
-    if (key && this.pendingTasks.has(key)) {
-      const existingInQueue = this.queue.find((t) => t.key === key);
-      if (existingInQueue && priority > existingInQueue.priority) {
-        existingInQueue.priority = priority;
-        // ⚡ Optimization: Only sort if priority actually changed
-        this.queue.sort((a, b) => b.priority - a.priority);
+    console.log(key, priority);
+    if (key) {
+      const existingPromise = this.pendingTasks.get(key);
+      if (existingPromise) {
+        const queuedTask = this.queuedByKey.get(key);
+
+        if (queuedTask && priority > queuedTask.priority) {
+          queuedTask.priority = priority;
+          this.queue.sort((a, b) => b.priority - a.priority);
+        }
+
+        return existingPromise;
       }
-      return this.pendingTasks.get(key)!;
     }
 
     const promise = new Promise<T>((resolve, reject) => {
-      // If already aborted, reject immediately
       if (signal?.aborted) {
-        Promise.resolve().then(() => reject(new Error("Aborted")));
+        reject(new Error("Aborted"));
         return;
       }
 
@@ -52,10 +59,10 @@ class PdfRenderQueue {
         key,
       };
 
-      // Insert task in priority order (higher priority first)
       let inserted = false;
+
       for (let i = 0; i < this.queue.length; i++) {
-        if (queueTask.priority > this.queue[i].priority) {
+        if (priority > this.queue[i].priority) {
           this.queue.splice(i, 0, queueTask);
           inserted = true;
           break;
@@ -65,14 +72,24 @@ class PdfRenderQueue {
       if (!inserted) {
         this.queue.push(queueTask);
       }
+
+      if (key) {
+        this.queuedByKey.set(key, queueTask);
+      }
     });
 
     if (key) {
       this.pendingTasks.set(key, promise);
-      promise.finally(() => this.pendingTasks.delete(key)).catch(() => {});
+
+      promise
+        .finally(() => {
+          this.pendingTasks.delete(key);
+        })
+        .catch(() => {});
     }
 
     this.runNext();
+
     return promise;
   }
 
@@ -81,9 +98,12 @@ class PdfRenderQueue {
       const queueTask = this.queue.shift();
       if (!queueTask) return;
 
-      // Skip aborted tasks
+      if (queueTask.key) {
+        this.queuedByKey.delete(queueTask.key);
+      }
+
       if (queueTask.signal?.aborted) {
-        Promise.resolve().then(() => queueTask.reject(new Error("Aborted")));
+        queueTask.reject(new Error("Aborted"));
         continue;
       }
 
@@ -91,12 +111,8 @@ class PdfRenderQueue {
 
       queueTask
         .task()
-        .then((result) => {
-          queueTask.resolve(result);
-        })
-        .catch((err) => {
-          queueTask.reject(err);
-        })
+        .then(queueTask.resolve)
+        .catch(queueTask.reject)
         .finally(() => {
           this.runningCount--;
           this.runNext();
@@ -105,32 +121,32 @@ class PdfRenderQueue {
   }
 
   clear() {
-    const allTasks = [...this.queue];
+    const tasks = [...this.queue];
+
     this.queue = [];
+    this.queuedByKey.clear();
     this.pendingTasks.clear();
 
-    for (const task of allTasks) {
-      Promise.resolve().then(() => task.reject(new Error("Aborted")));
+    for (const t of tasks) {
+      t.reject(new Error("Aborted"));
     }
   }
 
   cancelLowerPriority(minPriority: number) {
     const remaining: QueueTask<any>[] = [];
-    const cancelled: QueueTask<any>[] = [];
 
     for (const task of this.queue) {
       if (task.priority >= minPriority) {
         remaining.push(task);
       } else {
-        cancelled.push(task);
+        if (task.key) {
+          this.queuedByKey.delete(task.key);
+        }
+        task.reject(new Error("Aborted"));
       }
     }
 
     this.queue = remaining;
-
-    for (const task of cancelled) {
-      Promise.resolve().then(() => task.reject(new Error("Aborted")));
-    }
   }
 }
 

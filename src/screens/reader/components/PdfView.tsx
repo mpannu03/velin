@@ -19,15 +19,15 @@ type PdfViewProps = {
 
 export function PdfView({ doc }: PdfViewProps): JSX.Element {
   const id: string = doc.id;
-  const activeDocumentId = useDocumentsStore((s) => s.activeDocumentId);
+  const activeDocumentId = useDocumentsStore().activeDocumentId;
   const { info, error, loading } = usePdfInfo(id);
   const parentRef = useRef<HTMLDivElement>(null);
-  const viewerState = usePdfViewerStore((s) => s.getState(id));
+  const viewerState = usePdfViewerStore().getState(id);
   const wheelRef = usePdfWheelZoom(id);
-  const gotoPage = usePdfViewerStore((s) => s.getState(id).gotoPage);
-  const clearGotoPage = usePdfViewerStore((s) => s.clearGotoPage);
-  const currentPage = useDocumentRepositoryStore((s) =>
-    s.getDocumentByFilePath(doc.filePath),
+  const gotoPage = usePdfViewerStore().getState(id).gotoPage;
+  const clearGotoPage = usePdfViewerStore().clearGotoPage;
+  const currentPage = useDocumentRepositoryStore().getDocumentByFilePath(
+    doc.filePath,
   );
 
   const { width: windowWidth } = useViewportSize();
@@ -43,7 +43,7 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
       ? info.height / info.width
       : 1.414;
 
-  const estimatedHeight = displayWidth * aspectRatio;
+  const estimatedHeight = (renderWidth * aspectRatio) / dpr + 16;
 
   const rowVirtualizer = useVirtualizer({
     count: info?.page_count ?? 0,
@@ -137,13 +137,15 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
             height: `${rowVirtualizer.getTotalSize()}px`,
             width: "100%",
             position: "relative",
+            contain: "strict",
+            willChange: "transform",
           }}
         >
           {rowVirtualizer.getVirtualItems().map((virtualItem) => (
             <div
               key={virtualItem.key}
               data-index={virtualItem.index}
-              ref={rowVirtualizer.measureElement}
+              // ref={rowVirtualizer.measureElement}
               style={{
                 position: "absolute",
                 top: 0,
@@ -158,7 +160,7 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
                 id={id}
                 pageIndex={virtualItem.index}
                 width={renderWidth}
-                aspectRatio={aspectRatio}
+                dpr={dpr}
                 isVisible={virtualItem.index === viewerState.currentPage}
                 isScrolling={rowVirtualizer.isScrolling}
               />

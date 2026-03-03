@@ -35,21 +35,26 @@ export function TileLayer({
   useEffect(() => {
     let rafId: number;
     const update = () => {
-      if (!containerRef.current) return;
+      if (!containerRef.current || isScrolling) return;
 
-      const rect = containerRef.current.getBoundingClientRect();
+      const rect = isScrolling
+        ? undefined
+        : containerRef.current.getBoundingClientRect();
 
       const scrollContainer = document.getElementById("pdf-scroll-container");
       const viewportHeight = scrollContainer
         ? scrollContainer.clientHeight
         : window.innerHeight;
 
-      const viewportTop = -rect.top;
-      const viewportBottom = viewportHeight - rect.top;
+      const viewportTop = rect ? -rect.top : 0;
+      const viewportBottom = rect ? viewportHeight - rect.top : viewportHeight;
 
       const overscan = viewportHeight * OVERSCAN_PAGES;
       const visibleTop = Math.max(0, viewportTop - overscan);
-      const visibleBottom = Math.min(rect.height, viewportBottom + overscan);
+      const visibleBottom = Math.min(
+        rect?.height ?? Infinity,
+        viewportBottom + overscan,
+      );
 
       const startY = Math.floor((visibleTop * dpr) / TILE_SIZE) * TILE_SIZE;
       const endY = Math.ceil((visibleBottom * dpr) / TILE_SIZE) * TILE_SIZE;
