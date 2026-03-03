@@ -1,50 +1,41 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Virtualizer } from "@tanstack/react-virtual";
 import { usePdfViewerStore } from "../stores";
 import { useDocumentRepositoryStore, useDocumentsStore } from "@/app";
 
-type UseCurrentPageFromVirtualParams = {
-  virtualizer: Virtualizer<HTMLDivElement, Element>;
-  id: string;
-};
-
-export function useCurrentPageFromVirtual({
+export function useCurrentPageFromVirtual<
+  TScroll extends Element,
+  TItem extends Element,
+>({
   virtualizer,
   id,
-}: UseCurrentPageFromVirtualParams) {
+}: {
+  virtualizer: Virtualizer<TScroll, TItem>;
+  id: string;
+}) {
   const setCurrentPage = usePdfViewerStore((s) => s.setCurrentPage);
   const updateDocument = useDocumentRepositoryStore((s) => s.updateDocument);
   const filePath = useDocumentsStore((s) => s.documents[id]?.filePath);
-  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
+    const scrollTop = virtualizer.scrollOffset;
+    const items = virtualizer.getVirtualItems();
+
+    if (!items.length) return;
+
+    let current = items[0].index;
+
+    for (const item of items) {
+      if (scrollTop !== null && item.start <= scrollTop + 1) {
+        current = item.index;
+      } else {
+        break;
       }
-
-      rafRef.current = requestAnimationFrame(() => {
-        const items = virtualizer.getVirtualItems();
-        if (items.length > 0) {
-          const currentPage = items[0].index;
-          setCurrentPage(id, currentPage);
-          if (filePath) {
-            updateDocument(filePath, { currentPage });
-          }
-        }
-        rafRef.current = null;
-      });
-    };
-
-    const element = virtualizer.scrollElement;
-    if (element) {
-      element.addEventListener("scroll", handleScroll, { passive: true });
-      return () => {
-        element.removeEventListener("scroll", handleScroll);
-        if (rafRef.current !== null) {
-          cancelAnimationFrame(rafRef.current);
-        }
-      };
     }
-  }, [virtualizer, id, setCurrentPage, updateDocument, filePath]);
+
+    setCurrentPage(id, current);
+    if (filePath) {
+      updateDocument(filePath, { currentPage: current });
+    }
+  }, [virtualizer.scrollOffset]);
 }
