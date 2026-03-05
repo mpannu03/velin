@@ -25,3 +25,7 @@ dist-ssr
 
 # Tests
 coverage/
+
+# PDFium
+src-tauri/resources
+temp

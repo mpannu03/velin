@@ -130,7 +130,7 @@ pnpm install
 3. Run in development mode:
 
 ```bash
-pnpm tauri dev
+pnpm velin:dev
 ```
 
 ---

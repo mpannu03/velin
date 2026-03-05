@@ -16,12 +16,16 @@ jobs:
         include:
           - platform: "macos-latest"
             args: "--target aarch64-apple-darwin"
+            pdfium: "aarch64-apple-darwin"
           - platform: "macos-latest"
             args: "--target x86_64-apple-darwin"
+            pdfium: "x86_64-apple-darwin"
           - platform: "ubuntu-22.04"
             args: ""
+            pdfium: "x86_64-unknown-linux-gnu"
           - platform: "windows-latest"
             args: ""
+            pdfium: "x86_64-pc-windows-msvc"
 
     runs-on: ${{ matrix.platform }}
 
@@ -52,6 +56,9 @@ jobs:
 
       - name: install frontend dependencies
         run: pnpm install
+
+      - name: download PDFium
+        run: pnpm pdfium -- --target ${{ matrix.pdfium }}
 
       - uses: tauri-apps/tauri-action@v0
         env:

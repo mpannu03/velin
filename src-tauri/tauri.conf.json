@@ -42,7 +42,10 @@
       }
     },
     "resources": {
-      "bin/pdfium.dll": "pdfium.dll"
+      "resources/x86_64-pc-windows-msvc/pdfium.dll": "pdfium.dll",
+      "resources/x86_64-apple-darwin/libpdfium.dylib": "libpdfium.dylib",
+      "resources/aarch64-apple-darwin/libpdfium.dylib": "libpdfium.dylib",
+      "resources/x86_64-unknown-linux-gnu/libpdfium.so": "libpdfium.so"
     }
   }
 }
