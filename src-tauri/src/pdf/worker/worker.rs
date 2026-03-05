@@ -2,7 +2,7 @@ use flume::{Receiver, Sender};
 use pdfium_render::prelude::{PdfDocument, Pdfium};
 use std::{collections::HashMap, thread};
 
-use crate::pdf::{document::DocumentId, reader, worker::PdfEvent};
+use crate::pdf::{reader, worker::PdfEvent, DocumentId};
 
 pub struct PdfWorker {
     sender: Sender<PdfEvent>,
@@ -12,7 +12,7 @@ impl PdfWorker {
     pub fn spawn() -> Self {
         let (tx, rx) = flume::unbounded::<PdfEvent>();
 
-        for _ in 0..2 {
+        for _ in 0..4 {
             let rx = rx.clone();
             thread::spawn(move || {
                 worker_loop(rx);
