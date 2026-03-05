@@ -1,3 +1,5 @@
+import { Annotation } from "@/screens";
+
 // Core document type (Rust-aligned)
 export type PdfDocument = {
   id: string;
@@ -12,8 +14,9 @@ export type PdfViewerState = {
   page: number;
   zoom: number;
   scrollTop: number;
+  selectedAnnotation: Annotation | null;
 
-  viewMode: 'single' | 'continuous';
+  viewMode: "single" | "continuous";
 };
 
 // Render identity
@@ -27,13 +30,13 @@ export type PdfInfo = {
   page_count: number;
   width: number;
   height: number;
-}
+};
 
 export type Bookmark = {
   title: string;
   page_index: number | null;
   children: Bookmark[];
-}
+};
 
 export type PageText = {
   items: TextItem[];
@@ -51,42 +54,43 @@ export type TextItem = {
   y: number;
   width: number;
   height: number;
-}
+};
 
 export type PdfRect = {
   x: number;
   y: number;
   w: number;
   h: number;
-}
+};
 
 export type SearchHit = {
   page: number;
   start: number;
   end: number;
   rects: PdfRect[];
-}
+};
 
 /* ---------- factories ---------- */
 
 export const createPdfDocument = (
-  overrides?: Partial<PdfDocument>
+  overrides?: Partial<PdfDocument>,
 ): PdfDocument => ({
-  id: '',
-  filePath: '',
-  title: '',
+  id: "",
+  filePath: "",
+  title: "",
   ...overrides,
 });
 
 export const createPdfViewerState = (
   documentId: string,
-  overrides?: Partial<PdfViewerState>
+  overrides?: Partial<PdfViewerState>,
 ): PdfViewerState => ({
   documentId,
   page: 1,
   zoom: 1.0,
   scrollTop: 0,
-  viewMode: 'continuous',
+  viewMode: "continuous",
+  selectedAnnotation: null,
   ...overrides,
 });
 
