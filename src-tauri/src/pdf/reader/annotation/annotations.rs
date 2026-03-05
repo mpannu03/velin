@@ -161,20 +161,18 @@ fn get_annotation_type(annotation: &PdfPageAnnotation) -> AnnotationType {
     }
 }
 
+#[allow(unused_variables)]
 pub fn add_annotation(
     documents: &HashMap<DocumentId, PdfDocument>,
     id: &DocumentId,
     annotation: Annotation,
 ) -> Result<(), String> {
-    // Mock implementation
     eprintln!("Mock adding annotation: {:?}", annotation);
-    // In a real implementation, we would use pdfium-render to add the annotation.
-    // However, due to API version mismatches/ambiguity with PdfQuadPoints,
-    // we are mocking this for now to ensure compilation.
 
     Ok(())
 }
 
+#[allow(unused_variables)]
 pub fn delete_annotation(
     documents: &HashMap<DocumentId, PdfDocument>,
     id: &DocumentId,

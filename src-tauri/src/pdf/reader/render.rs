@@ -101,11 +101,11 @@ pub fn render_tile(
         .render_with_config(&config)
         .map_err(|e| format!("Rendering Error: {e}"))?;
 
-    let webp_bytes = bgra_to_webp(
+    let webp_bytes = rgba_to_webp(
         &bitmap.as_raw_bytes(),
         bitmap.width() as u32,
         bitmap.height() as u32,
-        85.0,
+        90.0,
     )?;
 
     Ok(RenderedTile {

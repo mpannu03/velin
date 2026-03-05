@@ -2,10 +2,9 @@ use std::path::PathBuf;
 
 use crate::{
     pdf::{
-        document::PdfInfo,
         reader::{Annotation, PageText, RenderedPage, RenderedTile, SearchHit},
         worker::PdfEvent,
-        Bookmarks,
+        Bookmarks, PdfInfo,
     },
     state::AppState,
 };

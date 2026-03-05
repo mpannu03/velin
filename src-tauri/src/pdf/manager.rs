@@ -3,8 +3,8 @@ use std::path::PathBuf;
 use uuid::Uuid;
 
 use crate::pdf::{
-    document::DocumentId,
     worker::{PdfEvent, PdfWorker},
+    DocumentId,
 };
 
 pub struct DocumentManager {

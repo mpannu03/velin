@@ -2,10 +2,7 @@ use std::collections::HashMap;
 
 use pdfium_render::prelude::{PdfBookmark, PdfDocument};
 
-use crate::pdf::{
-    document::{Bookmark, Bookmarks},
-    DocumentId, PdfInfo,
-};
+use crate::pdf::{Bookmark, Bookmarks, DocumentId, PdfInfo};
 
 pub fn get_info(
     documents: &HashMap<DocumentId, PdfDocument>,

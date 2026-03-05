@@ -3,10 +3,8 @@ use std::path::PathBuf;
 use flume::Sender;
 
 use crate::pdf::reader::{Annotation, RenderedTile};
-use crate::pdf::{
-    document::{Bookmarks, DocumentId, PdfInfo},
-    reader::{PageText, RenderedPage, SearchHit},
-};
+use crate::pdf::reader::{PageText, RenderedPage, SearchHit};
+use crate::pdf::{Bookmarks, DocumentId, PdfInfo};
 
 pub enum PdfEvent {
     Open {

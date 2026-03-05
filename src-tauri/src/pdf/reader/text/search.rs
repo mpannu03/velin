@@ -5,12 +5,14 @@ use serde::Serialize;
 
 use crate::pdf::DocumentId;
 
+#[allow(dead_code)]
 pub struct TextCharMeta {
     pub page: u16,
     pub char_index: usize,
     pub rect: PdfRect,
 }
 
+#[allow(dead_code)]
 pub struct PageSearchText {
     pub page: u16,
     pub text: String,

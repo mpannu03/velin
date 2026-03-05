@@ -2,9 +2,8 @@ use tauri::{AppHandle, Manager, State};
 
 use crate::{
     pdf::{
-        document::PdfInfo,
         reader::{Annotation, PageText, SearchHit},
-        Bookmarks,
+        Bookmarks, PdfInfo,
     },
     service::reader_service,
     state::AppState,
