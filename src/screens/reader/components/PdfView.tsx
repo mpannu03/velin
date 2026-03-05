@@ -1,6 +1,5 @@
 import { JSX, useEffect, useRef } from "react";
 import { Center, Loader } from "@mantine/core";
-import { useViewportSize } from "@mantine/hooks";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useDocumentsStore, useDocumentRepositoryStore } from "@/app";
 import { PdfDocument } from "@/shared/types";
@@ -12,6 +11,7 @@ import {
 import { usePdfViewerStore } from "../stores";
 import { PdfPage, ToolsPanel, SidePanel, SideBarPanel } from "./";
 import { pdfRenderQueue } from "../renderer";
+import { useViewportSize } from "@mantine/hooks";
 
 type PdfViewProps = {
   doc: PdfDocument;
@@ -30,9 +30,7 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
     doc.filePath,
   );
 
-  const { width: windowWidth } = useViewportSize();
-
-  const baseWidth = Math.max(windowWidth / 2, 400);
+  const baseWidth = useViewportSize().width / 2;
   const displayWidth = baseWidth * viewerState.scale;
 
   const dpr = window.devicePixelRatio || 1;
@@ -52,6 +50,20 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
     overscan: 3,
     scrollMargin: 16,
   });
+
+  const measureRaf = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (measureRaf.current) cancelAnimationFrame(measureRaf.current);
+
+    measureRaf.current = requestAnimationFrame(() => {
+      rowVirtualizer.measure();
+    });
+
+    return () => {
+      if (measureRaf.current) cancelAnimationFrame(measureRaf.current);
+    };
+  }, [estimatedHeight, rowVirtualizer]);
 
   useEffect(() => {
     if (gotoPage == null) return;
@@ -135,7 +147,7 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
         <div
           style={{
             height: `${rowVirtualizer.getTotalSize()}px`,
-            width: "100%",
+            minWidth: `${displayWidth}px`,
             position: "relative",
             contain: "strict",
             willChange: "transform",
@@ -145,7 +157,6 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
             <div
               key={virtualItem.key}
               data-index={virtualItem.index}
-              // ref={rowVirtualizer.measureElement}
               style={{
                 position: "absolute",
                 top: 0,

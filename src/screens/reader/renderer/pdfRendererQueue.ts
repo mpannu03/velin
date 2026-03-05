@@ -29,7 +29,6 @@ class PdfRenderQueue {
     priority: number = 0,
     key?: string,
   ): Promise<T> {
-    console.log(key, priority);
     if (key) {
       const existingPromise = this.pendingTasks.get(key);
       if (existingPromise) {

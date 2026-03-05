@@ -1,11 +1,34 @@
 import { useEffect } from "react";
-import { ActionIcon, Box, Group, Input, Stack, Text, ScrollArea } from "@mantine/core";
-import { Search as SearchIcon, ChevronLeft, ChevronRight, X } from "lucide-react";
+import {
+  ActionIcon,
+  Box,
+  Group,
+  Input,
+  Stack,
+  Text,
+  ScrollArea,
+} from "@mantine/core";
+import {
+  Search as SearchIcon,
+  ChevronLeft,
+  ChevronRight,
+  X,
+} from "lucide-react";
 import { useSearchStore, usePdfViewerStore } from "../../stores";
 
 export function Search({ id }: { id: string }) {
-  const { query, setQuery, search, results, currentIndex, nextResult, prevResult, isSearching, clearResult } = useSearchStore();
-  const gotoPage = usePdfViewerStore(s => s.gotoPage);
+  const {
+    query,
+    setQuery,
+    search,
+    results,
+    currentIndex,
+    nextResult,
+    prevResult,
+    isSearching,
+    clearResult,
+  } = useSearchStore();
+  const gotoPage = usePdfViewerStore((s) => s.gotoPage);
   const result = results[id] ?? [];
 
   const handleSearch = () => {
@@ -15,9 +38,9 @@ export function Search({ id }: { id: string }) {
   const currentHit = result[currentIndex];
 
   useEffect(() => {
-     if (currentHit) {
-         gotoPage(id, currentHit.page);
-     }
+    if (currentHit) {
+      gotoPage(id, currentHit.page);
+    }
   }, [currentIndex, currentHit, id, gotoPage]);
 
   return (
@@ -27,7 +50,7 @@ export function Search({ id }: { id: string }) {
           Search
         </Text>
         <ActionIcon variant="subtle" size="sm" onClick={() => clearResult(id)}>
-           <X size={16} />
+          <X size={16} />
         </ActionIcon>
       </Group>
 
@@ -40,7 +63,11 @@ export function Search({ id }: { id: string }) {
           style={{ flex: 1 }}
           leftSection={<SearchIcon size={16} />}
         />
-        <ActionIcon variant="filled" onClick={handleSearch} loading={isSearching}>
+        <ActionIcon
+          variant="filled"
+          onClick={handleSearch}
+          loading={isSearching}
+        >
           <SearchIcon size={18} />
         </ActionIcon>
       </Group>
@@ -67,19 +94,26 @@ export function Search({ id }: { id: string }) {
               p="xs"
               style={{
                 cursor: "pointer",
-                backgroundColor: index === currentIndex ? "var(--mantine-color-blue-light)" : "transparent",
+                backgroundColor:
+                  index === currentIndex
+                    ? "var(--mantine-color-blue-light)"
+                    : "transparent",
                 borderRadius: "var(--mantine-radius-sm)",
               }}
               onClick={() => {
-                  useSearchStore.setState({ currentIndex: index });
+                useSearchStore.setState({ currentIndex: index });
               }}
             >
-              <Text size="sm" fw={500}>Page {hit.page + 1}</Text>
+              <Text size="sm" fw={500}>
+                Page {hit.page + 1}
+              </Text>
               {/* Future: Add preview snippet here */}
             </Box>
           ))}
           {result.length === 0 && !isSearching && query && (
-             <Text size="sm" c="dimmed" ta="center" mt="xl">No results found</Text>
+            <Text size="sm" c="dimmed" ta="center" mt="xl">
+              No results found
+            </Text>
           )}
         </Stack>
       </ScrollArea>

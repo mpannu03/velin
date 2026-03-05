@@ -43,7 +43,9 @@ export const SearchHighlightLayer = memo(function SearchHighlightLayer({
               top: rect.y * scale,
               width: rect.w * scale,
               height: rect.h * scale,
-              backgroundColor: isCurrent ? "rgba(255, 255, 0, 0.5)" : "rgba(255, 255, 0, 0.3)",
+              backgroundColor: isCurrent
+                ? "rgba(255, 255, 0, 0.5)"
+                : "rgba(255, 255, 0, 0.3)",
               border: isCurrent ? "1px solid orange" : "none",
             }}
           />

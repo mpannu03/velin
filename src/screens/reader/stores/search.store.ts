@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { invoke } from '@tauri-apps/api/core';
-import { SearchHit } from '@/shared/types';
+import { create } from "zustand";
+import { invoke } from "@tauri-apps/api/core";
+import { SearchHit } from "@/shared/types";
 
 interface SearchState {
   query: string;
@@ -18,7 +18,7 @@ interface SearchState {
 }
 
 export const useSearchStore = create<SearchState>((set, get) => ({
-  query: '',
+  query: "",
   results: {},
   currentIndex: -1,
   isSearching: false,
@@ -34,8 +34,15 @@ export const useSearchStore = create<SearchState>((set, get) => ({
 
     set({ isSearching: true, error: null });
     try {
-      const results = await invoke<SearchHit[]>('search_document', { id, query });
-      set({ results: { ...get().results, [id]: results }, currentIndex: results.length > 0 ? 0 : -1, isSearching: false });
+      const results = await invoke<SearchHit[]>("search_document", {
+        id,
+        query,
+      });
+      set({
+        results: { ...get().results, [id]: results },
+        currentIndex: results.length > 0 ? 0 : -1,
+        isSearching: false,
+      });
     } catch (err) {
       set({ error: err as string, isSearching: false });
     }
@@ -50,10 +57,19 @@ export const useSearchStore = create<SearchState>((set, get) => ({
   prevResult: (id: string) => {
     const { results, currentIndex } = get();
     if (results[id].length === 0) return;
-    set({ currentIndex: (currentIndex - 1 + results[id].length) % results[id].length });
+    set({
+      currentIndex:
+        (currentIndex - 1 + results[id].length) % results[id].length,
+    });
   },
 
-  clearResult: (id: string) => set({ results: { ...get().results, [id]: [] }, currentIndex: -1 }),
+  clearResult: (id: string) =>
+    set({
+      results: { ...get().results, [id]: [] },
+      currentIndex: -1,
+      query: "",
+    }),
 
-  clearResults: () => set({ query: '', results: {}, currentIndex: -1, error: null }),
+  clearResults: () =>
+    set({ query: "", results: {}, currentIndex: -1, error: null }),
 }));

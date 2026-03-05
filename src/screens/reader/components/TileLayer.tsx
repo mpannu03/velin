@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, memo } from "react";
 import { usePdfPage, usePdfTile } from "../hooks";
 
-const TILE_SIZE = 256;
+const TILE_SIZE = 2048;
 const OVERSCAN_PAGES = 1.0;
 
 type Props = {

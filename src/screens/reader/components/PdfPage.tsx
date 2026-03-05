@@ -68,7 +68,6 @@ export const PdfPage = memo(
           position: "relative",
           width: `${displayWidth}px`,
           height: `${displayHeight}px`,
-          marginBottom: 16,
         }}
       >
         <TileLayer
@@ -96,7 +95,7 @@ export const PdfPage = memo(
             height={displayHeight}
           />
         )}
-        <SearchHighlightLayer pageIndex={pageIndex} scale={scale} id={""} />
+        <SearchHighlightLayer pageIndex={pageIndex} scale={scale} id={id} />
       </div>
     );
   },
