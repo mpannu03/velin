@@ -58,7 +58,7 @@ pub fn render_page(
     let width = bitmap.width();
     let height = bitmap.height();
 
-    let webp_bytes = bgra_to_webp(&bitmap.as_raw_bytes(), width as u32, height as u32, 80.0)?;
+    let webp_bytes = rgba_to_webp(&bitmap.as_raw_bytes(), width as u32, height as u32, 80.0)?;
 
     let rendered_page = RenderedPage {
         width: width as i32,
@@ -150,22 +150,6 @@ pub fn generate_preview(
     }
 
     Ok(webp_bytes)
-}
-
-fn bgra_to_webp(bgra: &[u8], width: u32, height: u32, quality: f32) -> Result<Vec<u8>, String> {
-    // PDFium returns BGRA, WebP wants RGBA. Swap R and B.
-    let mut rgba = vec![0u8; bgra.len()];
-    for (i, chunk) in bgra.chunks_exact(4).enumerate() {
-        let base = i * 4;
-        rgba[base] = chunk[2]; // R
-        rgba[base + 1] = chunk[1]; // G
-        rgba[base + 2] = chunk[0]; // B
-        rgba[base + 3] = chunk[3]; // A
-    }
-
-    let encoder = Encoder::from_rgba(&rgba, width, height);
-    let webp = encoder.encode(quality);
-    Ok(webp.to_vec())
 }
 
 fn rgba_to_webp(
