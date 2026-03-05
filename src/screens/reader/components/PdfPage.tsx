@@ -4,6 +4,7 @@ import { usePdfAnnotations, usePdfInfo, usePdfText } from "../hooks";
 import { TextLayer, SearchHighlightLayer, AnnotationLayer } from "./";
 import { SidebarPanel, usePdfViewerStore, useDictionaryStore } from "../stores";
 import { TileLayer } from "./TileLayer";
+import { Annotation } from "../types";
 
 type PdfPageProps = {
   id: string;
@@ -30,6 +31,10 @@ export const PdfPage = memo(
       ) || [];
 
     const currentToolbar = usePdfViewerStore((s) => s.getState(id).tool);
+    const selectedAnnotation = usePdfViewerStore(
+      (s) => s.getState(id).selectedAnnotation,
+    );
+    const setAnnotation = usePdfViewerStore((s) => s.setAnnotation);
     const setSidebar = usePdfViewerStore((s) => s.setSidebar);
     const { setQuery, search } = useDictionaryStore();
 
@@ -39,6 +44,15 @@ export const PdfPage = memo(
       setQuery(id, selectedText);
       search(id, selectedText);
       setSidebar(id, SidebarPanel.Dictionary);
+    };
+
+    const onAnnotationClick = (annotation: Annotation) => {
+      if (selectedAnnotation?.id === annotation.id) {
+        setAnnotation(id, null);
+        return;
+      }
+      setAnnotation(id, annotation);
+      setSidebar(id, SidebarPanel.Comments);
     };
 
     if (!info) {
@@ -93,6 +107,8 @@ export const PdfPage = memo(
             scale={scale}
             width={displayWidth}
             height={displayHeight}
+            selectedAnnotation={selectedAnnotation}
+            onAnnotationClick={onAnnotationClick}
           />
         )}
         <SearchHighlightLayer pageIndex={pageIndex} scale={scale} id={id} />

@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { Annotation } from "../types";
 
 export enum ViewerTool {
   Cursor = "cursor",
@@ -21,6 +22,7 @@ export type ViewerState = {
 
   currentPage: number; // Zero based
   gotoPage: number | null;
+  selectedAnnotation: Annotation | null;
 };
 
 type PdfViewerStore = {
@@ -37,6 +39,8 @@ type PdfViewerStore = {
   gotoPage: (id: string, page: number) => void;
   clearGotoPage: (id: string) => void;
 
+  setAnnotation: (id: string, annotation: Annotation | null) => void;
+
   getState: (id: string) => ViewerState;
   removeState: (id: string) => void;
 };
@@ -47,6 +51,7 @@ const DEFAULT_STATE: ViewerState = {
   sidebar: SidebarPanel.None,
   currentPage: 0,
   gotoPage: null,
+  selectedAnnotation: null,
 };
 
 export const usePdfViewerStore = create<PdfViewerStore>((set, get) => ({
@@ -149,6 +154,18 @@ export const usePdfViewerStore = create<PdfViewerStore>((set, get) => ({
         [id]: { ...(s.states[id] ?? DEFAULT_STATE), gotoPage: null },
       },
     })),
+
+  setAnnotation(id, annotation) {
+    set((s) => ({
+      states: {
+        ...s.states,
+        [id]: {
+          ...(s.states[id] ?? DEFAULT_STATE),
+          selectedAnnotation: annotation,
+        },
+      },
+    }));
+  },
 }));
 
 const ZOOM_STEPS = [0.1, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0];

@@ -1,20 +1,55 @@
-import { Stack, Text, Group, Paper, ActionIcon, ScrollArea, Center } from "@mantine/core";
+import {
+  Stack,
+  Text,
+  Group,
+  Paper,
+  ActionIcon,
+  ScrollArea,
+  Center,
+} from "@mantine/core";
 import { usePdfViewerStore } from "../../stores";
 import { Trash, MapPin, Loader } from "lucide-react";
 import { formatPdfDateTime } from "@/shared/utils";
 import { usePdfAnnotations } from "../../hooks";
+import { useEffect, useRef } from "react";
+import { Annotation } from "../../types";
 
 export function Comments({ id }: { id: string }) {
   const { annotations, loading, error } = usePdfAnnotations(id);
   const docAnnotations = annotations || [];
-  const gotoPage = usePdfViewerStore(s => s.gotoPage);
+  const gotoPage = usePdfViewerStore((s) => s.gotoPage);
+  const setAnnotation = usePdfViewerStore((s) => s.setAnnotation);
+  const selectedAnnotation = usePdfViewerStore(
+    (s) => s.getState(id).selectedAnnotation,
+  );
 
-  const handleJump = (pageIndex: number) => {
+  const selectedRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (selectedAnnotation && selectedRef.current) {
+      selectedRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "nearest",
+      });
+    }
+  }, [selectedAnnotation]);
+
+  const annotClicked = (pageIndex: number, annot: Annotation) => {
+    if (selectedAnnotation?.id == annot.id) {
+      setAnnotation(id, null);
+      return;
+    }
     gotoPage(id, pageIndex);
-  }
+    setAnnotation(id, annot);
+  };
 
   if (loading) {
-    return <Center h="100%"><Loader /></Center>;
+    return (
+      <Center h="100%">
+        <Loader />
+      </Center>
+    );
   }
 
   if (error) {
@@ -26,7 +61,7 @@ export function Comments({ id }: { id: string }) {
       <Text fw={700} tt="uppercase" size="xs" c="dimmed">
         Comments ({docAnnotations.length})
       </Text>
-      
+
       {docAnnotations.length === 0 ? (
         <Text size="sm" c="dimmed" fs="italic" px="xs">
           No annotations yet.
@@ -35,22 +70,43 @@ export function Comments({ id }: { id: string }) {
         <ScrollArea style={{ flex: 1 }}>
           <Stack gap="xs" px="xs" pb="xs">
             {docAnnotations.map((annot) => (
-              <Paper key={annot.id} withBorder p="xs" shadow="xs" 
-                  style={{ 
-                      cursor: 'pointer',
-                      borderLeft: `4px solid ${annot.appearance.color}` 
-                  }}
-                  onClick={() => handleJump(annot.page_index)}
+              <Paper
+                ref={annot.id === selectedAnnotation?.id ? selectedRef : null}
+                key={annot.id}
+                withBorder
+                p="xs"
+                shadow="xs"
+                bg={
+                  annot.id === selectedAnnotation?.id
+                    ? "var(--mantine-primary-color-light)"
+                    : ""
+                }
+                style={{
+                  cursor: "pointer",
+                  borderLeft: `4px solid ${annot.appearance.color}`,
+                }}
+                onClick={() => annotClicked(annot.page_index, annot)}
               >
                 <Group justify="space-between" mb={4}>
                   <Group gap={4}>
                     <MapPin size={14} />
-                    <Text size="xs" fw={500}>Page {annot.page_index + 1}</Text>
-                    <Text size="xs" c="dimmed">•</Text>
-                    <Text size="xs" tt="capitalize" c="dimmed">{annot.subtype}</Text>
+                    <Text size="xs" fw={500}>
+                      Page {annot.page_index + 1}
+                    </Text>
+                    <Text size="xs" c="dimmed">
+                      •
+                    </Text>
+                    <Text size="xs" tt="capitalize" c="dimmed">
+                      {annot.subtype}
+                    </Text>
                   </Group>
-                  <ActionIcon variant="subtle" color="red" size="sm" 
-                      onClick={(e) => {e.stopPropagation();}}
+                  <ActionIcon
+                    variant="subtle"
+                    color="red"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
                   >
                     <Trash size={14} />
                   </ActionIcon>
