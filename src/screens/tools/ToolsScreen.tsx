@@ -13,10 +13,21 @@ import {
 } from "@mantine/core";
 import { JSX, useState, useMemo } from "react";
 import { FiSearch } from "react-icons/fi";
+import { useScreenState } from "../../app/screenRouter";
 import { CATEGORIES, TOOLS } from "./types";
-import { ToolCard } from "./components";
+import {
+  ToolCard,
+  ToolDetailShell,
+  MergePreferences,
+  SplitPreferences,
+  CompressPreferences,
+  ImagePreferences,
+  SecurityPreferences,
+  EditPreferences,
+} from "./components";
 
 export function ToolsScreen(): JSX.Element {
+  const { screen } = useScreenState();
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
 
@@ -30,6 +41,23 @@ export function ToolsScreen(): JSX.Element {
       return matchesSearch && matchesCategory;
     });
   }, [search, activeCategory]);
+
+  // If a tool is selected, show its detail view
+  if (screen.name === "tools" && screen.toolId) {
+    const selectedTool = TOOLS.find((t) => t.id === screen.toolId);
+
+    if (selectedTool) {
+      return (
+        <ToolDetailShell
+          tool={selectedTool}
+          actionLabel={`${selectedTool.title}`}
+          onAction={() => console.log(`Running ${selectedTool.id}`)}
+        >
+          {renderToolPreferences(selectedTool.id)}
+        </ToolDetailShell>
+      );
+    }
+  }
 
   return (
     <ScrollArea h="100%" scrollbars="y" type="hover">
@@ -109,4 +137,33 @@ export function ToolsScreen(): JSX.Element {
       `}</style>
     </ScrollArea>
   );
+}
+
+function renderToolPreferences(toolId: string): JSX.Element {
+  switch (toolId) {
+    case "merge":
+      return <MergePreferences />;
+    case "split":
+      return <SplitPreferences />;
+    case "compress":
+      return <CompressPreferences />;
+    case "pdf-to-image":
+      return <ImagePreferences title="PDF to Image" />;
+    case "jpg-to-pdf":
+      return <ImagePreferences title="JPG to PDF" />;
+    case "protect":
+      return <SecurityPreferences mode="protect" />;
+    case "unlock":
+      return <SecurityPreferences mode="unlock" />;
+    case "rotate":
+    case "watermark":
+    case "extract":
+      return <EditPreferences toolId={toolId} />;
+    default:
+      return (
+        <Paper p="xl" withBorder radius="md">
+          <Text c="dimmed">Preferences for this tool are coming soon.</Text>
+        </Paper>
+      );
+  }
 }

@@ -2,22 +2,22 @@ import { Screen } from "../../types";
 import { create } from "zustand";
 
 interface ScreenState {
-  screen: Screen
+  screen: Screen;
 
   goHome(): void;
   openReader(): void;
   openModify(): void;
-  openTools(): void;
+  openTools(toolId?: string): void;
 }
 
 export const useScreenState = create<ScreenState>((set) => ({
-  screen: { name: 'home' },
+  screen: { name: "home" },
 
-  goHome: () => set({ screen: { name: 'home' } }),
+  goHome: () => set({ screen: { name: "home" } }),
 
-  openReader: () => set({ screen: { name: 'reader' } }),
+  openReader: () => set({ screen: { name: "reader" } }),
 
-  openModify: () =>  set({ screen: { name: 'modify' } }),
+  openModify: () => set({ screen: { name: "modify" } }),
 
-  openTools: () => set({ screen: { name: 'tools' } }),
+  openTools: (toolId?: string) => set({ screen: { name: "tools", toolId } }),
 }));

@@ -54,8 +54,8 @@ export const TOOLS: ToolInfo[] = [
     category: "convert",
   },
   {
-    id: "jpg-to-pdf",
-    title: "JPG to PDF",
+    id: "image-to-pdf",
+    title: "Image to PDF",
     description: "Create a PDF from a collection of images.",
     icon: FiFilePlus,
     color: "cyan",
