@@ -25,16 +25,6 @@ const PLATFORM_MAPPINGS: Record<string, PlatformConfig> = {
     pdfiumArchive: "pdfium-win-x64.tgz",
     binaryName: "pdfium.dll",
   },
-  // "i686-pc-windows-msvc": {
-  //   target: "i686-pc-windows-msvc",
-  //   pdfiumArchive: "pdfium-win-x86.tgz",
-  //   binaryName: "pdfium.dll",
-  // },
-  // "aarch64-pc-windows-msvc": {
-  //   target: "aarch64-pc-windows-msvc",
-  //   pdfiumArchive: "pdfium-win-arm64.tgz",
-  //   binaryName: "pdfium.dll",
-  // },
   "x86_64-apple-darwin": {
     target: "x86_64-apple-darwin",
     pdfiumArchive: "pdfium-mac-x64.tgz",
@@ -51,11 +41,6 @@ const PLATFORM_MAPPINGS: Record<string, PlatformConfig> = {
     pdfiumArchive: "pdfium-linux-x64.tgz",
     binaryName: "libpdfium.so",
   },
-  // "aarch64-unknown-linux-gnu": {
-  //   target: "aarch64-unknown-linux-gnu",
-  //   pdfiumArchive: "pdfium-linux-arm64.tgz",
-  //   binaryName: "libpdfium.so",
-  // },
 };
 
 function getCurrentTarget(): string {
@@ -65,8 +50,6 @@ function getCurrentTarget(): string {
   switch (platform) {
     case "win32":
       if (arch === "x64") return "x86_64-pc-windows-msvc";
-      if (arch === "ia32") return "i686-pc-windows-msvc";
-      if (arch === "arm64") return "aarch64-pc-windows-msvc";
       break;
 
     case "darwin":
@@ -76,7 +59,6 @@ function getCurrentTarget(): string {
 
     case "linux":
       if (arch === "x64") return "x86_64-unknown-linux-gnu";
-      if (arch === "arm64") return "aarch64-unknown-linux-gnu";
       break;
   }
 
