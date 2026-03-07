@@ -8,17 +8,17 @@ import {
   Title,
   UnstyledButton,
 } from "@mantine/core";
-import { useScreenState } from "@/app/screenRouter";
+import { useToolsStore } from "../stores";
 import { ToolInfo } from "../types";
 
 export function ToolCard({ tool }: { tool: ToolInfo }) {
-  const { openTools } = useScreenState();
+  const { setCurrentTool } = useToolsStore();
   const Icon = tool.icon;
 
   return (
     <UnstyledButton
       style={{ width: "100%" }}
-      onClick={() => openTools(tool.id)}
+      onClick={() => setCurrentTool(tool)}
     >
       <Paper p="lg" radius="md" withBorder className="tool-card">
         <Group align="flex-start" wrap="nowrap" mb="sm">

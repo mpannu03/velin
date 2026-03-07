@@ -13,7 +13,6 @@ import {
 } from "@mantine/core";
 import { JSX, useState, useMemo } from "react";
 import { FiSearch } from "react-icons/fi";
-import { useScreenState } from "../../app/screenRouter";
 import { CATEGORIES, TOOLS } from "./types";
 import {
   ToolCard,
@@ -25,9 +24,10 @@ import {
   SecurityPreferences,
   EditPreferences,
 } from "./components";
+import { useToolsStore } from "./stores";
 
 export function ToolsScreen(): JSX.Element {
-  const { screen } = useScreenState();
+  const currentTool = useToolsStore((s) => s.currentTool);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
 
@@ -43,20 +43,16 @@ export function ToolsScreen(): JSX.Element {
   }, [search, activeCategory]);
 
   // If a tool is selected, show its detail view
-  if (screen.name === "tools" && screen.toolId) {
-    const selectedTool = TOOLS.find((t) => t.id === screen.toolId);
-
-    if (selectedTool) {
-      return (
-        <ToolDetailShell
-          tool={selectedTool}
-          actionLabel={`${selectedTool.title}`}
-          onAction={() => console.log(`Running ${selectedTool.id}`)}
-        >
-          {renderToolPreferences(selectedTool.id)}
-        </ToolDetailShell>
-      );
-    }
+  if (currentTool) {
+    return (
+      <ToolDetailShell
+        tool={currentTool}
+        actionLabel={`${currentTool.title}`}
+        onAction={() => console.log(`Running ${currentTool.id}`)}
+      >
+        {renderToolPreferences(currentTool.id)}
+      </ToolDetailShell>
+    );
   }
 
   return (
@@ -149,8 +145,8 @@ function renderToolPreferences(toolId: string): JSX.Element {
       return <CompressPreferences />;
     case "pdf-to-image":
       return <ImagePreferences title="PDF to Image" />;
-    case "jpg-to-pdf":
-      return <ImagePreferences title="JPG to PDF" />;
+    case "image-to-pdf":
+      return <ImagePreferences title="Image to PDF" />;
     case "protect":
       return <SecurityPreferences mode="protect" />;
     case "unlock":

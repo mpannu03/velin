@@ -6,5 +6,7 @@ export interface ToolInfo {
   description: string;
   icon: IconType;
   color: string;
-  category: "edit" | "convert" | "optimize" | "security";
+  category: ToolCategory;
 }
+
+export type ToolCategory = "edit" | "convert" | "optimize" | "security";

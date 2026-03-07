@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { JSX, ReactNode } from "react";
 import { FiArrowLeft, FiPlay } from "react-icons/fi";
-import { useScreenState } from "../../../app/screenRouter";
+import { useToolsStore } from "../stores";
 import { ToolInfo } from "../types";
 
 interface ToolDetailShellProps {
@@ -31,7 +31,7 @@ export function ToolDetailShell({
   onAction,
   isValid = true,
 }: ToolDetailShellProps): JSX.Element {
-  const { openTools } = useScreenState();
+  const { setCurrentTool } = useToolsStore();
   const Icon = tool.icon;
 
   return (
@@ -44,7 +44,7 @@ export function ToolDetailShell({
                 variant="light"
                 size="lg"
                 radius="md"
-                onClick={() => openTools()}
+                onClick={() => setCurrentTool(null)}
                 color="gray"
               >
                 <FiArrowLeft size={20} />

@@ -7,7 +7,7 @@ interface ScreenState {
   goHome(): void;
   openReader(): void;
   openModify(): void;
-  openTools(toolId?: string): void;
+  openTools(): void;
 }
 
 export const useScreenState = create<ScreenState>((set) => ({
@@ -19,5 +19,5 @@ export const useScreenState = create<ScreenState>((set) => ({
 
   openModify: () => set({ screen: { name: "modify" } }),
 
-  openTools: (toolId?: string) => set({ screen: { name: "tools", toolId } }),
+  openTools: () => set({ screen: { name: "tools" } }),
 }));
