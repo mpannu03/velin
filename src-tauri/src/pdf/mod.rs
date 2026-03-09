@@ -2,6 +2,7 @@ use serde::Serialize;
 
 pub mod manager;
 pub mod reader;
+pub mod tools;
 pub mod worker;
 
 /// Unique identifier for an opened PDF document

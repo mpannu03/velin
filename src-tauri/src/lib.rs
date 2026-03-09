@@ -39,6 +39,7 @@ pub fn run() {
             commands::reader::remove_annotation,
             commands::reader::render_tile,
             commands::tools::extract_tar_gz,
+            commands::tools::merge_pdfs,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

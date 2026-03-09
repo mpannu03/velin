@@ -3,6 +3,10 @@ use std::fs::File;
 use std::path::Path;
 use tar::Archive;
 
+use crate::service::tools_service;
+use crate::state::AppState;
+use tauri::State;
+
 #[tauri::command]
 pub async fn extract_tar_gz(path: String, dest: String) -> Result<(), String> {
     let tar_gz = File::open(path).map_err(|e| e.to_string())?;
@@ -13,4 +17,13 @@ pub async fn extract_tar_gz(path: String, dest: String) -> Result<(), String> {
     archive.unpack(dest_path).map_err(|e| e.to_string())?;
 
     Ok(())
+}
+
+#[tauri::command]
+pub async fn merge_pdfs(
+    state: State<'_, AppState>,
+    files: Vec<String>,
+    dest: String,
+) -> Result<(), String> {
+    tools_service::merge_pdfs(&state, files, dest).await
 }

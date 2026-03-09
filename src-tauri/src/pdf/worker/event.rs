@@ -70,4 +70,9 @@ pub enum PdfEvent {
         annotation_id: String,
         reply: Sender<Result<(), String>>,
     },
+    Merge {
+        files: Vec<String>,
+        dest: String,
+        reply: Sender<Result<(), String>>,
+    },
 }
