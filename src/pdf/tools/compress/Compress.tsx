@@ -11,12 +11,10 @@ import {
 } from "@mantine/core";
 import { JSX, useState } from "react";
 import { FiInfo } from "react-icons/fi";
-import { FileSelection } from "./FileSelection";
-import { ToolPreferencesProps } from ".";
+import { FileSelection } from "../components";
+import { ToolPreferencesProps } from "../types";
 
-export function CompressPreferences({
-  setAction,
-}: ToolPreferencesProps): JSX.Element {
+export function Compress({ setAction }: ToolPreferencesProps): JSX.Element {
   const [level, setLevel] = useState("recommended");
   console.log(setAction);
 

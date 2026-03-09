@@ -9,7 +9,7 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { useToolsStore } from "../stores";
-import { ToolInfo } from "../types";
+import { ToolInfo } from "@/pdf/tools";
 
 export function ToolCard({ tool }: { tool: ToolInfo }) {
   const { setCurrentTool } = useToolsStore();

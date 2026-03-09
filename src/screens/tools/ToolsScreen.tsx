@@ -13,9 +13,10 @@ import {
 } from "@mantine/core";
 import { JSX, useState, useMemo } from "react";
 import { FiSearch } from "react-icons/fi";
-import { CATEGORIES, ToolId, TOOLS } from "./types";
-import { ToolCard, ToolDetailShell, PREFS_REGISTRY } from "./components";
+import { CATEGORIES, ToolId, TOOLS } from "@/pdf/tools";
+import { ToolCard, ToolDetailShell } from "./components";
 import { useToolsStore } from "./stores";
+import { PREFS_REGISTRY } from "./registry";
 
 export function ToolsScreen(): JSX.Element {
   const currentTool = useToolsStore((s) => s.currentTool);

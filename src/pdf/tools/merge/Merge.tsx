@@ -11,8 +11,8 @@ import {
   LoadingOverlay,
 } from "@mantine/core";
 import { JSX, useCallback, useEffect, useState } from "react";
-import { FiFileText, FiMove, FiTrash2, FiSave, FiEdit2 } from "react-icons/fi";
-import { FileSelection } from "./FileSelection";
+import { FiSave, FiEdit2 } from "react-icons/fi";
+import { FileItem, FileSelection } from "../components";
 import { pickPdfFile, savePdfFile } from "@/services/file";
 import {
   DndContext,
@@ -29,14 +29,12 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { SortableFileItem } from "../SortableFileItem";
-import { ToolPreferencesProps } from ".";
+import { SortableFileItem } from "../components";
+import { ToolPreferencesProps } from "../types";
 import { mergePdfs } from "@/services/tauri";
 import { notifications } from "@mantine/notifications";
 
-export function MergePreferences({
-  setAction,
-}: ToolPreferencesProps): JSX.Element {
+export function Merge({ setAction }: ToolPreferencesProps): JSX.Element {
   const [files, setFiles] = useState<string[]>([]);
   const [destinationPath, setDestinationPath] = useState<string>("");
   const [loading, setLoading] = useState(false);
@@ -202,77 +200,5 @@ export function MergePreferences({
         </Stack>
       )}
     </Stack>
-  );
-}
-
-interface FileItemProps {
-  file: string;
-  onRemove: () => void;
-  dragHandleProps?: any;
-  isDragging?: boolean;
-}
-
-function FileItem({
-  file,
-  onRemove,
-  dragHandleProps,
-  isDragging,
-}: FileItemProps) {
-  // Extract filename from path
-  const filename = file.split(/[/\\]/).pop() || file;
-  const path = file.substring(0, file.lastIndexOf(filename));
-
-  return (
-    <Paper
-      withBorder
-      p="sm"
-      radius="md"
-      shadow={isDragging ? "md" : "xs"}
-      style={{
-        backgroundColor: isDragging
-          ? "light-dark(var(--mantine-primary-color-light), var(--mantine-color-dark-6))"
-          : "light-dark(var(--mantine-color-white), var(--mantine-color-dark-7))",
-        borderColor: isDragging
-          ? "var(--mantine-primary-color-filled)"
-          : undefined,
-        cursor: "default",
-        transition: "all 0.2s ease",
-      }}
-    >
-      <Group justify="space-between" wrap="nowrap">
-        <Group gap="md" wrap="nowrap" style={{ flex: 1 }}>
-          <Tooltip label="Drag to reorder" position="left" withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="gray"
-              size="md"
-              style={{ cursor: "grab" }}
-              {...dragHandleProps}
-            >
-              <FiMove size={18} />
-            </ActionIcon>
-          </Tooltip>
-
-          <ThemeIcon variant="light" size="lg" radius="md">
-            <FiFileText size={20} />
-          </ThemeIcon>
-
-          <Box style={{ flex: 1, minWidth: 0 }}>
-            <Text size="sm" fw={600} truncate="end">
-              {filename}
-            </Text>
-            <Text size="xs" c="dimmed" truncate="end" title={path}>
-              {path}
-            </Text>
-          </Box>
-        </Group>
-
-        <Tooltip label="Remove file" withArrow>
-          <ActionIcon variant="subtle" color="red" onClick={onRemove} size="md">
-            <FiTrash2 size={18} />
-          </ActionIcon>
-        </Tooltip>
-      </Group>
-    </Paper>
   );
 }

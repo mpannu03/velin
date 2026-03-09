@@ -10,8 +10,8 @@ import {
   protectTool,
   unlockTool,
   watermarkTool,
-} from ".";
-import { ToolId } from "../../types";
+} from "../registry";
+import { ToolId } from "@/pdf/tools";
 
 export const PREFS_REGISTRY: Record<ToolId, ToolDefinition> = {
   merge: mergeTool,

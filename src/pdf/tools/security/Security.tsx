@@ -9,9 +9,9 @@ import {
 } from "@mantine/core";
 import { JSX, useState } from "react";
 import { FiShield, FiAlertTriangle } from "react-icons/fi";
-import { FileSelection } from "./FileSelection";
+import { FileSelection } from "../components";
 
-export function SecurityPreferences({
+export function Security({
   mode,
 }: {
   mode: "protect" | "unlock";

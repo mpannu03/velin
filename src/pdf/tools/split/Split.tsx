@@ -8,12 +8,10 @@ import {
   Divider,
 } from "@mantine/core";
 import { JSX, useState } from "react";
-import { FileSelection } from "./FileSelection";
-import { ToolPreferencesProps } from ".";
+import { FileSelection } from "../components";
+import { ToolPreferencesProps } from "../types";
 
-export function SplitPreferences({
-  setAction,
-}: ToolPreferencesProps): JSX.Element {
+export function Split({ setAction }: ToolPreferencesProps): JSX.Element {
   const [splitMode, setSplitMode] = useState("ranges");
   console.log(setAction);
 

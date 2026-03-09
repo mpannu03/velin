@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ToolInfo } from "../types";
+import { ToolInfo } from "@/pdf/tools";
 
 interface ToolsState {
   currentTool: ToolInfo | null;

@@ -14,7 +14,7 @@ import {
 import { JSX, ReactNode } from "react";
 import { FiArrowLeft, FiPlay } from "react-icons/fi";
 import { useToolsStore } from "../stores";
-import { ToolInfo } from "../types";
+import { ToolInfo } from "@/pdf/tools";
 
 interface ToolDetailShellProps {
   tool: ToolInfo;
