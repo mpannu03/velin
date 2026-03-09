@@ -1,25 +1,25 @@
 import { JSX, useEffect, useRef } from "react";
 import { Center, Loader } from "@mantine/core";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { useDocumentsStore, useDocumentRepositoryStore } from "@/app";
 import { PdfDocument } from "@/shared/types";
 import {
   usePdfInfo,
   usePdfWheelZoom,
   useCurrentPageFromVirtual,
-} from "../hooks";
-import { usePdfViewerStore } from "../stores";
-import { PdfPage, ToolsPanel, SidePanel, SideBarPanel } from "./";
-import { pdfRenderQueue } from "../renderer";
+} from "./hooks";
+import { usePdfViewerStore } from "./stores";
+import { PdfPage, ToolsPanel, SidePanel, SideBarPanel } from "./components";
+import { pdfRenderQueue } from "./renderer";
 import { useViewportSize } from "@mantine/hooks";
+import { useDocumentRepositoryStore } from "@/app";
 
 type PdfViewProps = {
   doc: PdfDocument;
+  activeDocumentId: string | null;
 };
 
-export function PdfView({ doc }: PdfViewProps): JSX.Element {
+export function PdfView({ doc, activeDocumentId }: PdfViewProps): JSX.Element {
   const id: string = doc.id;
-  const activeDocumentId = useDocumentsStore().activeDocumentId;
   const { info, error, loading } = usePdfInfo(id);
   const parentRef = useRef<HTMLDivElement>(null);
   const viewerState = usePdfViewerStore().getState(id);
@@ -28,7 +28,7 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
   const clearGotoPage = usePdfViewerStore().clearGotoPage;
   const currentPage = useDocumentRepositoryStore().getDocumentByFilePath(
     doc.filePath,
-  );
+  )?.currentPage;
 
   const baseWidth = useViewportSize().width / 2;
   const displayWidth = baseWidth * viewerState.scale;
@@ -81,9 +81,9 @@ export function PdfView({ doc }: PdfViewProps): JSX.Element {
   useEffect(() => {
     if (loading || !info || !currentPage || initialScrollDone.current) return;
 
-    if (currentPage.currentPage > 0) {
+    if (currentPage > 0) {
       setTimeout(() => {
-        rowVirtualizer.scrollToIndex(currentPage.currentPage, {
+        rowVirtualizer.scrollToIndex(currentPage, {
           align: "start",
         });
       }, 0);

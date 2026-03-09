@@ -15,6 +15,7 @@ export function SplitPreferences({
   setAction,
 }: ToolPreferencesProps): JSX.Element {
   const [splitMode, setSplitMode] = useState("ranges");
+  console.log(setAction);
 
   return (
     <Stack gap="lg">

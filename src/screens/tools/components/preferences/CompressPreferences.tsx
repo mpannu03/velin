@@ -18,6 +18,7 @@ export function CompressPreferences({
   setAction,
 }: ToolPreferencesProps): JSX.Element {
   const [level, setLevel] = useState("recommended");
+  console.log(setAction);
 
   const LEVELS = [
     {

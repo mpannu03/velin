@@ -1,4 +1,4 @@
-import { Annotation } from "@/screens";
+import { Annotation } from "@/pdf/reader";
 
 // Core document type (Rust-aligned)
 export type PdfDocument = {

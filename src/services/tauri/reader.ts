@@ -1,5 +1,5 @@
 import { Bookmarks, PageText, PdfInfo } from "@/shared/types";
-import { Annotation, RenderedPage, RenderedTile } from "@/screens/reader/types";
+import { Annotation, RenderedPage, RenderedTile } from "@/pdf/reader";
 import { InvokeResult, safeInvoke } from "@/services/tauri";
 
 export const openPdf = async (path: string): Promise<InvokeResult<string>> => {

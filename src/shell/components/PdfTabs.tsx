@@ -4,7 +4,7 @@ import { PdfDocument } from "@/shared/types";
 import { FiPlus, FiX } from "react-icons/fi";
 import { useHover } from "@mantine/hooks";
 import { useDocumentsStore } from "@/app/store/documents.store";
-import { closePdf, openPdf } from "@/screens/reader";
+import { closePdf, openPdf } from "@/pdf/reader";
 import { useScreenState } from "@/app/screenRouter";
 import {
   DndContext,
@@ -32,7 +32,7 @@ export function PdfTabs(): JSX.Element {
       activationConstraint: {
         distance: 5,
       },
-    })
+    }),
   );
 
   useEffect(() => {
@@ -56,10 +56,7 @@ export function PdfTabs(): JSX.Element {
       onDragEnd={handleDragEnd}
     >
       <Group gap={0} h="100%">
-        <SortableContext
-          items={order}
-          strategy={horizontalListSortingStrategy}
-        >
+        <SortableContext items={order} strategy={horizontalListSortingStrategy}>
           {order.map((id) => {
             const doc = docs[id];
             if (!doc) return null;
