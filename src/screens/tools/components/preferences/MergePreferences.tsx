@@ -8,8 +8,9 @@ import {
   ActionIcon,
   Tooltip,
   Divider,
+  LoadingOverlay,
 } from "@mantine/core";
-import { JSX, useState } from "react";
+import { JSX, useCallback, useEffect, useState } from "react";
 import { FiFileText, FiMove, FiTrash2, FiSave, FiEdit2 } from "react-icons/fi";
 import { FileSelection } from "./FileSelection";
 import { pickPdfFile, savePdfFile } from "@/services/file";
@@ -29,10 +30,48 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { SortableFileItem } from "../SortableFileItem";
+import { ToolPreferencesProps } from ".";
+import { mergePdfs } from "@/services/tauri";
+import { notifications } from "@mantine/notifications";
 
-export function MergePreferences(): JSX.Element {
+export function MergePreferences({
+  setAction,
+}: ToolPreferencesProps): JSX.Element {
   const [files, setFiles] = useState<string[]>([]);
   const [destinationPath, setDestinationPath] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+
+  const runMerge = useCallback(async () => {
+    if (files.length > 0 && !loading) {
+      setLoading(true);
+      const result = await mergePdfs(files, destinationPath);
+      if (result.ok) {
+        notifications.show({
+          title: "Success",
+          message: "PDF files merged successfully.",
+          color: "green",
+        });
+      } else {
+        notifications.show({
+          title: "Merge Failed",
+          message:
+            result.error ?? "An unexpected error occurred while merging PDFs.",
+          color: "red",
+        });
+      }
+      setLoading(false);
+    } else {
+      notifications.show({
+        title: "No Files Added",
+        message: "Please add PDF files to merge.",
+        color: "orange",
+      });
+    }
+  }, [files, destinationPath]);
+
+  useEffect(() => {
+    setAction(() => runMerge);
+  }, [runMerge]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -53,7 +92,7 @@ export function MergePreferences(): JSX.Element {
     if (file) {
       setFiles((prev) => {
         const newFiles = [...prev, file];
-        if (prev.length === 0 && !destinationPath) {
+        if (prev.length === 0) {
           setDestinationPath(getDefaultDestination(file));
         }
         return newFiles;
@@ -92,7 +131,8 @@ export function MergePreferences(): JSX.Element {
   );
 
   return (
-    <Stack gap="lg">
+    <Stack gap="lg" pos="relative">
+      <LoadingOverlay visible={loading} zIndex={1000} />
       <FileSelection onSelect={pickFiles} multiple hasFiles={hasFiles}>
         <DndContext
           sensors={sensors}
@@ -131,7 +171,7 @@ export function MergePreferences(): JSX.Element {
           >
             <Group justify="space-between" wrap="nowrap">
               <Group gap="md" wrap="nowrap" style={{ flex: 1 }}>
-                <ThemeIcon variant="light" color="green" size="lg" radius="md">
+                <ThemeIcon variant="light" size="lg" radius="md">
                   <FiSave size={20} />
                 </ThemeIcon>
                 <Box style={{ flex: 1, minWidth: 0 }}>
@@ -190,10 +230,10 @@ function FileItem({
       shadow={isDragging ? "md" : "xs"}
       style={{
         backgroundColor: isDragging
-          ? "light-dark(var(--mantine-color-blue-0), var(--mantine-color-dark-6))"
+          ? "light-dark(var(--mantine-primary-color-light), var(--mantine-color-dark-6))"
           : "light-dark(var(--mantine-color-white), var(--mantine-color-dark-7))",
         borderColor: isDragging
-          ? "var(--mantine-color-blue-filled)"
+          ? "var(--mantine-primary-color-filled)"
           : undefined,
         cursor: "default",
         transition: "all 0.2s ease",
@@ -213,7 +253,7 @@ function FileItem({
             </ActionIcon>
           </Tooltip>
 
-          <ThemeIcon variant="light" color="blue" size="lg" radius="md">
+          <ThemeIcon variant="light" size="lg" radius="md">
             <FiFileText size={20} />
           </ThemeIcon>
 

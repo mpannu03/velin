@@ -13,23 +13,15 @@ import {
 } from "@mantine/core";
 import { JSX, useState, useMemo } from "react";
 import { FiSearch } from "react-icons/fi";
-import { CATEGORIES, TOOLS } from "./types";
-import {
-  ToolCard,
-  ToolDetailShell,
-  MergePreferences,
-  SplitPreferences,
-  CompressPreferences,
-  ImagePreferences,
-  SecurityPreferences,
-  EditPreferences,
-} from "./components";
+import { CATEGORIES, ToolId, TOOLS } from "./types";
+import { ToolCard, ToolDetailShell, PREFS_REGISTRY } from "./components";
 import { useToolsStore } from "./stores";
 
 export function ToolsScreen(): JSX.Element {
   const currentTool = useToolsStore((s) => s.currentTool);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const [toolAction, setToolAction] = useState<() => void | null>();
 
   const filteredTools = useMemo(() => {
     return TOOLS.filter((tool) => {
@@ -48,9 +40,9 @@ export function ToolsScreen(): JSX.Element {
       <ToolDetailShell
         tool={currentTool}
         actionLabel={`${currentTool.title}`}
-        onAction={() => console.log(`Running ${currentTool.id}`)}
+        onAction={() => toolAction?.()}
       >
-        {renderToolPreferences(currentTool.id)}
+        {renderToolPreferences(currentTool.id, setToolAction)}
       </ToolDetailShell>
     );
   }
@@ -135,31 +127,10 @@ export function ToolsScreen(): JSX.Element {
   );
 }
 
-function renderToolPreferences(toolId: string): JSX.Element {
-  switch (toolId) {
-    case "merge":
-      return <MergePreferences />;
-    case "split":
-      return <SplitPreferences />;
-    case "compress":
-      return <CompressPreferences />;
-    case "pdf-to-image":
-      return <ImagePreferences title="PDF to Image" />;
-    case "image-to-pdf":
-      return <ImagePreferences title="Image to PDF" />;
-    case "protect":
-      return <SecurityPreferences mode="protect" />;
-    case "unlock":
-      return <SecurityPreferences mode="unlock" />;
-    case "rotate":
-    case "watermark":
-    case "extract":
-      return <EditPreferences toolId={toolId} />;
-    default:
-      return (
-        <Paper p="xl" withBorder radius="md">
-          <Text c="dimmed">Preferences for this tool are coming soon.</Text>
-        </Paper>
-      );
-  }
+function renderToolPreferences(
+  toolId: ToolId,
+  setToolAction: (fn: () => void) => void,
+): JSX.Element {
+  const Preferences = PREFS_REGISTRY[toolId].Preferences;
+  return <Preferences setAction={setToolAction} />;
 }

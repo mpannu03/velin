@@ -12,8 +12,11 @@ import {
 import { JSX, useState } from "react";
 import { FiInfo } from "react-icons/fi";
 import { FileSelection } from "./FileSelection";
+import { ToolPreferencesProps } from ".";
 
-export function CompressPreferences(): JSX.Element {
+export function CompressPreferences({
+  setAction,
+}: ToolPreferencesProps): JSX.Element {
   const [level, setLevel] = useState("recommended");
 
   const LEVELS = [

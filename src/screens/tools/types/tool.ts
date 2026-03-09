@@ -1,7 +1,7 @@
 import { IconType } from "react-icons";
 
 export interface ToolInfo {
-  id: string;
+  id: ToolId;
   title: string;
   description: string;
   icon: IconType;
@@ -10,3 +10,15 @@ export interface ToolInfo {
 }
 
 export type ToolCategory = "edit" | "convert" | "optimize" | "security";
+
+export type ToolId =
+  | "merge"
+  | "split"
+  | "extract"
+  | "compress"
+  | "pdf-to-image"
+  | "image-to-pdf"
+  | "rotate"
+  | "protect"
+  | "unlock"
+  | "watermark";
