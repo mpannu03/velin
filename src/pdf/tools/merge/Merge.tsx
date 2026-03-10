@@ -10,7 +10,7 @@ import {
   Divider,
   LoadingOverlay,
 } from "@mantine/core";
-import { JSX, useCallback, useState } from "react";
+import { JSX } from "react";
 import { FiSave, FiEdit2 } from "react-icons/fi";
 import { FileItem, FileSelection } from "../components";
 import { pickPdfFile, savePdfFile } from "@/services/file";
@@ -31,42 +31,20 @@ import {
 } from "@dnd-kit/sortable";
 import { SortableFileItem } from "../components";
 import { ToolPreferencesProps, TOOLS } from "../types";
-import { mergePdfs } from "@/services/tauri";
-import { notifications } from "@mantine/notifications";
-import { ToolDetailShell } from "../components/ToolDetailShell";
+import { ToolDetailShell } from "../components";
+import { useMergeState } from "./merge.store";
 
 export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
-  const [files, setFiles] = useState<string[]>([]);
-  const [destinationPath, setDestinationPath] = useState<string>("");
-  const [loading, setLoading] = useState(false);
-
-  const runMerge = useCallback(async () => {
-    if (files.length > 0 && !loading) {
-      setLoading(true);
-      const result = await mergePdfs(files, destinationPath);
-      if (result.ok) {
-        notifications.show({
-          title: "Success",
-          message: "PDF files merged successfully.",
-          color: "green",
-        });
-      } else {
-        notifications.show({
-          title: "Merge Failed",
-          message:
-            result.error ?? "An unexpected error occurred while merging PDFs.",
-          color: "red",
-        });
-      }
-      setLoading(false);
-    } else {
-      notifications.show({
-        title: "No Files Added",
-        message: "Please add PDF files to merge.",
-        color: "orange",
-      });
-    }
-  }, [files, destinationPath]);
+  const {
+    files,
+    destinationPath,
+    isLoading,
+    addFiles,
+    setFiles,
+    removeFile,
+    setDestinationPath,
+    runMerge,
+  } = useMergeState();
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -83,15 +61,13 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
   };
 
   const pickFiles = async () => {
-    const file = await pickPdfFile();
-    if (file) {
-      setFiles((prev) => {
-        const newFiles = [...prev, file];
-        if (prev.length === 0) {
-          setDestinationPath(getDefaultDestination(file));
-        }
-        return newFiles;
-      });
+    const selected = await pickPdfFile(true);
+    if (selected) {
+      const newFiles = Array.isArray(selected) ? selected : [selected];
+      addFiles(newFiles);
+      if (files.length === 0 && newFiles.length > 0) {
+        setDestinationPath(getDefaultDestination(newFiles[0]));
+      }
     }
   };
 
@@ -102,20 +78,15 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
     }
   };
 
-  const removeFile = (file: string) => {
-    setFiles((prev) => prev.filter((f) => f !== file));
-  };
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (over && active.id !== over.id) {
-      setFiles((items) => {
-        const oldIndex = items.indexOf(active.id as string);
-        const newIndex = items.indexOf(over.id as string);
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = files.indexOf(String(active.id));
+    const newIndex = files.indexOf(String(over.id));
+
+    setFiles(arrayMove(files, oldIndex, newIndex));
   };
 
   const hasFiles = files.length > 0;
@@ -131,10 +102,10 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
       actionLabel="Merge PDFs"
       onAction={runMerge}
       onBackClick={onBackPressed}
-      isValid={hasFiles}
+      isValid={hasFiles && !isLoading}
     >
       <Stack gap="lg" pos="relative">
-        <LoadingOverlay visible={loading} zIndex={1000} />
+        <LoadingOverlay visible={isLoading} zIndex={1000} />
         <FileSelection onSelect={pickFiles} multiple hasFiles={hasFiles}>
           <DndContext
             sensors={sensors}

@@ -10,7 +10,7 @@ import {
 import { JSX, useState } from "react";
 import { FileSelection } from "../components";
 import { ToolPreferencesProps, TOOLS } from "../types";
-import { ToolDetailShell } from "../components/ToolDetailShell";
+import { ToolDetailShell } from "../components";
 
 export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
   const [splitMode, setSplitMode] = useState("ranges");
