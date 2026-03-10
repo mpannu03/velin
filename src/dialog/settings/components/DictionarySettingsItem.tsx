@@ -1,6 +1,18 @@
-import { downloadAndInstallWordNet, isDictionaryInstalled, WordnetInstallStatus } from "@/services/dictionary";
-import { Box, Button, Group, Loader, Progress, Stack, Text } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
+import {
+  downloadAndInstallWordNet,
+  isDictionaryInstalled,
+  WordnetInstallStatus,
+} from "@/services/dictionary";
+import { notifyError, notifySuccess } from "@/services/notifications";
+import {
+  Box,
+  Button,
+  Group,
+  Loader,
+  Progress,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { useEffect, useState } from "react";
 
 export function DictionarySettingsItem() {
@@ -30,19 +42,10 @@ export function DictionarySettingsItem() {
           setStage("extracting");
         }
       });
-      notifications.show({
-        title: "Success",
-        message: "Dictionary downloaded and installed successfully",
-        color: "green",
-      });
+      notifySuccess("Dictionary downloaded and installed successfully");
       setInstalled(true);
     } catch (error) {
-      console.error(error);
-      notifications.show({
-        title: "Error",
-        message: "Failed to download dictionary",
-        color: "red",
-      });
+      notifyError("Failed to download dictionary");
     } finally {
       setDownloading(false);
       setStage("idle");

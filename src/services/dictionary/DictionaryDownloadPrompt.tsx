@@ -1,7 +1,15 @@
-import { Modal, Stack, Text, Button, Progress, Group, Title } from '@mantine/core';
-import { useState } from 'react';
-import { downloadAndInstallWordNet } from '@/services/dictionary';
-import { notifications } from '@mantine/notifications';
+import {
+  Modal,
+  Stack,
+  Text,
+  Button,
+  Progress,
+  Group,
+  Title,
+} from "@mantine/core";
+import { useState } from "react";
+import { downloadAndInstallWordNet } from "@/services/dictionary";
+import { notifyError, notifySuccess } from "../notifications";
 
 interface DictionaryDownloadPromptProps {
   opened: boolean;
@@ -9,38 +17,35 @@ interface DictionaryDownloadPromptProps {
   onComplete: () => void;
 }
 
-export function DictionaryDownloadPrompt({ opened, onClose, onComplete }: DictionaryDownloadPromptProps) {
+export function DictionaryDownloadPrompt({
+  opened,
+  onClose,
+  onComplete,
+}: DictionaryDownloadPromptProps) {
   const [downloading, setDownloading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [stage, setStage] = useState<'idle' | 'downloading' | 'extracting'>('idle');
+  const [stage, setStage] = useState<"idle" | "downloading" | "extracting">(
+    "idle",
+  );
 
   const handleDownload = async () => {
     setDownloading(true);
-    setStage('downloading');
+    setStage("downloading");
     try {
       await downloadAndInstallWordNet((status) => {
-        if (status.stage === 'downloading') {
+        if (status.stage === "downloading") {
           setProgress(status.percent);
-        } else if (status.stage === 'extracting') {
-          setStage('extracting');
+        } else if (status.stage === "extracting") {
+          setStage("extracting");
         }
       });
-      notifications.show({
-        title: 'Success',
-        message: 'Dictionary downloaded and installed successfully',
-        color: 'green',
-      });
+      notifySuccess("Dictionary downloaded and installed successfully");
       onComplete();
       onClose();
     } catch (error) {
-      console.error(error);
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to download dictionary',
-        color: 'red',
-      });
+      notifyError("Failed to download dictionary");
       setDownloading(false);
-      setStage('idle');
+      setStage("idle");
     }
   };
 
@@ -56,19 +61,26 @@ export function DictionaryDownloadPrompt({ opened, onClose, onComplete }: Dictio
     >
       <Stack>
         <Text size="sm">
-          To use the dictionary feature offline, we need to download additional data (approx. 10MB).
-          Would you like to download it now?
+          To use the dictionary feature offline, we need to download additional
+          data (approx. 10MB). Would you like to download it now?
         </Text>
 
         {downloading && (
           <Stack gap="xs">
-             <Group justify="space-between">
+            <Group justify="space-between">
+              <Text size="xs" c="dimmed">
+                {stage === "downloading" ? "Downloading..." : "Extracting..."}
+              </Text>
+              {stage === "downloading" && (
                 <Text size="xs" c="dimmed">
-                  {stage === 'downloading' ? 'Downloading...' : 'Extracting...'}
+                  {progress}%
                 </Text>
-                {stage === 'downloading' && <Text size="xs" c="dimmed">{progress}%</Text>}
-             </Group>
-            <Progress value={stage === 'extracting' ? 100 : progress} animated={stage === 'extracting'} />
+              )}
+            </Group>
+            <Progress
+              value={stage === "extracting" ? 100 : progress}
+              animated={stage === "extracting"}
+            />
           </Stack>
         )}
 
@@ -78,7 +90,11 @@ export function DictionaryDownloadPrompt({ opened, onClose, onComplete }: Dictio
               Later
             </Button>
           )}
-          <Button onClick={handleDownload} loading={downloading} disabled={downloading && stage === 'extracting'}>
+          <Button
+            onClick={handleDownload}
+            loading={downloading}
+            disabled={downloading && stage === "extracting"}
+          >
             Download Now
           </Button>
         </Group>
