@@ -158,8 +158,12 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 };
                 let _ = reply.send(result);
             }
-            PdfEvent::Merge { files, dest, reply } => {
-                let result = crate::pdf::tools::merge(&pdfium, files, dest);
+            PdfEvent::Merge {
+                inputs,
+                dest,
+                reply,
+            } => {
+                let result = crate::pdf::tools::merge(&pdfium, inputs, dest);
                 let _ = reply.send(result);
             }
         }

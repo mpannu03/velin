@@ -1,6 +1,8 @@
+use serde::{Deserialize, Serialize};
+
 use crate::utils::page_selection::error::ParseError;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum SelectionItem {
     Page(u32),
     Range(u32, u32),
@@ -12,7 +14,7 @@ pub enum SelectionItem {
     Even,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PageSelection {
     pub items: Vec<SelectionItem>,
 }

@@ -3,6 +3,7 @@ use std::fs::File;
 use std::path::Path;
 use tar::Archive;
 
+use crate::pdf::tools::MergeInputRaw;
 use crate::service::tools_service;
 use crate::state::AppState;
 use tauri::State;
@@ -22,8 +23,8 @@ pub async fn extract_tar_gz(path: String, dest: String) -> Result<(), String> {
 #[tauri::command]
 pub async fn merge_pdfs(
     state: State<'_, AppState>,
-    files: Vec<String>,
+    raw_inputs: Vec<MergeInputRaw>,
     dest: String,
 ) -> Result<(), String> {
-    tools_service::merge_pdfs(&state, files, dest).await
+    tools_service::merge_pdfs(&state, raw_inputs, dest).await
 }

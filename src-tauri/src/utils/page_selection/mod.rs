@@ -2,8 +2,10 @@ pub mod error;
 pub mod parser;
 pub mod selection;
 
+#[allow(unused_imports)]
 pub use error::ParseError;
 pub use parser::PageSelectionParser;
+#[allow(unused_imports)]
 pub use selection::{PageSelection, SelectionItem};
 
 #[cfg(test)]

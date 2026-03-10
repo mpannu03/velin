@@ -1,15 +1,27 @@
-use crate::{pdf::worker::PdfEvent, state::AppState};
+use crate::{
+    pdf::{
+        tools::{self, MergeInputRaw},
+        worker::PdfEvent,
+    },
+    state::AppState,
+};
 
-pub async fn merge_pdfs(state: &AppState, files: Vec<String>, dest: String) -> Result<(), String> {
+pub async fn merge_pdfs(
+    state: &AppState,
+    raw_inputs: Vec<MergeInputRaw>,
+    dest: String,
+) -> Result<(), String> {
     let manager = state.manager.read();
     let worker = manager.worker();
 
     let (tx, rx) = flume::bounded(1);
 
+    let inputs = tools::prepare_merge_inputs(raw_inputs).map_err(|e| e.to_string())?;
+
     worker
         .sender()
         .send(PdfEvent::Merge {
-            files,
+            inputs,
             dest,
             reply: tx,
         })
