@@ -2,6 +2,7 @@ mod commands;
 mod pdf;
 mod service;
 mod state;
+mod utils;
 
 pub use state::AppState;
 
