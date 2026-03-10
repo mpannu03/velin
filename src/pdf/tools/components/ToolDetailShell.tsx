@@ -13,13 +13,13 @@ import {
 } from "@mantine/core";
 import { JSX, ReactNode } from "react";
 import { FiArrowLeft, FiPlay } from "react-icons/fi";
-import { useToolsStore } from "../stores";
 import { ToolInfo } from "@/pdf/tools";
 
 interface ToolDetailShellProps {
   tool: ToolInfo;
   children: ReactNode;
   actionLabel?: string;
+  onBackClick?: () => void;
   onAction?: () => void;
   isValid?: boolean;
 }
@@ -28,10 +28,10 @@ export function ToolDetailShell({
   tool,
   children,
   actionLabel = "Run Tool",
+  onBackClick,
   onAction,
   isValid = true,
 }: ToolDetailShellProps): JSX.Element {
-  const { setCurrentTool } = useToolsStore();
   const Icon = tool.icon;
 
   return (
@@ -44,7 +44,7 @@ export function ToolDetailShell({
                 variant="light"
                 size="lg"
                 radius="md"
-                onClick={() => setCurrentTool(null)}
+                onClick={onBackClick}
                 color="gray"
               >
                 <FiArrowLeft size={20} />

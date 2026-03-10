@@ -14,7 +14,7 @@ import {
 import { JSX, useState, useMemo } from "react";
 import { FiSearch } from "react-icons/fi";
 import { CATEGORIES, ToolId, TOOLS } from "@/pdf/tools";
-import { ToolCard, ToolDetailShell } from "./components";
+import { ToolCard } from "./components";
 import { useToolsStore } from "./stores";
 import { PREFS_REGISTRY } from "./registry";
 
@@ -22,7 +22,7 @@ export function ToolsScreen(): JSX.Element {
   const currentTool = useToolsStore((s) => s.currentTool);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
-  const [toolAction, setToolAction] = useState<() => void | null>();
+  const setCurrentTool = useToolsStore((s) => s.setCurrentTool);
 
   const filteredTools = useMemo(() => {
     return TOOLS.filter((tool) => {
@@ -37,15 +37,7 @@ export function ToolsScreen(): JSX.Element {
 
   // If a tool is selected, show its detail view
   if (currentTool) {
-    return (
-      <ToolDetailShell
-        tool={currentTool}
-        actionLabel={`${currentTool.title}`}
-        onAction={() => toolAction?.()}
-      >
-        {renderToolPreferences(currentTool.id, setToolAction)}
-      </ToolDetailShell>
-    );
+    return renderToolPreferences(currentTool.id, () => setCurrentTool(null));
   }
 
   return (
@@ -130,8 +122,9 @@ export function ToolsScreen(): JSX.Element {
 
 function renderToolPreferences(
   toolId: ToolId,
-  setToolAction: (fn: () => void) => void,
+  onBackPressed: () => void,
 ): JSX.Element {
   const Preferences = PREFS_REGISTRY[toolId].Preferences;
-  return <Preferences setAction={setToolAction} />;
+
+  return <Preferences onBackPressed={onBackPressed} />;
 }

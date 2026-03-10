@@ -1,3 +1,3 @@
 export type ToolPreferencesProps = {
-  setAction: (fn: () => void) => void;
+  onBackPressed: () => void;
 };

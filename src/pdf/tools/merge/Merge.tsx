@@ -10,7 +10,7 @@ import {
   Divider,
   LoadingOverlay,
 } from "@mantine/core";
-import { JSX, useCallback, useEffect, useState } from "react";
+import { JSX, useCallback, useState } from "react";
 import { FiSave, FiEdit2 } from "react-icons/fi";
 import { FileItem, FileSelection } from "../components";
 import { pickPdfFile, savePdfFile } from "@/services/file";
@@ -30,11 +30,12 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { SortableFileItem } from "../components";
-import { ToolPreferencesProps } from "../types";
+import { ToolPreferencesProps, TOOLS } from "../types";
 import { mergePdfs } from "@/services/tauri";
 import { notifications } from "@mantine/notifications";
+import { ToolDetailShell } from "../components/ToolDetailShell";
 
-export function Merge({ setAction }: ToolPreferencesProps): JSX.Element {
+export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
   const [files, setFiles] = useState<string[]>([]);
   const [destinationPath, setDestinationPath] = useState<string>("");
   const [loading, setLoading] = useState(false);
@@ -66,10 +67,6 @@ export function Merge({ setAction }: ToolPreferencesProps): JSX.Element {
       });
     }
   }, [files, destinationPath]);
-
-  useEffect(() => {
-    setAction(() => runMerge);
-  }, [runMerge]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -129,76 +126,87 @@ export function Merge({ setAction }: ToolPreferencesProps): JSX.Element {
   );
 
   return (
-    <Stack gap="lg" pos="relative">
-      <LoadingOverlay visible={loading} zIndex={1000} />
-      <FileSelection onSelect={pickFiles} multiple hasFiles={hasFiles}>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext items={files} strategy={verticalListSortingStrategy}>
-            <Stack gap="xs">
-              {files.map((file) => (
-                <SortableFileItem key={file} id={file}>
-                  {({ attributes, listeners, isDragging }) => (
-                    <FileItem
-                      file={file}
-                      onRemove={() => removeFile(file)}
-                      dragHandleProps={{ ...attributes, ...listeners }}
-                      isDragging={isDragging}
-                    />
-                  )}
-                </SortableFileItem>
-              ))}
-            </Stack>
-          </SortableContext>
-        </DndContext>
-      </FileSelection>
-
-      {hasFiles && (
-        <Stack gap="md">
-          <Divider label="Output Destination" labelPosition="center" />
-
-          <Paper
-            withBorder
-            p="md"
-            radius="md"
-            bg="light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8))"
-            style={{ borderStyle: "solid" }}
+    <ToolDetailShell
+      tool={TOOLS.find((t) => t.id === "merge")!}
+      actionLabel="Merge PDFs"
+      onAction={runMerge}
+      onBackClick={onBackPressed}
+      isValid={hasFiles}
+    >
+      <Stack gap="lg" pos="relative">
+        <LoadingOverlay visible={loading} zIndex={1000} />
+        <FileSelection onSelect={pickFiles} multiple hasFiles={hasFiles}>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
           >
-            <Group justify="space-between" wrap="nowrap">
-              <Group gap="md" wrap="nowrap" style={{ flex: 1 }}>
-                <ThemeIcon variant="light" size="lg" radius="md">
-                  <FiSave size={20} />
-                </ThemeIcon>
-                <Box style={{ flex: 1, minWidth: 0 }}>
-                  <Text size="xs" c="dimmed" tt="uppercase" fw={700} lts={1}>
-                    Destination File
-                  </Text>
-                  <Text size="sm" fw={600} truncate="end">
-                    {destFilename}
-                  </Text>
-                  <Text size="xs" c="dimmed" truncate="end" title={destDir}>
-                    {destDir}
-                  </Text>
-                </Box>
+            <SortableContext
+              items={files}
+              strategy={verticalListSortingStrategy}
+            >
+              <Stack gap="xs">
+                {files.map((file) => (
+                  <SortableFileItem key={file} id={file}>
+                    {({ attributes, listeners, isDragging }) => (
+                      <FileItem
+                        file={file}
+                        onRemove={() => removeFile(file)}
+                        dragHandleProps={{ ...attributes, ...listeners }}
+                        isDragging={isDragging}
+                      />
+                    )}
+                  </SortableFileItem>
+                ))}
+              </Stack>
+            </SortableContext>
+          </DndContext>
+        </FileSelection>
+
+        {hasFiles && (
+          <Stack gap="md">
+            <Divider label="Output Destination" labelPosition="center" />
+
+            <Paper
+              withBorder
+              p="md"
+              radius="md"
+              bg="light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8))"
+              style={{ borderStyle: "solid" }}
+            >
+              <Group justify="space-between" wrap="nowrap">
+                <Group gap="md" wrap="nowrap" style={{ flex: 1 }}>
+                  <ThemeIcon variant="light" size="lg" radius="md">
+                    <FiSave size={20} />
+                  </ThemeIcon>
+                  <Box style={{ flex: 1, minWidth: 0 }}>
+                    <Text size="xs" c="dimmed" tt="uppercase" fw={700} lts={1}>
+                      Destination File
+                    </Text>
+                    <Text size="sm" fw={600} truncate="end">
+                      {destFilename}
+                    </Text>
+                    <Text size="xs" c="dimmed" truncate="end" title={destDir}>
+                      {destDir}
+                    </Text>
+                  </Box>
+                </Group>
+                <Tooltip label="Change destination" withArrow>
+                  <ActionIcon
+                    variant="light"
+                    color="blue"
+                    size="lg"
+                    radius="md"
+                    onClick={handleSaveLocation}
+                  >
+                    <FiEdit2 size={18} />
+                  </ActionIcon>
+                </Tooltip>
               </Group>
-              <Tooltip label="Change destination" withArrow>
-                <ActionIcon
-                  variant="light"
-                  color="blue"
-                  size="lg"
-                  radius="md"
-                  onClick={handleSaveLocation}
-                >
-                  <FiEdit2 size={18} />
-                </ActionIcon>
-              </Tooltip>
-            </Group>
-          </Paper>
-        </Stack>
-      )}
-    </Stack>
+            </Paper>
+          </Stack>
+        )}
+      </Stack>
+    </ToolDetailShell>
   );
 }
