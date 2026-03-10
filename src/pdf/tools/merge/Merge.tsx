@@ -36,7 +36,7 @@ import { useMergeState } from "./merge.store";
 
 export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
   const {
-    files,
+    inputs,
     destinationPath,
     isLoading,
     addFiles,
@@ -44,6 +44,7 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
     removeFile,
     setDestinationPath,
     runMerge,
+    updateFileSelection,
   } = useMergeState();
 
   const sensors = useSensors(
@@ -65,7 +66,7 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
     if (selected) {
       const newFiles = Array.isArray(selected) ? selected : [selected];
       addFiles(newFiles);
-      if (files.length === 0 && newFiles.length > 0) {
+      if (inputs.length === 0 && newFiles.length > 0) {
         setDestinationPath(getDefaultDestination(newFiles[0]));
       }
     }
@@ -83,13 +84,13 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
 
     if (!over || active.id === over.id) return;
 
-    const oldIndex = files.indexOf(String(active.id));
-    const newIndex = files.indexOf(String(over.id));
+    const oldIndex = inputs.findIndex((f) => f.file === String(active.id));
+    const newIndex = inputs.findIndex((f) => f.file === String(over.id));
 
-    setFiles(arrayMove(files, oldIndex, newIndex));
+    setFiles(arrayMove(inputs, oldIndex, newIndex));
   };
 
-  const hasFiles = files.length > 0;
+  const hasFiles = inputs.length > 0;
   const destFilename = destinationPath.split(/[/\\]/).pop() || destinationPath;
   const destDir = destinationPath.substring(
     0,
@@ -113,16 +114,20 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
             onDragEnd={handleDragEnd}
           >
             <SortableContext
-              items={files}
+              items={inputs.map((f) => f.file)}
               strategy={verticalListSortingStrategy}
             >
               <Stack gap="xs">
-                {files.map((file) => (
-                  <SortableFileItem key={file} id={file}>
+                {inputs.map((fileInput) => (
+                  <SortableFileItem key={fileInput.file} id={fileInput.file}>
                     {({ attributes, listeners, isDragging }) => (
                       <FileItem
-                        file={file}
-                        onRemove={() => removeFile(file)}
+                        file={fileInput.file}
+                        selection={fileInput.selection}
+                        onSelectionChange={(val) =>
+                          updateFileSelection(fileInput.file, val)
+                        }
+                        onRemove={() => removeFile(fileInput.file)}
                         dragHandleProps={{ ...attributes, ...listeners }}
                         isDragging={isDragging}
                       />
