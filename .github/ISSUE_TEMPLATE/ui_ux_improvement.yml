@@ -1,0 +1,23 @@
+name: UI / UX Improvement
+description: Suggest improvements to the interface or user experience
+title: "[UI/UX]: "
+labels: ["ui/ux"]
+
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: UX Problem
+      description: What feels confusing or inefficient?
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested Improvement
+
+  - type: textarea
+    id: mockup
+    attributes:
+      label: Mockups or Examples

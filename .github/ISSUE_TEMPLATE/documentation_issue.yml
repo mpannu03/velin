@@ -1,0 +1,18 @@
+.github/ISSUE_TEMPLATE/documentation_issue.ymlname: Documentation Issue
+description: Report missing or incorrect documentation
+title: "[Docs]: "
+labels: ["documentation"]
+
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Documentation Problem
+      description: What part of the documentation is incorrect or missing?
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested Improvement
