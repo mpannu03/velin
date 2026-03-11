@@ -4,7 +4,7 @@ use flume::Sender;
 
 use crate::pdf::reader::{Annotation, RenderedTile};
 use crate::pdf::reader::{PageText, RenderedPage, SearchHit};
-use crate::pdf::tools::MergeInput;
+use crate::pdf::tools::PageSelectionInput;
 use crate::pdf::{Bookmarks, DocumentId, PdfInfo};
 
 pub enum PdfEvent {
@@ -72,7 +72,7 @@ pub enum PdfEvent {
         reply: Sender<Result<(), String>>,
     },
     Merge {
-        inputs: Vec<MergeInput>,
+        inputs: Vec<PageSelectionInput>,
         dest: String,
         reply: Sender<Result<(), String>>,
     },

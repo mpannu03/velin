@@ -1,6 +1,6 @@
 use crate::{
     pdf::{
-        tools::{self, MergeInputRaw},
+        tools::{self, PageSelectionInputRaw},
         worker::PdfEvent,
     },
     state::AppState,
@@ -8,7 +8,7 @@ use crate::{
 
 pub async fn merge_pdfs(
     state: &AppState,
-    raw_inputs: Vec<MergeInputRaw>,
+    raw_inputs: Vec<PageSelectionInputRaw>,
     dest: String,
 ) -> Result<(), String> {
     let manager = state.manager.read();

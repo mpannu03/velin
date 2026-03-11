@@ -1,8 +1,8 @@
 import { InvokeResult, safeInvoke } from "./invokeResult";
-import { MergeInput } from "@/pdf/tools";
+import { PageSelectionInput } from "@/pdf/tools";
 
 export const mergePdfs = async (
-  inputs: MergeInput[],
+  inputs: PageSelectionInput[],
   dest: string,
 ): Promise<InvokeResult<void>> => {
   return safeInvoke("merge_pdfs", { rawInputs: inputs, dest });

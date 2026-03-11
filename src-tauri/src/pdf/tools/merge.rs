@@ -1,23 +1,13 @@
 use std::path::PathBuf;
 
 use pdfium_render::prelude::Pdfium;
-use serde::Deserialize;
 
-use crate::utils::page_selection::{PageSelection, PageSelectionParser};
+use crate::{
+    pdf::tools::{PageSelectionInput, PageSelectionInputRaw},
+    utils::page_selection::PageSelectionParser,
+};
 
-#[derive(Debug, Deserialize)]
-pub struct MergeInputRaw {
-    pub file: String,
-    pub selection: Option<String>,
-}
-
-#[derive(Debug)]
-pub struct MergeInput {
-    pub file: String,
-    pub selection: Option<PageSelection>,
-}
-
-pub fn merge(pdfium: &Pdfium, inputs: Vec<MergeInput>, dest: String) -> Result<(), String> {
+pub fn merge(pdfium: &Pdfium, inputs: Vec<PageSelectionInput>, dest: String) -> Result<(), String> {
     if inputs.is_empty() {
         return Err("No files provided".to_string());
     }
@@ -62,7 +52,9 @@ pub fn merge(pdfium: &Pdfium, inputs: Vec<MergeInput>, dest: String) -> Result<(
     Ok(())
 }
 
-pub fn prepare_merge_inputs(raw_inputs: Vec<MergeInputRaw>) -> Result<Vec<MergeInput>, String> {
+pub fn prepare_merge_inputs(
+    raw_inputs: Vec<PageSelectionInputRaw>,
+) -> Result<Vec<PageSelectionInput>, String> {
     let mut inputs = Vec::new();
 
     for raw in raw_inputs {
@@ -75,7 +67,7 @@ pub fn prepare_merge_inputs(raw_inputs: Vec<MergeInputRaw>) -> Result<Vec<MergeI
             None => None,
         };
 
-        inputs.push(MergeInput {
+        inputs.push(PageSelectionInput {
             file: raw.file,
             selection,
         });
