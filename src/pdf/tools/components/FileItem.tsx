@@ -9,7 +9,7 @@ import {
   TextInput,
   Stack,
 } from "@mantine/core";
-import { FiFileText, FiMove, FiTrash2, FiSettings } from "react-icons/fi";
+import { FileText, Move, Trash2, Settings } from "lucide-react";
 
 interface FileItemProps {
   file: string;
@@ -60,12 +60,12 @@ export function FileItem({
                 style={{ cursor: "grab" }}
                 {...dragHandleProps}
               >
-                <FiMove size={18} />
+                <Move size={18} />
               </ActionIcon>
             </Tooltip>
 
             <ThemeIcon variant="light" size="lg" radius="md">
-              <FiFileText size={20} />
+              <FileText size={20} />
             </ThemeIcon>
 
             <Box style={{ flex: 1, minWidth: 0 }}>
@@ -85,7 +85,7 @@ export function FileItem({
               onClick={onRemove}
               size="md"
             >
-              <FiTrash2 size={18} />
+              <Trash2 size={18} />
             </ActionIcon>
           </Tooltip>
         </Group>
@@ -93,7 +93,7 @@ export function FileItem({
         <TextInput
           size="xs"
           placeholder="Page selection (e.g. 1, 3-5, odd, last)"
-          leftSection={<FiSettings size={14} />}
+          leftSection={<Settings size={14} />}
           value={selection || ""}
           onChange={(e) => onSelectionChange?.(e.currentTarget.value)}
           styles={{

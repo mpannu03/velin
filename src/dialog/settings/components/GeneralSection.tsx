@@ -1,7 +1,7 @@
 import { GeneralSettings, Settings } from "@/shared/types";
 import { Box, Group, Select, Stack, Text, Switch } from "@mantine/core";
 import { JSX } from "react";
-import { FiGlobe } from "react-icons/fi";
+import { Globe } from "lucide-react";
 import { DictionarySettingsItem } from "./DictionarySettingsItem";
 
 export function GeneralSection({
@@ -26,7 +26,7 @@ export function GeneralSection({
             { label: "French", value: "fr" },
             { label: "German", value: "de" },
           ]}
-          leftSection={<FiGlobe size={16} />}
+          leftSection={<Globe size={16} />}
           radius="md"
           allowDeselect={false}
         />

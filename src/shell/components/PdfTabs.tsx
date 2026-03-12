@@ -1,7 +1,7 @@
 import { ActionIcon, Divider, Group, Text, Tooltip } from "@mantine/core";
 import { JSX, useEffect } from "react";
 import { PdfDocument } from "@/shared/types";
-import { FiPlus, FiX } from "react-icons/fi";
+import { Plus, X } from "lucide-react";
 import { useHover } from "@mantine/hooks";
 import { useDocumentsStore } from "@/app/store/documents.store";
 import { closePdf, openPdf } from "@/pdf/reader";
@@ -78,7 +78,7 @@ export function PdfTabs(): JSX.Element {
             onClick={() => openPdf()}
             aria-label={t("file.open")}
           >
-            <FiPlus size={18} />
+            <Plus size={18} />
           </ActionIcon>
         </Tooltip>
       </Group>
@@ -173,7 +173,7 @@ function Tab({ tab }: TabProps): JSX.Element {
           e.stopPropagation();
         }}
       >
-        <FiX />
+        <X />
       </ActionIcon>
     </Group>
   );

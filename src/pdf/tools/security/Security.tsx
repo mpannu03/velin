@@ -8,7 +8,7 @@ import {
   Alert,
 } from "@mantine/core";
 import { JSX, useState } from "react";
-import { FiShield, FiAlertTriangle } from "react-icons/fi";
+import { Shield, AlertTriangle } from "lucide-react";
 import { FileSelection } from "../components";
 
 export function Security({
@@ -51,7 +51,7 @@ export function Security({
               </Stack>
 
               <Alert
-                icon={<FiShield size={16} />}
+                icon={<Shield size={16} />}
                 title="Encryption Level"
                 color="green"
                 variant="light"
@@ -63,7 +63,7 @@ export function Security({
 
           {mode === "unlock" && (
             <Alert
-              icon={<FiAlertTriangle size={16} />}
+              icon={<AlertTriangle size={16} />}
               title="Warning"
               color="red"
               variant="light"

@@ -1,6 +1,6 @@
 import { Card, Text, Group, Badge, Stack, ActionIcon, Box, Progress } from '@mantine/core';
 import { DocumentMeta } from '@/shared/types';
-import { FiStar, FiFile, FiClock, FiTrash } from 'react-icons/fi';
+import { Star, File, Clock, Trash } from 'lucide-react';
 import { JSX, useMemo } from 'react';
 import { convertFileSrc } from '@tauri-apps/api/core';
 
@@ -57,7 +57,7 @@ export function DocumentCard({ document, onClick, onDelete, onToggleStar }: Docu
               loading="lazy"
             />
           ) : (
-            <FiFile size={48} stroke="var(--mantine-color-gray-4)" />
+            <File size={48} stroke="var(--mantine-color-gray-4)" />
           )}
         </Box>
       </Card.Section>
@@ -76,7 +76,7 @@ export function DocumentCard({ document, onClick, onDelete, onToggleStar }: Docu
                 onToggleStar?.();
               }}
             >
-              <FiStar size={16} style={{ fill: document.starred ? 'currentColor' : 'none' }} />
+              <Star size={16} style={{ fill: document.starred ? 'currentColor' : 'none' }} />
             </ActionIcon>
             <ActionIcon 
               variant="subtle" 
@@ -88,7 +88,7 @@ export function DocumentCard({ document, onClick, onDelete, onToggleStar }: Docu
               onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--mantine-color-red-6)')}
               onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--mantine-color-gray-6)')}
             >
-              <FiTrash size={16} />
+              <Trash size={16} />
             </ActionIcon>
           </Group>
         </Group>
@@ -102,7 +102,7 @@ export function DocumentCard({ document, onClick, onDelete, onToggleStar }: Docu
         </Stack>
 
         <Group gap={4} wrap="nowrap">
-          <FiClock size={12} color="var(--mantine-color-gray-6)" />
+          <Clock size={12} color="var(--mantine-color-gray-6)" />
           <Text size="xs" c="dimmed">
             {formattedDate}
           </Text>

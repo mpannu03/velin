@@ -8,7 +8,7 @@ import {
   Group,
 } from "@mantine/core";
 import { JSX, useState, ReactNode } from "react";
-import { FiPlus, FiUploadCloud } from "react-icons/fi";
+import { Plus, CloudUpload } from "lucide-react";
 
 interface FileSelectionProps {
   onSelect: () => void;
@@ -65,7 +65,7 @@ export function FileSelection({
               transform: hovered ? "scale(1.05)" : "scale(1)",
             }}
           >
-            <FiUploadCloud size={40} />
+            <CloudUpload size={40} />
           </ThemeIcon>
 
           <Box style={{ textAlign: "center" }}>
@@ -81,7 +81,7 @@ export function FileSelection({
           </Box>
 
           <Button
-            leftSection={<FiPlus size={20} />}
+            leftSection={<Plus size={20} />}
             radius="md"
             size="md"
             variant={hovered ? "filled" : "light"}
@@ -99,7 +99,7 @@ export function FileSelection({
             <Button
               variant="subtle"
               size="xs"
-              leftSection={<FiPlus size={14} />}
+              leftSection={<Plus size={14} />}
               onClick={onSelect}
             >
               Add More

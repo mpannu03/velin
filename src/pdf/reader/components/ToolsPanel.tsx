@@ -4,30 +4,30 @@ import { MousePointer, Hand, Book } from "lucide-react";
 import { usePdfViewerStore, ViewerTool } from "../stores";
 
 type ToolsPanelProps = {
-	documentId: string;
+  documentId: string;
 };
 
 export function ToolsPanel({ documentId }: ToolsPanelProps): JSX.Element {
-	const state = usePdfViewerStore(s => s.getState(documentId));
-	const setTool = usePdfViewerStore.getState().setTool;
+  const state = usePdfViewerStore((s) => s.getState(documentId));
+  const setTool = usePdfViewerStore.getState().setTool;
 
-	return (
-		<Paper
-			shadow="xs"
+  return (
+    <Paper
+      shadow="xs"
       p="xs"
-			m="xs"
-			h="fit-content"
-			w="50"
+      m="xs"
+      h="fit-content"
+      w="50"
       withBorder
       style={{
-        display: 'flex',
-        flexDirection: 'column',
+        display: "flex",
+        flexDirection: "column",
       }}
-		>
-			<Stack gap="xs" align="center">
+    >
+      <Stack gap="xs" align="center">
         <Tooltip label="Selection Tool" position="left">
           <ActionIcon
-            variant={state.tool === ViewerTool.Cursor ? 'filled' : 'light'}
+            variant={state.tool === ViewerTool.Cursor ? "filled" : "light"}
             onClick={() => setTool(documentId, ViewerTool.Cursor)}
             size="lg"
           >
@@ -36,7 +36,7 @@ export function ToolsPanel({ documentId }: ToolsPanelProps): JSX.Element {
         </Tooltip>
         <Tooltip label="Hand Tool" position="left">
           <ActionIcon
-            variant={state.tool === ViewerTool.Hand ? 'filled' : 'light'}
+            variant={state.tool === ViewerTool.Hand ? "filled" : "light"}
             onClick={() => setTool(documentId, ViewerTool.Hand)}
             size="lg"
           >
@@ -45,7 +45,7 @@ export function ToolsPanel({ documentId }: ToolsPanelProps): JSX.Element {
         </Tooltip>
         <Tooltip label="Dictionary Tool" position="left">
           <ActionIcon
-            variant={state.tool === ViewerTool.Dictionary ? 'filled' : 'light'}
+            variant={state.tool === ViewerTool.Dictionary ? "filled" : "light"}
             onClick={() => setTool(documentId, ViewerTool.Dictionary)}
             size="lg"
           >
@@ -53,6 +53,6 @@ export function ToolsPanel({ documentId }: ToolsPanelProps): JSX.Element {
           </ActionIcon>
         </Tooltip>
       </Stack>
-		</Paper>
-	);
+    </Paper>
+  );
 }

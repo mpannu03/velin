@@ -1,6 +1,6 @@
 import { Group, Text, ActionIcon, Box, Stack, Badge, Progress, Card } from '@mantine/core';
 import { DocumentMeta } from '@/shared/types';
-import { FiStar, FiFile, FiClock, FiTrash } from 'react-icons/fi';
+import { Star, File, Clock, Trash } from 'lucide-react';
 import { JSX, useMemo } from 'react';
 import { convertFileSrc } from '@tauri-apps/api/core';
 
@@ -65,7 +65,7 @@ export function DocumentListItem({ document, onClick, onDelete, onToggleStar }: 
               loading="lazy"
             />
           ) : (
-            <FiFile size={24} />
+            <File size={24} />
           )}
         </Box>
 
@@ -83,7 +83,7 @@ export function DocumentListItem({ document, onClick, onDelete, onToggleStar }: 
                   onToggleStar?.();
                 }}
               >
-                <FiStar size={16} style={{ fill: document.starred ? 'currentColor' : 'none' }} />
+                <Star size={16} style={{ fill: document.starred ? 'currentColor' : 'none' }} />
               </ActionIcon>
               <ActionIcon 
                 variant="subtle" 
@@ -95,7 +95,7 @@ export function DocumentListItem({ document, onClick, onDelete, onToggleStar }: 
                 onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--mantine-color-red-6)')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--mantine-color-gray-6)')}
               >
-                <FiTrash size={16} />
+                <Trash size={16} />
               </ActionIcon>
             </Group>
           </Group>
@@ -108,7 +108,7 @@ export function DocumentListItem({ document, onClick, onDelete, onToggleStar }: 
 
           <Group gap="md">
             <Group gap={4} wrap="nowrap">
-              <FiClock size={12} color="var(--mantine-color-gray-6)" />
+              <Clock size={12} color="var(--mantine-color-gray-6)" />
               <Text size="xs" c="dimmed">
                 {formattedDate}
               </Text>

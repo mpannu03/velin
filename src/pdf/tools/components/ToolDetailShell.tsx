@@ -12,7 +12,7 @@ import {
   ScrollArea,
 } from "@mantine/core";
 import { JSX, ReactNode } from "react";
-import { FiArrowLeft, FiPlay } from "react-icons/fi";
+import { ArrowLeft, Play } from "lucide-react";
 import { ToolInfo } from "@/pdf/tools";
 
 interface ToolDetailShellProps {
@@ -47,7 +47,7 @@ export function ToolDetailShell({
                 onClick={onBackClick}
                 color="gray"
               >
-                <FiArrowLeft size={20} />
+                <ArrowLeft size={20} />
               </ActionIcon>
               <ThemeIcon
                 size={44}
@@ -69,7 +69,7 @@ export function ToolDetailShell({
               size="md"
               radius="md"
               color={tool.color}
-              leftSection={<FiPlay size={18} />}
+              leftSection={<Play size={18} />}
               onClick={onAction}
               disabled={!isValid}
             >

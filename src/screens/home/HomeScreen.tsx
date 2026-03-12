@@ -17,14 +17,14 @@ import {
 } from "@mantine/core";
 import { JSX, useState } from "react";
 import {
-  FiPlus,
-  FiBookOpen,
-  FiFileText,
-  FiClock,
-  FiStar,
-  FiGrid,
-  FiList,
-} from "react-icons/fi";
+  Plus,
+  BookOpen,
+  FileText,
+  Clock,
+  Star,
+  Grid,
+  List,
+} from "lucide-react";
 import { DocumentCard, DocumentListItem } from "./components";
 import { openPdf, openPdfFromPath } from "@/pdf/reader/renderer";
 
@@ -65,7 +65,7 @@ export function HomeScreen(): JSX.Element {
               </Stack>
               <Group>
                 <Button
-                  leftSection={<FiPlus size={18} />}
+                  leftSection={<Plus size={18} />}
                   size="md"
                   radius="md"
                   onClick={() => openPdf()}
@@ -75,7 +75,7 @@ export function HomeScreen(): JSX.Element {
                 {lastOpened && (
                   <Button
                     variant="outline"
-                    leftSection={<FiBookOpen size={18} />}
+                    leftSection={<BookOpen size={18} />}
                     size="md"
                     radius="md"
                     onClick={() => openPdfFromPath(lastOpened.filePath)}
@@ -95,10 +95,10 @@ export function HomeScreen(): JSX.Element {
               radius="md"
             >
               <Tabs.List>
-                <Tabs.Tab value="recent" leftSection={<FiClock size={16} />}>
+                <Tabs.Tab value="recent" leftSection={<Clock size={16} />}>
                   Recent
                 </Tabs.Tab>
-                <Tabs.Tab value="starred" leftSection={<FiStar size={16} />}>
+                <Tabs.Tab value="starred" leftSection={<Star size={16} />}>
                   Starred
                 </Tabs.Tab>
               </Tabs.List>
@@ -111,7 +111,7 @@ export function HomeScreen(): JSX.Element {
                 {
                   label: (
                     <Center>
-                      <FiGrid size={16} />
+                      <Grid size={16} />
                     </Center>
                   ),
                   value: "grid",
@@ -119,7 +119,7 @@ export function HomeScreen(): JSX.Element {
                 {
                   label: (
                     <Center>
-                      <FiList size={16} />
+                      <List size={16} />
                     </Center>
                   ),
                   value: "list",
@@ -169,9 +169,9 @@ export function HomeScreen(): JSX.Element {
               <Stack align="center" gap="sm">
                 <ThemeIcon size={64} radius="xl" variant="light" color="gray">
                   {activeTab === "recent" ? (
-                    <FiFileText size={32} />
+                    <FileText size={32} />
                   ) : (
-                    <FiStar size={32} />
+                    <Star size={32} />
                   )}
                 </ThemeIcon>
                 <Text fw={500} c="dimmed">

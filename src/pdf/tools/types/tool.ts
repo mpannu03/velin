@@ -1,10 +1,10 @@
-import { IconType } from "react-icons";
+import { LucideIcon } from "lucide-react";
 
 export interface ToolInfo {
   id: ToolId;
   title: string;
   description: string;
-  icon: IconType;
+  icon: LucideIcon;
   color: string;
   category: ToolCategory;
 }

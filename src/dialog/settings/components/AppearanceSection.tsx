@@ -1,7 +1,7 @@
 import { AppearanceSettings, Settings } from "@/shared/types";
 import { Box, Stack, Text, SegmentedControl, ActionIcon, ColorSwatch, Divider, Group, MantineColorScheme, useMantineTheme, useMantineColorScheme } from "@mantine/core";
 import { JSX } from "react";
-import { FiCheck, FiMonitor, FiMoon, FiSun } from "react-icons/fi";
+import { Check, Monitor, Moon, Sun } from "lucide-react";
 import { THEME_COLORS } from "@/app/theme";
 
 export function AppearanceSection({
@@ -48,7 +48,7 @@ export function AppearanceSection({
               radius="xl"
             >
               {settings.appearance.color === color ? (
-                <FiCheck size={18} />
+                <Check size={18} />
               ) : (
                 <ColorSwatch
                   color={theme.colors[color][6]}
@@ -80,7 +80,7 @@ function SegmentedControlCustom({
         {
           label: (
             <Group gap="xs" justify="center">
-              <FiSun size={14} /> Light
+              <Sun size={14} /> Light
             </Group>
           ),
           value: "light",
@@ -88,7 +88,7 @@ function SegmentedControlCustom({
         {
           label: (
             <Group gap="xs" justify="center">
-              <FiMoon size={14} /> Dark
+              <Moon size={14} /> Dark
             </Group>
           ),
           value: "dark",
@@ -96,7 +96,7 @@ function SegmentedControlCustom({
         {
           label: (
             <Group gap="xs" justify="center">
-              <FiMonitor size={14} /> System
+              <Monitor size={14} /> System
             </Group>
           ),
           value: "auto",

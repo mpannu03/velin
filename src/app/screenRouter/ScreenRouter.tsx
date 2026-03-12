@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { SCREEN_COMPONENTS } from "./screens.registry";
 import { Screen } from "@/app/types";
-import { FiBookOpen, FiEdit, FiHome, FiSettings, FiTool } from "react-icons/fi";
+import { BookOpen, Edit, Home, Settings, Wrench } from "lucide-react";
 import { useScreenState } from "@/app/screenRouter";
 import { ReaderScreen } from "@/screens";
 import { useDisclosure } from "@mantine/hooks";
@@ -91,23 +91,19 @@ export function ScreenNavigationBar(): JSX.Element {
           data={[
             {
               value: "home",
-              label: <SegmentLabel icon={<FiHome size={16} />} label="Home" />,
+              label: <SegmentLabel icon={<Home size={16} />} label="Home" />,
             },
             {
               value: "reader",
-              label: (
-                <SegmentLabel icon={<FiBookOpen size={16} />} label="Reader" />
-              ),
+              label: <SegmentLabel icon={<BookOpen size={16} />} label="Reader" />,
             },
             {
               value: "modify",
-              label: (
-                <SegmentLabel icon={<FiEdit size={16} />} label="Modify" />
-              ),
+              label: <SegmentLabel icon={<Edit size={16} />} label="Modify" />,
             },
             {
               value: "tools",
-              label: <SegmentLabel icon={<FiTool size={16} />} label="Tools" />,
+              label: <SegmentLabel icon={<Wrench size={16} />} label="Tools" />,
             },
           ]}
         />
@@ -120,7 +116,7 @@ export function ScreenNavigationBar(): JSX.Element {
             onClick={openSettings}
             color="gray"
           >
-            <FiSettings size={20} />
+            <Settings size={20} />
           </ActionIcon>
         </Tooltip>
       </Group>

@@ -11,7 +11,7 @@ import {
   LoadingOverlay,
 } from "@mantine/core";
 import { JSX } from "react";
-import { FiSave, FiEdit2 } from "react-icons/fi";
+import { Save, Pencil } from "lucide-react";
 import { FileItem, FileSelection } from "../components";
 import { pickPdfFile, savePdfFile } from "@/services/file";
 import {
@@ -153,7 +153,7 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
               <Group justify="space-between" wrap="nowrap">
                 <Group gap="md" wrap="nowrap" style={{ flex: 1 }}>
                   <ThemeIcon variant="light" size="lg" radius="md">
-                    <FiSave size={20} />
+                    <Save size={20} />
                   </ThemeIcon>
                   <Box style={{ flex: 1, minWidth: 0 }}>
                     <Text size="xs" c="dimmed" tt="uppercase" fw={700} lts={1}>
@@ -175,7 +175,7 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                     radius="md"
                     onClick={handleSaveLocation}
                   >
-                    <FiEdit2 size={18} />
+                    <Pencil size={18} />
                   </ActionIcon>
                 </Tooltip>
               </Group>

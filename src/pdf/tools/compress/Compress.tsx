@@ -10,7 +10,7 @@ import {
   Alert,
 } from "@mantine/core";
 import { JSX, useState } from "react";
-import { FiInfo } from "react-icons/fi";
+import { Info } from "lucide-react";
 import { FileSelection } from "../components";
 import { ToolPreferencesProps, TOOLS } from "../types";
 import { ToolDetailShell } from "../components";
@@ -60,7 +60,7 @@ export function Compress({ onBackPressed }: ToolPreferencesProps): JSX.Element {
             />
 
             <Alert
-              icon={<FiInfo size={16} />}
+              icon={<Info size={16} />}
               title="About this level"
               color="blue"
               variant="light"

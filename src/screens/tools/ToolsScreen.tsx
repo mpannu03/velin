@@ -12,7 +12,7 @@ import {
   Badge,
 } from "@mantine/core";
 import { JSX, useState, useMemo } from "react";
-import { FiSearch } from "react-icons/fi";
+import { Search } from "lucide-react";
 import { CATEGORIES, ToolId, TOOLS } from "@/pdf/tools";
 import { ToolCard } from "./components";
 import { useToolsStore } from "./stores";
@@ -65,7 +65,7 @@ export function ToolsScreen(): JSX.Element {
 
             <TextInput
               placeholder="Search tools..."
-              leftSection={<FiSearch size={16} />}
+              leftSection={<Search size={16} />}
               value={search}
               onChange={(e) => setSearch(e.currentTarget.value)}
               radius="md"

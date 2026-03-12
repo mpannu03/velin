@@ -1,6 +1,6 @@
 import { Center, Stack, ThemeIcon, Title, Text, Button } from "@mantine/core";
 import { JSX } from "react";
-import { FiFileText, FiPlus } from "react-icons/fi";
+import { FileText, Plus } from "lucide-react";
 import { openPdf } from "@/pdf/reader/renderer";
 
 export function NoDocumentOpened(): JSX.Element {
@@ -21,7 +21,7 @@ export function NoDocumentOpened(): JSX.Element {
             boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
           }}
         >
-          <FiFileText size={60} />
+          <FileText size={60} />
         </ThemeIcon>
 
         <Stack gap="xs" align="center">
@@ -40,7 +40,7 @@ export function NoDocumentOpened(): JSX.Element {
           px={40}
           variant="filled"
           onClick={() => openPdf()}
-          leftSection={<FiPlus size={20} />}
+          leftSection={<Plus size={20} />}
         >
           Open Document
         </Button>
