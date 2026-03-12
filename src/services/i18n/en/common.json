@@ -1,0 +1,60 @@
+{
+  "file": {
+    "_": "File",
+    "open": "Open",
+    "save": "Save",
+    "saveAs": "Save As",
+    "close": "Close",
+    "print": {
+      "_": "Print",
+      "preview": "Print Preview",
+      "setup": "Print Setup",
+      "document": "Print Document",
+      "all": "Print All",
+      "currentPage": "Print Current Page",
+      "range": "Print Range",
+      "selection": "Print Selection"
+    },
+    "exit": "Exit",
+    "quit": "Quit"
+  },
+  "edit": {
+    "_": "Edit",
+    "undo": "Undo",
+    "redo": "Redo",
+    "cut": "Cut",
+    "copy": "Copy",
+    "paste": "Paste",
+    "delete": "Delete",
+    "selectAll": "Select All"
+  },
+  "view": {
+    "_": "View",
+    "zoom": {
+      "_": "Zoom",
+      "in": "Zoom In",
+      "out": "Zoom Out",
+      "actualSize": "Actual Size",
+      "fitToPage": "Fit to Page",
+      "fitToWidth": "Fit to Width"
+    },
+    "rotate": {
+      "_": "Rotate",
+      "left": "Rotate Left",
+      "right": "Rotate Right"
+    },
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit Fullscreen"
+  },
+  "settings": {
+    "_": "Settings"
+  },
+  "help": {
+    "_": "Help",
+    "about": "About"
+  },
+  "home": "Home",
+  "reader": "Reader",
+  "modify": "Modify",
+  "tools": "Tools"
+}

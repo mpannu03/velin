@@ -20,8 +20,10 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useTranslation } from "react-i18next";
 
 export function PdfTabs(): JSX.Element {
+  const { t } = useTranslation();
   const docs = useDocumentsStore((s) => s.documents);
   const order = useDocumentsStore((s) => s.documentOrder);
   const reorder = useDocumentsStore((s) => s.reorder);
@@ -68,13 +70,13 @@ export function PdfTabs(): JSX.Element {
             );
           })}
         </SortableContext>
-        <Tooltip label="Open PDF" position="bottom" withArrow>
+        <Tooltip label={t("file.open")} position="bottom" withArrow>
           <ActionIcon
             w={36}
             h={36}
             variant="subtle"
             onClick={() => openPdf()}
-            aria-label="Open PDF"
+            aria-label={t("file.open")}
           >
             <FiPlus size={18} />
           </ActionIcon>
@@ -114,6 +116,7 @@ function SortableTab({ tab }: TabProps): JSX.Element {
 }
 
 function Tab({ tab }: TabProps): JSX.Element {
+  const { t } = useTranslation();
   const { hovered, ref } = useHover();
   const pdfStore = useDocumentsStore();
   const selectedTab = useDocumentsStore((s) => s.activeDocumentId);
@@ -161,7 +164,7 @@ function Tab({ tab }: TabProps): JSX.Element {
       </Text>
       <ActionIcon
         variant="subtle"
-        aria-label={`Close ${tab.title}`}
+        aria-label={`${t("file.close")} ${tab.title}`}
         onClick={(e) => {
           e.stopPropagation();
           closePdf(tab.id);
