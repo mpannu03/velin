@@ -1,3 +1,20 @@
 {
-    "title": "Home"
+    "recents": {
+        "title": "Recents",
+        "empty": "No documents yet",
+        "emptyDescription": "Your recently opened documents will appear here."
+    },
+    "starred": {
+        "title": "Starred",
+        "empty": "No starred documents",
+        "emptyDescription": "Your starred documents will appear here."
+    },
+    "welcome": {
+        "title": "Welcome back",
+        "description": "Open a document to start reading or continue where you left off."
+    },
+    "card": {
+        "progress": "Progress",
+        "pages": "Pages"
+    }
 }

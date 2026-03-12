@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { DocumentCard, DocumentListItem } from "./components";
 import { openPdf, openPdfFromPath } from "@/pdf/reader/renderer";
+import { useTranslation } from "react-i18next";
 
 export function HomeScreen(): JSX.Element {
   const { documents, deleteDocument, updateDocument } =
@@ -34,6 +35,7 @@ export function HomeScreen(): JSX.Element {
   const lastOpened = useDocumentRepositoryStore((state) =>
     state.getLastOpened(),
   );
+  const { t } = useTranslation(["home", "common"]);
 
   const [activeTab, setActiveTab] = useState<string | null>("recent");
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
@@ -58,9 +60,9 @@ export function HomeScreen(): JSX.Element {
           >
             <Group justify="space-between" align="center">
               <Stack gap={4}>
-                <Title order={2}>Welcome back</Title>
+                <Title order={2}>{t("welcome.title")}</Title>
                 <Text c="dimmed" size="sm">
-                  Open a PDF to start reading or continue where you left off.
+                  {t("welcome.description")}
                 </Text>
               </Stack>
               <Group>
@@ -70,7 +72,7 @@ export function HomeScreen(): JSX.Element {
                   radius="md"
                   onClick={() => openPdf()}
                 >
-                  Open PDF
+                  {t("common:file.open")}
                 </Button>
                 {lastOpened && (
                   <Button
@@ -80,7 +82,7 @@ export function HomeScreen(): JSX.Element {
                     radius="md"
                     onClick={() => openPdfFromPath(lastOpened.filePath)}
                   >
-                    Continue Reading
+                    {t("common:file.continueReading")}
                   </Button>
                 )}
               </Group>
@@ -96,10 +98,10 @@ export function HomeScreen(): JSX.Element {
             >
               <Tabs.List>
                 <Tabs.Tab value="recent" leftSection={<Clock size={16} />}>
-                  Recent
+                  {t("recents.title")}
                 </Tabs.Tab>
                 <Tabs.Tab value="starred" leftSection={<Star size={16} />}>
-                  Starred
+                  {t("starred.title")}
                 </Tabs.Tab>
               </Tabs.List>
             </Tabs>
@@ -176,13 +178,13 @@ export function HomeScreen(): JSX.Element {
                 </ThemeIcon>
                 <Text fw={500} c="dimmed">
                   {activeTab === "recent"
-                    ? "No documents yet"
-                    : "No starred documents"}
+                    ? t("recents.empty")
+                    : t("starred.empty")}
                 </Text>
                 <Text size="xs" c="dimmed">
                   {activeTab === "recent"
-                    ? "Your recently opened PDFs will appear here"
-                    : "Star your favorite documents to find them quickly"}
+                    ? t("recents.emptyDescription")
+                    : t("starred.emptyDescription")}
                 </Text>
               </Stack>
             </Center>

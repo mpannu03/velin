@@ -1,7 +1,8 @@
 {
   "file": {
     "_": "File",
-    "open": "Open",
+    "open": "Open PDF",
+    "continueReading": "Continue Reading",
     "save": "Save",
     "saveAs": "Save As",
     "close": "Close",
