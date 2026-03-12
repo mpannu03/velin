@@ -1,5 +1,7 @@
 import { open, save } from "@tauri-apps/plugin-dialog";
 
+export async function pickPdfFile(multiple: false): Promise<string | null>;
+export async function pickPdfFile(multiple: true): Promise<string[] | null>;
 export async function pickPdfFile(
   multiple: boolean = false,
 ): Promise<string | string[] | null> {

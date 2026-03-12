@@ -7,11 +7,11 @@ import { pickPdfFile } from "@/services/file";
 
 export async function openPdf() {
   const pdfStore = useDocumentsStore.getState();
-  const filePath = await pickPdfFile();
+  const filePath = await pickPdfFile(false);
   const router = useScreenState.getState();
   if (!filePath) {
     return;
-  };
+  }
 
   const result = await pdfStore.open(filePath);
 
@@ -46,7 +46,6 @@ export async function closePdf(id: string) {
   const result = await pdfStore.close(id);
   const viewerState = usePdfViewerStore.getState().getState(id);
   const documentRepositoryStore = useDocumentRepositoryStore.getState();
-
 
   if (!result.ok) {
     notifications.show({

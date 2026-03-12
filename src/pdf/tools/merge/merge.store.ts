@@ -5,14 +5,14 @@ import {
 } from "@/services/notifications";
 import { mergePdfs } from "@/services/tauri";
 import { create } from "zustand";
-import { MergeInput } from "@/pdf/tools";
+import { PageSelectionInput } from "../types";
 
 interface MergeState {
-  inputs: MergeInput[];
+  inputs: PageSelectionInput[];
   destinationPath: string;
   isLoading: boolean;
   addFiles: (filePaths: string[]) => void;
-  setFiles: (files: MergeInput[]) => void;
+  setFiles: (files: PageSelectionInput[]) => void;
   updateFileSelection: (filePath: string, selection: string | null) => void;
   removeFile: (filePath: string) => void;
   setDestinationPath: (path: string) => void;
@@ -33,7 +33,7 @@ export const useMergeState = create<MergeState>((set, get) => ({
       ],
     })),
 
-  setFiles: (inputs: MergeInput[]) => set({ inputs }),
+  setFiles: (inputs: PageSelectionInput[]) => set({ inputs }),
 
   updateFileSelection: (filePath: string, selection: string | null) =>
     set((prev) => ({
