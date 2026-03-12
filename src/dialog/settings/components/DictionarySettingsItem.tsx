@@ -14,8 +14,10 @@ import {
   Text,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export function DictionarySettingsItem() {
+  const { t } = useTranslation("settings");
   const [downloading, setDownloading] = useState(false);
   const [installed, setInstalled] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -42,10 +44,10 @@ export function DictionarySettingsItem() {
           setStage("extracting");
         }
       });
-      notifySuccess("Dictionary downloaded and installed successfully");
+      notifySuccess(t("general.dictionary.downloadSuccess"));
       setInstalled(true);
     } catch (error) {
-      notifyError("Failed to download dictionary");
+      notifyError(t("general.dictionary.downloadError"));
     } finally {
       setDownloading(false);
       setStage("idle");
@@ -56,11 +58,11 @@ export function DictionarySettingsItem() {
     <Box>
       <Group justify="space-between" align="flex-start" wrap="nowrap" mb="xs">
         <Box>
-          <Text fw={500}>Dictionary Data</Text>
+          <Text fw={500}>{t("general.dictionary.title")}</Text>
           <Text size="xs" c="dimmed">
             {installed
-              ? "Dictionary data is installed and ready for offline use."
-              : "Download dictionary data (approx. 10MB) to enable offline definitions."}
+              ? t("general.dictionary.installedDescription")
+              : t("general.dictionary.notInstalledDescription")}
           </Text>
         </Box>
         {checking ? (
@@ -74,7 +76,9 @@ export function DictionarySettingsItem() {
             disabled={installed || downloading}
             loading={downloading}
           >
-            {installed ? "Installed" : "Download"}
+            {installed
+              ? t("general.dictionary.installed")
+              : t("general.dictionary.download")}
           </Button>
         )}
       </Group>
@@ -83,7 +87,9 @@ export function DictionarySettingsItem() {
         <Stack gap="xs">
           <Group justify="space-between">
             <Text size="xs" c="dimmed">
-              {stage === "downloading" ? "Downloading..." : "Extracting..."}
+              {stage === "downloading"
+                ? t("general.dictionary.downloading")
+                : t("general.dictionary.extracting")}
             </Text>
             {stage === "downloading" && (
               <Text size="xs" c="dimmed">

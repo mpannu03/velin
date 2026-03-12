@@ -4,6 +4,7 @@ import { JSX } from "react";
 import { Globe } from "lucide-react";
 import { DictionarySettingsItem } from "./DictionarySettingsItem";
 import { LANGUAGES } from "@/services/i18n";
+import { useTranslation } from "react-i18next";
 
 export function GeneralSection({
   settings,
@@ -12,11 +13,12 @@ export function GeneralSection({
   settings: Settings;
   updateGeneral: (settings: Partial<GeneralSettings>) => void;
 }): JSX.Element {
+  const { t } = useTranslation("settings");
   return (
     <Stack gap="xl">
       <Box>
         <Text fw={600} size="sm" mb="xs" c="dimmed" tt="uppercase" lts="0.5px">
-          Language
+          {t("general.language")}
         </Text>
         <Select
           value={settings.general.language}
@@ -33,9 +35,9 @@ export function GeneralSection({
 
       <Group justify="space-between" align="flex-start" wrap="nowrap">
         <Box>
-          <Text fw={500}>Check for updates on start</Text>
+          <Text fw={500}>{t("general.updates.title")}</Text>
           <Text size="xs" c="dimmed">
-            The app will automatically check for new versions on launch.
+            {t("general.updates.description")}
           </Text>
         </Box>
         <Switch

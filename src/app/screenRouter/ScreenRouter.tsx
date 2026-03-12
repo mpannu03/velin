@@ -15,6 +15,7 @@ import { useScreenState } from "@/app/screenRouter";
 import { ReaderScreen } from "@/screens";
 import { useDisclosure } from "@mantine/hooks";
 import { SettingsDialog } from "@/dialog/settings";
+import { useTranslation } from "react-i18next";
 
 export function ScreenRouter(): JSX.Element {
   const screen = useScreenState((s) => s.screen);
@@ -40,6 +41,7 @@ export function ScreenRouter(): JSX.Element {
 }
 
 export function ScreenNavigationBar(): JSX.Element {
+  const { t } = useTranslation();
   const router = useScreenState();
   const screen = useScreenState((s) => s.screen);
   const [settingsOpened, { open: openSettings, close: closeSettings }] =
@@ -91,19 +93,30 @@ export function ScreenNavigationBar(): JSX.Element {
           data={[
             {
               value: "home",
-              label: <SegmentLabel icon={<Home size={16} />} label="Home" />,
+              label: (
+                <SegmentLabel icon={<Home size={16} />} label={t("home")} />
+              ),
             },
             {
               value: "reader",
-              label: <SegmentLabel icon={<BookOpen size={16} />} label="Reader" />,
+              label: (
+                <SegmentLabel
+                  icon={<BookOpen size={16} />}
+                  label={t("reader")}
+                />
+              ),
             },
             {
               value: "modify",
-              label: <SegmentLabel icon={<Edit size={16} />} label="Modify" />,
+              label: (
+                <SegmentLabel icon={<Edit size={16} />} label={t("modify")} />
+              ),
             },
             {
               value: "tools",
-              label: <SegmentLabel icon={<Wrench size={16} />} label="Tools" />,
+              label: (
+                <SegmentLabel icon={<Wrench size={16} />} label={t("tools")} />
+              ),
             },
           ]}
         />

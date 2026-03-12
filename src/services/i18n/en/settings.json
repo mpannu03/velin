@@ -1,0 +1,45 @@
+{
+  "title": "Settings",
+  "appearance": {
+    "title": "Appearance",
+    "colorScheme": {
+      "title": "Color Scheme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "accentColor": "Accent Color"
+  },
+  "reader": {
+    "title": "Reader",
+    "defaultViewMode": {
+      "title": "Default View Mode",
+      "single": "Single Page",
+      "continuous": "Continuous",
+      "double": "Double Page"
+    },
+    "defaultZoom": "Default Zoom Level",
+    "scrollSensitivity": "Scroll Sensitivity"
+  },
+  "general": {
+    "title": "General",
+    "language": "Language",
+    "updates": {
+      "title": "Check for Updates on startup",
+      "description": "The app will automatically check for new versions on launch."
+    },
+    "dictionary": {
+      "title": "Dictionary Data",
+      "description": "Dictionary data is installed and ready for offline use.",
+      "downloadSuccess": "Dictionary data downloaded successfully.",
+      "downloadError": "Failed to download dictionary data.",
+      "downloading": "Downloading dictionary data...",
+      "extracting": "Extracting dictionary data...",
+      "installedDescription": "Dictionary data is installed and ready for offline use.",
+      "notInstalledDescription": "Download dictionary data (approx. 10MB) to enable offline definitions.",
+      "installed": "Installed",
+      "download": "Download"
+    }
+  },
+  "restoreDefaults": "Restore Defaults"
+}

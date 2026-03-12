@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { Settings, DEFAULT_SETTINGS } from "@/shared/types";
 import { settingsStore } from "@/services/storage/store";
-import i18next from "@/services/i18n/i18n";
 
 interface SettingsState {
   settings: Settings;
@@ -63,14 +62,12 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       ...current,
       general: { ...current.general, ...patch },
     };
-    i18next.changeLanguage(nextSettings.general.language);
     set({ settings: nextSettings });
     await settingsStore.set("settings", nextSettings);
     await settingsStore.save();
   },
 
   restoreDefaults: async () => {
-    i18next.changeLanguage(DEFAULT_SETTINGS.general.language);
     set({ settings: DEFAULT_SETTINGS });
     await settingsStore.set("settings", DEFAULT_SETTINGS);
     await settingsStore.save();
