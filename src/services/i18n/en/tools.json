@@ -1,0 +1,55 @@
+{
+    "category": {
+        "all": "All",
+        "edit": "Edit",
+        "convert": "Convert",
+        "optimize": "Optimize",
+        "security": "Security"
+    },
+    "search": {
+        "placeholder": "Search tools...",
+        "empty": "No tools found matching your search."
+    },
+    "tools": {
+        "merge": {
+            "title": "Merge PDF",
+            "description": "Combine multiple PDFs into a single document."
+        },
+        "split": {
+            "title": "Split PDF",
+            "description": "Split a PDF into multiple files by page range."
+        },
+        "extract": {
+            "title": "Extract Pages",
+            "description": "Extract pages as a new PDF file."
+        },
+        "compress": {
+            "title": "Compress PDF",
+            "description": "Compress a PDF file."
+        },
+        "pdfToImage": {
+            "title": "PDF to Image",
+            "description": "Convert PDF pages into high quality images."
+        },
+        "imageToPdf": {
+            "title": "Image to PDF",
+            "description": "Convert images into a PDF file."
+        },
+        "rotate": {
+            "title": "Rotate Pages",
+            "description": "Change the orientation of your PDF pages."
+        },
+        "protect": {
+            "title": "Protect PDF",
+            "description": "Add a password and secure your document."
+        },
+        "unlock": {
+            "title": "Unlock PDF",
+            "description": "Remove password protection from your document."
+        },
+        "watermark": {
+            "title": "Add Watermark",
+            "description": "Add text or image watermark to your document."
+        }
+    }
+}

@@ -9,6 +9,7 @@ declare module "i18next" {
       common: typeof common_en;
       home: typeof home_en;
       reader: typeof reader_en;
+      tools: typeof tools_en;
     };
   }
 }

@@ -17,8 +17,10 @@ import { CATEGORIES, ToolId, TOOLS } from "@/pdf/tools";
 import { ToolCard } from "./components";
 import { useToolsStore } from "./stores";
 import { PREFS_REGISTRY } from "./registry";
+import { useTranslation } from "react-i18next";
 
 export function ToolsScreen(): JSX.Element {
+  const { t } = useTranslation("tools");
   const currentTool = useToolsStore((s) => s.currentTool);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
@@ -57,14 +59,14 @@ export function ToolsScreen(): JSX.Element {
                     radius="md"
                     style={{ cursor: "pointer", transition: "all 0.2s ease" }}
                   >
-                    {cat.label}
+                    {t(`category.${cat.value}`)}
                   </Badge>
                 </UnstyledButton>
               ))}
             </Group>
 
             <TextInput
-              placeholder="Search tools..."
+              placeholder={t("search.placeholder")}
               leftSection={<Search size={16} />}
               value={search}
               onChange={(e) => setSearch(e.currentTarget.value)}
@@ -94,7 +96,7 @@ export function ToolsScreen(): JSX.Element {
                     radius="md"
                     style={{ textAlign: "center" }}
                   >
-                    <Text c="dimmed">No tools found matching your search.</Text>
+                    <Text c="dimmed">{t("search.empty")}</Text>
                   </Paper>
                 )}
               </div>

@@ -10,10 +10,12 @@ import {
 } from "@mantine/core";
 import { useToolsStore } from "../stores";
 import { ToolInfo } from "@/pdf/tools";
+import { useTranslation } from "react-i18next";
 
 export function ToolCard({ tool }: { tool: ToolInfo }) {
   const { setCurrentTool } = useToolsStore();
   const Icon = tool.icon;
+  const { t } = useTranslation("tools");
 
   return (
     <UnstyledButton
@@ -26,14 +28,14 @@ export function ToolCard({ tool }: { tool: ToolInfo }) {
             <Icon size={24} />
           </ThemeIcon>
           <Box>
-            <Title order={4}>{tool.title}</Title>
+            <Title order={4}>{t(`tools.${tool.id}.title`)}</Title>
             <Badge size="xs" variant="outline" color={tool.color} mt={4}>
-              {tool.category.toUpperCase()}
+              {t(`category.${tool.category}`)}
             </Badge>
           </Box>
         </Group>
         <Text size="sm" c="dimmed" style={{ flexGrow: 1 }}>
-          {tool.description}
+          {t(`tools.${tool.id}.description`)}
         </Text>
       </Paper>
     </UnstyledButton>
