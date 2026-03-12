@@ -38,7 +38,10 @@
       "installedDescription": "Dictionary data is installed and ready for offline use.",
       "notInstalledDescription": "Download dictionary data (approx. 10MB) to enable offline definitions.",
       "installed": "Installed",
-      "download": "Download"
+      "download": "Download",
+      "onboardTitle": "Enable Offline Dictionary",
+      "onboardDescription": "To use the dictionary feature offline, we need to download additional data (approx. 10MB). Would you like to download it now?",
+      "later": "Later"
     }
   },
   "restoreDefaults": "Restore Defaults"

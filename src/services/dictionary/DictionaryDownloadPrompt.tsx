@@ -10,6 +10,7 @@ import {
 import { useState } from "react";
 import { downloadAndInstallWordNet } from "@/services/dictionary";
 import { notifyError, notifySuccess } from "../notifications";
+import { useTranslation } from "react-i18next";
 
 interface DictionaryDownloadPromptProps {
   opened: boolean;
@@ -22,6 +23,7 @@ export function DictionaryDownloadPrompt({
   onClose,
   onComplete,
 }: DictionaryDownloadPromptProps) {
+  const { t } = useTranslation("settings");
   const [downloading, setDownloading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState<"idle" | "downloading" | "extracting">(
@@ -39,11 +41,11 @@ export function DictionaryDownloadPrompt({
           setStage("extracting");
         }
       });
-      notifySuccess("Dictionary downloaded and installed successfully");
+      notifySuccess(t("general.dictionary.downloadSuccess"));
       onComplete();
       onClose();
     } catch (error) {
-      notifyError("Failed to download dictionary");
+      notifyError(t("general.dictionary.downloadError"));
       setDownloading(false);
       setStage("idle");
     }
@@ -53,23 +55,22 @@ export function DictionaryDownloadPrompt({
     <Modal
       opened={opened}
       onClose={onClose}
-      title={<Title order={4}>Additional Data Required</Title>}
+      title={<Title order={4}>{t("general.dictionary.onboardTitle")}</Title>}
       centered
       closeOnClickOutside={!downloading}
       closeOnEscape={!downloading}
       withCloseButton={!downloading}
     >
       <Stack>
-        <Text size="sm">
-          To use the dictionary feature offline, we need to download additional
-          data (approx. 10MB). Would you like to download it now?
-        </Text>
+        <Text size="sm">{t("general.dictionary.onboardDescription")}</Text>
 
         {downloading && (
           <Stack gap="xs">
             <Group justify="space-between">
               <Text size="xs" c="dimmed">
-                {stage === "downloading" ? "Downloading..." : "Extracting..."}
+                {stage === "downloading"
+                  ? t("general.dictionary.downloading")
+                  : t("general.dictionary.extracting")}
               </Text>
               {stage === "downloading" && (
                 <Text size="xs" c="dimmed">
@@ -87,7 +88,7 @@ export function DictionaryDownloadPrompt({
         <Group justify="flex-end" mt="md">
           {!downloading && (
             <Button variant="subtle" onClick={onClose} color="gray">
-              Later
+              {t("general.dictionary.later")}
             </Button>
           )}
           <Button
