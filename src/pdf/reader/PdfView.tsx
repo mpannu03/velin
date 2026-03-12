@@ -12,6 +12,7 @@ import { PdfPage, ToolsPanel, SidePanel, SideBarPanel } from "./components";
 import { pdfRenderQueue } from "./renderer";
 import { useViewportSize } from "@mantine/hooks";
 import { useDocumentRepositoryStore } from "@/app";
+import { useTranslation } from "react-i18next";
 
 type PdfViewProps = {
   doc: PdfDocument;
@@ -19,6 +20,7 @@ type PdfViewProps = {
 };
 
 export function PdfView({ doc, activeDocumentId }: PdfViewProps): JSX.Element {
+  const { t } = useTranslation("reader");
   const id: string = doc.id;
   const { info, error, loading } = usePdfInfo(id);
   const parentRef = useRef<HTMLDivElement>(null);
@@ -105,11 +107,15 @@ export function PdfView({ doc, activeDocumentId }: PdfViewProps): JSX.Element {
   }
 
   if (error) {
-    return <div>Loading Error: {error}</div>;
+    return (
+      <div>
+        {t("error.loading")} {error}
+      </div>
+    );
   }
 
   if (!info) {
-    return <div>Loading PDF info...</div>;
+    return <div>{t("loading.info")}</div>;
   }
 
   return (

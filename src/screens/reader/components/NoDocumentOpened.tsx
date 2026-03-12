@@ -2,8 +2,11 @@ import { Center, Stack, ThemeIcon, Title, Text, Button } from "@mantine/core";
 import { JSX } from "react";
 import { FileText, Plus } from "lucide-react";
 import { openPdf } from "@/pdf/reader/renderer";
+import { useTranslation } from "react-i18next";
 
 export function NoDocumentOpened(): JSX.Element {
+  const { t } = useTranslation(["common", "reader"]);
+
   return (
     <Center
       style={{
@@ -26,11 +29,10 @@ export function NoDocumentOpened(): JSX.Element {
 
         <Stack gap="xs" align="center">
           <Title order={2} fw={800} c="brightness(1.2)" ta="center">
-            No Open Documents
+            {t("reader:empty.title")}
           </Title>
           <Text c="dimmed" size="lg" maw={320} ta="center" fw={500}>
-            Your reader is currently empty. Open a PDF file to start reading and
-            annotating.
+            {t("reader:empty.description")}
           </Text>
         </Stack>
 
@@ -42,7 +44,7 @@ export function NoDocumentOpened(): JSX.Element {
           onClick={() => openPdf()}
           leftSection={<Plus size={20} />}
         >
-          Open Document
+          {t("common:file.open")}
         </Button>
       </Stack>
     </Center>

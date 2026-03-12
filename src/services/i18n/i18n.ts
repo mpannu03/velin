@@ -11,7 +11,7 @@ i18next.use(initReactI18next).init({
   lng: supportedLngs.includes(lng) ? lng : DEFAULT_LANGUAGE,
   fallbackLng: DEFAULT_LANGUAGE,
   supportedLngs,
-  ns: ["common", "home"],
+  ns: ["common", "home", "reader"],
   defaultNS: "common",
   keySeparator: ".",
   nsSeparator: ":",

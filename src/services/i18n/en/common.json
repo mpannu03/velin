@@ -1,7 +1,7 @@
 {
   "file": {
     "_": "File",
-    "open": "Open PDF",
+    "open": "Open Document",
     "continueReading": "Continue Reading",
     "save": "Save",
     "saveAs": "Save As",
@@ -33,9 +33,10 @@
     "_": "View",
     "zoom": {
       "_": "Zoom",
-      "in": "Zoom In",
-      "out": "Zoom Out",
-      "actualSize": "Actual Size",
+      "in": "Zoom In (Ctrl + Plus)",
+      "out": "Zoom Out (Ctrl + Minus)",
+      "reset": "Reset Zoom (Ctrl + 0)",
+      "actualSize": "Actual Size (Ctrl + 0)",
       "fitToPage": "Fit to Page",
       "fitToWidth": "Fit to Width"
     },

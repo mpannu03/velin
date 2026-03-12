@@ -1,23 +1,33 @@
-import { useEffect, useState } from 'react';
-import { ActionIcon, Divider, Input, Paper, Stack, Text, Tooltip } from '@mantine/core';
-import { useHotkeys } from '@mantine/hooks';
+import { useEffect, useState } from "react";
+import {
+  ActionIcon,
+  Divider,
+  Input,
+  Paper,
+  Stack,
+  Text,
+  Tooltip,
+} from "@mantine/core";
+import { useHotkeys } from "@mantine/hooks";
 import {
   ZoomIn,
   ZoomOut,
   MessageCircle,
   Bookmark,
   Search,
-  Book
+  Book,
 } from "lucide-react";
-import { usePageIndicator } from '../hooks';
-import { SidebarPanel, usePdfViewerStore } from '../stores';
+import { usePageIndicator } from "../hooks";
+import { SidebarPanel, usePdfViewerStore } from "../stores";
+import { useTranslation } from "react-i18next";
 
 type SideBarPanelProps = {
-    documentId: string;
+  documentId: string;
 };
 
 export function SideBarPanel({ documentId }: SideBarPanelProps) {
-  const state = usePdfViewerStore(s => s.getState(documentId));
+  const { t } = useTranslation(["common", "reader"]);
+  const state = usePdfViewerStore((s) => s.getState(documentId));
   const zoomIn = () => usePdfViewerStore.getState().zoomIn(documentId);
   const zoomOut = () => usePdfViewerStore.getState().zoomOut(documentId);
   const resetZoom = () => usePdfViewerStore.getState().resetZoom(documentId);
@@ -25,9 +35,9 @@ export function SideBarPanel({ documentId }: SideBarPanelProps) {
   const pageIndicator = usePageIndicator(documentId);
 
   useHotkeys([
-    ['mod+plus', zoomIn],
-    ['mod+minus', zoomOut],
-    ['mod+0', resetZoom],
+    ["mod+plus", zoomIn],
+    ["mod+minus", zoomOut],
+    ["mod+0", resetZoom],
   ]);
 
   return (
@@ -38,60 +48,78 @@ export function SideBarPanel({ documentId }: SideBarPanelProps) {
       w="50"
       h="100%"
       style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
       }}
     >
       <Stack gap="xs" align="center">
-        <Tooltip label="Comments" position="left">
+        <Tooltip label={t("reader:panel.comments")} position="left">
           <ActionIcon
-            variant={state.sidebar === SidebarPanel.Comments ? 'filled' : 'light'}
+            variant={
+              state.sidebar === SidebarPanel.Comments ? "filled" : "light"
+            }
             size="lg"
-            onClick={() => setSidebar(
-              documentId, state.sidebar === SidebarPanel.Comments 
-                ? SidebarPanel.None 
-                : SidebarPanel.Comments
-            )}
+            onClick={() =>
+              setSidebar(
+                documentId,
+                state.sidebar === SidebarPanel.Comments
+                  ? SidebarPanel.None
+                  : SidebarPanel.Comments,
+              )
+            }
           >
             <MessageCircle size={20} />
           </ActionIcon>
         </Tooltip>
-        <Tooltip label="Bookmarks" position="left">
+        <Tooltip label={t("reader:panel.bookmarks")} position="left">
           <ActionIcon
-            variant={state.sidebar === SidebarPanel.Bookmarks ? 'filled' : 'light'}
+            variant={
+              state.sidebar === SidebarPanel.Bookmarks ? "filled" : "light"
+            }
             size="lg"
-            onClick={() => setSidebar(
-              documentId, state.sidebar === SidebarPanel.Bookmarks 
-                ? SidebarPanel.None 
-                : SidebarPanel.Bookmarks
-            )}
+            onClick={() =>
+              setSidebar(
+                documentId,
+                state.sidebar === SidebarPanel.Bookmarks
+                  ? SidebarPanel.None
+                  : SidebarPanel.Bookmarks,
+              )
+            }
           >
             <Bookmark size={20} />
           </ActionIcon>
         </Tooltip>
-        <Tooltip label="Search" position="left">
+        <Tooltip label={t("reader:panel.search")} position="left">
           <ActionIcon
-            variant={state.sidebar === SidebarPanel.Search ? 'filled' : 'light'}
+            variant={state.sidebar === SidebarPanel.Search ? "filled" : "light"}
             size="lg"
-            onClick={() => setSidebar(
-              documentId, state.sidebar === SidebarPanel.Search 
-                ? SidebarPanel.None 
-                : SidebarPanel.Search
-            )}
+            onClick={() =>
+              setSidebar(
+                documentId,
+                state.sidebar === SidebarPanel.Search
+                  ? SidebarPanel.None
+                  : SidebarPanel.Search,
+              )
+            }
           >
             <Search size={20} />
           </ActionIcon>
         </Tooltip>
-        <Tooltip label="Dictionary" position="left">
+        <Tooltip label={t("reader:panel.dictionary")} position="left">
           <ActionIcon
-            variant={state.sidebar === SidebarPanel.Dictionary ? 'filled' : 'light'}
+            variant={
+              state.sidebar === SidebarPanel.Dictionary ? "filled" : "light"
+            }
             size="lg"
-            onClick={() => setSidebar(
-              documentId, state.sidebar === SidebarPanel.Dictionary 
-                ? SidebarPanel.None 
-                : SidebarPanel.Dictionary
-            )}
+            onClick={() =>
+              setSidebar(
+                documentId,
+                state.sidebar === SidebarPanel.Dictionary
+                  ? SidebarPanel.None
+                  : SidebarPanel.Dictionary,
+              )
+            }
           >
             <Book size={20} />
           </ActionIcon>
@@ -101,44 +129,40 @@ export function SideBarPanel({ documentId }: SideBarPanelProps) {
       <Stack align="center" gap="xs">
         <PageGotoInput id={documentId} />
         <Divider w={16} />
-        <Text size="xs">
-          {pageIndicator?.total}
-        </Text>
+        <Text size="xs">{pageIndicator?.total}</Text>
 
-        <Tooltip label="Zoom In (Ctrl+Plus)" position="left">
+        <Tooltip label={t("common:view.zoom.in")} position="left">
           <ActionIcon variant="light" onClick={zoomIn} size="lg">
             <ZoomIn size={20} />
           </ActionIcon>
         </Tooltip>
 
-        <Tooltip label="Reset Zoom (Ctrl+0)" position="left">
-          <Text 
-            size="xs" 
-            fw={700} 
-            style={{ fontSize: 11, textAlign: 'center', cursor: 'pointer' }}
+        <Tooltip label={t("common:view.zoom.reset")} position="left">
+          <Text
+            size="xs"
+            fw={700}
+            style={{ fontSize: 11, textAlign: "center", cursor: "pointer" }}
             onClick={resetZoom}
           >
             {Math.round(state.scale * 100)}%
           </Text>
         </Tooltip>
 
-        <Tooltip label="Zoom Out (Ctrl+Minus)" position="left">
+        <Tooltip label={t("common:view.zoom.out")} position="left">
           <ActionIcon variant="light" onClick={zoomOut} size="lg">
             <ZoomOut size={20} />
           </ActionIcon>
         </Tooltip>
       </Stack>
     </Paper>
-    );
+  );
 }
 
 function PageGotoInput({ id }: { id: string }) {
   const pageIndicator = usePageIndicator(id);
   const goToPage = usePdfViewerStore((s) => s.gotoPage);
 
-  const [value, setValue] = useState(
-    pageIndicator?.current.toString() ?? ""
-  );
+  const [value, setValue] = useState(pageIndicator?.current.toString() ?? "");
 
   useEffect(() => {
     setValue(pageIndicator?.current.toString() ?? "");
@@ -150,10 +174,7 @@ function PageGotoInput({ id }: { id: string }) {
     const num = Number(value);
     if (!Number.isInteger(num)) return;
 
-    const pageIndex = Math.min(
-      Math.max(num - 1, 0),
-      pageIndicator.total - 1
-    );
+    const pageIndex = Math.min(Math.max(num - 1, 0), pageIndicator.total - 1);
 
     goToPage(id, pageIndex);
     element?.blur();
@@ -181,4 +202,3 @@ function PageGotoInput({ id }: { id: string }) {
     />
   );
 }
-

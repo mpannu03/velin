@@ -2,12 +2,14 @@ import { ActionIcon, Paper, Stack, Tooltip } from "@mantine/core";
 import { JSX } from "react";
 import { MousePointer, Hand, Book } from "lucide-react";
 import { usePdfViewerStore, ViewerTool } from "../stores";
+import { useTranslation } from "react-i18next";
 
 type ToolsPanelProps = {
   documentId: string;
 };
 
 export function ToolsPanel({ documentId }: ToolsPanelProps): JSX.Element {
+  const { t } = useTranslation("reader");
   const state = usePdfViewerStore((s) => s.getState(documentId));
   const setTool = usePdfViewerStore.getState().setTool;
 
@@ -25,7 +27,7 @@ export function ToolsPanel({ documentId }: ToolsPanelProps): JSX.Element {
       }}
     >
       <Stack gap="xs" align="center">
-        <Tooltip label="Selection Tool" position="left">
+        <Tooltip label={t("tools.selection")} position="left">
           <ActionIcon
             variant={state.tool === ViewerTool.Cursor ? "filled" : "light"}
             onClick={() => setTool(documentId, ViewerTool.Cursor)}
@@ -34,7 +36,7 @@ export function ToolsPanel({ documentId }: ToolsPanelProps): JSX.Element {
             <MousePointer size={20} />
           </ActionIcon>
         </Tooltip>
-        <Tooltip label="Hand Tool" position="left">
+        <Tooltip label={t("tools.hand")} position="left">
           <ActionIcon
             variant={state.tool === ViewerTool.Hand ? "filled" : "light"}
             onClick={() => setTool(documentId, ViewerTool.Hand)}
@@ -43,7 +45,7 @@ export function ToolsPanel({ documentId }: ToolsPanelProps): JSX.Element {
             <Hand size={20} />
           </ActionIcon>
         </Tooltip>
-        <Tooltip label="Dictionary Tool" position="left">
+        <Tooltip label={t("tools.dictionary")} position="left">
           <ActionIcon
             variant={state.tool === ViewerTool.Dictionary ? "filled" : "light"}
             onClick={() => setTool(documentId, ViewerTool.Dictionary)}
