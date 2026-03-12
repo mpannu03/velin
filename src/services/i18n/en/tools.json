@@ -27,11 +27,11 @@
             "title": "Compress PDF",
             "description": "Compress a PDF file."
         },
-        "pdfToImage": {
+        "pdf-to-image": {
             "title": "PDF to Image",
             "description": "Convert PDF pages into high quality images."
         },
-        "imageToPdf": {
+        "image-to-pdf": {
             "title": "Image to PDF",
             "description": "Convert images into a PDF file."
         },

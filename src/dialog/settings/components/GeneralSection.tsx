@@ -3,6 +3,7 @@ import { Box, Group, Select, Stack, Text, Switch } from "@mantine/core";
 import { JSX } from "react";
 import { Globe } from "lucide-react";
 import { DictionarySettingsItem } from "./DictionarySettingsItem";
+import { LANGUAGES } from "@/services/i18n";
 
 export function GeneralSection({
   settings,
@@ -20,12 +21,10 @@ export function GeneralSection({
         <Select
           value={settings.general.language}
           onChange={(value) => updateGeneral({ language: value || "en" })}
-          data={[
-            { label: "English", value: "en" },
-            { label: "Spanish", value: "es" },
-            { label: "French", value: "fr" },
-            { label: "German", value: "de" },
-          ]}
+          data={Object.entries(LANGUAGES).map(([value, label]) => ({
+            value,
+            label,
+          }))}
           leftSection={<Globe size={16} />}
           radius="md"
           allowDeselect={false}
