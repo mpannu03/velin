@@ -101,4 +101,4 @@ export const CATEGORIES = [
   { label: "Convert", value: "convert" },
   { label: "Optimize", value: "optimize" },
   { label: "Security", value: "security" },
-];
+] as const;
