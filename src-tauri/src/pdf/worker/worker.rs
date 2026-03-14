@@ -2,7 +2,7 @@ use flume::{Receiver, Sender};
 use pdfium_render::prelude::{PdfDocument, Pdfium};
 use std::{collections::HashMap, thread};
 
-use crate::pdf::{reader, worker::PdfEvent, DocumentId};
+use crate::pdf::{reader, tools, worker::PdfEvent, DocumentId};
 
 pub struct PdfWorker {
     sender: Sender<PdfEvent>,
@@ -163,7 +163,16 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 dest,
                 reply,
             } => {
-                let result = crate::pdf::tools::merge(&pdfium, inputs, dest);
+                let result = tools::merge(&pdfium, inputs, dest);
+                let _ = reply.send(result);
+            }
+            PdfEvent::Split {
+                input,
+                dest_dir,
+                file_name,
+                reply,
+            } => {
+                let result = tools::split(&pdfium, &input, &dest_dir, &file_name);
                 let _ = reply.send(result);
             }
         }

@@ -28,3 +28,13 @@ pub async fn merge_pdfs(
 ) -> Result<(), String> {
     tools_service::merge_pdfs(&state, raw_inputs, dest).await
 }
+
+#[tauri::command]
+pub async fn split_pdf(
+    state: State<'_, AppState>,
+    raw_input: PageSelectionInputRaw,
+    dest_dir: String,
+    file_name: String,
+) -> Result<(), String> {
+    tools_service::split_pdf(&state, raw_input, dest_dir, file_name).await
+}

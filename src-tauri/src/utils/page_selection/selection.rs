@@ -98,6 +98,85 @@ impl PageSelection {
 
         Ok(result)
     }
+
+    pub fn resolve_groups(&self, total_pages: u32) -> Result<Vec<Vec<u32>>, ParseError> {
+        let mut groups = Vec::new();
+
+        for item in &self.items {
+            let mut group = Vec::new();
+
+            match item {
+                SelectionItem::Page(p) => {
+                    if *p > total_pages {
+                        return Err(ParseError::PageOutOfBounds(*p, total_pages));
+                    }
+                    group.push(*p);
+                }
+
+                SelectionItem::Range(start, end) => {
+                    if *start <= *end {
+                        for p in *start..=*end {
+                            if p > total_pages {
+                                return Err(ParseError::PageOutOfBounds(p, total_pages));
+                            }
+                            group.push(p);
+                        }
+                    } else {
+                        for p in (*end..=*start).rev() {
+                            if p > total_pages {
+                                return Err(ParseError::PageOutOfBounds(p, total_pages));
+                            }
+                            group.push(p);
+                        }
+                    }
+                }
+
+                SelectionItem::OpenStart(end) => {
+                    for p in 1..=*end {
+                        if p > total_pages {
+                            return Err(ParseError::PageOutOfBounds(p, total_pages));
+                        }
+                        group.push(p);
+                    }
+                }
+
+                SelectionItem::OpenEnd(start) => {
+                    for p in *start..=total_pages {
+                        group.push(p);
+                    }
+                }
+
+                SelectionItem::Last => {
+                    group.push(total_pages);
+                }
+
+                SelectionItem::LastMinus(n) => {
+                    let page = total_pages.saturating_sub(*n);
+                    group.push(page);
+                }
+
+                SelectionItem::Odd => {
+                    for p in 1..=total_pages {
+                        if p % 2 == 1 {
+                            group.push(p);
+                        }
+                    }
+                }
+
+                SelectionItem::Even => {
+                    for p in 1..=total_pages {
+                        if p % 2 == 0 {
+                            group.push(p);
+                        }
+                    }
+                }
+            }
+
+            groups.push(group);
+        }
+
+        Ok(groups)
+    }
 }
 
 #[cfg(test)]
@@ -179,6 +258,59 @@ mod tests {
     fn test_resolve_empty_selection() {
         let selection = PageSelection::new(vec![]);
         let result = selection.resolve(10).unwrap();
+        assert!(result.is_empty());
+    }
+
+    #[test]
+    fn test_resolve_groups_basic() {
+        let selection = PageSelection::new(vec![
+            SelectionItem::Page(1),
+            SelectionItem::Range(3, 5),
+            SelectionItem::Range(5, 3), // Descending
+            SelectionItem::Odd,
+        ]);
+        let result = selection.resolve_groups(6).unwrap();
+        assert_eq!(result.len(), 4);
+        assert_eq!(result[0], vec![1]);
+        assert_eq!(result[1], vec![3, 4, 5]);
+        assert_eq!(result[2], vec![5, 4, 3]);
+        assert_eq!(result[3], vec![1, 3, 5]);
+    }
+
+    #[test]
+    fn test_resolve_groups_special_tokens() {
+        let selection = PageSelection::new(vec![
+            SelectionItem::Last,
+            SelectionItem::LastMinus(2),
+            SelectionItem::Even,
+        ]);
+        let result = selection.resolve_groups(5).unwrap();
+        assert_eq!(result.len(), 3);
+        assert_eq!(result[0], vec![5]);
+        assert_eq!(result[1], vec![3]);
+        assert_eq!(result[2], vec![2, 4]);
+    }
+
+    #[test]
+    fn test_resolve_groups_out_of_bounds() {
+        let selection = PageSelection::new(vec![
+            SelectionItem::Page(1),
+            SelectionItem::Page(11),
+        ]);
+        let result = selection.resolve_groups(10);
+        assert!(matches!(result, Err(ParseError::PageOutOfBounds(11, 10))));
+
+        let selection = PageSelection::new(vec![
+            SelectionItem::Range(12, 15),
+        ]);
+        let result = selection.resolve_groups(10);
+        assert!(matches!(result, Err(ParseError::PageOutOfBounds(12, 10))));
+    }
+
+    #[test]
+    fn test_resolve_groups_empty() {
+        let selection = PageSelection::new(vec![]);
+        let result = selection.resolve_groups(10).unwrap();
         assert!(result.is_empty());
     }
 }

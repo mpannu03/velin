@@ -76,4 +76,10 @@ pub enum PdfEvent {
         dest: String,
         reply: Sender<Result<(), String>>,
     },
+    Split {
+        input: PageSelectionInput,
+        dest_dir: String,
+        file_name: String,
+        reply: Sender<Result<(), String>>,
+    },
 }

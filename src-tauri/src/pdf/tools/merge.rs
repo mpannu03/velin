@@ -2,14 +2,11 @@ use std::path::PathBuf;
 
 use pdfium_render::prelude::Pdfium;
 
-use crate::{
-    pdf::tools::{PageSelectionInput, PageSelectionInputRaw},
-    utils::page_selection::PageSelectionParser,
-};
+use crate::pdf::tools::PageSelectionInput;
 
 pub fn merge(pdfium: &Pdfium, inputs: Vec<PageSelectionInput>, dest: String) -> Result<(), String> {
     if inputs.is_empty() {
-        return Err("No files provided".to_string());
+        return Err("No inputs provided".to_string());
     }
 
     let mut document = pdfium.create_new_pdf().map_err(|e| e.to_string())?;
@@ -50,28 +47,4 @@ pub fn merge(pdfium: &Pdfium, inputs: Vec<PageSelectionInput>, dest: String) -> 
     document.save_to_file(&dest).map_err(|e| e.to_string())?;
 
     Ok(())
-}
-
-pub fn prepare_merge_inputs(
-    raw_inputs: Vec<PageSelectionInputRaw>,
-) -> Result<Vec<PageSelectionInput>, String> {
-    let mut inputs = Vec::new();
-
-    for raw in raw_inputs {
-        let selection = match raw.selection {
-            Some(expr) => {
-                let parsed = PageSelectionParser::parse(&expr).map_err(|e| e.to_string())?;
-                Some(parsed)
-            }
-
-            None => None,
-        };
-
-        inputs.push(PageSelectionInput {
-            file: raw.file,
-            selection,
-        });
-    }
-
-    Ok(inputs)
 }

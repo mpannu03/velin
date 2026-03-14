@@ -16,7 +16,7 @@ pub async fn merge_pdfs(
 
     let (tx, rx) = flume::bounded(1);
 
-    let inputs = tools::prepare_merge_inputs(raw_inputs).map_err(|e| e.to_string())?;
+    let inputs = tools::prepare_page_selection_inputs(raw_inputs).map_err(|e| e.to_string())?;
 
     worker
         .sender()
@@ -29,4 +29,31 @@ pub async fn merge_pdfs(
 
     rx.recv()
         .map_err(|e| format!("Error receiving merge result: {e}"))?
+}
+
+pub async fn split_pdf(
+    state: &AppState,
+    raw_input: PageSelectionInputRaw,
+    dest_dir: String,
+    file_name: String,
+) -> Result<(), String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = flume::bounded(1);
+
+    let input = tools::prepare_page_selection_input(raw_input).map_err(|e| e.to_string())?;
+
+    worker
+        .sender()
+        .send(PdfEvent::Split {
+            input,
+            dest_dir,
+            file_name,
+            reply: tx,
+        })
+        .map_err(|e| format!("Error sending split command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving split result: {e}"))?
 }
