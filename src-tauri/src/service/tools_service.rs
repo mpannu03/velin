@@ -57,3 +57,28 @@ pub async fn split_pdf(
     rx.recv()
         .map_err(|e| format!("Error receiving split result: {e}"))?
 }
+
+pub async fn extract_pdf(
+    state: &AppState,
+    raw_input: PageSelectionInputRaw,
+    dest: String,
+) -> Result<(), String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = flume::bounded(1);
+
+    let input = tools::prepare_page_selection_input(raw_input).map_err(|e| e.to_string())?;
+
+    worker
+        .sender()
+        .send(PdfEvent::Extract {
+            input,
+            dest,
+            reply: tx,
+        })
+        .map_err(|e| format!("Error sending extract command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving extract result: {e}"))?
+}

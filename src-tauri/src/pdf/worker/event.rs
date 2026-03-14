@@ -86,4 +86,9 @@ pub enum PdfEvent {
         file_name: String,
         reply: Sender<Result<(), String>>,
     },
+    Extract {
+        input: PageSelectionInput,
+        dest: String,
+        reply: Sender<Result<(), String>>,
+    },
 }

@@ -167,7 +167,7 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 dest,
                 reply,
             } => {
-                let result = tools::merge(&pdfium, inputs, dest);
+                let result = tools::merge(&pdfium, &inputs, &dest);
                 let _ = reply.send(result);
             }
             PdfEvent::Split {
@@ -177,6 +177,10 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 reply,
             } => {
                 let result = tools::split(&pdfium, &input, &dest_dir, &file_name);
+                let _ = reply.send(result);
+            }
+            PdfEvent::Extract { input, dest, reply } => {
+                let result = tools::extract(&pdfium, &input, &dest);
                 let _ = reply.send(result);
             }
         }

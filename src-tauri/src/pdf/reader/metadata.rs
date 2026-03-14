@@ -1,7 +1,4 @@
-use std::{
-    collections::HashMap,
-    path::{Path, PathBuf},
-};
+use std::{collections::HashMap, path::PathBuf};
 
 use pdfium_render::prelude::{PdfBookmark, PdfDocument, Pdfium};
 

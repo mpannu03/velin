@@ -38,3 +38,12 @@ pub async fn split_pdf(
 ) -> Result<(), String> {
     tools_service::split_pdf(&state, raw_input, dest_dir, file_name).await
 }
+
+#[tauri::command]
+pub async fn extract_pdf(
+    state: State<'_, AppState>,
+    raw_input: PageSelectionInputRaw,
+    dest: String,
+) -> Result<(), String> {
+    tools_service::extract_pdf(&state, raw_input, dest).await
+}

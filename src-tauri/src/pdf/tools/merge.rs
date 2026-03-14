@@ -4,7 +4,7 @@ use pdfium_render::prelude::Pdfium;
 
 use crate::pdf::tools::PageSelectionInput;
 
-pub fn merge(pdfium: &Pdfium, inputs: Vec<PageSelectionInput>, dest: String) -> Result<(), String> {
+pub fn merge(pdfium: &Pdfium, inputs: &Vec<PageSelectionInput>, dest: &str) -> Result<(), String> {
     if inputs.is_empty() {
         return Err("No inputs provided".to_string());
     }
@@ -18,7 +18,7 @@ pub fn merge(pdfium: &Pdfium, inputs: Vec<PageSelectionInput>, dest: String) -> 
             .load_pdf_from_file(&path, None)
             .map_err(|e| e.to_string())?;
 
-        match input.selection {
+        match &input.selection {
             Some(selection) => {
                 let total_pages = pdf_document.pages().len() as u32;
 
