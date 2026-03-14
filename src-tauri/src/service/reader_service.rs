@@ -16,6 +16,21 @@ pub fn open_pdf(state: &AppState, path: String) -> Result<String, String> {
     Ok(id)
 }
 
+pub fn get_page_count(state: &AppState, file: String) -> Result<u16, String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = flume::bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::PageCount { file, reply: tx })
+        .map_err(|e| format!("Error sending page count command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving page count result: {e}"))?
+}
+
 pub fn render_page(
     state: &AppState,
     id: String,

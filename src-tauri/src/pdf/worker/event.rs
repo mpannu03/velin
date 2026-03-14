@@ -33,6 +33,10 @@ pub enum PdfEvent {
         id: DocumentId,
         reply: Sender<Result<PdfInfo, String>>,
     },
+    PageCount {
+        file: String,
+        reply: Sender<Result<u16, String>>,
+    },
     Close {
         id: DocumentId,
         reply: Sender<Result<(), String>>,

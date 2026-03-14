@@ -87,6 +87,10 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 };
                 let _ = reply.send(result);
             }
+            PdfEvent::PageCount { file, reply } => {
+                let result = reader::get_page_count(&pdfium, &file);
+                let _ = reply.send(result);
+            }
             PdfEvent::Close { id, reply } => {
                 documents.remove(&id);
                 paths.remove(&id);

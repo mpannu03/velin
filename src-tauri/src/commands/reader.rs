@@ -15,6 +15,11 @@ pub fn open_pdf(state: State<AppState>, path: String) -> Result<String, String> 
 }
 
 #[tauri::command]
+pub fn get_page_count(state: State<AppState>, file: String) -> Result<u16, String> {
+    reader_service::get_page_count(&state, file)
+}
+
+#[tauri::command]
 pub async fn render_page(
     state: State<'_, AppState>,
     id: String,

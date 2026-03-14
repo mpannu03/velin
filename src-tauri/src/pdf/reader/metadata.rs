@@ -1,6 +1,9 @@
-use std::collections::HashMap;
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+};
 
-use pdfium_render::prelude::{PdfBookmark, PdfDocument};
+use pdfium_render::prelude::{PdfBookmark, PdfDocument, Pdfium};
 
 use crate::pdf::{Bookmark, Bookmarks, DocumentId, PdfInfo};
 
@@ -23,6 +26,17 @@ pub fn get_info(
     let pdf_info = PdfInfo::new(page_count, width, height);
 
     Ok(pdf_info)
+}
+
+pub fn get_page_count(pdfium: &Pdfium, file: &str) -> Result<u16, String> {
+    let path = PathBuf::from(file);
+    let document = pdfium
+        .load_pdf_from_file(&path, None)
+        .map_err(|e| e.to_string())?;
+
+    let page_count = document.pages().len();
+
+    Ok(page_count as u16)
 }
 
 pub fn get_bookmarks(

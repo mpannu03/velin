@@ -28,6 +28,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             // reader
             commands::reader::open_pdf,
+            commands::reader::get_page_count,
             commands::reader::render_page,
             commands::reader::close_pdf,
             commands::reader::get_pdf_info,
