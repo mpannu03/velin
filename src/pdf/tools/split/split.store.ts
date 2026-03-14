@@ -11,11 +11,13 @@ import { generateEachPageSelection, generateFixedSizeSplit } from "./utils";
 interface SplitState {
   file: string;
   selection: string;
+  destinationDir: string;
   isLoading: boolean;
   splitMode: SplitMode;
 
   setFile: (file: string) => void;
   setSelection: (selection: string) => void;
+  setDestinationDir: (dir: string) => void;
   removeFile: () => void;
   setIsLoading: (isLoading: boolean) => void;
   setSplitMode: (splitMode: SplitMode) => void;
@@ -26,13 +28,16 @@ export const useSplitStore = create<SplitState>((set, get) => ({
   file: "",
   selection: "",
   isLoading: false,
-  splitMode: "ranges",
+  splitMode: "ranges" as SplitMode,
+  destinationDir: "",
 
   setFile: (file) => set({ file }),
 
   setSelection: (selection) => set({ selection }),
 
-  removeFile: () => set({ file: "", selection: "" }),
+  setDestinationDir: (destinationDir) => set({ destinationDir }),
+
+  removeFile: () => set({ file: "", selection: "", destinationDir: "" }),
 
   setIsLoading: (isLoading) => set({ isLoading }),
 
@@ -44,10 +49,9 @@ export const useSplitStore = create<SplitState>((set, get) => ({
       setIsLoading(true);
       let result: Awaited<ReturnType<typeof splitPdf>>;
       const input = { file, selection };
-      const destinationDir = file.substring(
-        0,
-        file.lastIndexOf(file.split(/[/\\]/).pop() || ""),
-      );
+      const currentDestDir =
+        get().destinationDir ||
+        file.substring(0, file.lastIndexOf(file.split(/[/\\]/).pop() || ""));
       const fileName = file.split(/[/\\]/).pop() || "";
       switch (splitMode) {
         case "ranges":
@@ -56,7 +60,7 @@ export const useSplitStore = create<SplitState>((set, get) => ({
             setIsLoading(false);
             return;
           }
-          result = await splitPdf(input, destinationDir, fileName);
+          result = await splitPdf(input, currentDestDir, fileName);
           break;
         case "fixedSize":
           if (!selection) {
@@ -72,7 +76,7 @@ export const useSplitStore = create<SplitState>((set, get) => ({
           }
           const ranges = generateFixedSizeSplit(info.data, parseInt(selection));
           input.selection = ranges;
-          result = await splitPdf(input, destinationDir, fileName);
+          result = await splitPdf(input, currentDestDir, fileName);
           break;
         case "allPages":
           const pageInfo = await getPageCount(input.file);
@@ -82,7 +86,7 @@ export const useSplitStore = create<SplitState>((set, get) => ({
             return;
           }
           input.selection = generateEachPageSelection(pageInfo.data);
-          result = await splitPdf(input, destinationDir, fileName);
+          result = await splitPdf(input, currentDestDir, fileName);
           break;
       }
       if (result.ok) {

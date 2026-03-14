@@ -24,3 +24,12 @@ export async function savePdfFile(
 
   return path;
 }
+
+export async function pickDirectory(): Promise<string | null> {
+  const directory = await open({
+    multiple: false,
+    directory: true,
+  });
+
+  return directory;
+}
