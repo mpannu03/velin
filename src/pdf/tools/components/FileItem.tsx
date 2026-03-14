@@ -18,6 +18,8 @@ interface FileItemProps {
   onRemove: () => void;
   dragHandleProps?: any;
   isDragging?: boolean;
+  multiple?: boolean;
+  showSelection?: boolean;
 }
 
 export function FileItem({
@@ -27,6 +29,8 @@ export function FileItem({
   onRemove,
   dragHandleProps,
   isDragging,
+  multiple = true,
+  showSelection = false,
 }: FileItemProps) {
   // Extract filename from path
   const filename = file.split(/[/\\]/).pop() || file;
@@ -52,17 +56,19 @@ export function FileItem({
       <Stack gap="xs">
         <Group justify="space-between" wrap="nowrap">
           <Group gap="md" wrap="nowrap" style={{ flex: 1 }}>
-            <Tooltip label="Drag to reorder" position="left" withArrow>
-              <ActionIcon
-                variant="subtle"
-                color="gray"
-                size="md"
-                style={{ cursor: "grab" }}
-                {...dragHandleProps}
-              >
-                <Move size={18} />
-              </ActionIcon>
-            </Tooltip>
+            {multiple && (
+              <Tooltip label="Drag to reorder" position="left" withArrow>
+                <ActionIcon
+                  variant="subtle"
+                  color="gray"
+                  size="md"
+                  style={{ cursor: "grab" }}
+                  {...dragHandleProps}
+                >
+                  <Move size={18} />
+                </ActionIcon>
+              </Tooltip>
+            )}
 
             <ThemeIcon variant="light" size="lg" radius="md">
               <FileText size={20} />
@@ -90,19 +96,21 @@ export function FileItem({
           </Tooltip>
         </Group>
 
-        <TextInput
-          size="xs"
-          placeholder="Page selection (e.g. 1, 3-5, odd, last)"
-          leftSection={<Settings size={14} />}
-          value={selection || ""}
-          onChange={(e) => onSelectionChange?.(e.currentTarget.value)}
-          styles={{
-            input: {
-              backgroundColor:
-                "light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8))",
-            },
-          }}
-        />
+        {showSelection && (
+          <TextInput
+            size="xs"
+            placeholder="Page selection (e.g. 1, 3-5, odd, last)"
+            leftSection={<Settings size={14} />}
+            value={selection || ""}
+            onChange={(e) => onSelectionChange?.(e.currentTarget.value)}
+            styles={{
+              input: {
+                backgroundColor:
+                  "light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8))",
+              },
+            }}
+          />
+        )}
       </Stack>
     </Paper>
   );

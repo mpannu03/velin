@@ -8,7 +8,7 @@ import {
   Group,
 } from "@mantine/core";
 import { JSX, useState, ReactNode } from "react";
-import { Plus, CloudUpload } from "lucide-react";
+import { Plus, CloudUpload, RefreshCw } from "lucide-react";
 
 interface FileSelectionProps {
   onSelect: () => void;
@@ -94,15 +94,15 @@ export function FileSelection({
         <Stack gap="md">
           <Group justify="space-between" px="xs">
             <Text fw={700} size="sm" c="dimmed" tt="uppercase" lts={1}>
-              Files to Process
+              {multiple ? "Files to Process" : "Selected File"}
             </Text>
             <Button
               variant="subtle"
               size="xs"
-              leftSection={<Plus size={14} />}
+              leftSection={multiple ? <Plus size={14} /> : <RefreshCw size={14} />}
               onClick={onSelect}
             >
-              Add More
+              {multiple ? "Add More" : "Change File"}
             </Button>
           </Group>
 
@@ -110,28 +110,30 @@ export function FileSelection({
             {children}
           </Box>
 
-          <Box
-            p="sm"
-            style={{
-              borderTop: "1px dashed var(--mantine-color-default-border)",
-              textAlign: "center",
-              cursor: "pointer",
-              borderRadius:
-                "0 0 var(--mantine-radius-lg) var(--mantine-radius-lg)",
-            }}
-            onClick={onSelect}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.backgroundColor =
-                "var(--mantine-primary-color-light)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.backgroundColor = "transparent")
-            }
-          >
-            <Text size="xs" fw={500} c="dimmed">
-              Drop more files here or click to add
-            </Text>
-          </Box>
+          {multiple && (
+            <Box
+              p="sm"
+              style={{
+                borderTop: "1px dashed var(--mantine-color-default-border)",
+                textAlign: "center",
+                cursor: "pointer",
+                borderRadius:
+                  "0 0 var(--mantine-radius-lg) var(--mantine-radius-lg)",
+              }}
+              onClick={onSelect}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.backgroundColor =
+                  "var(--mantine-primary-color-light)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.backgroundColor = "transparent")
+              }
+            >
+              <Text size="xs" fw={500} c="dimmed">
+                Drop more files here or click to add
+              </Text>
+            </Box>
+          )}
         </Stack>
       )}
     </Paper>
