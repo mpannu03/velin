@@ -1,4 +1,4 @@
-import { Compress, Merge, Split } from "@/pdf/tools";
+import { Compress, Extract, Merge, Split } from "@/pdf/tools";
 import { ToolInfo, ToolPreferencesProps, TOOLS } from "@/pdf/tools";
 
 export type ToolDefinition = {
@@ -18,7 +18,7 @@ export const splitTool: ToolDefinition = {
 
 export const extractTool: ToolDefinition = {
   info: TOOLS.find((t) => t.id === "extract")!,
-  Preferences: Merge,
+  Preferences: Extract,
 };
 
 export const compressTool: ToolDefinition = {

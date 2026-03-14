@@ -15,3 +15,10 @@ export const splitPdf = async (
 ): Promise<InvokeResult<void>> => {
   return safeInvoke("split_pdf", { rawInput: input, destDir, fileName });
 };
+
+export const extractPdf = async (
+  input: PageSelectionInput,
+  dest: string,
+): Promise<InvokeResult<void>> => {
+  return safeInvoke("extract_pdf", { rawInput: input, dest });
+};
