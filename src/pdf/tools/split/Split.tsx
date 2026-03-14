@@ -6,6 +6,7 @@ import {
   TextInput,
   NumberInput,
   Divider,
+  LoadingOverlay,
 } from "@mantine/core";
 import { JSX } from "react";
 import { FileItem, FileSelection } from "../components";
@@ -44,8 +45,9 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
       isValid={true}
     >
       <Stack gap="lg">
+        <LoadingOverlay visible={isLoading} zIndex={1000} />
         <FileSelection onSelect={pickFiles} hasFiles={file !== ""}>
-          <FileItem file={file} onRemove={removeFile} />
+          <FileItem file={file} onRemove={removeFile} multiple={false} />
         </FileSelection>
 
         <Paper withBorder p="md" radius="md">
@@ -53,7 +55,10 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
             <Text fw={600}>Split Options</Text>
             <Radio.Group
               value={splitMode}
-              onChange={(value) => setSplitMode(value as SplitMode)}
+              onChange={(value) => {
+                setSplitMode(value as SplitMode);
+                setSelection("");
+              }}
               label="Split Mode"
               description="Choose how you want to split the document"
             >
@@ -75,6 +80,8 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                   Page Ranges
                 </Text>
                 <TextInput
+                  value={selection}
+                  onChange={(e) => setSelection(e.currentTarget.value)}
                   placeholder="e.g. 1-5, 8-12, 15, even"
                   description="Use commas to separate ranges. Example: 1-10, 15, 20-25"
                   radius="md"
@@ -88,7 +95,8 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                   Pages per File
                 </Text>
                 <NumberInput
-                  defaultValue={5}
+                  value={selection !== "" ? parseInt(selection) : undefined}
+                  onChange={(value) => setSelection(value?.toString() || "")}
                   min={1}
                   description="The document will be split into multiple files, each containing this many pages."
                   radius="md"

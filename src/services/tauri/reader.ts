@@ -6,6 +6,12 @@ export const openPdf = async (path: string): Promise<InvokeResult<string>> => {
   return safeInvoke<string>("open_pdf", { path });
 };
 
+export const getPageCount = async (
+  file: string,
+): Promise<InvokeResult<number>> => {
+  return safeInvoke<number>("get_page_count", { file });
+};
+
 export const renderPage = async (
   id: string,
   pageIndex: number,

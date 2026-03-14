@@ -5,7 +5,8 @@ import {
   notifySuccess,
   notifyWarning,
 } from "@/services/notifications";
-import { splitPdf } from "@/services/tauri";
+import { getPageCount, splitPdf } from "@/services/tauri";
+import { generateEachPageSelection, generateFixedSizeSplit } from "./utils";
 
 interface SplitState {
   file: string;
@@ -28,10 +29,15 @@ export const useSplitStore = create<SplitState>((set, get) => ({
   splitMode: "ranges",
 
   setFile: (file) => set({ file }),
+
   setSelection: (selection) => set({ selection }),
+
   removeFile: () => set({ file: "", selection: "" }),
+
   setIsLoading: (isLoading) => set({ isLoading }),
+
   setSplitMode: (splitMode) => set({ splitMode }),
+
   runSplit: async () => {
     const { file, selection, isLoading, setIsLoading, splitMode } = get();
     if (file && !isLoading) {
@@ -58,9 +64,24 @@ export const useSplitStore = create<SplitState>((set, get) => ({
             setIsLoading(false);
             return;
           }
+          const info = await getPageCount(input.file);
+          if (!info.ok) {
+            notifyError(info.error);
+            setIsLoading(false);
+            return;
+          }
+          const ranges = generateFixedSizeSplit(info.data, parseInt(selection));
+          input.selection = ranges;
           result = await splitPdf(input, destinationDir, fileName);
           break;
         case "allPages":
+          const pageInfo = await getPageCount(input.file);
+          if (!pageInfo.ok) {
+            notifyError(pageInfo.error);
+            setIsLoading(false);
+            return;
+          }
+          input.selection = generateEachPageSelection(pageInfo.data);
           result = await splitPdf(input, destinationDir, fileName);
           break;
       }
