@@ -130,6 +130,7 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                         onRemove={() => removeFile(fileInput.file)}
                         dragHandleProps={{ ...attributes, ...listeners }}
                         isDragging={isDragging}
+                        showSelection={true}
                       />
                     )}
                   </SortableFileItem>
