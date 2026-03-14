@@ -10,18 +10,90 @@
         "placeholder": "Search tools...",
         "empty": "No tools found matching your search."
     },
+    "components": {
+        "file_selection": {
+            "title_multiple": "Select PDF files to merge",
+            "title_single": "Select a PDF file to process",
+            "description": "Drag and drop your PDF files here or click anywhere in this area to browse",
+            "button_multiple": "Add PDF Files",
+            "button_single": "Select PDF",
+            "label_multiple": "Files to Process",
+            "label_single": "Selected File",
+            "add_more": "Add More",
+            "change_file": "Change File",
+            "drop_more": "Drop more files here or click to add"
+        },
+        "file_item": {
+            "drag_tooltip": "Drag to reorder",
+            "remove_tooltip": "Remove file",
+            "selection_placeholder": "Page selection (e.g. 1, 3-5, odd, last)"
+        },
+        "destination": {
+            "output_destination": "Output Destination",
+            "destination_file": "Destination File",
+            "destination_base": "Destination Base",
+            "output_directory": "Output Directory",
+            "tooltip_file": "Change destination",
+            "tooltip_dir": "Change directory"
+        }
+    },
     "tools": {
         "merge": {
             "title": "Merge PDF",
-            "description": "Combine multiple PDFs into a single document."
+            "description": "Combine multiple PDFs into a single document.",
+            "action": "Merge PDFs",
+            "notifications": {
+                "success": "PDF files merged successfully.",
+                "error": "An unexpected error occurred while merging PDFs.",
+                "warning": "Please add PDF files to merge."
+            }
         },
         "split": {
             "title": "Split PDF",
-            "description": "Split a PDF into multiple files by page range."
+            "description": "Split a PDF into multiple files by page range.",
+            "action": "Split PDF",
+            "options_title": "Split Options",
+            "mode": {
+                "label": "Split Mode",
+                "description": "Choose how you want to split the document",
+                "ranges": "Split by Ranges",
+                "fixedSize": "Fixed Page Ranges (e.g., every 5 pages)",
+                "allPages": "Extract All Pages"
+            },
+            "page_ranges": {
+                "label": "Page Ranges",
+                "description": "Use commas to separate ranges. Example: 1-10, 15, 20-25"
+            },
+            "pages_per_file": {
+                "label": "Pages per File",
+                "description": "The document will be split into multiple files, each containing this many pages."
+            },
+            "all_pages_info": "Each page of the document will be saved as a separate PDF file.",
+            "notifications": {
+                "success": "PDF file split successfully.",
+                "error": "An unexpected error occurred while splitting the PDF.",
+                "warning": {
+                    "no_file": "Please select a PDF file to split.",
+                    "no_selection": "Please select pages to split."
+                }
+            }
         },
         "extract": {
             "title": "Extract Pages",
-            "description": "Extract pages as a new PDF file."
+            "description": "Extract pages as a new PDF file.",
+            "action": "Extract Pages",
+            "pages_to_extract": {
+                "label": "Pages to Extract",
+                "description": "Use commas to separate ranges. Example: 1-10, 15, 20-25"
+            },
+            "notifications": {
+                "success": "Pages extracted successfully.",
+                "error": "An unexpected error occurred while extracting pages.",
+                "warning": {
+                    "no_file": "Please select a PDF file.",
+                    "no_selection": "Please specify pages to extract."
+                }
+            }
         },
         "compress": {
             "title": "Compress PDF",

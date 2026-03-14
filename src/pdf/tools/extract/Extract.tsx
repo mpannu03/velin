@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import { JSX } from "react";
 import { Save, Pencil } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { FileItem, FileSelection } from "../components";
 import { pickPdfFile, savePdfFile } from "@/services/file";
 import { ToolPreferencesProps, TOOLS } from "../types";
@@ -20,6 +21,7 @@ import { ToolDetailShell } from "../components";
 import { useExtractStore } from "./extract.store";
 
 export function Extract({ onBackPressed }: ToolPreferencesProps): JSX.Element {
+  const { t } = useTranslation("tools");
   const {
     file,
     selection,
@@ -66,20 +68,16 @@ export function Extract({ onBackPressed }: ToolPreferencesProps): JSX.Element {
   return (
     <ToolDetailShell
       tool={TOOLS.find((t) => t.id === "extract")!}
-      actionLabel="Extract Pages"
+      actionLabel={t("tools.extract.action")}
       onAction={runExtract}
       onBackClick={onBackPressed}
       isValid={hasFile && selection !== "" && !isLoading}
     >
       <Stack gap="lg" pos="relative">
         <LoadingOverlay visible={isLoading} zIndex={1000} />
-        
+
         <FileSelection onSelect={pickFile} hasFiles={hasFile}>
-          <FileItem 
-            file={file} 
-            onRemove={removeFile} 
-            multiple={false} 
-          />
+          <FileItem file={file} onRemove={removeFile} multiple={false} />
         </FileSelection>
 
         {hasFile && (
@@ -87,20 +85,23 @@ export function Extract({ onBackPressed }: ToolPreferencesProps): JSX.Element {
             <Paper withBorder p="md" radius="md">
               <Stack gap="xs">
                 <Text size="sm" fw={500}>
-                  Pages to Extract
+                  {t("tools.extract.pages_to_extract.label")}
                 </Text>
                 <TextInput
                   value={selection}
                   onChange={(e) => setSelection(e.currentTarget.value)}
-                  placeholder="e.g. 1-5, 8, 11-13"
-                  description="Use commas to separate ranges. Example: 1-10, 15, 20-25"
+                  placeholder={t("components.file_item.selection_placeholder")}
+                  description={t("tools.extract.pages_to_extract.description")}
                   radius="md"
                 />
               </Stack>
             </Paper>
 
             <Stack gap="md">
-              <Divider label="Output Destination" labelPosition="center" />
+              <Divider
+                label={t("components.destination.output_destination")}
+                labelPosition="center"
+              />
 
               <Paper
                 withBorder
@@ -116,7 +117,7 @@ export function Extract({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                     </ThemeIcon>
                     <Box style={{ flex: 1, minWidth: 0 }}>
                       <Text size="xs" c="dimmed" tt="uppercase" fw={700} lts={1}>
-                        Destination File
+                        {t("components.destination.destination_file")}
                       </Text>
                       <Text size="sm" fw={600} truncate="end">
                         {destFilename}
@@ -126,7 +127,10 @@ export function Extract({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                       </Text>
                     </Box>
                   </Group>
-                  <Tooltip label="Change destination" withArrow>
+                  <Tooltip
+                    label={t("components.destination.tooltip_file")}
+                    withArrow
+                  >
                     <ActionIcon
                       variant="light"
                       color="blue"

@@ -7,6 +7,7 @@ import {
 } from "@/services/notifications";
 import { getPageCount, splitPdf } from "@/services/tauri";
 import { generateEachPageSelection, generateFixedSizeSplit } from "./utils";
+import i18next from "@/services/i18n/i18n";
 
 interface SplitState {
   file: string;
@@ -56,7 +57,9 @@ export const useSplitStore = create<SplitState>((set, get) => ({
       switch (splitMode) {
         case "ranges":
           if (!selection) {
-            notifyWarning("Please select pages to split.");
+            notifyWarning(
+              i18next.t("tools:tools.split.notifications.warning.no_selection"),
+            );
             setIsLoading(false);
             return;
           }
@@ -64,7 +67,9 @@ export const useSplitStore = create<SplitState>((set, get) => ({
           break;
         case "fixedSize":
           if (!selection) {
-            notifyWarning("Please select pages to split.");
+            notifyWarning(
+              i18next.t("tools:tools.split.notifications.warning.no_selection"),
+            );
             setIsLoading(false);
             return;
           }
@@ -90,16 +95,17 @@ export const useSplitStore = create<SplitState>((set, get) => ({
           break;
       }
       if (result.ok) {
-        notifySuccess("PDF file split successfully.");
+        notifySuccess(i18next.t("tools:tools.split.notifications.success"));
       } else {
         notifyError(
-          result.error ??
-            "An unexpected error occurred while splitting the PDF.",
+          result.error ?? i18next.t("tools:tools.split.notifications.error"),
         );
       }
       setIsLoading(false);
     } else {
-      notifyWarning("Please select a PDF file to split.");
+      notifyWarning(
+        i18next.t("tools:tools.split.notifications.warning.no_file"),
+      );
     }
   },
 }));

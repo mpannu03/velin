@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import { JSX } from "react";
 import { Save, Pencil } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { FileItem, FileSelection } from "../components";
 import { pickPdfFile, savePdfFile } from "@/services/file";
 import {
@@ -35,6 +36,7 @@ import { ToolDetailShell } from "../components";
 import { useMergeState } from "./merge.store";
 
 export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
+  const { t } = useTranslation("tools");
   const {
     inputs,
     destinationPath,
@@ -100,7 +102,7 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
   return (
     <ToolDetailShell
       tool={TOOLS.find((t) => t.id === "merge")!}
-      actionLabel="Merge PDFs"
+      actionLabel={t("tools.merge.action")}
       onAction={runMerge}
       onBackClick={onBackPressed}
       isValid={hasFiles && !isLoading}
@@ -142,7 +144,10 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
 
         {hasFiles && (
           <Stack gap="md">
-            <Divider label="Output Destination" labelPosition="center" />
+            <Divider
+              label={t("components.destination.output_destination")}
+              labelPosition="center"
+            />
 
             <Paper
               withBorder
@@ -158,7 +163,7 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                   </ThemeIcon>
                   <Box style={{ flex: 1, minWidth: 0 }}>
                     <Text size="xs" c="dimmed" tt="uppercase" fw={700} lts={1}>
-                      Destination File
+                      {t("components.destination.destination_file")}
                     </Text>
                     <Text size="sm" fw={600} truncate="end">
                       {destFilename}
@@ -168,7 +173,10 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                     </Text>
                   </Box>
                 </Group>
-                <Tooltip label="Change destination" withArrow>
+                <Tooltip
+                  label={t("components.destination.tooltip_file")}
+                  withArrow
+                >
                   <ActionIcon
                     variant="light"
                     color="blue"

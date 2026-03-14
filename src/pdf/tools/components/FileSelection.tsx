@@ -9,6 +9,7 @@ import {
 } from "@mantine/core";
 import { JSX, useState, ReactNode } from "react";
 import { Plus, CloudUpload, RefreshCw } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface FileSelectionProps {
   onSelect: () => void;
@@ -23,6 +24,7 @@ export function FileSelection({
   children,
   hasFiles = false,
 }: FileSelectionProps): JSX.Element {
+  const { t } = useTranslation("tools");
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -71,12 +73,11 @@ export function FileSelection({
           <Box style={{ textAlign: "center" }}>
             <Text fw={700} size="xl" mb={4}>
               {multiple
-                ? "Select PDF files to merge"
-                : "Select a PDF file to process"}
+                ? t("components.file_selection.title_multiple")
+                : t("components.file_selection.title_single")}
             </Text>
             <Text size="sm" c="dimmed" maw={300} mx="auto">
-              Drag and drop your PDF files here or click anywhere in this area
-              to browse
+              {t("components.file_selection.description")}
             </Text>
           </Box>
 
@@ -87,22 +88,30 @@ export function FileSelection({
             variant={hovered ? "filled" : "light"}
             style={{ transition: "all 0.2s ease" }}
           >
-            {multiple ? "Add PDF Files" : "Select PDF"}
+            {multiple
+              ? t("components.file_selection.button_multiple")
+              : t("components.file_selection.button_single")}
           </Button>
         </Stack>
       ) : (
         <Stack gap="md">
           <Group justify="space-between" px="xs">
             <Text fw={700} size="sm" c="dimmed" tt="uppercase" lts={1}>
-              {multiple ? "Files to Process" : "Selected File"}
+              {multiple
+                ? t("components.file_selection.label_multiple")
+                : t("components.file_selection.label_single")}
             </Text>
             <Button
               variant="subtle"
               size="xs"
-              leftSection={multiple ? <Plus size={14} /> : <RefreshCw size={14} />}
+              leftSection={
+                multiple ? <Plus size={14} /> : <RefreshCw size={14} />
+              }
               onClick={onSelect}
             >
-              {multiple ? "Add More" : "Change File"}
+              {multiple
+                ? t("components.file_selection.add_more")
+                : t("components.file_selection.change_file")}
             </Button>
           </Group>
 
@@ -130,7 +139,7 @@ export function FileSelection({
               }
             >
               <Text size="xs" fw={500} c="dimmed">
-                Drop more files here or click to add
+                {t("components.file_selection.drop_more")}
               </Text>
             </Box>
           )}

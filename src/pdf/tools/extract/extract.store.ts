@@ -5,6 +5,7 @@ import {
 } from "@/services/notifications";
 import { extractPdf } from "@/services/tauri";
 import { create } from "zustand";
+import i18next from "@/services/i18n/i18n";
 
 interface ExtractState {
   file: string;
@@ -46,12 +47,12 @@ export const useExtractStore = create<ExtractState>((set, get) => ({
     } = get();
 
     if (!file) {
-      notifyWarning("Please select a PDF file.");
+      notifyWarning(i18next.t("tools:tools.extract.notifications.warning.no_file"));
       return;
     }
 
     if (!selection) {
-      notifyWarning("Please specify pages to extract.");
+      notifyWarning(i18next.t("tools:tools.extract.notifications.warning.no_selection"));
       return;
     }
 
@@ -61,12 +62,12 @@ export const useExtractStore = create<ExtractState>((set, get) => ({
       const result = await extractPdf(input, destinationPath);
 
       if (result.ok) {
-        notifySuccess("Pages extracted successfully.");
+        notifySuccess(i18next.t("tools:tools.extract.notifications.success"));
         removeFile();
       } else {
         notifyError(
           result.error ??
-            "An unexpected error occurred while extracting pages.",
+            i18next.t("tools:tools.extract.notifications.error"),
         );
       }
       setIsLoading(false);

@@ -6,6 +6,7 @@ import {
 import { mergePdfs } from "@/services/tauri";
 import { create } from "zustand";
 import { PageSelectionInput } from "../types";
+import i18next from "@/services/i18n/i18n";
 
 interface MergeState {
   inputs: PageSelectionInput[];
@@ -58,16 +59,16 @@ export const useMergeState = create<MergeState>((set, get) => ({
       setIsLoading(true);
       const result = await mergePdfs(inputs, destinationPath);
       if (result.ok) {
-        notifySuccess("PDF files merged successfully.");
+        notifySuccess(i18next.t("tools:tools.merge.notifications.success"));
         setFiles([]);
       } else {
         notifyError(
-          result.error ?? "An unexpected error occurred while merging PDFs.",
+          result.error ?? i18next.t("tools:tools.merge.notifications.error"),
         );
       }
       setIsLoading(false);
     } else {
-      notifyWarning("Please add PDF files to merge.");
+      notifyWarning(i18next.t("tools:tools.merge.notifications.warning"));
     }
   },
 }));

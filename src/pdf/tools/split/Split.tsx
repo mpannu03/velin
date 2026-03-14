@@ -15,6 +15,7 @@ import {
 } from "@mantine/core";
 import { JSX } from "react";
 import { Pencil, Folder } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { FileItem, FileSelection } from "../components";
 import { ToolPreferencesProps, TOOLS } from "../types";
 import { ToolDetailShell } from "../components";
@@ -23,6 +24,7 @@ import { SplitMode } from ".";
 import { pickDirectory, pickPdfFile } from "@/services/file";
 
 export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
+  const { t } = useTranslation("tools");
   const splitMode = useSplitStore((s) => s.splitMode);
   const file = useSplitStore((s) => s.file);
   const selection = useSplitStore((s) => s.selection);
@@ -58,16 +60,21 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
   };
 
   const hasFile = file !== "";
-  const displayDestDir = destinationDir || (hasFile ? getDefaultDestinationDir(file) : "");
+  const displayDestDir =
+    destinationDir || (hasFile ? getDefaultDestinationDir(file) : "");
   // Get just the directory name for the bold title
-  const destDirName = displayDestDir.split(/[/\\]/).filter(Boolean).pop() || displayDestDir;
+  const destDirName =
+    displayDestDir.split(/[/\\]/).filter(Boolean).pop() || displayDestDir;
   // Get the parent path for the dimmed text
-  const parentPath = displayDestDir.substring(0, displayDestDir.lastIndexOf(destDirName));
+  const parentPath = displayDestDir.substring(
+    0,
+    displayDestDir.lastIndexOf(destDirName),
+  );
 
   return (
     <ToolDetailShell
       tool={TOOLS.find((t) => t.id === "split")!}
-      actionLabel="Split PDF"
+      actionLabel={t("tools.split.action")}
       onAction={runSplit}
       onBackClick={onBackPressed}
       isValid={true}
@@ -80,23 +87,23 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
 
         <Paper withBorder p="md" radius="md">
           <Stack gap="md">
-            <Text fw={600}>Split Options</Text>
+            <Text fw={600}>{t("tools.split.options_title")}</Text>
             <Radio.Group
               value={splitMode}
               onChange={(value) => {
                 setSplitMode(value as SplitMode);
                 setSelection("");
               }}
-              label="Split Mode"
-              description="Choose how you want to split the document"
+              label={t("tools.split.mode.label")}
+              description={t("tools.split.mode.description")}
             >
               <Stack gap="xs" mt="xs">
-                <Radio value="ranges" label="Split by Ranges" />
+                <Radio value="ranges" label={t("tools.split.mode.ranges")} />
                 <Radio
                   value="fixedSize"
-                  label="Fixed Page Ranges (e.g., every 5 pages)"
+                  label={t("tools.split.mode.fixedSize")}
                 />
-                <Radio value="allPages" label="Extract All Pages" />
+                <Radio value="allPages" label={t("tools.split.mode.allPages")} />
               </Stack>
             </Radio.Group>
 
@@ -105,13 +112,13 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
             {splitMode === "ranges" && (
               <Stack gap="xs">
                 <Text size="sm" fw={500}>
-                  Page Ranges
+                  {t("tools.split.page_ranges.label")}
                 </Text>
                 <TextInput
                   value={selection}
                   onChange={(e) => setSelection(e.currentTarget.value)}
-                  placeholder="e.g. 1-5, 8-12, 15, even"
-                  description="Use commas to separate ranges. Example: 1-10, 15, 20-25"
+                  placeholder={t("components.file_item.selection_placeholder")}
+                  description={t("tools.split.page_ranges.description")}
                   radius="md"
                 />
               </Stack>
@@ -120,13 +127,13 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
             {splitMode === "fixedSize" && (
               <Stack gap="xs">
                 <Text size="sm" fw={500}>
-                  Pages per File
+                  {t("tools.split.pages_per_file.label")}
                 </Text>
                 <NumberInput
                   value={selection !== "" ? parseInt(selection) : undefined}
                   onChange={(value) => setSelection(value?.toString() || "")}
                   min={1}
-                  description="The document will be split into multiple files, each containing this many pages."
+                  description={t("tools.split.pages_per_file.description")}
                   radius="md"
                 />
               </Stack>
@@ -139,8 +146,7 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                 radius="sm"
               >
                 <Text size="sm" c="dimmed">
-                  Each page of the document will be saved as a separate PDF
-                  file.
+                  {t("tools.split.all_pages_info")}
                 </Text>
               </Paper>
             )}
@@ -149,7 +155,10 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
 
         {hasFile && (
           <Stack gap="md">
-            <Divider label="Output Destination" labelPosition="center" />
+            <Divider
+              label={t("components.destination.output_destination")}
+              labelPosition="center"
+            />
 
             <Paper
               withBorder
@@ -165,17 +174,25 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                   </ThemeIcon>
                   <Box style={{ flex: 1, minWidth: 0 }}>
                     <Text size="xs" c="dimmed" tt="uppercase" fw={700} lts={1}>
-                      Output Directory
+                      {t("components.destination.output_directory")}
                     </Text>
                     <Text size="sm" fw={600} truncate="end">
                       {destDirName}
                     </Text>
-                    <Text size="xs" c="dimmed" truncate="end" title={displayDestDir}>
+                    <Text
+                      size="xs"
+                      c="dimmed"
+                      truncate="end"
+                      title={displayDestDir}
+                    >
                       {parentPath}
                     </Text>
                   </Box>
                 </Group>
-                <Tooltip label="Change directory" withArrow>
+                <Tooltip
+                  label={t("components.destination.tooltip_dir")}
+                  withArrow
+                >
                   <ActionIcon
                     variant="light"
                     color="blue"

@@ -10,6 +10,7 @@ import {
   Stack,
 } from "@mantine/core";
 import { FileText, Move, Trash2, Settings } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface FileItemProps {
   file: string;
@@ -32,6 +33,7 @@ export function FileItem({
   multiple = true,
   showSelection = false,
 }: FileItemProps) {
+  const { t } = useTranslation("tools");
   // Extract filename from path
   const filename = file.split(/[/\\]/).pop() || file;
   const path = file.substring(0, file.lastIndexOf(filename));
@@ -57,7 +59,7 @@ export function FileItem({
         <Group justify="space-between" wrap="nowrap">
           <Group gap="md" wrap="nowrap" style={{ flex: 1 }}>
             {multiple && (
-              <Tooltip label="Drag to reorder" position="left" withArrow>
+              <Tooltip label={t("components.file_item.drag_tooltip")} position="left" withArrow>
                 <ActionIcon
                   variant="subtle"
                   color="gray"
@@ -84,7 +86,7 @@ export function FileItem({
             </Box>
           </Group>
 
-          <Tooltip label="Remove file" withArrow>
+          <Tooltip label={t("components.file_item.remove_tooltip")} withArrow>
             <ActionIcon
               variant="subtle"
               color="red"
@@ -99,7 +101,7 @@ export function FileItem({
         {showSelection && (
           <TextInput
             size="xs"
-            placeholder="Page selection (e.g. 1, 3-5, odd, last)"
+            placeholder={t("components.file_item.selection_placeholder")}
             leftSection={<Settings size={14} />}
             value={selection || ""}
             onChange={(e) => onSelectionChange?.(e.currentTarget.value)}
