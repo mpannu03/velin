@@ -7,3 +7,11 @@ export const mergePdfs = async (
 ): Promise<InvokeResult<void>> => {
   return safeInvoke("merge_pdfs", { rawInputs: inputs, dest });
 };
+
+export const splitPdf = async (
+  input: PageSelectionInput,
+  destDir: string,
+  fileName: string,
+): Promise<InvokeResult<void>> => {
+  return safeInvoke("split_pdf", { rawInput: input, destDir, fileName });
+};
