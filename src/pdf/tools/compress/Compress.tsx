@@ -19,9 +19,9 @@ import { Info, Save, Pencil } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { FileItem, FileSelection, ToolDetailShell } from "../components";
 import { ToolPreferencesProps, TOOLS } from "../types";
-import { useCompressState, CompressLevel } from "./compress.store";
+import { useCompressState } from "./compress.store";
 import { pickPdfFile, savePdfFile } from "@/services/file";
-import { LEVELS } from ".";
+import { CompressLevel, LEVELS } from ".";
 
 export function Compress({ onBackPressed }: ToolPreferencesProps): JSX.Element {
   const { t } = useTranslation("tools");
