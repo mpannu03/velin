@@ -2,45 +2,25 @@ use image::{DynamicImage, GenericImageView, ImageEncoder};
 use lopdf::{Document, Object, Stream};
 use std::io::Cursor;
 
-/// Map the user-facing quality (0–100) to:
-///   - an internal JPEG quality (more aggressive than raw quality)
-///   - a dimension scale factor
-///
-/// User quality = 100 → no image changes at all (structural only)
-/// User quality = 70  → JPEG quality ~55, scale ~0.85
-/// User quality = 50  → JPEG quality ~35, scale ~0.70
-/// User quality = 30  → JPEG quality ~20, scale ~0.55
-/// User quality = 1   → JPEG quality ~5,  scale ~0.25
 fn quality_params(quality: u8) -> (u8, f32) {
-    let q = quality.clamp(1, 99) as f32 / 100.0;
-
-    // JPEG quality: brutal compression until very high qualities
-    // Maps 0→1, 0.3→3, 0.5→8, 0.7→20, 0.85→50, 0.95→80, 1→95
     let jpeg_q = match quality {
-        0..=30 => 1 + (quality as f32 * 0.1) as u8,         // 1-4
-        31..=60 => 4 + ((quality - 30) as f32 * 0.5) as u8, // 4-19
-        61..=80 => 20 + ((quality - 60) as f32 * 1.5) as u8, // 20-50
-        81..=94 => 51 + ((quality - 80) as f32 * 2.0) as u8, // 51-79
-        _ => 80 + ((quality - 94) as f32 * 2.5) as u8,      // 80-92
+        0..=30 => 1 + (quality as f32 * 0.1) as u8,
+        31..=60 => 4 + ((quality - 30) as f32 * 0.5) as u8,
+        61..=80 => 20 + ((quality - 60) as f32 * 1.5) as u8,
+        81..=94 => 51 + ((quality - 80) as f32 * 2.0) as u8,
+        _ => 80 + ((quality - 94) as f32 * 2.5) as u8,
     }
     .clamp(1, 95);
 
-    // Scale: aggressive downscaling
-    // At quality=30: 0.15 (6.6x linear = 44x pixel reduction)
-    // At quality=50: 0.25 (4x linear = 16x pixel reduction)
-    // At quality=70: 0.4 (2.5x linear = 6.25x pixel reduction)
-    // At quality=85: 0.65
-    // At quality=95: 0.9
     let scale = if quality >= 98 {
         1.0
     } else {
-        // Piecewise scale for more control
         match quality {
-            0..=20 => 0.1 + (quality as f32 * 0.005),         // 0.1-0.2
-            21..=40 => 0.2 + ((quality - 20) as f32 * 0.01),  // 0.2-0.4
-            41..=60 => 0.4 + ((quality - 40) as f32 * 0.01),  // 0.4-0.6
-            61..=80 => 0.6 + ((quality - 60) as f32 * 0.015), // 0.6-0.9
-            _ => 0.9 + ((quality - 80) as f32 * 0.005).min(0.1), // 0.9-1.0
+            0..=20 => 0.1 + (quality as f32 * 0.005),
+            21..=40 => 0.2 + ((quality - 20) as f32 * 0.01),
+            41..=60 => 0.4 + ((quality - 40) as f32 * 0.01),
+            61..=80 => 0.6 + ((quality - 60) as f32 * 0.015),
+            _ => 0.9 + ((quality - 80) as f32 * 0.005).min(0.1),
         }
         .clamp(0.1, 1.0)
     };
@@ -48,8 +28,6 @@ fn quality_params(quality: u8) -> (u8, f32) {
     (jpeg_q, scale)
 }
 
-/// Try to decode a PDF image stream into a DynamicImage.
-/// Handles DCTDecode (JPEG) and FlateDecode (raw pixels) with RGB/Gray/CMYK color spaces.
 fn decode_pdf_image(stream: &mut Stream) -> Option<DynamicImage> {
     let filter = stream.dict.get(b"Filter").ok()?;
     let mut is_jpeg = false;
@@ -137,8 +115,6 @@ fn decode_pdf_image(stream: &mut Stream) -> Option<DynamicImage> {
     None
 }
 
-/// Re-encode a DynamicImage as JPEG at the given quality.
-/// Drops alpha channel (not supported by JPEG).
 fn encode_as_jpeg(img: &DynamicImage, jpeg_quality: u8) -> Option<Vec<u8>> {
     let img_to_encode: DynamicImage = match img {
         DynamicImage::ImageRgba8(_) | DynamicImage::ImageRgba16(_) => {
@@ -163,7 +139,6 @@ fn encode_as_jpeg(img: &DynamicImage, jpeg_quality: u8) -> Option<Vec<u8>> {
     Some(buf.into_inner())
 }
 
-/// Check whether a stream already has a compression filter applied.
 fn stream_is_compressed(stream: &Stream) -> bool {
     if let Ok(filter) = stream.dict.get(b"Filter") {
         if let Ok(name) = filter.as_name() {
@@ -211,7 +186,6 @@ pub fn compress(input_path: &str, output_path: &str, quality: u8) -> Result<(), 
                     return None;
                 }
 
-                // Skip 1-bit image masks (cannot JPEG-compress them)
                 if stream
                     .dict
                     .get(b"ImageMask")
@@ -268,15 +242,11 @@ pub fn compress(input_path: &str, output_path: &str, quality: u8) -> Result<(), 
             }
         }
 
-        // Selectively Flate-compress content streams that aren't already compressed.
-        // We do NOT call doc.compress() globally because it re-encodes already-compressed
-        // streams (FlateDecode images, etc.) which can GROW the file.
         let uncompressed_ids: Vec<_> = doc
             .objects
             .iter()
             .filter_map(|(id, obj)| {
                 if let Object::Stream(s) = obj {
-                    // Skip image XObjects — we already handled them above.
                     let is_image = s
                         .dict
                         .get(b"Subtype")
