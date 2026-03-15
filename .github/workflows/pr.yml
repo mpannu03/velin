@@ -1,0 +1,82 @@
+name: "CI"
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  filter:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+      rust: ${{ steps.filter.outputs.rust }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'src/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - 'tsconfig.json'
+              - 'vite.config.ts'
+            rust:
+              - 'src-tauri/**'
+              - 'src-tauri/Cargo.toml'
+              - 'src-tauri/Cargo.lock'
+
+  frontend:
+    needs: filter
+    if: ${{ needs.filter.outputs.frontend == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: "pnpm"
+
+      - name: install frontend dependencies
+        run: pnpm install
+
+      - name: typecheck
+        run: pnpm typecheck
+
+      - name: test
+        run: pnpm test:run
+
+  rust:
+    needs: filter
+    if: ${{ needs.filter.outputs.rust == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install dependencies (ubuntu only)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf librsvg2-dev libsoup-3.0-dev libjavascriptcoregtk-4.1-dev
+
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "./src-tauri -> target"
+
+      - name: cargo test
+        run: |
+          cd src-tauri
+          cargo test --verbose
