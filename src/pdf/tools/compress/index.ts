@@ -19,29 +19,28 @@ export const getCompressQuality = (
 };
 
 export const LEVELS: {
-  label: string;
+  labelKey: string;
   value: CompressLevel;
-  description: string;
+  descriptionKey: string;
 }[] = [
   {
-    label: "Extreme",
+    labelKey: "tools.compress.levels.extreme.label",
     value: "extreme",
-    description:
-      "Highest compression, lowest quality (images downsampled to ~30%)",
+    descriptionKey: "tools.compress.levels.extreme.description",
   },
   {
-    label: "Recommended",
+    labelKey: "tools.compress.levels.recommended.label",
     value: "recommended",
-    description: "Good compression, high quality (images compressed to 60%)",
+    descriptionKey: "tools.compress.levels.recommended.description",
   },
   {
-    label: "Less",
+    labelKey: "tools.compress.levels.less.label",
     value: "less",
-    description: "Low compression, best quality (only structural compression)",
+    descriptionKey: "tools.compress.levels.less.description",
   },
   {
-    label: "Custom",
+    labelKey: "tools.compress.levels.custom.label",
     value: "custom",
-    description: "Manually choose the image compression quality",
+    descriptionKey: "tools.compress.levels.custom.description",
   },
 ];

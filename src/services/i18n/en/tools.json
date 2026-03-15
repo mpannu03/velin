@@ -97,7 +97,36 @@
         },
         "compress": {
             "title": "Compress PDF",
-            "description": "Compress a PDF file."
+            "description": "Compress a PDF file to reduce its size while maintaining quality.",
+            "action": "Compress PDF",
+            "levels_title": "Compression Level",
+            "about_title": "About this level",
+            "custom_quality_title": "Custom Quality vs. Size",
+            "size_label": "Size",
+            "quality_label": "Quality",
+            "levels": {
+                "extreme": {
+                    "label": "Extreme",
+                    "description": "Highest compression, lowest quality (images downsampled to ~30%)"
+                },
+                "recommended": {
+                    "label": "Recommended",
+                    "description": "Good compression, high quality (images compressed to 60%)"
+                },
+                "less": {
+                    "label": "Less",
+                    "description": "Low compression, best quality (only structural compression)"
+                },
+                "custom": {
+                    "label": "Custom",
+                    "description": "Manually choose the image compression quality"
+                }
+            },
+            "notifications": {
+                "success": "PDF compressed successfully",
+                "error": "Failed to compress PDF",
+                "warning": "Please select a file and a destination"
+            }
         },
         "pdf-to-image": {
             "title": "PDF to Image",

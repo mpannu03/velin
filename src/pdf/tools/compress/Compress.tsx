@@ -93,23 +93,26 @@ export function Compress({ onBackPressed }: ToolPreferencesProps): JSX.Element {
           <>
             <Paper withBorder p="md" radius="md">
               <Stack gap="md">
-                <Text fw={600}>Compression Level</Text>
+                <Text fw={600}>{t("tools.compress.levels_title")}</Text>
                 <SegmentedControl
                   fullWidth
                   value={level}
                   onChange={(val) => setLevel(val as CompressLevel)}
-                  data={LEVELS.map((l) => ({ label: l.label, value: l.value }))}
+                  data={LEVELS.map((l) => ({
+                    label: t(l.labelKey as any),
+                    value: l.value,
+                  }))}
                   radius="md"
                   size="md"
                 />
 
                 <Alert
                   icon={<Info size={16} />}
-                  title="About this level"
+                  title={t("tools.compress.about_title")}
                   color="blue"
                   variant="light"
                 >
-                  {LEVELS.find((l) => l.value === level)?.description}
+                  {t((LEVELS.find((l) => l.value === level)?.descriptionKey || "") as any)}
                 </Alert>
 
                 {level === "custom" && (
@@ -118,7 +121,7 @@ export function Compress({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                     <Stack gap="xs">
                       <Group justify="space-between">
                         <Text size="sm" fw={500}>
-                          Custom Quality vs. Size
+                          {t("tools.compress.custom_quality_title")}
                         </Text>
                         <Badge color="blue">{customQuality}%</Badge>
                       </Group>
@@ -126,8 +129,8 @@ export function Compress({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                         value={customQuality}
                         onChange={setCustomQuality}
                         marks={[
-                          { value: 0, label: "Size" },
-                          { value: 100, label: "Quality" },
+                          { value: 0, label: t("tools.compress.size_label") },
+                          { value: 100, label: t("tools.compress.quality_label") },
                         ]}
                         mb="xl"
                       />
