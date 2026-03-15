@@ -36,3 +36,11 @@ export const pdfToImg = async (
 ): Promise<InvokeResult<void>> => {
   return safeInvoke("pdf_to_image", { rawInput: input, destDir, options });
 };
+
+export const compressPdf = async (
+  inputPath: string,
+  outputPath: string,
+  quality: number,
+): Promise<InvokeResult<void>> => {
+  return safeInvoke("compress_pdf", { inputPath, outputPath, quality });
+};
