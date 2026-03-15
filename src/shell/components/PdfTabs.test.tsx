@@ -10,7 +10,10 @@ import { PdfDocument } from "@/shared/types";
 // Mock dependencies
 vi.mock("@/app/store/documents.store");
 vi.mock("@/app/screenRouter");
-vi.mock("@/screens/reader");
+vi.mock("@/pdf/reader", () => ({
+  closePdf: vi.fn(),
+  openPdf: vi.fn(),
+}));
 
 // Test data
 const mockDocuments: Record<string, PdfDocument> = {
@@ -78,7 +81,7 @@ describe("PdfTabs", () => {
       expect(screen.getByText("Document 3.pdf")).toBeInTheDocument();
 
       // Check if open PDF button is rendered
-      expect(screen.getByLabelText("Open PDF")).toBeInTheDocument();
+      expect(screen.getByLabelText("Open Document")).toBeInTheDocument();
     });
 
     it("should render empty state when no documents exist", () => {
@@ -99,7 +102,7 @@ describe("PdfTabs", () => {
 
       // Only the open PDF button should be visible
       expect(screen.queryByText(/Document/)).not.toBeInTheDocument();
-      expect(screen.getByLabelText("Open PDF")).toBeInTheDocument();
+      expect(screen.getByLabelText("Open Document")).toBeInTheDocument();
     });
 
     it("should highlight the active tab", () => {
@@ -118,7 +121,7 @@ describe("PdfTabs", () => {
       const user = userEvent.setup();
       render(<PdfTabs />);
 
-      const openButton = screen.getByLabelText("Open PDF");
+      const openButton = screen.getByLabelText("Open Document");
       await user.click(openButton);
 
       expect(openPdf).toHaveBeenCalledTimes(1);
@@ -280,7 +283,7 @@ describe("PdfTabs", () => {
       render(<PdfTabs />);
 
       // Open PDF button should have a label
-      expect(screen.getByLabelText("Open PDF")).toBeInTheDocument();
+      expect(screen.getByLabelText("Open Document")).toBeInTheDocument();
 
       // Close buttons should be accessible
       const closeButtons = screen.getAllByRole("button");
@@ -302,7 +305,7 @@ describe("PdfTabs", () => {
 
       // We don't want to be too specific about the exact order because dnd-kit
       // might inject elements, but the Open PDF button should be reachable.
-      const openButton = screen.getByLabelText("Open PDF");
+      const openButton = screen.getByLabelText("Open Document");
 
       // Tab until we hit the open button or run out of elements (max 10 tabs)
       let found = false;

@@ -25,11 +25,16 @@ beforeAll(() => {
   })
 })
 
+import { I18nextProvider } from 'react-i18next'
+import i18n from '@/services/i18n/i18n'
+
 function AllProviders({ children }: { children: React.ReactNode }) {
   return (
-    <MantineProvider forceColorScheme="light">
-      {children}
-    </MantineProvider>
+    <I18nextProvider i18n={i18n}>
+      <MantineProvider forceColorScheme="light">
+        {children}
+      </MantineProvider>
+    </I18nextProvider>
   )
 }
 

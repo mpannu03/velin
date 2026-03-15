@@ -54,23 +54,34 @@ describe('reader tauri service', () => {
 
       vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: buffer })
 
-      const result = await renderPage('doc-id', 0, 1000)
+      const getImageDataSpy = vi
+        .spyOn(CanvasRenderingContext2D.prototype, "getImageData")
+        .mockReturnValue({
+          data: new Uint8ClampedArray([255, 0, 0, 255]),
+          width: 100,
+          height: 200,
+          colorSpace: "srgb",
+        } as any);
 
-      expect(safeInvoke).toHaveBeenCalledWith('render_page', {
-        id: 'doc-id',
+      const result = await renderPage("doc-id", 0, 1000);
+
+      expect(safeInvoke).toHaveBeenCalledWith("render_page", {
+        id: "doc-id",
         pageIndex: 0,
-        targetWidth: 1000
-      })
+        targetWidth: 1000,
+      });
 
       if (result.ok) {
-        expect(result.data.width).toBe(100)
-        expect(result.data.height).toBe(200)
-        expect(result.data.pixels).toBeInstanceOf(Uint8ClampedArray)
-        expect(result.data.pixels[0]).toBe(255)
+        expect(result.data.width).toBe(100);
+        expect(result.data.height).toBe(200);
+        expect(result.data.pixels).toBeInstanceOf(Uint8ClampedArray);
+        expect(result.data.pixels[0]).toBe(255);
       } else {
-        throw new Error('Should be ok')
+        throw new Error("Should be ok");
       }
-    })
+
+      getImageDataSpy.mockRestore();
+    });
 
     it('should return error if safeInvoke fails', async () => {
       vi.mocked(safeInvoke).mockResolvedValue({ ok: false, error: 'Failed' })
