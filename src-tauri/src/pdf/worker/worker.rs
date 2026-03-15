@@ -183,6 +183,15 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 let result = tools::extract(&pdfium, &input, &dest);
                 let _ = reply.send(result);
             }
+            PdfEvent::PdfToImage {
+                input,
+                dest_dir,
+                options,
+                reply,
+            } => {
+                let result = tools::pdf_to_image(&pdfium, &input, &dest_dir, &options);
+                let _ = reply.send(result);
+            }
         }
     }
 }

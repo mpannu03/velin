@@ -47,3 +47,13 @@ pub async fn extract_pdf(
 ) -> Result<(), String> {
     tools_service::extract_pdf(&state, raw_input, dest).await
 }
+
+#[tauri::command]
+pub async fn pdf_to_image(
+    state: State<'_, AppState>,
+    raw_input: PageSelectionInputRaw,
+    dest_dir: String,
+    options: crate::pdf::tools::PdfToImgOptions,
+) -> Result<(), String> {
+    tools_service::pdf_to_image(&state, raw_input, dest_dir, options).await
+}

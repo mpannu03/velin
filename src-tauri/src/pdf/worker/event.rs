@@ -91,4 +91,10 @@ pub enum PdfEvent {
         dest: String,
         reply: Sender<Result<(), String>>,
     },
+    PdfToImage {
+        input: PageSelectionInput,
+        dest_dir: String,
+        options: crate::pdf::tools::PdfToImgOptions,
+        reply: Sender<Result<(), String>>,
+    },
 }

@@ -1,8 +1,10 @@
 pub mod extract;
+pub mod image;
 pub mod merge;
 pub mod split;
 
 pub use extract::*;
+pub use image::*;
 pub use merge::*;
 use serde::Deserialize;
 pub use split::*;

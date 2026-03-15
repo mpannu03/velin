@@ -1,7 +1,7 @@
 use pdfium_render::prelude::{PdfDocument, PdfPoints, PdfRenderConfig, Pdfium};
 use serde::Serialize;
 use std::{collections::HashMap, path::Path};
-use webp::Encoder;
+use webp;
 
 use crate::pdf::DocumentId;
 
@@ -158,7 +158,7 @@ fn rgba_to_webp(
     height: u32,
     quality: f32, // 0.0 - 100.0
 ) -> Result<Vec<u8>, String> {
-    let encoder = Encoder::from_rgba(rgba, width, height);
+    let encoder = webp::Encoder::from_rgba(rgba, width, height);
     let webp = encoder.encode(quality);
     Ok(webp.to_vec())
 }
