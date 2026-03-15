@@ -101,7 +101,36 @@
         },
         "pdf-to-image": {
             "title": "PDF to Image",
-            "description": "Convert PDF pages into high quality images."
+            "description": "Convert PDF pages into high-quality images.",
+            "action": "Convert to Images",
+            "options_title": "Conversion Options",
+            "format": {
+                "label": "Image Format"
+            },
+            "dpi": {
+                "label": "Resolution (DPI)"
+            },
+            "quality": {
+                "label": "Image Quality",
+                "description": "Adjust the quality of the output images (1-100)"
+            },
+            "mode": {
+                "label": "Color Mode",
+                "color": "Color",
+                "grayscale": "Grayscale"
+            },
+            "pattern": {
+                "label": "Naming Pattern",
+                "description": "Use {n} for page number. Example: page_{n}"
+            },
+            "notifications": {
+                "success": "PDF converted to images successfully.",
+                "error": "An unexpected error occurred during conversion.",
+                "warning": {
+                    "no_file": "Please select a PDF file.",
+                    "no_selection": "Please specify pages to convert."
+                }
+            }
         },
         "image-to-pdf": {
             "title": "Image to PDF",

@@ -22,3 +22,17 @@ export const extractPdf = async (
 ): Promise<InvokeResult<void>> => {
   return safeInvoke("extract_pdf", { rawInput: input, dest });
 };
+
+export const pdfToImg = async (
+  input: PageSelectionInput,
+  destDir: string,
+  options: {
+    format: string;
+    dpi: number;
+    quality: number;
+    mode: string;
+    pattern: string;
+  },
+): Promise<InvokeResult<void>> => {
+  return safeInvoke("pdf_to_image", { rawInput: input, destDir, options });
+};

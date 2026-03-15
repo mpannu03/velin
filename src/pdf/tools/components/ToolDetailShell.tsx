@@ -14,6 +14,7 @@ import {
 import { JSX, ReactNode } from "react";
 import { ArrowLeft, Play } from "lucide-react";
 import { ToolInfo } from "@/pdf/tools";
+import { useTranslation } from "react-i18next";
 
 interface ToolDetailShellProps {
   tool: ToolInfo;
@@ -32,6 +33,7 @@ export function ToolDetailShell({
   onAction,
   isValid = true,
 }: ToolDetailShellProps): JSX.Element {
+  const { t } = useTranslation("tools");
   const Icon = tool.icon;
 
   return (
@@ -58,9 +60,9 @@ export function ToolDetailShell({
                 <Icon size={24} />
               </ThemeIcon>
               <Box>
-                <Title order={2}>{tool.title}</Title>
+                <Title order={2}>{t(`tools.${tool.id}.title`)}</Title>
                 <Text size="sm" c="dimmed">
-                  {tool.description}
+                  {t(`tools.${tool.id}.description`)}
                 </Text>
               </Box>
             </Group>

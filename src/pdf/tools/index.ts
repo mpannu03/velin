@@ -4,3 +4,4 @@ export * from "./split";
 export * from "./extract";
 export * from "./compress";
 export * from "./security";
+export * from "./pdf-to-image";

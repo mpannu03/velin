@@ -77,7 +77,7 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
       actionLabel={t("tools.split.action")}
       onAction={runSplit}
       onBackClick={onBackPressed}
-      isValid={true}
+      isValid={hasFile && !isLoading}
     >
       <Stack gap="lg">
         <LoadingOverlay visible={isLoading} zIndex={1000} />
@@ -103,7 +103,10 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                   value="fixedSize"
                   label={t("tools.split.mode.fixedSize")}
                 />
-                <Radio value="allPages" label={t("tools.split.mode.allPages")} />
+                <Radio
+                  value="allPages"
+                  label={t("tools.split.mode.allPages")}
+                />
               </Stack>
             </Radio.Group>
 
