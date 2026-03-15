@@ -97,4 +97,10 @@ pub enum PdfEvent {
         options: crate::pdf::tools::PdfToImgOptions,
         reply: Sender<Result<(), String>>,
     },
+    Compress {
+        input_path: String,
+        output_path: String,
+        quality: u8,
+        reply: Sender<Result<(), String>>,
+    },
 }

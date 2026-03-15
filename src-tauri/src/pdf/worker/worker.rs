@@ -192,6 +192,15 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 let result = tools::pdf_to_image(&pdfium, &input, &dest_dir, &options);
                 let _ = reply.send(result);
             }
+            PdfEvent::Compress {
+                input_path,
+                output_path,
+                quality,
+                reply,
+            } => {
+                let result = tools::compress(&input_path, &output_path, quality);
+                let _ = reply.send(result);
+            }
         }
     }
 }

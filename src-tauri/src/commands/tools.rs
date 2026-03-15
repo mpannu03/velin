@@ -57,3 +57,13 @@ pub async fn pdf_to_image(
 ) -> Result<(), String> {
     tools_service::pdf_to_image(&state, raw_input, dest_dir, options).await
 }
+
+#[tauri::command]
+pub async fn compress_pdf(
+    state: State<'_, AppState>,
+    input_path: String,
+    output_path: String,
+    quality: u8,
+) -> Result<(), String> {
+    tools_service::compress_pdf(&state, input_path, output_path, quality).await
+}
