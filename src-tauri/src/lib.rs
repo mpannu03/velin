@@ -8,16 +8,14 @@ pub use state::AppState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    #[cfg(debug_assertions)] // only enable instrumentation in development builds
-    let devtools = tauri_plugin_devtools::init();
-
+    #[allow(unused_mut)]
     let mut builder = tauri::Builder::default()
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_store::Builder::new().build());
 
-    #[cfg(debug_assertions)]
-    {
+    if cfg!(debug_assertions) {
+        let devtools = tauri_plugin_devtools::init();
         builder = builder.plugin(devtools);
     }
 
