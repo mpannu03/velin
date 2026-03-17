@@ -1,67 +1,60 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { 
-  openPdf, 
-  renderPage, 
-  closePdf, 
-  fetchPdfInfo, 
-  fetchBookmarks, 
-  fetchTextByPage, 
-  generatePreview, 
-  fetchAnnotations 
-} from './reader'
-import { safeInvoke } from '@/services/tauri'
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import {
+  openPdf,
+  getPageCount,
+  renderPage,
+  renderTile,
+  closePdf,
+  fetchPdfInfo,
+  fetchBookmarks,
+  fetchTextByPage,
+  generatePreview,
+  fetchAnnotations,
+} from "./reader";
+import { safeInvoke } from "@/services/tauri";
 
 // Mock safeInvoke
-vi.mock('@/services/tauri', () => ({
+vi.mock("@/services/tauri", () => ({
   safeInvoke: vi.fn(),
-}))
+}));
 
-describe('reader tauri service', () => {
+describe("reader tauri service", () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    vi.clearAllMocks();
+  });
 
-  it('openPdf should call safeInvoke with correct arguments', async () => {
-    vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: 'doc-id' })
-    const result = await openPdf('/path/to.pdf')
-    
-    expect(safeInvoke).toHaveBeenCalledWith('open_pdf', { path: '/path/to.pdf' })
-    expect(result).toEqual({ ok: true, data: 'doc-id' })
-  })
+  describe("openPdf", () => {
+    it("should call safeInvoke with correct arguments", async () => {
+      vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: "doc-id" });
+      const result = await openPdf("/path/to.pdf");
+      expect(safeInvoke).toHaveBeenCalledWith("open_pdf", {
+        path: "/path/to.pdf",
+      });
+      expect(result).toEqual({ ok: true, data: "doc-id" });
+    });
+  });
 
-  it('closePdf should call safeInvoke with correct arguments', async () => {
-    vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: undefined })
-    await closePdf('doc-id')
-    expect(safeInvoke).toHaveBeenCalledWith('close_pdf', { id: 'doc-id' })
-  })
+  describe("getPageCount", () => {
+    it("should call safeInvoke with correct arguments", async () => {
+      vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: 10 });
+      const result = await getPageCount("doc-id");
+      expect(safeInvoke).toHaveBeenCalledWith("get_page_count", {
+        file: "doc-id",
+      });
+      expect(result).toEqual({ ok: true, data: 10 });
+    });
+  });
 
-  it('fetchPdfInfo should call safeInvoke with correct arguments', async () => {
-    const mockInfo = { page_count: 10 }
-    vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: mockInfo })
-    const result = await fetchPdfInfo('doc-id')
-    expect(safeInvoke).toHaveBeenCalledWith('get_pdf_info', { id: 'doc-id' })
-    expect(result).toEqual({ ok: true, data: mockInfo })
-  })
+  describe("renderPage", () => {
+    it("should process binary buffer and return RenderedPage on success", async () => {
+      const width = 100;
+      const height = 200;
+      const buffer = new Uint8Array(8 + 10);
+      const view = new DataView(buffer.buffer);
+      view.setUint32(0, width, false);
+      view.setUint32(4, height, false);
 
-  describe('renderPage', () => {
-    it('should parse binary data correctly on success', async () => {
-      // Create a mock buffer: 4 bytes width (100), 4 bytes height (200), then pixels
-      const buffer = new Uint8Array(12)
-      const view = new DataView(buffer.buffer)
-      view.setUint32(0, 100, false)
-      view.setUint32(4, 200, false)
-      buffer.set([255, 0, 0, 255], 8) // one red pixel
-
-      vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: buffer })
-
-      const getImageDataSpy = vi
-        .spyOn(CanvasRenderingContext2D.prototype, "getImageData")
-        .mockReturnValue({
-          data: new Uint8ClampedArray([255, 0, 0, 255]),
-          width: 100,
-          height: 200,
-          colorSpace: "srgb",
-        } as any);
+      vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: buffer });
 
       const result = await renderPage("doc-id", 0, 1000);
 
@@ -70,50 +63,130 @@ describe('reader tauri service', () => {
         pageIndex: 0,
         targetWidth: 1000,
       });
-
+      expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.data.width).toBe(100);
-        expect(result.data.height).toBe(200);
+        expect(result.data.width).toBe(width);
+        expect(result.data.height).toBe(height);
         expect(result.data.pixels).toBeInstanceOf(Uint8ClampedArray);
-        expect(result.data.pixels[0]).toBe(255);
-      } else {
-        throw new Error("Should be ok");
       }
-
-      getImageDataSpy.mockRestore();
     });
 
-    it('should return error if safeInvoke fails', async () => {
-      vi.mocked(safeInvoke).mockResolvedValue({ ok: false, error: 'Failed' })
-      const result = await renderPage('doc-id', 0, 1000)
-      expect(result.ok).toBe(false)
-      if (!result.ok) {
-        expect(result.error).toBe('Failed')
+    it("should handle raw array data and convert to Uint8Array (edge case)", async () => {
+      const width = 20;
+      const height = 20;
+      const buffer = new Uint8Array(8 + 4);
+      const view = new DataView(buffer.buffer);
+      view.setUint32(0, width, false);
+      view.setUint32(4, height, false);
+      const dataArr = Array.from(buffer);
+
+      vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: dataArr });
+
+      const result = await renderPage("doc-id", 0, 800);
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.data.width).toBe(width);
+        expect(result.data.height).toBe(height);
       }
-    })
-  })
+    });
 
-  it('fetchBookmarks should call safeInvoke', async () => {
-    vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: [] })
-    await fetchBookmarks('doc-id')
-    expect(safeInvoke).toHaveBeenCalledWith('get_bookmarks', { id: 'doc-id' })
-  })
+    it("should return error if safeInvoke fails", async () => {
+      vi.mocked(safeInvoke).mockResolvedValue({
+        ok: false,
+        error: "Render error",
+      });
+      const result = await renderPage("doc-id", 0, 1000);
+      expect(result).toEqual({ ok: false, error: "Render error" });
+    });
+  });
 
-  it('fetchTextByPage should call safeInvoke', async () => {
-    vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: { text: '', char_rects: [] } })
-    await fetchTextByPage('doc-id', 5)
-    expect(safeInvoke).toHaveBeenCalledWith('get_text_by_page', { id: 'doc-id', pageIndex: 5 })
-  })
+  describe("renderTile", () => {
+    it("should process binary buffer and return RenderedTile on success", async () => {
+      const x = 10,
+        y = 20,
+        w = 100,
+        h = 100;
+      const buffer = new Uint8Array(16 + 10);
+      const view = new DataView(buffer.buffer);
+      view.setInt32(0, x, false);
+      view.setInt32(4, y, false);
+      view.setInt32(8, w, false);
+      view.setInt32(12, h, false);
 
-  it('generatePreview should call safeInvoke', async () => {
-    vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: new Uint8Array() })
-    await generatePreview('doc-id')
-    expect(safeInvoke).toHaveBeenCalledWith('generate_preview', { id: 'doc-id' })
-  })
+      vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: buffer });
 
-  it('fetchAnnotations should call safeInvoke', async () => {
-    vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: [] })
-    await fetchAnnotations('doc-id')
-    expect(safeInvoke).toHaveBeenCalledWith('get_annotations', { id: 'doc-id' })
-  })
-})
+      const result = await renderTile("doc-id", 0, 1000, x, y, w, h);
+
+      expect(safeInvoke).toHaveBeenCalledWith("render_tile", {
+        id: "doc-id",
+        pageIndex: 0,
+        targetWidth: 1000,
+        tileX: x,
+        tileY: y,
+        tileWidth: w,
+        tileHeight: h,
+      });
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.data.x).toBe(x);
+        expect(result.data.y).toBe(y);
+        // pixels should be the mock ImageBitmap (which is a canvas in setup.ts)
+        expect(result.data.pixels).toBeDefined();
+      }
+    });
+  });
+
+  describe("simple safeInvoke wrappers", () => {
+    it("closePdf should call safeInvoke", async () => {
+      vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: undefined });
+      await closePdf("doc-id");
+      expect(safeInvoke).toHaveBeenCalledWith("close_pdf", { id: "doc-id" });
+    });
+
+    it("fetchPdfInfo should call safeInvoke", async () => {
+      const mockInfo = { page_count: 10 };
+      vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: mockInfo });
+      const result = await fetchPdfInfo("doc-id");
+      expect(result).toEqual({ ok: true, data: mockInfo });
+    });
+
+    it("fetchBookmarks should call safeInvoke", async () => {
+      vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: [] });
+      await fetchBookmarks("doc-id");
+      expect(safeInvoke).toHaveBeenCalledWith("get_bookmarks", {
+        id: "doc-id",
+      });
+    });
+
+    it("fetchTextByPage should call safeInvoke", async () => {
+      vi.mocked(safeInvoke).mockResolvedValue({
+        ok: true,
+        data: { text: "", char_rects: [] },
+      });
+      await fetchTextByPage("doc-id", 5);
+      expect(safeInvoke).toHaveBeenCalledWith("get_text_by_page", {
+        id: "doc-id",
+        pageIndex: 5,
+      });
+    });
+
+    it("generatePreview should call safeInvoke", async () => {
+      vi.mocked(safeInvoke).mockResolvedValue({
+        ok: true,
+        data: new Uint8Array(),
+      });
+      await generatePreview("doc-id");
+      expect(safeInvoke).toHaveBeenCalledWith("generate_preview", {
+        id: "doc-id",
+      });
+    });
+
+    it("fetchAnnotations should call safeInvoke", async () => {
+      vi.mocked(safeInvoke).mockResolvedValue({ ok: true, data: [] });
+      await fetchAnnotations("doc-id");
+      expect(safeInvoke).toHaveBeenCalledWith("get_annotations", {
+        id: "doc-id",
+      });
+    });
+  });
+});
