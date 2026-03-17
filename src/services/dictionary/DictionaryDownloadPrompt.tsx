@@ -1,12 +1,4 @@
-import {
-  Modal,
-  Stack,
-  Text,
-  Button,
-  Progress,
-  Group,
-  Title,
-} from "@mantine/core";
+import { Modal, Stack, Text, Button, Progress, Group } from "@mantine/core";
 import { useState } from "react";
 import { downloadAndInstallWordNet } from "@/services/dictionary";
 import { notifyError, notifySuccess } from "../notifications";
@@ -55,7 +47,11 @@ export function DictionaryDownloadPrompt({
     <Modal
       opened={opened}
       onClose={onClose}
-      title={<Title order={4}>{t("general.dictionary.onboardTitle")}</Title>}
+      title={
+        <Text fw={700} size="xl">
+          {t("general.dictionary.onboardTitle")}
+        </Text>
+      }
       centered
       closeOnClickOutside={!downloading}
       closeOnEscape={!downloading}
