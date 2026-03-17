@@ -18,7 +18,8 @@ i18next.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
-  debug: true,
+  showSupportNotice: process.env.NODE_ENV !== "test",
+  debug: process.env.NODE_ENV === "development",
 });
 
 export default i18next;
