@@ -201,6 +201,15 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 let result = tools::compress(&input_path, &output_path, quality);
                 let _ = reply.send(result);
             }
+            PdfEvent::ImageToPdf {
+                image_paths,
+                dest,
+                options,
+                reply,
+            } => {
+                let result = tools::image_to_pdf(&image_paths, &dest, &options);
+                let _ = reply.send(result);
+            }
         }
     }
 }

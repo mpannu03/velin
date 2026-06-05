@@ -4,7 +4,7 @@ use flume::Sender;
 
 use crate::pdf::reader::{Annotation, RenderedTile};
 use crate::pdf::reader::{PageText, RenderedPage, SearchHit};
-use crate::pdf::tools::PageSelectionInput;
+use crate::pdf::tools::{ImageToPdfOptions, PageSelectionInput};
 use crate::pdf::{Bookmarks, DocumentId, PdfInfo};
 
 pub enum PdfEvent {
@@ -101,6 +101,12 @@ pub enum PdfEvent {
         input_path: String,
         output_path: String,
         quality: u8,
+        reply: Sender<Result<(), String>>,
+    },
+    ImageToPdf {
+        image_paths: Vec<String>,
+        dest: String,
+        options: ImageToPdfOptions,
         reply: Sender<Result<(), String>>,
     },
 }

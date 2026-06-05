@@ -67,3 +67,13 @@ pub async fn compress_pdf(
 ) -> Result<(), String> {
     tools_service::compress_pdf(&state, input_path, output_path, quality).await
 }
+
+#[tauri::command]
+pub async fn image_to_pdf(
+    state: State<'_, AppState>,
+    image_paths: Vec<String>,
+    dest: String,
+    options: crate::pdf::tools::ImageToPdfOptions,
+) -> Result<(), String> {
+    tools_service::image_to_pdf(&state, image_paths, dest, options).await
+}

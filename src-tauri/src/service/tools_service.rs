@@ -134,3 +134,28 @@ pub async fn compress_pdf(
     rx.recv()
         .map_err(|e| format!("Error receiving compress result: {e}"))?
 }
+
+pub async fn image_to_pdf(
+    state: &AppState,
+    image_paths: Vec<String>,
+    dest: String,
+    options: tools::ImageToPdfOptions,
+) -> Result<(), String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = flume::bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::ImageToPdf {
+            image_paths,
+            dest,
+            options,
+            reply: tx,
+        })
+        .map_err(|e| format!("Error sending image_to_pdf command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving image_to_pdf result: {e}"))?
+}

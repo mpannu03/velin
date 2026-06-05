@@ -44,6 +44,7 @@ pub fn run() {
             commands::tools::extract_pdf,
             commands::tools::pdf_to_image,
             commands::tools::compress_pdf,
+            commands::tools::image_to_pdf,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
