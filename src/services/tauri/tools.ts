@@ -44,3 +44,16 @@ export const compressPdf = async (
 ): Promise<InvokeResult<void>> => {
   return safeInvoke("compress_pdf", { inputPath, outputPath, quality });
 };
+
+export const imagesToPdf = async (
+  imagePaths: string[],
+  dest: string,
+  options: {
+    page_size: string;
+    orientation: string;
+    fit: string;
+    margin: number;
+  },
+): Promise<InvokeResult<void>> => {
+  return safeInvoke("image_to_pdf", { imagePaths, dest, options });
+};

@@ -163,7 +163,38 @@
         },
         "image-to-pdf": {
             "title": "छवि से PDF",
-            "description": "छवियों को PDF फ़ाइल में बदलें।"
+            "description": "छवियों को PDF फ़ाइल में बदलें।",
+            "action": "PDF बनाएं",
+            "options_title": "छवि विकल्प",
+            "page_size": {
+                "label": "पृष्ठ आकार",
+                "auto": "स्वचालित",
+                "a4": "A4",
+                "letter": "पत्र"
+            },
+            "orientation": {
+                "label": "अभिविन्यास",
+                "auto": "स्वचालित",
+                "portrait": "पोर्ट्रेट",
+                "landscape": "लैंडस्केप"
+            },
+            "fit": {
+                "label": "छवि फ़िट",
+                "contain": "कंटेन",
+                "cover": "कवर",
+                "stretch": "स्ट्रेच"
+            },
+            "margin": {
+                "label": "मार्जिन"
+            },
+            "notifications": {
+                "success": "छवियाँ सफलतापूर्वक PDF में परिवर्तित हो गईं।",
+                "error": "PDF बनाते समय एक अप्रत्याशित त्रुटि हुई।",
+                "warning": {
+                    "no_images": "कृपया कम से कम एक छवि जोड़ें।",
+                    "no_destination": "कृपया एक गंतव्य फ़ाइल चुनें।"
+                }
+            }
         },
         "rotate": {
             "title": "पृष्ठ घुमाएं",

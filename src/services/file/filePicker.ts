@@ -25,6 +25,25 @@ export async function savePdfFile(
   return path;
 }
 
+export async function pickImageFiles(multiple: true): Promise<string[] | null>;
+export async function pickImageFiles(multiple: false): Promise<string | null>;
+export async function pickImageFiles(
+  multiple: boolean = false,
+): Promise<string | string[] | null> {
+  const file = await open({
+    multiple,
+    directory: false,
+    filters: [
+      {
+        name: "Images",
+        extensions: ["png", "jpeg", "jpg", "webp", "bmp", "gif", "tiff", "tif"],
+      },
+    ],
+  });
+
+  return file;
+}
+
 export async function pickDirectory(): Promise<string | null> {
   const directory = await open({
     multiple: false,

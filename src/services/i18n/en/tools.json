@@ -163,7 +163,38 @@
         },
         "image-to-pdf": {
             "title": "Image to PDF",
-            "description": "Convert images into a PDF file."
+            "description": "Convert images into a PDF file.",
+            "action": "Create PDF",
+            "options_title": "Image Options",
+            "page_size": {
+                "label": "Page Size",
+                "auto": "Auto",
+                "a4": "A4",
+                "letter": "Letter"
+            },
+            "orientation": {
+                "label": "Orientation",
+                "auto": "Auto",
+                "portrait": "Portrait",
+                "landscape": "Landscape"
+            },
+            "fit": {
+                "label": "Image Fit",
+                "contain": "Contain",
+                "cover": "Cover",
+                "stretch": "Stretch"
+            },
+            "margin": {
+                "label": "Margin"
+            },
+            "notifications": {
+                "success": "Images converted to PDF successfully.",
+                "error": "An unexpected error occurred while creating the PDF.",
+                "warning": {
+                    "no_images": "Please add at least one image.",
+                    "no_destination": "Please select a destination file."
+                }
+            }
         },
         "rotate": {
             "title": "Rotate Pages",

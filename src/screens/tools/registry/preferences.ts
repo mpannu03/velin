@@ -1,6 +1,7 @@
 import {
   Compress,
   Extract,
+  ImageToPdf,
   Merge,
   Split,
   PdfToImage,
@@ -39,7 +40,7 @@ export const pdfToImageTool: ToolDefinition = {
 
 export const imageToPdfTool: ToolDefinition = {
   info: TOOLS.find((t) => t.id === "image-to-pdf")!,
-  Preferences: Merge,
+  Preferences: ImageToPdf,
 };
 
 export const rotateTool: ToolDefinition = {
