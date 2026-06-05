@@ -70,12 +70,11 @@ export function ImageToPdf({
     }),
   );
 
-  const getDefaultDestination = () => {
-    if (images.length === 0) return "";
-    const firstFile = images[0];
-    const filename = firstFile.split(/[/\\]/).pop() || "";
-    const path = firstFile.substring(0, firstFile.lastIndexOf(filename));
-    return `${path}images_to_pdf.pdf`;
+  const getDefaultDestination = (sourceFile: string = "image") => {
+    const filename = sourceFile.split(/[/\\]/).pop() || "";
+    const path = sourceFile.substring(0, sourceFile.lastIndexOf(filename));
+    const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
+    return `${path}${nameWithoutExt}_compressed.pdf`;
   };
 
   const pickFiles = async () => {
@@ -83,13 +82,15 @@ export function ImageToPdf({
     if (selected && Array.isArray(selected)) {
       addImages(selected);
       if (!destinationPath && images.length === 0) {
-        setDestinationPath(getDefaultDestination());
+        setDestinationPath(getDefaultDestination(selected[0]));
       }
     }
   };
 
   const handleSaveLocation = async () => {
-    const path = await savePdfFile(destinationPath || getDefaultDestination());
+    const path = await savePdfFile(
+      destinationPath || getDefaultDestination(images[0]),
+    );
     if (path) {
       setDestinationPath(path);
     }
@@ -107,7 +108,7 @@ export function ImageToPdf({
   };
 
   const hasImages = images.length > 0;
-  const displayDestPath = destinationPath || getDefaultDestination();
+  const displayDestPath = destinationPath || getDefaultDestination(images[0]);
   const destFilename = displayDestPath.split(/[/\\]/).pop() || displayDestPath;
   const destDir = displayDestPath.substring(
     0,
