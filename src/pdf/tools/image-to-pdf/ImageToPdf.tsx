@@ -14,10 +14,14 @@ import {
   SegmentedControl,
   SimpleGrid,
 } from "@mantine/core";
-import { JSX } from "react";
-import { Save, Pencil } from "lucide-react";
+import { JSX, useState } from "react";
+import { Save, Pencil, LayoutGrid, List } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { FileItem, FileSelection } from "../components";
+import {
+  FileSelection,
+  ImageThumbnailItem,
+  SortableFileItem,
+} from "../components";
 import { pickImageFiles, savePdfFile } from "@/services/file";
 import {
   DndContext,
@@ -34,16 +38,18 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { SortableFileItem } from "../components";
 import { ToolPreferencesProps, TOOLS } from "../types";
 import { ToolDetailShell } from "../components";
 import { useImageToPdfStore } from "./imageToPdf.store";
 import { ImageToPdfPageSize, ImageToPdfOrientation, ImageToPdfFit } from ".";
 
+type ViewMode = "list" | "grid";
+
 export function ImageToPdf({
   onBackPressed,
 }: ToolPreferencesProps): JSX.Element {
   const { t } = useTranslation("tools");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
   const {
     images,
     pageSize,
@@ -74,16 +80,17 @@ export function ImageToPdf({
     const filename = sourceFile.split(/[/\\]/).pop() || "";
     const path = sourceFile.substring(0, sourceFile.lastIndexOf(filename));
     const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
-    return `${path}${nameWithoutExt}_compressed.pdf`;
+    return `${path}${nameWithoutExt}.pdf`;
   };
 
   const pickFiles = async () => {
     const selected = await pickImageFiles(true);
     if (selected && Array.isArray(selected)) {
       addImages(selected);
-      if (!destinationPath && images.length === 0) {
-        setDestinationPath(getDefaultDestination(selected[0]));
-      }
+      setDestinationPath(getDefaultDestination(selected[0]));
+      // if (!destinationPath && images.length === 0) {
+      //   setDestinationPath(getDefaultDestination(selected[0]));
+      // }
     }
   };
 
@@ -127,6 +134,21 @@ export function ImageToPdf({
         <LoadingOverlay visible={isLoading} zIndex={1000} />
 
         <FileSelection onSelect={pickFiles} multiple hasFiles={hasImages}>
+          <Group justify="space-between" mb="xs" px="xs">
+            <Text fw={700} size="sm" c="dimmed" tt="uppercase" lts={1}>
+              {images.length} {t("components.file_selection.label_multiple")}
+            </Text>
+            <SegmentedControl
+              value={viewMode}
+              onChange={(v) => setViewMode(v as ViewMode)}
+              size="xs"
+              data={[
+                { label: <List size={14} />, value: "list" },
+                { label: <LayoutGrid size={14} />, value: "grid" },
+              ]}
+            />
+          </Group>
+
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -136,22 +158,43 @@ export function ImageToPdf({
               items={images}
               strategy={verticalListSortingStrategy}
             >
-              <Stack gap="xs">
-                {images.map((imagePath) => (
-                  <SortableFileItem key={imagePath} id={imagePath}>
-                    {({ attributes, listeners, isDragging }) => (
-                      <FileItem
-                        file={imagePath}
-                        onRemove={() => removeImage(imagePath)}
-                        dragHandleProps={{ ...attributes, ...listeners }}
-                        isDragging={isDragging}
-                        multiple={true}
-                        showSelection={false}
-                      />
-                    )}
-                  </SortableFileItem>
-                ))}
-              </Stack>
+              {viewMode === "grid" ? (
+                <SimpleGrid
+                  cols={{ base: 2, sm: 3, md: 4 }}
+                  spacing="sm"
+                  verticalSpacing="sm"
+                >
+                  {images.map((imagePath) => (
+                    <SortableFileItem key={imagePath} id={imagePath}>
+                      {({ attributes, listeners, isDragging }) => (
+                        <ImageThumbnailItem
+                          file={imagePath}
+                          onRemove={() => removeImage(imagePath)}
+                          dragHandleProps={{ ...attributes, ...listeners }}
+                          isDragging={isDragging}
+                          viewMode="grid"
+                        />
+                      )}
+                    </SortableFileItem>
+                  ))}
+                </SimpleGrid>
+              ) : (
+                <Stack gap="xs">
+                  {images.map((imagePath) => (
+                    <SortableFileItem key={imagePath} id={imagePath}>
+                      {({ attributes, listeners, isDragging }) => (
+                        <ImageThumbnailItem
+                          file={imagePath}
+                          onRemove={() => removeImage(imagePath)}
+                          dragHandleProps={{ ...attributes, ...listeners }}
+                          isDragging={isDragging}
+                          viewMode="list"
+                        />
+                      )}
+                    </SortableFileItem>
+                  ))}
+                </Stack>
+              )}
             </SortableContext>
           </DndContext>
         </FileSelection>
