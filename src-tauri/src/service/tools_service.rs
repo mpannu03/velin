@@ -186,3 +186,18 @@ pub async fn rotate_pdf(
     rx.recv()
         .map_err(|e| format!("Error receiving rotate result: {e}"))?
 }
+
+pub async fn protect_pdf(state: &AppState, input: tools::ProtectInput) -> Result<(), String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = flume::bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::Protect { input, reply: tx })
+        .map_err(|e| format!("Error sending protect command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving protect result: {e}"))?
+}

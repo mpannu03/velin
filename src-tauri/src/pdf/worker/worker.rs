@@ -219,6 +219,10 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 let result = tools::rotate(&pdfium, &input, &dest, angle);
                 let _ = reply.send(result);
             }
+            PdfEvent::Protect { input, reply } => {
+                let result = tools::protect_pdf(input);
+                let _ = reply.send(result);
+            }
         }
     }
 }

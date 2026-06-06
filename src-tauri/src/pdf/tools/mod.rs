@@ -3,6 +3,7 @@ pub mod extract;
 pub mod image;
 pub mod image_to_pdf;
 pub mod merge;
+pub mod protect;
 pub mod rotate;
 pub mod split;
 
@@ -11,6 +12,7 @@ pub use extract::*;
 pub use image::*;
 pub use image_to_pdf::*;
 pub use merge::*;
+pub use protect::*;
 pub use rotate::*;
 use serde::Deserialize;
 pub use split::*;

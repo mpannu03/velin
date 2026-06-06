@@ -3,7 +3,7 @@ use std::fs::File;
 use std::path::Path;
 use tar::Archive;
 
-use crate::pdf::tools::PageSelectionInputRaw;
+use crate::pdf::tools::{self, PageSelectionInputRaw};
 use crate::service::tools_service;
 use crate::state::AppState;
 use tauri::State;
@@ -88,3 +88,10 @@ pub async fn rotate_pdf(
     tools_service::rotate_pdf(&state, raw_input, dest, angle).await
 }
 
+#[tauri::command]
+pub async fn protect_pdf(
+    state: State<'_, AppState>,
+    input: tools::ProtectInput,
+) -> Result<(), String> {
+    tools_service::protect_pdf(&state, input).await
+}
