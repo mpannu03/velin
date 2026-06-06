@@ -43,6 +43,8 @@
     "tools": {
         "merge": {
             "title": "PDF मर्ज करें",
+            "selection": "PDF फ़ाइलें चुनें",
+            "selection_button": "PDF फ़ाइलें जोड़ें",
             "description": "कई PDFs को एक ही दस्तावेज़ में संयोजित करें।",
             "action": "PDFs मर्ज करें",
             "notifications": {
@@ -53,6 +55,8 @@
         },
         "split": {
             "title": "PDF विभाजित करें",
+            "selection": "PDF फ़ाइल चुनें",
+            "selection_button": "PDF फ़ाइल जोड़ें",
             "description": "पृष्ठ श्रेणी के अनुसार PDF को कई फ़ाइलों में विभाजित करें।",
             "action": "PDF विभाजित करें",
             "options_title": "विभाजन विकल्प",
@@ -83,6 +87,8 @@
         },
         "extract": {
             "title": "पृष्ठ निकालें",
+            "selection": "PDF फ़ाइल चुनें",
+            "selection_button": "PDF फ़ाइल जोड़ें",
             "description": "पृष्ठों को एक नई PDF फ़ाइल के रूप में निकालें।",
             "action": "पृष्ठ निकालें",
             "pages_to_extract": {
@@ -100,6 +106,8 @@
         },
         "compress": {
             "title": "PDF संपीड़ित करें",
+            "selection": "PDF फ़ाइल चुनें",
+            "selection_button": "PDF फ़ाइल जोड़ें",
             "description": "गुणवत्ता बनाए रखते हुए इसका आकार कम करने के लिए PDF फ़ाइल को संपीड़ित करें।",
             "action": "PDF संपीड़ित करें",
             "levels_title": "संपीड़न स्तर",
@@ -133,6 +141,8 @@
         },
         "pdf-to-image": {
             "title": "PDF से छवि",
+            "selection": "PDF फ़ाइल चुनें",
+            "selection_button": "PDF फ़ाइल जोड़ें",
             "description": "PDF पृष्ठों को उच्च गुणवत्ता वाली छवियों में बदलें।",
             "action": "छवियों में बदलें",
             "options_title": "रूपांतरण विकल्प",
@@ -166,6 +176,8 @@
         },
         "image-to-pdf": {
             "title": "छवि से PDF",
+            "selection": "छवि फ़ाइलें चुनें",
+            "selection_button": "छवियां जोड़ें",
             "description": "छवियों को PDF फ़ाइल में बदलें।",
             "action": "PDF बनाएं",
             "options_title": "छवि विकल्प",
@@ -201,6 +213,8 @@
         },
         "rotate": {
             "title": "PDF घुमाएँ",
+            "selection": "PDF फ़ाइल चुनें",
+            "selection_button": "PDF फ़ाइल जोड़ें",
             "description": "अपने PDF पृष्ठों की दिशा बदलें।",
             "action": "पृष्ठ घुमाएँ",
             "angle": {

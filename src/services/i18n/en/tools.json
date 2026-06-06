@@ -43,6 +43,8 @@
     "tools": {
         "merge": {
             "title": "Merge PDF",
+            "selection": "Select PDF Files",
+            "selection_button": "Add PDF Files",
             "description": "Combine multiple PDFs into a single document.",
             "action": "Merge PDFs",
             "notifications": {
@@ -53,6 +55,8 @@
         },
         "split": {
             "title": "Split PDF",
+            "selection": "Select PDF File",
+            "selection_button": "Add PDF File",
             "description": "Split a PDF into multiple files by page range.",
             "action": "Split PDF",
             "options_title": "Split Options",
@@ -83,6 +87,8 @@
         },
         "extract": {
             "title": "Extract Pages",
+            "selection": "Select PDF File",
+            "selection_button": "Add PDF File",
             "description": "Extract pages as a new PDF file.",
             "action": "Extract Pages",
             "pages_to_extract": {
@@ -100,6 +106,8 @@
         },
         "compress": {
             "title": "Compress PDF",
+            "selection": "Select PDF File",
+            "selection_button": "Add PDF File",
             "description": "Compress a PDF file to reduce its size while maintaining quality.",
             "action": "Compress PDF",
             "levels_title": "Compression Level",
@@ -133,6 +141,8 @@
         },
         "pdf-to-image": {
             "title": "PDF to Image",
+            "selection": "Select PDF File",
+            "selection_button": "Add PDF File",
             "description": "Convert PDF pages into high-quality images.",
             "action": "Convert to Images",
             "options_title": "Conversion Options",
@@ -166,6 +176,8 @@
         },
         "image-to-pdf": {
             "title": "Image to PDF",
+            "selection": "Select Image Files",
+            "selection_button": "Add Images",
             "description": "Convert images into a PDF file.",
             "action": "Create PDF",
             "options_title": "Image Options",
@@ -201,6 +213,8 @@
         },
         "rotate": {
             "title": "Rotate PDF",
+            "selection": "Select PDF File",
+            "selection_button": "Add PDF File",
             "description": "Change the orientation of your PDF pages.",
             "action": "Rotate Pages",
             "angle": {

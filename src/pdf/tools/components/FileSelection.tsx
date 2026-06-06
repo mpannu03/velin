@@ -78,10 +78,8 @@ export function FileSelection({
 
           <Box style={{ textAlign: "center" }}>
             <Text fw={700} size="xl" mb={4}>
-              {toolTitle
-                ? t("components.file_selection.title_template", {
-                    tool: toolTitle,
-                  })
+              {toolId
+                ? t(`tools.${toolId}.selection`, { defaultValue: "" })
                 : multiple
                   ? t("components.file_selection.title_multiple")
                   : t("components.file_selection.title_single")}
@@ -102,10 +100,8 @@ export function FileSelection({
             variant={hovered ? "filled" : "light"}
             style={{ transition: "all 0.2s ease" }}
           >
-            {toolTitle
-              ? t("components.file_selection.button_template", {
-                  tool: toolTitle,
-                })
+            {toolId
+              ? t(`tools.${toolId}.selection_button`, { defaultValue: "" })
               : multiple
                 ? t("components.file_selection.button_multiple")
                 : t("components.file_selection.button_single")}
