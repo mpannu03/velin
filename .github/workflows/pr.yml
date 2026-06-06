@@ -2,9 +2,9 @@ name: "CI"
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   filter:
@@ -62,6 +62,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: "pnpm"
+
+      - name: install frontend dependencies
+        run: pnpm install
+
+      - name: download pdfium
+        run: pnpm pdfium
 
       - name: install dependencies (ubuntu only)
         run: |
