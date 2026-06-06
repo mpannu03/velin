@@ -88,9 +88,6 @@ export function ImageToPdf({
     if (selected && Array.isArray(selected)) {
       addImages(selected);
       setDestinationPath(getDefaultDestination(selected[0]));
-      // if (!destinationPath && images.length === 0) {
-      //   setDestinationPath(getDefaultDestination(selected[0]));
-      // }
     }
   };
 
@@ -133,7 +130,12 @@ export function ImageToPdf({
       <Stack gap="lg" pos="relative">
         <LoadingOverlay visible={isLoading} zIndex={1000} />
 
-        <FileSelection onSelect={pickFiles} multiple hasFiles={hasImages}>
+        <FileSelection
+          onSelect={pickFiles}
+          multiple
+          hasFiles={hasImages}
+          toolId="image-to-pdf"
+        >
           <Group justify="space-between" mb="xs" px="xs">
             <Text fw={700} size="sm" c="dimmed" tt="uppercase" lts={1}>
               {images.length} {t("components.file_selection.label_multiple")}

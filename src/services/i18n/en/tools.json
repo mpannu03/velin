@@ -12,9 +12,12 @@
     },
     "components": {
         "file_selection": {
-            "title_multiple": "Select PDF files to merge",
-            "title_single": "Select a PDF file to process",
+            "title_template": "Select files",
+            "title_multiple": "Select PDF files",
+            "title_single": "Select a PDF file",
+            "description_template": "Drag and drop your files here or click to browse",
             "description": "Drag and drop your PDF files here or click anywhere in this area to browse",
+            "button_template": "Add files",
             "button_multiple": "Add PDF Files",
             "button_single": "Select PDF",
             "label_multiple": "Files to Process",

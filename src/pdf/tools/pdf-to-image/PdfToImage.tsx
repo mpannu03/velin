@@ -96,7 +96,11 @@ export function PdfToImage({
       <Stack gap="lg" pos="relative">
         <LoadingOverlay visible={isLoading} zIndex={1000} />
 
-        <FileSelection onSelect={pickFile} hasFiles={hasFile}>
+        <FileSelection
+          onSelect={pickFile}
+          hasFiles={hasFile}
+          toolId="pdf-to-image"
+        >
           <FileItem file={file} onRemove={removeFile} multiple={false} />
         </FileSelection>
 

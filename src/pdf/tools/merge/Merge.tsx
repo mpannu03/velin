@@ -109,7 +109,12 @@ export function Merge({ onBackPressed }: ToolPreferencesProps): JSX.Element {
     >
       <Stack gap="lg" pos="relative">
         <LoadingOverlay visible={isLoading} zIndex={1000} />
-        <FileSelection onSelect={pickFiles} multiple hasFiles={hasFiles}>
+        <FileSelection
+          onSelect={pickFiles}
+          multiple
+          hasFiles={hasFiles}
+          toolId="merge"
+        >
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}

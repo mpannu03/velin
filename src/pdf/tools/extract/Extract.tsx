@@ -76,7 +76,7 @@ export function Extract({ onBackPressed }: ToolPreferencesProps): JSX.Element {
       <Stack gap="lg" pos="relative">
         <LoadingOverlay visible={isLoading} zIndex={1000} />
 
-        <FileSelection onSelect={pickFile} hasFiles={hasFile}>
+        <FileSelection onSelect={pickFile} hasFiles={hasFile} toolId="extract">
           <FileItem file={file} onRemove={removeFile} multiple={false} />
         </FileSelection>
 
@@ -116,7 +116,13 @@ export function Extract({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                       <Save size={20} />
                     </ThemeIcon>
                     <Box style={{ flex: 1, minWidth: 0 }}>
-                      <Text size="xs" c="dimmed" tt="uppercase" fw={700} lts={1}>
+                      <Text
+                        size="xs"
+                        c="dimmed"
+                        tt="uppercase"
+                        fw={700}
+                        lts={1}
+                      >
                         {t("components.destination.destination_file")}
                       </Text>
                       <Text size="sm" fw={600} truncate="end">

@@ -81,7 +81,7 @@ export function Split({ onBackPressed }: ToolPreferencesProps): JSX.Element {
     >
       <Stack gap="lg">
         <LoadingOverlay visible={isLoading} zIndex={1000} />
-        <FileSelection onSelect={pickFiles} hasFiles={hasFile}>
+        <FileSelection onSelect={pickFiles} hasFiles={hasFile} toolId="split">
           <FileItem file={file} onRemove={removeFile} multiple={false} />
         </FileSelection>
 

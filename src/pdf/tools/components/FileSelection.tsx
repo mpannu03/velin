@@ -16,6 +16,7 @@ interface FileSelectionProps {
   multiple?: boolean;
   children?: ReactNode;
   hasFiles?: boolean;
+  toolId?: string;
 }
 
 export function FileSelection({
@@ -23,9 +24,14 @@ export function FileSelection({
   multiple = false,
   children,
   hasFiles = false,
+  toolId,
 }: FileSelectionProps): JSX.Element {
   const { t } = useTranslation("tools");
   const [hovered, setHovered] = useState(false);
+
+  const toolTitle = toolId
+    ? t(`tools.${toolId}.title`, { defaultValue: "" })
+    : "";
 
   return (
     <Paper
@@ -72,12 +78,20 @@ export function FileSelection({
 
           <Box style={{ textAlign: "center" }}>
             <Text fw={700} size="xl" mb={4}>
-              {multiple
-                ? t("components.file_selection.title_multiple")
-                : t("components.file_selection.title_single")}
+              {toolTitle
+                ? t("components.file_selection.title_template", {
+                    tool: toolTitle,
+                  })
+                : multiple
+                  ? t("components.file_selection.title_multiple")
+                  : t("components.file_selection.title_single")}
             </Text>
             <Text size="sm" c="dimmed" maw={300} mx="auto">
-              {t("components.file_selection.description")}
+              {toolTitle
+                ? t("components.file_selection.description_template", {
+                    tool: toolTitle,
+                  })
+                : t("components.file_selection.description")}
             </Text>
           </Box>
 
@@ -88,9 +102,13 @@ export function FileSelection({
             variant={hovered ? "filled" : "light"}
             style={{ transition: "all 0.2s ease" }}
           >
-            {multiple
-              ? t("components.file_selection.button_multiple")
-              : t("components.file_selection.button_single")}
+            {toolTitle
+              ? t("components.file_selection.button_template", {
+                  tool: toolTitle,
+                })
+              : multiple
+                ? t("components.file_selection.button_multiple")
+                : t("components.file_selection.button_single")}
           </Button>
         </Stack>
       ) : (

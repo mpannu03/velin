@@ -77,7 +77,12 @@ export function Compress({ onBackPressed }: ToolPreferencesProps): JSX.Element {
       <Stack gap="lg" pos="relative">
         <LoadingOverlay visible={isLoading} zIndex={1000} />
 
-        <FileSelection onSelect={pickFile} multiple={false} hasFiles={!!file}>
+        <FileSelection
+          onSelect={pickFile}
+          multiple={false}
+          hasFiles={!!file}
+          toolId="compress"
+        >
           {file && (
             <Stack gap="xs">
               <FileItem
@@ -112,7 +117,10 @@ export function Compress({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                   color="blue"
                   variant="light"
                 >
-                  {t((LEVELS.find((l) => l.value === level)?.descriptionKey || "") as any)}
+                  {t(
+                    (LEVELS.find((l) => l.value === level)?.descriptionKey ||
+                      "") as any,
+                  )}
                 </Alert>
 
                 {level === "custom" && (
@@ -130,7 +138,10 @@ export function Compress({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                         onChange={setCustomQuality}
                         marks={[
                           { value: 0, label: t("tools.compress.size_label") },
-                          { value: 100, label: t("tools.compress.quality_label") },
+                          {
+                            value: 100,
+                            label: t("tools.compress.quality_label"),
+                          },
                         ]}
                         mb="xl"
                       />

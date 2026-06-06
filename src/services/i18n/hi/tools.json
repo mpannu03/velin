@@ -12,9 +12,12 @@
     },
     "components": {
         "file_selection": {
-            "title_multiple": "मर्ज करने के लिए PDF फ़ाइलें चुनें",
-            "title_single": "प्रक्रिया के लिए एक PDF फ़ाइल चुनें",
+            "title_template": "फ़ाइलें चुनें",
+            "title_multiple": "PDF फ़ाइलें चुनें",
+            "title_single": "एक PDF फ़ाइल चुनें",
+            "description_template": "अपनी फ़ाइलें यहां खींचें और छोड़ें या ब्राउज़ करने के लिए क्लिक करें",
             "description": "अपनी PDF फ़ाइलें यहां खींचें और छोड़ें या ब्राउज़ करने के लिए इस क्षेत्र में कहीं भी क्लिक करें",
+            "button_template": "फ़ाइलें जोड़ें",
             "button_multiple": "PDF फ़ाइलें जोड़ें",
             "button_single": "PDF चुनें",
             "label_multiple": "प्रक्रिया के लिए फ़ाइलें",
