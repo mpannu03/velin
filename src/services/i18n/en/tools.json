@@ -37,7 +37,16 @@
             "destination_base": "Destination Base",
             "output_directory": "Output Directory",
             "tooltip_file": "Change destination",
-            "tooltip_dir": "Change directory"
+            "tooltip_dir": "Change directory",
+            "not_set": "Not set",
+            "dialog": {
+                "title": "Select Destination"
+            },
+            "notifications": {
+                "success": "Destination updated",
+                "cancelled": "Destination selection cancelled",
+                "error": "Failed to select destination"
+            }
         }
     },
     "tools": {
@@ -240,7 +249,32 @@
         },
         "protect": {
             "title": "Protect PDF",
-            "description": "Add a password and secure your document."
+            "selection": "Select PDF File",
+            "selection_button": "Add PDF File",
+            "description": "Add a password and secure your document.",
+            "action": "Protect PDF",
+            "password_label": "Password",
+            "password_placeholder": "Enter password (min. 8 characters)",
+            "password_error": {
+                "title": "Password too short",
+                "desc": "Password must be at least 8 characters."
+            },
+            "permissions": "Permissions",
+            "allow_printing": "Allow Printing",
+            "allow_assembly": "Allow Document Assembly",
+            "allow_commenting": "Allow Commenting",
+            "allow_copy": "Allow Content Copying",
+            "encryption_level": "Encryption Level",
+            "encryption_desc": "Document will be encrypted with AES-256 bit security standard.",
+            "notifications": {
+                "success": "PDF protected successfully.",
+                "error": "An unexpected error occurred while protecting the PDF.",
+                "warning": {
+                    "no_file": "Please select a PDF file to protect.",
+                    "no_password": "Please enter a password.",
+                    "password_too_short": "Password must be at least 8 characters."
+                }
+            }
         },
         "unlock": {
             "title": "Unlock PDF",

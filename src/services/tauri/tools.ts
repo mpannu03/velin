@@ -1,5 +1,5 @@
 import { InvokeResult, safeInvoke } from "./invokeResult";
-import { PageSelectionInput } from "@/pdf/tools";
+import { PageSelectionInput, ProtectInput } from "@/pdf/tools";
 
 export const mergePdfs = async (
   inputs: PageSelectionInput[],
@@ -66,3 +66,8 @@ export const rotatePdf = async (
   return safeInvoke("rotate_pdf", { rawInput: input, dest, angle });
 };
 
+export const protectPdf = async (
+  input: ProtectInput,
+): Promise<InvokeResult<void>> => {
+  return safeInvoke("protect_pdf", { input });
+};

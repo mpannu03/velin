@@ -6,6 +6,7 @@ import {
   Split,
   PdfToImage,
   Rotate,
+  Protect,
 } from "@/pdf/tools";
 import { ToolInfo, ToolPreferencesProps, TOOLS } from "@/pdf/tools";
 
@@ -51,7 +52,7 @@ export const rotateTool: ToolDefinition = {
 
 export const protectTool: ToolDefinition = {
   info: TOOLS.find((t) => t.id === "protect")!,
-  Preferences: Merge,
+  Preferences: Protect,
 };
 
 export const unlockTool: ToolDefinition = {
