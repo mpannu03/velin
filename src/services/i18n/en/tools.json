@@ -200,8 +200,29 @@
             }
         },
         "rotate": {
-            "title": "Rotate Pages",
-            "description": "Change the orientation of your PDF pages."
+            "title": "Rotate PDF",
+            "description": "Change the orientation of your PDF pages.",
+            "action": "Rotate Pages",
+            "angle": {
+                "label": "Rotation Angle",
+                "right": "90° Clockwise",
+                "half": "180°",
+                "left": "90° Counter-Clockwise"
+            },
+            "pages_to_rotate": {
+                "label": "Pages to Rotate",
+                "all": "All Pages",
+                "select": "Specific Pages",
+                "selection_description": "Use commas to separate ranges. Example: 1-10, 15, 20-25"
+            },
+            "notifications": {
+                "success": "PDF pages rotated successfully.",
+                "error": "An unexpected error occurred while rotating PDF pages.",
+                "warning": {
+                    "no_file": "Please select a PDF file to rotate.",
+                    "no_selection": "Please select pages to rotate."
+                }
+            }
         },
         "protect": {
             "title": "Protect PDF",

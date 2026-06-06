@@ -57,3 +57,12 @@ export const imagesToPdf = async (
 ): Promise<InvokeResult<void>> => {
   return safeInvoke("image_to_pdf", { imagePaths, dest, options });
 };
+
+export const rotatePdf = async (
+  input: PageSelectionInput,
+  dest: string,
+  angle: number,
+): Promise<InvokeResult<void>> => {
+  return safeInvoke("rotate_pdf", { rawInput: input, dest, angle });
+};
+

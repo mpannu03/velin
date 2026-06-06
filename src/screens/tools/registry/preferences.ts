@@ -5,6 +5,7 @@ import {
   Merge,
   Split,
   PdfToImage,
+  Rotate,
 } from "@/pdf/tools";
 import { ToolInfo, ToolPreferencesProps, TOOLS } from "@/pdf/tools";
 
@@ -45,7 +46,7 @@ export const imageToPdfTool: ToolDefinition = {
 
 export const rotateTool: ToolDefinition = {
   info: TOOLS.find((t) => t.id === "rotate")!,
-  Preferences: Merge,
+  Preferences: Rotate,
 };
 
 export const protectTool: ToolDefinition = {

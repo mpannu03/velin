@@ -6,3 +6,5 @@ export * from "./compress";
 export * from "./security";
 export * from "./pdf-to-image";
 export * from "./image-to-pdf";
+export * from "./rotate";
+
