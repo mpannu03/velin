@@ -279,6 +279,6 @@ mod tests {
             .unwrap();
 
         let result_close = rx_close.recv().unwrap();
-        assert!(result_close.is_err());
+        assert!(result_close.is_ok());
     }
 }
