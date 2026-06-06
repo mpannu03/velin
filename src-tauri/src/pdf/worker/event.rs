@@ -109,4 +109,10 @@ pub enum PdfEvent {
         options: ImageToPdfOptions,
         reply: Sender<Result<(), String>>,
     },
+    Rotate {
+        input: PageSelectionInput,
+        dest: String,
+        angle: i32,
+        reply: Sender<Result<(), String>>,
+    },
 }

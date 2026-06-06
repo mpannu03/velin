@@ -210,6 +210,15 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 let result = tools::image_to_pdf(&image_paths, &dest, &options);
                 let _ = reply.send(result);
             }
+            PdfEvent::Rotate {
+                input,
+                dest,
+                angle,
+                reply,
+            } => {
+                let result = tools::rotate(&pdfium, &input, &dest, angle);
+                let _ = reply.send(result);
+            }
         }
     }
 }

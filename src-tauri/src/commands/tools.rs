@@ -77,3 +77,14 @@ pub async fn image_to_pdf(
 ) -> Result<(), String> {
     tools_service::image_to_pdf(&state, image_paths, dest, options).await
 }
+
+#[tauri::command]
+pub async fn rotate_pdf(
+    state: State<'_, AppState>,
+    raw_input: PageSelectionInputRaw,
+    dest: String,
+    angle: i32,
+) -> Result<(), String> {
+    tools_service::rotate_pdf(&state, raw_input, dest, angle).await
+}
+
