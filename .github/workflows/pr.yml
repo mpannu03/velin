@@ -78,7 +78,7 @@ jobs:
         run: pnpm install
 
       - name: download pdfium
-        run: pnpm pdfium
+        run: pnpm pdfium:all
 
       - name: install dependencies (ubuntu only)
         run: |
