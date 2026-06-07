@@ -7,6 +7,7 @@ import {
   PdfToImage,
   Rotate,
   Protect,
+  Unlock,
 } from "@/pdf/tools";
 import { ToolInfo, ToolPreferencesProps, TOOLS } from "@/pdf/tools";
 
@@ -57,7 +58,7 @@ export const protectTool: ToolDefinition = {
 
 export const unlockTool: ToolDefinition = {
   info: TOOLS.find((t) => t.id === "unlock")!,
-  Preferences: Merge,
+  Preferences: Unlock,
 };
 
 export const watermarkTool: ToolDefinition = {

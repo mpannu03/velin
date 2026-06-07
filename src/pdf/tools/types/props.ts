@@ -19,3 +19,9 @@ export type ProtectInput = {
   allowFormFilling: boolean;
   allowAssembly: boolean;
 };
+
+export type UnlockInput = {
+  inputPath: string;
+  outputPath: string;
+  password: string;
+};

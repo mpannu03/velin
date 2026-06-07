@@ -281,7 +281,23 @@
         },
         "unlock": {
             "title": "Unlock PDF",
-            "description": "Remove password protection from your document."
+            "description": "Remove password protection from your document.",
+            "selection": "Select PDF File",
+            "selection_button": "Add PDF File",
+            "action": "Unlock PDF",
+            "password_label": "Current Password",
+            "password_placeholder": "Enter current password",
+            "warning_title": "Remove Protection",
+            "warning_desc": "This will permanently remove all password protection and security restrictions from the document.",
+            "notifications": {
+                "success": "PDF unlocked successfully.",
+                "error": "An unexpected error occurred while unlocking the PDF.",
+                "warning": {
+                    "no_file": "Please select a PDF file to unlock.",
+                    "no_password": "Please enter the current password.",
+                    "wrong_password": "Incorrect password. Please try again."
+                }
+            }
         },
         "watermark": {
             "title": "Add Watermark",
