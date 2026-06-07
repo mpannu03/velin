@@ -6,6 +6,7 @@ pub mod merge;
 pub mod protect;
 pub mod rotate;
 pub mod split;
+pub mod unlock;
 
 pub use compress::*;
 pub use extract::*;
@@ -16,6 +17,7 @@ pub use protect::*;
 pub use rotate::*;
 use serde::Deserialize;
 pub use split::*;
+pub use unlock::*;
 
 use crate::utils::page_selection::{PageSelection, PageSelectionParser};
 

@@ -4,7 +4,7 @@ use flume::Sender;
 
 use crate::pdf::reader::{Annotation, RenderedTile};
 use crate::pdf::reader::{PageText, RenderedPage, SearchHit};
-use crate::pdf::tools::{ImageToPdfOptions, PageSelectionInput, ProtectInput};
+use crate::pdf::tools::{ImageToPdfOptions, PageSelectionInput, ProtectInput, UnlockInput};
 use crate::pdf::{Bookmarks, DocumentId, PdfInfo};
 
 pub enum PdfEvent {
@@ -117,6 +117,10 @@ pub enum PdfEvent {
     },
     Protect {
         input: ProtectInput,
+        reply: Sender<Result<(), String>>,
+    },
+    Unlock {
+        input: UnlockInput,
         reply: Sender<Result<(), String>>,
     },
 }

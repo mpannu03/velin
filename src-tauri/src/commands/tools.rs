@@ -95,3 +95,11 @@ pub async fn protect_pdf(
 ) -> Result<(), String> {
     tools_service::protect_pdf(&state, input).await
 }
+
+#[tauri::command]
+pub async fn unlock_pdf(
+    state: State<'_, AppState>,
+    input: tools::UnlockInput,
+) -> Result<(), String> {
+    tools_service::unlock_pdf(&state, input).await
+}

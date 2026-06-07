@@ -223,6 +223,10 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
                 let result = tools::protect_pdf(input);
                 let _ = reply.send(result);
             }
+            PdfEvent::Unlock { input, reply } => {
+                let result = tools::unlock_pdf(input);
+                let _ = reply.send(result);
+            }
         }
     }
 }
