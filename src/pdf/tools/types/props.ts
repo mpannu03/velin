@@ -12,7 +12,10 @@ export type ProtectInput = {
   outputPath: string;
   password: string;
   allowPrinting: boolean;
-  allowAssembly: boolean;
-  allowCommenting: boolean;
+  allowHighQualityPrinting: boolean;
+  allowModifying: boolean;
   allowCopying: boolean;
+  allowAnnotating: boolean;
+  allowFormFilling: boolean;
+  allowAssembly: boolean;
 };

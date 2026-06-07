@@ -9,10 +9,23 @@ import { protectPdf } from "@/services/tauri";
 
 interface Permissions {
   printing: boolean;
-  assembly: boolean;
-  commenting: boolean;
+  highQualityPrinting: boolean;
+  modifying: boolean;
   copying: boolean;
+  annotating: boolean;
+  formFilling: boolean;
+  assembly: boolean;
 }
+
+const DEFAULT_PERMISSIONS: Permissions = {
+  printing: false,
+  highQualityPrinting: false,
+  modifying: false,
+  copying: false,
+  annotating: false,
+  formFilling: false,
+  assembly: false,
+};
 
 interface ProtectState {
   file: string;
@@ -33,12 +46,7 @@ export const useProtectStore = create<ProtectState>((set, get) => ({
   file: "",
   destinationPath: "",
   password: "",
-  permissions: {
-    printing: false,
-    assembly: false,
-    commenting: false,
-    copying: false,
-  },
+  permissions: { ...DEFAULT_PERMISSIONS },
   isLoading: false,
 
   setFile: (file) => set({ file }),
@@ -54,12 +62,7 @@ export const useProtectStore = create<ProtectState>((set, get) => ({
       file: "",
       destinationPath: "",
       password: "",
-      permissions: {
-        printing: false,
-        assembly: false,
-        commenting: false,
-        copying: false,
-      },
+      permissions: { ...DEFAULT_PERMISSIONS },
       isLoading: false,
     }),
 
@@ -89,15 +92,17 @@ export const useProtectStore = create<ProtectState>((set, get) => ({
     if (isLoading) return;
 
     setIsLoading(true);
-    console.log(permissions);
     const result = await protectPdf({
       inputPath: file,
       outputPath: destinationPath || "",
       password,
       allowPrinting: permissions.printing,
-      allowAssembly: permissions.assembly,
-      allowCommenting: permissions.commenting,
+      allowHighQualityPrinting: permissions.highQualityPrinting,
+      allowModifying: permissions.modifying,
       allowCopying: permissions.copying,
+      allowAnnotating: permissions.annotating,
+      allowFormFilling: permissions.formFilling,
+      allowAssembly: permissions.assembly,
     });
     if (result.ok) {
       notifySuccess(i18next.t("tools:tools.protect.notifications.success"));

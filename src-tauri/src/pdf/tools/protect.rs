@@ -7,18 +7,45 @@ pub struct ProtectInput {
     pub input_path: String,
     pub output_path: String,
     pub password: String,
+    // Mapped 1-to-1 to lopdf Permissions bitflags
     pub allow_printing: bool,
-    pub allow_assembly: bool,
-    pub allow_commenting: bool,
+    pub allow_high_quality_printing: bool,
+    pub allow_modifying: bool,
     pub allow_copying: bool,
+    pub allow_annotating: bool,
+    pub allow_form_filling: bool,
+    pub allow_assembly: bool,
 }
 
 pub fn protect_pdf(input: ProtectInput) -> Result<(), String> {
     let mut doc =
         Document::load(&input.input_path).map_err(|e| format!("Failed to load PDF: {e}"))?;
 
-    // TODO: Replace with actual permission flags available in your version.
-    let permissions = Permissions::all();
+    // COPYABLE_FOR_ACCESSIBILITY is deprecated since PDF 2.0 but must always be set for
+    // backward compatibility with viewers following earlier specifications.
+    let mut permissions = Permissions::COPYABLE_FOR_ACCESSIBILITY;
+
+    if input.allow_printing {
+        permissions |= Permissions::PRINTABLE;
+    }
+    if input.allow_high_quality_printing {
+        permissions |= Permissions::PRINTABLE_IN_HIGH_QUALITY;
+    }
+    if input.allow_modifying {
+        permissions |= Permissions::MODIFIABLE;
+    }
+    if input.allow_copying {
+        permissions |= Permissions::COPYABLE;
+    }
+    if input.allow_annotating {
+        permissions |= Permissions::ANNOTABLE;
+    }
+    if input.allow_form_filling {
+        permissions |= Permissions::FILLABLE;
+    }
+    if input.allow_assembly {
+        permissions |= Permissions::ASSEMBLABLE;
+    }
 
     let encryption_version = EncryptionVersion::V2 {
         document: &doc,

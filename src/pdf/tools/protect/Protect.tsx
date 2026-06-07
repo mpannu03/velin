@@ -128,18 +128,18 @@ export function Protect({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                     onChange={() => togglePermission("printing")}
                   />
                   <Checkbox
-                    label={t("tools.protect.allow_assembly", {
-                      defaultValue: "Allow Document Assembly",
+                    label={t("tools.protect.allow_high_quality_printing", {
+                      defaultValue: "Allow High Quality Printing",
                     })}
-                    checked={permissions.assembly}
-                    onChange={() => togglePermission("assembly")}
+                    checked={permissions.highQualityPrinting}
+                    onChange={() => togglePermission("highQualityPrinting")}
                   />
                   <Checkbox
-                    label={t("tools.protect.allow_commenting", {
-                      defaultValue: "Allow Commenting",
+                    label={t("tools.protect.allow_modifying", {
+                      defaultValue: "Allow Modifying",
                     })}
-                    checked={permissions.commenting}
-                    onChange={() => togglePermission("commenting")}
+                    checked={permissions.modifying}
+                    onChange={() => togglePermission("modifying")}
                   />
                   <Checkbox
                     label={t("tools.protect.allow_copy", {
@@ -147,6 +147,27 @@ export function Protect({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                     })}
                     checked={permissions.copying}
                     onChange={() => togglePermission("copying")}
+                  />
+                  <Checkbox
+                    label={t("tools.protect.allow_annotating", {
+                      defaultValue: "Allow Commenting & Annotations",
+                    })}
+                    checked={permissions.annotating}
+                    onChange={() => togglePermission("annotating")}
+                  />
+                  <Checkbox
+                    label={t("tools.protect.allow_form_filling", {
+                      defaultValue: "Allow Form Filling",
+                    })}
+                    checked={permissions.formFilling}
+                    onChange={() => togglePermission("formFilling")}
+                  />
+                  <Checkbox
+                    label={t("tools.protect.allow_assembly", {
+                      defaultValue: "Allow Document Assembly",
+                    })}
+                    checked={permissions.assembly}
+                    onChange={() => togglePermission("assembly")}
                   />
                 </Stack>
                 <Alert
