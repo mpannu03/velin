@@ -31,11 +31,13 @@ interface ProtectState {
   file: string;
   destinationPath: string;
   password: string;
+  requirePasswordToOpen: boolean;
   permissions: Permissions;
   isLoading: boolean;
   setFile: (file: string) => void;
   setDestinationPath: (path: string) => void;
   setPassword: (pw: string) => void;
+  setRequirePasswordToOpen: (value: boolean) => void;
   togglePermission: (key: keyof Permissions) => void;
   setIsLoading: (loading: boolean) => void;
   runProtect: () => Promise<void>;
@@ -46,12 +48,14 @@ export const useProtectStore = create<ProtectState>((set, get) => ({
   file: "",
   destinationPath: "",
   password: "",
+  requirePasswordToOpen: false,
   permissions: { ...DEFAULT_PERMISSIONS },
   isLoading: false,
 
   setFile: (file) => set({ file }),
   setDestinationPath: (path) => set({ destinationPath: path }),
   setPassword: (pw) => set({ password: pw }),
+  setRequirePasswordToOpen: (value) => set({ requirePasswordToOpen: value }),
   togglePermission: (key) =>
     set((state) => ({
       permissions: { ...state.permissions, [key]: !state.permissions[key] },
@@ -62,6 +66,7 @@ export const useProtectStore = create<ProtectState>((set, get) => ({
       file: "",
       destinationPath: "",
       password: "",
+      requirePasswordToOpen: false,
       permissions: { ...DEFAULT_PERMISSIONS },
       isLoading: false,
     }),
@@ -71,6 +76,7 @@ export const useProtectStore = create<ProtectState>((set, get) => ({
       file,
       destinationPath,
       password,
+      requirePasswordToOpen,
       permissions,
       isLoading,
       setIsLoading,
@@ -96,6 +102,7 @@ export const useProtectStore = create<ProtectState>((set, get) => ({
       inputPath: file,
       outputPath: destinationPath || "",
       password,
+      requirePasswordToOpen,
       allowPrinting: permissions.printing,
       allowHighQualityPrinting: permissions.highQualityPrinting,
       allowModifying: permissions.modifying,

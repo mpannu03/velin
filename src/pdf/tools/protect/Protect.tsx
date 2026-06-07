@@ -28,11 +28,13 @@ export function Protect({ onBackPressed }: ToolPreferencesProps): JSX.Element {
     file,
     destinationPath,
     password,
+    requirePasswordToOpen,
     permissions,
     isLoading,
     setFile,
     setDestinationPath,
     setPassword,
+    setRequirePasswordToOpen,
     togglePermission,
     runProtect,
   } = useProtectStore();
@@ -113,6 +115,16 @@ export function Protect({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                     })}
                   </Alert>
                 )}
+                <Checkbox
+                  label={t("tools.protect.require_password_to_open", {
+                    defaultValue: "Require password to open document",
+                  })}
+                  checked={requirePasswordToOpen}
+                  onChange={(e) =>
+                    setRequirePasswordToOpen(e.currentTarget.checked)
+                  }
+                  size="sm"
+                />
                 <Divider
                   label={t("tools.protect.permissions", {
                     defaultValue: "Permissions",

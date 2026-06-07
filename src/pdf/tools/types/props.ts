@@ -11,6 +11,7 @@ export type ProtectInput = {
   inputPath: string;
   outputPath: string;
   password: string;
+  requirePasswordToOpen: boolean;
   allowPrinting: boolean;
   allowHighQualityPrinting: boolean;
   allowModifying: boolean;

@@ -7,7 +7,7 @@ pub struct ProtectInput {
     pub input_path: String,
     pub output_path: String,
     pub password: String,
-    // Mapped 1-to-1 to lopdf Permissions bitflags
+    pub require_password_to_open: bool,
     pub allow_printing: bool,
     pub allow_high_quality_printing: bool,
     pub allow_modifying: bool,
@@ -47,10 +47,16 @@ pub fn protect_pdf(input: ProtectInput) -> Result<(), String> {
         permissions |= Permissions::ASSEMBLABLE;
     }
 
+    let user_password: &str = if input.require_password_to_open {
+        &input.password
+    } else {
+        ""
+    };
+
     let encryption_version = EncryptionVersion::V2 {
         document: &doc,
         owner_password: &input.password,
-        user_password: &input.password,
+        user_password,
         key_length: 128,
         permissions,
     };
