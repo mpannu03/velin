@@ -1,7 +1,8 @@
 import { JSX } from "react";
 import { Box, Button, NavLink, Stack } from "@mantine/core";
-import { FiMonitor, FiLayout, FiSettings, FiRotateCcw } from "react-icons/fi";
+import { Monitor, Layout, Settings, RotateCcw } from "lucide-react";
 import { SettingsSection } from "@/dialog/settings";
+import { useTranslation } from "react-i18next";
 
 export function NavigationSection({
   activeSection,
@@ -12,21 +13,24 @@ export function NavigationSection({
   setActiveSection: (section: SettingsSection) => void;
   restoreDefaults: () => void;
 }): JSX.Element {
+  const { t } = useTranslation("settings");
+
   return (
     <Box
       w={220}
-      bg="gray.0"
+      bg="light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))"
       p="md"
       style={{
-        borderRight: "1px solid var(--mantine-color-gray-3)",
+        borderRight:
+          "1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4))",
         display: "flex",
         flexDirection: "column",
       }}
     >
       <Stack gap="xs" style={{ flex: 1 }}>
         <NavLink
-          label="Appearance"
-          leftSection={<FiMonitor size={16} />}
+          label={t("appearance.title")}
+          leftSection={<Monitor size={16} />}
           active={activeSection === "appearance"}
           onClick={() => setActiveSection("appearance")}
           variant="filled"
@@ -35,8 +39,8 @@ export function NavigationSection({
           })}
         />
         <NavLink
-          label="Reader"
-          leftSection={<FiLayout size={16} />}
+          label={t("reader.title")}
+          leftSection={<Layout size={16} />}
           active={activeSection === "reader"}
           onClick={() => setActiveSection("reader")}
           variant="filled"
@@ -45,8 +49,8 @@ export function NavigationSection({
           })}
         />
         <NavLink
-          label="General"
-          leftSection={<FiSettings size={16} />}
+          label={t("general.title")}
+          leftSection={<Settings size={16} />}
           active={activeSection === "general"}
           onClick={() => setActiveSection("general")}
           variant="filled"
@@ -59,12 +63,12 @@ export function NavigationSection({
       <Button
         variant="subtle"
         color="gray"
-        leftSection={<FiRotateCcw size={14} />}
+        leftSection={<RotateCcw size={14} />}
         onClick={() => restoreDefaults()}
         fullWidth
         radius="md"
       >
-        Restore Defaults
+        {t("restoreDefaults")}
       </Button>
     </Box>
   );

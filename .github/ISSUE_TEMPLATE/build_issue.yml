@@ -1,0 +1,28 @@
+name: Build / Development Issue
+description: Problems building or running Velin locally
+title: "[Build]: "
+labels: ["build"]
+
+body:
+  - type: textarea
+    id: issue
+    attributes:
+      label: Build Problem
+      description: Describe the issue you encountered while building
+    validations:
+      required: true
+
+  - type: input
+    id: rust_version
+    attributes:
+      label: Rust Version
+
+  - type: input
+    id: node_version
+    attributes:
+      label: Node Version
+
+  - type: textarea
+    id: error_output
+    attributes:
+      label: Error Output

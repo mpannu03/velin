@@ -2,10 +2,10 @@ use std::path::PathBuf;
 
 use flume::Sender;
 
-use crate::pdf::{
-    document::{Bookmarks, DocumentId, PdfInfo},
-    reader::{PageText, RenderedPage, SearchHit},
-};
+use crate::pdf::reader::{Annotation, RenderedTile};
+use crate::pdf::reader::{PageText, RenderedPage, SearchHit};
+use crate::pdf::tools::{ImageToPdfOptions, PageSelectionInput, ProtectInput, UnlockInput};
+use crate::pdf::{Bookmarks, DocumentId, PdfInfo};
 
 pub enum PdfEvent {
     Open {
@@ -19,9 +19,23 @@ pub enum PdfEvent {
         target_width: i32,
         reply: Sender<Result<RenderedPage, String>>,
     },
+    RenderTile {
+        id: DocumentId,
+        page_index: u16,
+        target_width: i32,
+        tile_x: i32,
+        tile_y: i32,
+        tile_width: i32,
+        tile_height: i32,
+        reply: Sender<Result<RenderedTile, String>>,
+    },
     Info {
         id: DocumentId,
         reply: Sender<Result<PdfInfo, String>>,
+    },
+    PageCount {
+        file: String,
+        reply: Sender<Result<u16, String>>,
     },
     Close {
         id: DocumentId,
@@ -45,5 +59,72 @@ pub enum PdfEvent {
         id: DocumentId,
         save_path: Option<PathBuf>,
         reply: Sender<Result<Vec<u8>, String>>,
+    },
+    GetAnnotations {
+        id: DocumentId,
+        reply: Sender<Result<Vec<Annotation>, String>>,
+    },
+    AddAnnotation {
+        id: DocumentId,
+        annotation: Annotation,
+        reply: Sender<Result<(), String>>,
+    },
+    RemoveAnnotation {
+        id: DocumentId,
+        page_index: u16,
+        annotation_id: String,
+        reply: Sender<Result<(), String>>,
+    },
+    Merge {
+        inputs: Vec<PageSelectionInput>,
+        dest: String,
+        reply: Sender<Result<(), String>>,
+    },
+    Split {
+        input: PageSelectionInput,
+        dest_dir: String,
+        file_name: String,
+        reply: Sender<Result<(), String>>,
+    },
+    Extract {
+        input: PageSelectionInput,
+        dest: String,
+        reply: Sender<Result<(), String>>,
+    },
+    PdfToImage {
+        input: PageSelectionInput,
+        dest_dir: String,
+        options: crate::pdf::tools::PdfToImgOptions,
+        reply: Sender<Result<(), String>>,
+    },
+    Compress {
+        input_path: String,
+        output_path: String,
+        quality: u8,
+        reply: Sender<Result<(), String>>,
+    },
+    ImageToPdf {
+        image_paths: Vec<String>,
+        dest: String,
+        options: ImageToPdfOptions,
+        reply: Sender<Result<(), String>>,
+    },
+    Rotate {
+        input: PageSelectionInput,
+        dest: String,
+        angle: i32,
+        reply: Sender<Result<(), String>>,
+    },
+    Protect {
+        input: ProtectInput,
+        reply: Sender<Result<(), String>>,
+    },
+    Unlock {
+        input: UnlockInput,
+        reply: Sender<Result<(), String>>,
+    },
+    Watermark {
+        input: crate::pdf::tools::WatermarkInput,
+        reply: Sender<Result<(), String>>,
     },
 }

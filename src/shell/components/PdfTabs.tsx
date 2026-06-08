@@ -1,10 +1,10 @@
-import { ActionIcon, Divider, Group, Text } from "@mantine/core";
+import { ActionIcon, Divider, Group, Text, Tooltip } from "@mantine/core";
 import { JSX, useEffect } from "react";
 import { PdfDocument } from "@/shared/types";
-import { FiPlus, FiX } from "react-icons/fi";
+import { Plus, X } from "lucide-react";
 import { useHover } from "@mantine/hooks";
 import { useDocumentsStore } from "@/app/store/documents.store";
-import { closePdf, openPdf } from "@/screens/reader";
+import { closePdf, openPdf } from "@/pdf/reader";
 import { useScreenState } from "@/app/screenRouter";
 import {
   DndContext,
@@ -20,8 +20,10 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useTranslation } from "react-i18next";
 
 export function PdfTabs(): JSX.Element {
+  const { t } = useTranslation();
   const docs = useDocumentsStore((s) => s.documents);
   const order = useDocumentsStore((s) => s.documentOrder);
   const reorder = useDocumentsStore((s) => s.reorder);
@@ -32,7 +34,7 @@ export function PdfTabs(): JSX.Element {
       activationConstraint: {
         distance: 5,
       },
-    })
+    }),
   );
 
   useEffect(() => {
@@ -56,10 +58,7 @@ export function PdfTabs(): JSX.Element {
       onDragEnd={handleDragEnd}
     >
       <Group gap={0} h="100%">
-        <SortableContext
-          items={order}
-          strategy={horizontalListSortingStrategy}
-        >
+        <SortableContext items={order} strategy={horizontalListSortingStrategy}>
           {order.map((id) => {
             const doc = docs[id];
             if (!doc) return null;
@@ -71,14 +70,17 @@ export function PdfTabs(): JSX.Element {
             );
           })}
         </SortableContext>
-        <ActionIcon
-          w={36}
-          h={36}
-          variant="subtle"
-          onClick={() => openPdf()}
-        >
-          <FiPlus size={18} />
-        </ActionIcon>
+        <Tooltip label={t("file.open")} position="bottom" withArrow>
+          <ActionIcon
+            w={36}
+            h={36}
+            variant="subtle"
+            onClick={() => openPdf()}
+            aria-label={t("file.open")}
+          >
+            <Plus size={18} />
+          </ActionIcon>
+        </Tooltip>
       </Group>
     </DndContext>
   );
@@ -114,6 +116,7 @@ function SortableTab({ tab }: TabProps): JSX.Element {
 }
 
 function Tab({ tab }: TabProps): JSX.Element {
+  const { t } = useTranslation();
   const { hovered, ref } = useHover();
   const pdfStore = useDocumentsStore();
   const selectedTab = useDocumentsStore((s) => s.activeDocumentId);
@@ -122,6 +125,8 @@ function Tab({ tab }: TabProps): JSX.Element {
   return (
     <Group
       ref={ref}
+      data-active={selectedTab === tab.id}
+      data-testid={`pdf-tab-${tab.id}`}
       bg={
         selectedTab === tab.id
           ? "var(--mantine-color-body)"
@@ -150,7 +155,6 @@ function Tab({ tab }: TabProps): JSX.Element {
         truncate
         size="xs"
         fw={500}
-        c="dark.7"
         style={{
           flex: 1,
           minWidth: 0,
@@ -160,6 +164,7 @@ function Tab({ tab }: TabProps): JSX.Element {
       </Text>
       <ActionIcon
         variant="subtle"
+        aria-label={`${t("file.close")} ${tab.title}`}
         onClick={(e) => {
           e.stopPropagation();
           closePdf(tab.id);
@@ -168,7 +173,7 @@ function Tab({ tab }: TabProps): JSX.Element {
           e.stopPropagation();
         }}
       >
-        <FiX />
+        <X />
       </ActionIcon>
     </Group>
   );

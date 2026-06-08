@@ -1,14 +1,13 @@
-import {
-  Modal,
-  Group,
-  Stack,
-  Text,
-  Divider,
-  ScrollArea,
-} from "@mantine/core";
+import { Modal, Group, Stack, Text, Divider, ScrollArea } from "@mantine/core";
 import { useSettingsStore } from "@/app";
 import { JSX, useState } from "react";
-import { NavigationSection, AppearanceSection, ReaderSection, GeneralSection } from "./components";
+import {
+  NavigationSection,
+  AppearanceSection,
+  ReaderSection,
+  GeneralSection,
+} from "./components";
+import { useTranslation } from "react-i18next";
 
 interface SettingsDialogProps {
   opened: boolean;
@@ -23,6 +22,7 @@ export function SettingsDialog({
   opened,
   onClose,
 }: SettingsDialogProps): JSX.Element {
+  const { t } = useTranslation("settings");
   const {
     settings,
     updateAppearance,
@@ -30,7 +30,8 @@ export function SettingsDialog({
     updateGeneral,
     restoreDefaults,
   } = useSettingsStore();
-  const [activeSection, setActiveSection] = useState<SettingsSection>("appearance");
+  const [activeSection, setActiveSection] =
+    useState<SettingsSection>("appearance");
 
   return (
     <Modal
@@ -38,7 +39,7 @@ export function SettingsDialog({
       onClose={onClose}
       title={
         <Text size="xl" fw="600">
-          Settings
+          {t("title")}
         </Text>
       }
       size="700px"
@@ -60,10 +61,7 @@ export function SettingsDialog({
           restoreDefaults={restoreDefaults}
         />
 
-        <Stack
-          flex={1}
-          p="xl"
-        >
+        <Stack flex={1} p="xl">
           <ScrollArea flex={1} offsetScrollbars>
             {activeSection === "appearance" && (
               <AppearanceSection
@@ -73,10 +71,7 @@ export function SettingsDialog({
             )}
 
             {activeSection === "reader" && (
-              <ReaderSection
-                settings={settings} 
-                updateReader={updateReader} 
-              />
+              <ReaderSection settings={settings} updateReader={updateReader} />
             )}
 
             {activeSection === "general" && (

@@ -1,0 +1,74 @@
+import {
+  notifyError,
+  notifySuccess,
+  notifyWarning,
+} from "@/services/notifications";
+import { mergePdfs } from "@/services/tauri";
+import { create } from "zustand";
+import { PageSelectionInput } from "../types";
+import i18next from "@/services/i18n/i18n";
+
+interface MergeState {
+  inputs: PageSelectionInput[];
+  destinationPath: string;
+  isLoading: boolean;
+  addFiles: (filePaths: string[]) => void;
+  setFiles: (files: PageSelectionInput[]) => void;
+  updateFileSelection: (filePath: string, selection: string | null) => void;
+  removeFile: (filePath: string) => void;
+  setDestinationPath: (path: string) => void;
+  setIsLoading: (loading: boolean) => void;
+  runMerge: () => Promise<void>;
+}
+
+export const useMergeState = create<MergeState>((set, get) => ({
+  inputs: [],
+  destinationPath: "",
+  isLoading: false,
+
+  addFiles: (filePaths: string[]) =>
+    set((prev) => ({
+      inputs: [
+        ...prev.inputs,
+        ...filePaths.map((file) => ({ file, selection: null })),
+      ],
+    })),
+
+  setFiles: (inputs: PageSelectionInput[]) => set({ inputs }),
+
+  updateFileSelection: (filePath: string, selection: string | null) =>
+    set((prev) => ({
+      inputs: prev.inputs.map((f) =>
+        f.file === filePath ? { ...f, selection: selection || null } : f,
+      ),
+    })),
+
+  removeFile: (filePath: string) =>
+    set((prev) => ({
+      inputs: prev.inputs.filter((f) => f.file !== filePath),
+    })),
+
+  setDestinationPath: (path: string) => set({ destinationPath: path }),
+
+  setIsLoading: (loading: boolean) => set({ isLoading: loading }),
+
+  runMerge: async () => {
+    const { inputs, destinationPath, isLoading, setIsLoading, setFiles } =
+      get();
+    if (inputs.length > 0 && !isLoading) {
+      setIsLoading(true);
+      const result = await mergePdfs(inputs, destinationPath);
+      if (result.ok) {
+        notifySuccess(i18next.t("tools:tools.merge.notifications.success"));
+        setFiles([]);
+      } else {
+        notifyError(
+          result.error ?? i18next.t("tools:tools.merge.notifications.error"),
+        );
+      }
+      setIsLoading(false);
+    } else {
+      notifyWarning(i18next.t("tools:tools.merge.notifications.warning"));
+    }
+  },
+}));

@@ -2,10 +2,9 @@ use std::path::PathBuf;
 
 use crate::{
     pdf::{
-        document::PdfInfo,
-        reader::{PageText, RenderedPage, SearchHit},
+        reader::{Annotation, PageText, RenderedPage, RenderedTile, SearchHit},
         worker::PdfEvent,
-        Bookmarks,
+        Bookmarks, PdfInfo,
     },
     state::AppState,
 };
@@ -15,6 +14,21 @@ pub fn open_pdf(state: &AppState, path: String) -> Result<String, String> {
     let id = state.manager.write().open(path.into())?;
 
     Ok(id)
+}
+
+pub fn get_page_count(state: &AppState, file: String) -> Result<u16, String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = flume::bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::PageCount { file, reply: tx })
+        .map_err(|e| format!("Error sending page count command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving page count result: {e}"))?
 }
 
 pub fn render_page(
@@ -40,6 +54,39 @@ pub fn render_page(
 
     rx.recv()
         .map_err(|e| format!("Error receiving render result: {e}"))?
+}
+
+pub fn render_tile(
+    state: &AppState,
+    id: String,
+    page_index: u16,
+    target_width: i32,
+    tile_x: i32,
+    tile_y: i32,
+    tile_width: i32,
+    tile_height: i32,
+) -> Result<RenderedTile, String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::RenderTile {
+            id,
+            page_index,
+            target_width,
+            tile_x,
+            tile_y,
+            tile_width,
+            tile_height,
+            reply: tx,
+        })
+        .map_err(|e| format!("Error sending render tile command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving render tile result: {e}"))?
 }
 
 pub fn get_pdf_info(state: &AppState, id: String) -> Result<PdfInfo, String> {
@@ -150,4 +197,63 @@ pub fn generate_preview(
 
     rx.recv()
         .map_err(|e| format!("Error receiving preview result: {e}"))?
+}
+
+pub fn get_annotations(state: &AppState, id: String) -> Result<Vec<Annotation>, String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::GetAnnotations { id, reply: tx })
+        .map_err(|e| format!("Error sending get annotations command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving get annotations result: {e}"))?
+}
+
+pub fn add_annotation(state: &AppState, id: String, annotation: Annotation) -> Result<(), String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::AddAnnotation {
+            id,
+            annotation,
+            reply: tx,
+        })
+        .map_err(|e| format!("Error sending add annotation command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving add annotation result: {e}"))?
+}
+
+pub fn remove_annotation(
+    state: &AppState,
+    id: String,
+    page_index: u16,
+    annotation_id: String,
+) -> Result<(), String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::RemoveAnnotation {
+            id,
+            page_index,
+            annotation_id,
+            reply: tx,
+        })
+        .map_err(|e| format!("Error sending remove annotation command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving remove annotation result: {e}"))?
 }

@@ -1,14 +1,18 @@
-import '@mantine/core/styles.css';
-import '@mantine/notifications/styles.css';
-import './styles.css'
-import { JSX, useEffect, useState } from 'react';
-import { Notifications } from '@mantine/notifications';
+import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
+import "./styles.css";
+import { JSX, useEffect, useState } from "react";
+import { Notifications } from "@mantine/notifications";
 import { MantineProvider } from "@mantine/core";
 import { ShellLayout } from "@/shell";
-import { velinTheme } from './theme';
-import { ScreenRouter } from './screenRouter';
-import { useDocumentRepositoryStore, useSettingsStore } from './store';
-import { DictionaryDownloadPrompt, isDictionaryInstalled } from '@/services/dictionary';
+import { velinTheme } from "./theme";
+import { ScreenRouter } from "./screenRouter";
+import { useDocumentRepositoryStore, useSettingsStore } from "./store";
+import {
+  DictionaryDownloadPrompt,
+  isDictionaryInstalled,
+} from "@/services/dictionary";
+import i18next from "@/services/i18n/i18n";
 
 export function App(): JSX.Element {
   const settings = useSettingsStore((state) => state.settings);
@@ -18,7 +22,7 @@ export function App(): JSX.Element {
     const initStorage = async () => {
       await useSettingsStore.getState().init();
       await useDocumentRepositoryStore.getState().init();
-      
+
       const installed = await isDictionaryInstalled();
       if (!installed) {
         setShowDictionaryPrompt(true);
@@ -27,14 +31,18 @@ export function App(): JSX.Element {
     initStorage();
   }, []);
 
-  return(
+  useEffect(() => {
+    i18next.changeLanguage(settings.general.language);
+  }, [settings.general.language]);
+
+  return (
     <MantineProvider
       theme={velinTheme(settings.appearance.color)}
       defaultColorScheme={settings.appearance.colorScheme}
     >
       <Notifications />
-      <DictionaryDownloadPrompt 
-        opened={showDictionaryPrompt} 
+      <DictionaryDownloadPrompt
+        opened={showDictionaryPrompt}
         onClose={() => setShowDictionaryPrompt(false)}
         onComplete={() => setShowDictionaryPrompt(false)}
       />

@@ -9,6 +9,30 @@ A modern, high-performance PDF reader built with **Tauri**, **Rust**, and **Reac
 
 ---
 
+## 📸 Showcase
+
+### Modern Home Screen
+
+A clean and intuitive landing page to manage and access your PDF collection.
+![Home Screen](assets/images/home-screen.png)
+
+### High-Performance Reader
+
+Experience lag-free reading, instant zooming, and smooth text interactions.
+![Reader Screen](assets/images/reader-screen.png)
+
+### Personalized Themes
+
+Switch between various themes — including a full dark theme — to match your workspace and reduce eye strain.
+![Multiple Themes](assets/images/multiple-themes.png)
+
+### Everything You Need for PDFs
+
+Merge, split, protect, unlock, watermark, and organize PDF files with a complete set of powerful tools.
+![Multiple Tools](assets/images/tools-screen.png)
+
+---
+
 ## 🚀 Tech Stack
 
 Velin leverages a modern stack to deliver a native-feel desktop experience with web flexibility:
@@ -19,6 +43,7 @@ Velin leverages a modern stack to deliver a native-feel desktop experience with 
 - **UI System**: Mantine
 - **State Management**: Zustand
 - **Virtualization**: @tanstack/react-virtual
+- **Internationalization**: react-i18next
 - **Build Tool**: Vite
 
 ---
@@ -39,7 +64,7 @@ Velin leverages a modern stack to deliver a native-feel desktop experience with 
 - [x] **Recent Files** – Automatically tracks recently opened PDFs.
 - [x] **Starred Documents** – Mark important PDFs for quick access.
 - [x] **Persistent Settings** – App preferences are saved across sessions.
-- [x] **Theme Support** – Multiple theme colors with dynamic switching.
+- [x] **Theme & Dark Mode Support** – Multiple theme colors with a fully supported dark theme.
 
 ### 📚 Integrated Dictionary
 
@@ -52,18 +77,41 @@ Velin leverages a modern stack to deliver a native-feel desktop experience with 
 - [x] **Bookmarks Panel** – Navigate using embedded PDF bookmarks.
 - [x] **Smooth Navigation** – Jump between pages instantly.
 
-### 💬 In Progress
+### 🛠 PDF Tools
 
-- [/] **Comments & Annotations** – PDF annotations and inline commenting (under active development).
-- [ ] **Advanced Search**
-- [ ] **Highlight Management**
-- [ ] **Cross-document indexing**
+A growing suite of built-in PDF utilities, all accessible from the tools screen:
+
+- [x] **Merge PDF** – Combine multiple PDFs into a single document.
+- [x] **Split PDF** – Separate a PDF into multiple files by page range.
+- [x] **Extract Pages** – Save specific pages as a new PDF file.
+- [x] **Compress PDF** – Reduce file size without losing quality.
+- [x] **PDF to Image** – Convert PDF pages into high-quality images.
+- [x] **Image to PDF** – Create a PDF from a collection of images.
+- [x] **Rotate PDF** – Change the orientation of your PDF pages.
+- [x] **Protect PDF** – Add a password and secure your document.
+- [x] **Unlock PDF** – Remove password protection from your PDF.
+- [x] **Watermark** – Add text or image watermarks to your PDF.
+
+### 🌐 Internationalization
+
+- [x] **English (en)** – Full English language support.
+- [x] **Hindi (हिन्दी)** – Complete Hindi language interface.
+- [x] **Extensible i18n** – Built on react-i18next, ready for additional languages.
 
 ### ⚡ Performance
 
 - [x] Significant optimizations to PDF pixel rendering and caching.
 - [x] Virtualized page rendering for large documents.
 - [x] Reduced unnecessary re-renders across the app.
+- [x] Optimized tool execution with minimal overhead.
+
+### 💬 In Progress
+
+- [ ] **Modify Screen** – Edit and annotate PDF pages directly.
+- [ ] **Comments & Annotations** – PDF annotations and inline commenting.
+- [ ] **Advanced Search**
+- [ ] **Highlight Management**
+- [ ] **Cross-document indexing**
 
 ---
 
@@ -111,7 +159,7 @@ pnpm install
 3. Run in development mode:
 
 ```bash
-pnpm tauri dev
+pnpm velin:dev
 ```
 
 ---

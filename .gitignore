@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Tests
+coverage/
+
+# PDFium
+src-tauri/resources
+temp

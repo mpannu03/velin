@@ -1,0 +1,34 @@
+name: Performance Issue
+description: Report slow performance, high CPU or memory usage
+title: "[Performance]: "
+labels: ["performance"]
+
+body:
+  - type: textarea
+    id: issue
+    attributes:
+      label: Performance Problem
+      description: Describe the slowdown or performance issue
+    validations:
+      required: true
+
+  - type: input
+    id: pdf_size
+    attributes:
+      label: PDF File Size
+      placeholder: e.g. 120MB
+
+  - type: input
+    id: system_specs
+    attributes:
+      label: System Specifications
+      placeholder: CPU, RAM, GPU
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      options:
+        - Windows
+        - Linux
+        - macOS

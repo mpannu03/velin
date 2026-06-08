@@ -1,6 +1,7 @@
 import { ReaderSettings, Settings } from "@/shared/types";
 import { Box, NumberInput, Select, Stack, Text } from "@mantine/core";
 import { JSX } from "react";
+import { useTranslation } from "react-i18next";
 
 export function ReaderSection({
   settings,
@@ -9,19 +10,23 @@ export function ReaderSection({
   settings: Settings;
   updateReader: (settings: Partial<ReaderSettings>) => void;
 }): JSX.Element {
+  const { t } = useTranslation("settings");
   return (
     <Stack gap="xl">
       <Box>
         <Text fw={600} size="sm" mb="xs" c="dimmed" tt="uppercase" lts="0.5px">
-          Default View Mode
+          {t("reader.defaultViewMode.title")}
         </Text>
         <Select
           value={settings.reader.defaultViewMode}
           onChange={(value) => updateReader({ defaultViewMode: value as any })}
           data={[
-            { label: "Single Page", value: "single" },
-            { label: "Continuous", value: "continuous" },
-            { label: "Double Page", value: "double" },
+            { label: t("reader.defaultViewMode.single"), value: "single" },
+            {
+              label: t("reader.defaultViewMode.continuous"),
+              value: "continuous",
+            },
+            { label: t("reader.defaultViewMode.double"), value: "double" },
           ]}
           radius="md"
           allowDeselect={false}
@@ -30,7 +35,7 @@ export function ReaderSection({
 
       <Box>
         <Text fw={600} size="sm" mb="xs" c="dimmed" tt="uppercase" lts="0.5px">
-          Default Zoom Level
+          {t("reader.defaultZoom")}
         </Text>
         <NumberInput
           value={settings.reader.defaultZoom}
@@ -49,7 +54,7 @@ export function ReaderSection({
 
       <Box>
         <Text fw={600} size="sm" mb="xs" c="dimmed" tt="uppercase" lts="0.5px">
-          Scroll Sensitivity
+          {t("reader.scrollSensitivity")}
         </Text>
         <NumberInput
           value={settings.reader.scrollSensitivity}

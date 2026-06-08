@@ -3,6 +3,11 @@ use std::fs::File;
 use std::path::Path;
 use tar::Archive;
 
+use crate::pdf::tools::{self, PageSelectionInputRaw};
+use crate::service::tools_service;
+use crate::state::AppState;
+use tauri::State;
+
 #[tauri::command]
 pub async fn extract_tar_gz(path: String, dest: String) -> Result<(), String> {
     let tar_gz = File::open(path).map_err(|e| e.to_string())?;
@@ -13,4 +18,96 @@ pub async fn extract_tar_gz(path: String, dest: String) -> Result<(), String> {
     archive.unpack(dest_path).map_err(|e| e.to_string())?;
 
     Ok(())
+}
+
+#[tauri::command]
+pub async fn merge_pdfs(
+    state: State<'_, AppState>,
+    raw_inputs: Vec<PageSelectionInputRaw>,
+    dest: String,
+) -> Result<(), String> {
+    tools_service::merge_pdfs(&state, raw_inputs, dest).await
+}
+
+#[tauri::command]
+pub async fn split_pdf(
+    state: State<'_, AppState>,
+    raw_input: PageSelectionInputRaw,
+    dest_dir: String,
+    file_name: String,
+) -> Result<(), String> {
+    tools_service::split_pdf(&state, raw_input, dest_dir, file_name).await
+}
+
+#[tauri::command]
+pub async fn extract_pdf(
+    state: State<'_, AppState>,
+    raw_input: PageSelectionInputRaw,
+    dest: String,
+) -> Result<(), String> {
+    tools_service::extract_pdf(&state, raw_input, dest).await
+}
+
+#[tauri::command]
+pub async fn pdf_to_image(
+    state: State<'_, AppState>,
+    raw_input: PageSelectionInputRaw,
+    dest_dir: String,
+    options: crate::pdf::tools::PdfToImgOptions,
+) -> Result<(), String> {
+    tools_service::pdf_to_image(&state, raw_input, dest_dir, options).await
+}
+
+#[tauri::command]
+pub async fn compress_pdf(
+    state: State<'_, AppState>,
+    input_path: String,
+    output_path: String,
+    quality: u8,
+) -> Result<(), String> {
+    tools_service::compress_pdf(&state, input_path, output_path, quality).await
+}
+
+#[tauri::command]
+pub async fn image_to_pdf(
+    state: State<'_, AppState>,
+    image_paths: Vec<String>,
+    dest: String,
+    options: crate::pdf::tools::ImageToPdfOptions,
+) -> Result<(), String> {
+    tools_service::image_to_pdf(&state, image_paths, dest, options).await
+}
+
+#[tauri::command]
+pub async fn rotate_pdf(
+    state: State<'_, AppState>,
+    raw_input: PageSelectionInputRaw,
+    dest: String,
+    angle: i32,
+) -> Result<(), String> {
+    tools_service::rotate_pdf(&state, raw_input, dest, angle).await
+}
+
+#[tauri::command]
+pub async fn protect_pdf(
+    state: State<'_, AppState>,
+    input: tools::ProtectInput,
+) -> Result<(), String> {
+    tools_service::protect_pdf(&state, input).await
+}
+
+#[tauri::command]
+pub async fn unlock_pdf(
+    state: State<'_, AppState>,
+    input: tools::UnlockInput,
+) -> Result<(), String> {
+    tools_service::unlock_pdf(&state, input).await
+}
+
+#[tauri::command]
+pub async fn watermark_pdf(
+    state: State<'_, AppState>,
+    input: tools::WatermarkInput,
+) -> Result<(), String> {
+    tools_service::watermark_pdf(&state, input).await
 }

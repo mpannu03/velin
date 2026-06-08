@@ -2,21 +2,20 @@ mod commands;
 mod pdf;
 mod service;
 mod state;
+mod utils;
 
 pub use state::AppState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    #[cfg(debug_assertions)] // only enable instrumentation in development builds
-    let devtools = tauri_plugin_devtools::init();
-
+    #[allow(unused_mut)]
     let mut builder = tauri::Builder::default()
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_store::Builder::new().build());
 
-    #[cfg(debug_assertions)]
-    {
+    if cfg!(debug_assertions) {
+        let devtools = tauri_plugin_devtools::init();
         builder = builder.plugin(devtools);
     }
 
@@ -27,6 +26,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             // reader
             commands::reader::open_pdf,
+            commands::reader::get_page_count,
             commands::reader::render_page,
             commands::reader::close_pdf,
             commands::reader::get_pdf_info,
@@ -34,7 +34,21 @@ pub fn run() {
             commands::reader::get_text_by_page,
             commands::reader::search_document,
             commands::reader::generate_preview,
+            commands::reader::get_annotations,
+            commands::reader::add_annotation,
+            commands::reader::remove_annotation,
+            commands::reader::render_tile,
             commands::tools::extract_tar_gz,
+            commands::tools::merge_pdfs,
+            commands::tools::split_pdf,
+            commands::tools::extract_pdf,
+            commands::tools::pdf_to_image,
+            commands::tools::compress_pdf,
+            commands::tools::image_to_pdf,
+            commands::tools::rotate_pdf,
+            commands::tools::protect_pdf,
+            commands::tools::unlock_pdf,
+            commands::tools::watermark_pdf,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

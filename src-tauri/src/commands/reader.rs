@@ -2,9 +2,8 @@ use tauri::{AppHandle, Manager, State};
 
 use crate::{
     pdf::{
-        document::PdfInfo,
-        reader::{PageText, SearchHit},
-        Bookmarks,
+        reader::{Annotation, PageText, SearchHit},
+        Bookmarks, PdfInfo,
     },
     service::reader_service,
     state::AppState,
@@ -13,6 +12,11 @@ use crate::{
 #[tauri::command]
 pub fn open_pdf(state: State<AppState>, path: String) -> Result<String, String> {
     reader_service::open_pdf(&state, path)
+}
+
+#[tauri::command]
+pub fn get_page_count(state: State<AppState>, file: String) -> Result<u16, String> {
+    reader_service::get_page_count(&state, file)
 }
 
 #[tauri::command]
@@ -34,6 +38,44 @@ pub async fn render_page(
     data.extend_from_slice(&(page.width as u32).to_be_bytes());
     data.extend_from_slice(&(page.height as u32).to_be_bytes());
     data.extend_from_slice(&page.pixels);
+
+    Ok(tauri::ipc::Response::new(data))
+}
+
+#[tauri::command]
+pub async fn render_tile(
+    state: State<'_, AppState>,
+    id: String,
+    page_index: u16,
+    target_width: i32,
+    tile_x: i32,
+    tile_y: i32,
+    tile_width: i32,
+    tile_height: i32,
+) -> Result<tauri::ipc::Response, String> {
+    let app_state = state.inner().clone();
+
+    let tile = tauri::async_runtime::spawn_blocking(move || {
+        reader_service::render_tile(
+            &app_state,
+            id,
+            page_index,
+            target_width,
+            tile_x,
+            tile_y,
+            tile_width,
+            tile_height,
+        )
+    })
+    .await
+    .map_err(|e| e.to_string())??;
+
+    let mut data = Vec::with_capacity(16 + tile.pixels.len());
+    data.extend_from_slice(&(tile.x as i32).to_be_bytes());
+    data.extend_from_slice(&(tile.y as i32).to_be_bytes());
+    data.extend_from_slice(&(tile.width as i32).to_be_bytes());
+    data.extend_from_slice(&(tile.height as i32).to_be_bytes());
+    data.extend_from_slice(&tile.pixels);
 
     Ok(tauri::ipc::Response::new(data))
 }
@@ -82,7 +124,31 @@ pub fn generate_preview(
         .app_cache_dir()
         .map_err(|e| format!("Failed to get app cache dir: {e}"))?;
     let previews_dir = app_data.join("previews");
-    let save_path = previews_dir.join(format!("{}.png", id));
+    let save_path = previews_dir.join(format!("{}.webp", id));
 
     reader_service::generate_preview(&state, id, Some(save_path))
+}
+
+#[tauri::command]
+pub fn get_annotations(state: State<AppState>, id: String) -> Result<Vec<Annotation>, String> {
+    reader_service::get_annotations(&state, id)
+}
+
+#[tauri::command]
+pub fn add_annotation(
+    state: State<AppState>,
+    id: String,
+    annotation: Annotation,
+) -> Result<(), String> {
+    reader_service::add_annotation(&state, id, annotation)
+}
+
+#[tauri::command]
+pub fn remove_annotation(
+    state: State<AppState>,
+    id: String,
+    page_index: u16,
+    annotation_id: String,
+) -> Result<(), String> {
+    reader_service::remove_annotation(&state, id, page_index, annotation_id)
 }

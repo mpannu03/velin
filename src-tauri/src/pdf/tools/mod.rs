@@ -1,0 +1,65 @@
+pub mod compress;
+pub mod extract;
+pub mod image;
+pub mod image_to_pdf;
+pub mod merge;
+pub mod protect;
+pub mod rotate;
+pub mod split;
+pub mod unlock;
+pub mod watermark;
+
+pub use compress::*;
+pub use extract::*;
+pub use image::*;
+pub use image_to_pdf::*;
+pub use merge::*;
+pub use protect::*;
+pub use rotate::*;
+use serde::Deserialize;
+pub use split::*;
+pub use unlock::*;
+pub use watermark::*;
+
+use crate::utils::page_selection::{PageSelection, PageSelectionParser};
+
+#[derive(Debug, Deserialize)]
+pub struct PageSelectionInputRaw {
+    pub file: String,
+    pub selection: Option<String>,
+}
+
+#[derive(Debug)]
+pub struct PageSelectionInput {
+    pub file: String,
+    pub selection: Option<PageSelection>,
+}
+
+pub fn prepare_page_selection_inputs(
+    raw_inputs: Vec<PageSelectionInputRaw>,
+) -> Result<Vec<PageSelectionInput>, String> {
+    let mut inputs = Vec::new();
+
+    for raw in raw_inputs {
+        inputs.push(prepare_page_selection_input(raw)?);
+    }
+
+    Ok(inputs)
+}
+
+pub fn prepare_page_selection_input(
+    raw: PageSelectionInputRaw,
+) -> Result<PageSelectionInput, String> {
+    let selection = match raw.selection {
+        Some(expr) => {
+            let parsed = PageSelectionParser::parse(&expr).map_err(|e| e.to_string())?;
+            Some(parsed)
+        }
+        None => None,
+    };
+
+    Ok(PageSelectionInput {
+        file: raw.file,
+        selection,
+    })
+}

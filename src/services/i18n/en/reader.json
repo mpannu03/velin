@@ -1,0 +1,26 @@
+{
+    "empty": {
+        "title": "No Open Documents",
+        "description": "Your reader is currently empty. Open a document to start reading and annotating."
+    },
+    "tools": {
+        "selection": "Selection Tool",
+        "hand": "Hand Tool",
+        "dictionary": "Dictionary Tool"
+    },
+    "panel": {
+        "annotations": "Annotations",
+        "bookmarks": "Bookmarks",
+        "search": "Search",
+        "outline": "Outline",
+        "attachments": "Attachments",
+        "comments": "Comments",
+        "dictionary": "Dictionary"
+    },
+    "loading": {
+        "info": "Loading Document Info..."
+    },
+    "error": {
+        "loading": "Loading Error: "
+    }
+}

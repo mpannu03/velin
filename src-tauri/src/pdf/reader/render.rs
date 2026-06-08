@@ -1,7 +1,7 @@
-use image::{ImageBuffer, Rgba};
-use pdfium_render::prelude::{PdfDocument, PdfRenderConfig, Pdfium};
+use pdfium_render::prelude::{PdfDocument, PdfPoints, PdfRenderConfig, Pdfium};
 use serde::Serialize;
-use std::{collections::HashMap, io::Cursor, path::Path};
+use std::{collections::HashMap, path::Path};
+use webp;
 
 use crate::pdf::DocumentId;
 
@@ -9,6 +9,15 @@ const PREVIEW_WIDTH: i32 = 100;
 
 #[derive(Debug, Serialize)]
 pub struct RenderedPage {
+    pub width: i32,
+    pub height: i32,
+    pub pixels: Vec<u8>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct RenderedTile {
+    pub x: i32,
+    pub y: i32,
     pub width: i32,
     pub height: i32,
     pub pixels: Vec<u8>,
@@ -24,16 +33,6 @@ pub fn open<'a>(
         .load_pdf_from_file(path, None)
         .map_err(|e| format!("Failed to open PDF: {}", e))?;
     documents.insert(id, document);
-    Ok(())
-}
-
-pub fn close(
-    documents: &mut HashMap<DocumentId, PdfDocument>,
-    id: &DocumentId,
-) -> Result<(), String> {
-    documents
-        .remove(id)
-        .ok_or("Document not found".to_string())?;
     Ok(())
 }
 
@@ -56,13 +55,66 @@ pub fn render_page(
         .render_with_config(&config)
         .map_err(|e| format!("Rendering Error: {}", e))?;
 
+    let width = bitmap.width();
+    let height = bitmap.height();
+
+    let webp_bytes = rgba_to_webp(&bitmap.as_raw_bytes(), width as u32, height as u32, 80.0)?;
+
     let rendered_page = RenderedPage {
-        width: bitmap.width(),
-        height: bitmap.height(),
-        pixels: bitmap.as_raw_bytes(),
+        width: width as i32,
+        height: height as i32,
+        pixels: webp_bytes,
     };
 
     Ok(rendered_page)
+}
+
+pub fn render_tile(
+    documents: &HashMap<DocumentId, PdfDocument>,
+    id: &DocumentId,
+    page_index: u16,
+    target_width: i32,
+    tile_x: i32,
+    tile_y: i32,
+    tile_width: i32,
+    tile_height: i32,
+) -> Result<RenderedTile, String> {
+    let document = documents.get(id).ok_or("Document not found")?;
+
+    let page = document
+        .pages()
+        .get(page_index)
+        .map_err(|e| format!("Failed to get page: {e}"))?;
+
+    let scale = target_width as f32 / page.width().value;
+
+    let config = PdfRenderConfig::new()
+        .set_fixed_size(tile_width as i32, tile_height as i32)
+        .scale_page_by_factor(scale)
+        .translate(
+            PdfPoints::new(-tile_x as f32 / scale),
+            PdfPoints::new(-tile_y as f32 / scale),
+        )
+        .map_err(|e| format!("Matrix error: {e}"))?;
+
+    let bitmap = page
+        .render_with_config(&config)
+        .map_err(|e| format!("Rendering Error: {e}"))?;
+
+    let webp_bytes = rgba_to_webp(
+        &bitmap.as_raw_bytes(),
+        bitmap.width() as u32,
+        bitmap.height() as u32,
+        90.0,
+    )?;
+
+    Ok(RenderedTile {
+        x: tile_x,
+        y: tile_y,
+        width: bitmap.width() as i32,
+        height: bitmap.height() as i32,
+        pixels: webp_bytes,
+    })
 }
 
 pub fn generate_preview(
@@ -82,29 +134,33 @@ pub fn generate_preview(
         .render_with_config(&config)
         .map_err(|e| format!("Rendering Error: {e}"))?;
 
-    let png_bytes = rgba_to_png_bytes(bitmap.as_raw_bytes(), bitmap.width(), bitmap.height())?;
+    let webp_bytes = rgba_to_webp(
+        &bitmap.as_raw_bytes(),
+        bitmap.width() as u32,
+        bitmap.height() as u32,
+        90.0,
+    )?;
 
     if let Some(path) = save_path {
         let path = path.as_ref();
         if let Some(parent) = path.parent() {
             std::fs::create_dir_all(parent).map_err(|e| e.to_string())?;
         }
-        std::fs::write(path, &png_bytes).map_err(|e| e.to_string())?;
+        std::fs::write(path, &webp_bytes).map_err(|e| e.to_string())?;
     }
 
-    Ok(png_bytes)
+    Ok(webp_bytes)
 }
 
-pub fn rgba_to_png_bytes(pixels: Vec<u8>, width: i32, height: i32) -> Result<Vec<u8>, String> {
-    let img: ImageBuffer<Rgba<u8>, _> = ImageBuffer::from_raw(width as u32, height as u32, pixels)
-        .ok_or("Failed to create image buffer")?;
-
-    let mut png_bytes: Vec<u8> = Vec::new();
-
-    img.write_to(&mut Cursor::new(&mut png_bytes), image::ImageFormat::Png)
-        .map_err(|e| e.to_string())?;
-
-    Ok(png_bytes)
+fn rgba_to_webp(
+    rgba: &[u8],
+    width: u32,
+    height: u32,
+    quality: f32, // 0.0 - 100.0
+) -> Result<Vec<u8>, String> {
+    let encoder = webp::Encoder::from_rgba(rgba, width, height);
+    let webp = encoder.encode(quality);
+    Ok(webp.to_vec())
 }
 
 #[cfg(test)]
@@ -112,16 +168,6 @@ mod tests {
     use super::*;
     use pdfium_render::prelude::Pdfium;
     use std::{collections::HashMap, path::PathBuf};
-
-    #[test]
-    fn test_render_close_not_found() {
-        let mut documents = HashMap::new();
-        let id = "non_existent".to_string();
-
-        let result = close(&mut documents, &id);
-        assert!(result.is_err());
-        assert_eq!(result.unwrap_err(), "Document not found");
-    }
 
     #[test]
     fn test_render_page_not_found() {

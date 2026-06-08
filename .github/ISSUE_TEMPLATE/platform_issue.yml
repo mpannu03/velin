@@ -1,0 +1,29 @@
+name: Platform / OS Issue
+description: Problems specific to Windows, Linux, or macOS
+title: "[Platform]: "
+labels: ["platform"]
+
+body:
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      options:
+        - Windows
+        - Linux
+        - macOS
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Describe the Issue
+      description: What platform-specific issue occurred?
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or Error Messages

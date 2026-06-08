@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import packageJson from "./package.json";
@@ -15,10 +14,11 @@ export default defineConfig(async () => ({
     __APP_VERSION__: JSON.stringify(packageJson.version),
   },
 
-  plugins: [react(), tsconfigPaths()],
+  plugins: react(),
 
   resolve: {
     alias: [{ find: "@", replacement: resolve(__dirname, "./src") }],
+    tsconfigPaths: true,
   },
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
@@ -40,6 +40,20 @@ export default defineConfig(async () => ({
     watch: {
       // 3. tell Vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
+    },
+  },
+  test: {
+    environment: "jsdom",
+    globals: true,
+    setupFiles: ["./src/test/setup.ts"],
+
+    coverage: {
+      reporter: ["text", "html"],
+      provider: "v8",
+      lines: 80,
+      functions: 80,
+      branches: 70,
+      statements: 80,
     },
   },
 }));
