@@ -7,6 +7,7 @@ pub mod protect;
 pub mod rotate;
 pub mod split;
 pub mod unlock;
+pub mod watermark;
 
 pub use compress::*;
 pub use extract::*;
@@ -18,6 +19,7 @@ pub use rotate::*;
 use serde::Deserialize;
 pub use split::*;
 pub use unlock::*;
+pub use watermark::*;
 
 use crate::utils::page_selection::{PageSelection, PageSelectionParser};
 

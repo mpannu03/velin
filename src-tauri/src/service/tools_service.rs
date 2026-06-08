@@ -216,3 +216,18 @@ pub async fn unlock_pdf(state: &AppState, input: tools::UnlockInput) -> Result<(
     rx.recv()
         .map_err(|e| format!("Error receiving unlock result: {e}"))?
 }
+
+pub async fn watermark_pdf(state: &AppState, input: tools::WatermarkInput) -> Result<(), String> {
+    let manager = state.manager.read();
+    let worker = manager.worker();
+
+    let (tx, rx) = flume::bounded(1);
+
+    worker
+        .sender()
+        .send(PdfEvent::Watermark { input, reply: tx })
+        .map_err(|e| format!("Error sending watermark command: {e}"))?;
+
+    rx.recv()
+        .map_err(|e| format!("Error receiving watermark result: {e}"))?
+}

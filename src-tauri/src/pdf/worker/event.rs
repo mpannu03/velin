@@ -123,4 +123,8 @@ pub enum PdfEvent {
         input: UnlockInput,
         reply: Sender<Result<(), String>>,
     },
+    Watermark {
+        input: crate::pdf::tools::WatermarkInput,
+        reply: Sender<Result<(), String>>,
+    },
 }

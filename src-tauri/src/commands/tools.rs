@@ -103,3 +103,11 @@ pub async fn unlock_pdf(
 ) -> Result<(), String> {
     tools_service::unlock_pdf(&state, input).await
 }
+
+#[tauri::command]
+pub async fn watermark_pdf(
+    state: State<'_, AppState>,
+    input: tools::WatermarkInput,
+) -> Result<(), String> {
+    tools_service::watermark_pdf(&state, input).await
+}
