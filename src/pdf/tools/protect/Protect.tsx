@@ -28,12 +28,14 @@ export function Protect({ onBackPressed }: ToolPreferencesProps): JSX.Element {
     file,
     destinationPath,
     password,
+    confirmPassword,
     requirePasswordToOpen,
     permissions,
     isLoading,
     setFile,
     setDestinationPath,
     setPassword,
+    setConfirmPassword,
     setRequirePasswordToOpen,
     togglePermission,
     runProtect,
@@ -42,6 +44,7 @@ export function Protect({ onBackPressed }: ToolPreferencesProps): JSX.Element {
   const hasFile = !!file;
   const MIN_PASSWORD_LENGTH = 8;
   const passwordValid = password.length >= MIN_PASSWORD_LENGTH;
+  const passwordsMatch = password === confirmPassword;
 
   const getDefaultDestination = (sourceFile: string = "image") => {
     const filename = sourceFile.split(/[/\\]/).pop() || "";
@@ -75,7 +78,7 @@ export function Protect({ onBackPressed }: ToolPreferencesProps): JSX.Element {
       actionLabel={t("tools.protect.action", { defaultValue: "Protect PDF" })}
       onAction={runProtect}
       onBackClick={onBackPressed}
-      isValid={hasFile && passwordValid && !isLoading}
+      isValid={hasFile && passwordValid && !isLoading && passwordsMatch}
     >
       <Stack gap="lg" pos="relative">
         <LoadingOverlay visible={isLoading} zIndex={1000} />
@@ -102,16 +105,42 @@ export function Protect({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                   value={password}
                   onChange={(e) => setPassword(e.currentTarget.value)}
                 />
-                {!passwordValid && password.length > 0 && (
+                {password.length > 0 &&
+                  password.length < MIN_PASSWORD_LENGTH && (
+                    <Alert
+                      color="red"
+                      icon={<Shield size={16} />}
+                      title={t("tools.protect.password_error.title", {
+                        defaultValue: "Password too short",
+                      })}
+                    >
+                      {t("tools.protect.password_error.desc", {
+                        defaultValue: `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`,
+                      })}
+                    </Alert>
+                  )}
+                <Text size="sm" fw={600}>
+                  {t("tools.protect.confirm_password", {
+                    defaultValue: "Confirm Password",
+                  })}
+                </Text>
+                <PasswordInput
+                  placeholder={t("tools.protect.password_placeholder", {
+                    defaultValue: "Confirm password",
+                  })}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.currentTarget.value)}
+                />
+                {!passwordsMatch && confirmPassword.length > 0 && (
                   <Alert
                     color="red"
                     icon={<Shield size={16} />}
-                    title={t("tools.protect.password_error.title", {
-                      defaultValue: "Password too short",
+                    title={t("tools.protect.password_mismatch", {
+                      defaultValue: "Password do not match",
                     })}
                   >
-                    {t("tools.protect.password_error.desc", {
-                      defaultValue: `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`,
+                    {t("tools.protect.password_mismatch", {
+                      defaultValue: "Password do not match",
                     })}
                   </Alert>
                 )}

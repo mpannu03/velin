@@ -255,6 +255,8 @@
             "action": "PDF सुरक्षित करें",
             "password_label": "पासवर्ड",
             "password_placeholder": "पासवर्ड दर्ज करें (न्यूनतम 8 अक्षर)",
+            "confirm_password": "पासवर्ड की पुष्टि करें",
+            "password_mismatch": "पासवर्ड मेल नहीं खाता",
             "password_error": {
                 "title": "पासवर्ड बहुत छोटा है",
                 "desc": "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए।"

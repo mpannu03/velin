@@ -31,12 +31,14 @@ interface ProtectState {
   file: string;
   destinationPath: string;
   password: string;
+  confirmPassword: string;
   requirePasswordToOpen: boolean;
   permissions: Permissions;
   isLoading: boolean;
   setFile: (file: string) => void;
   setDestinationPath: (path: string) => void;
   setPassword: (pw: string) => void;
+  setConfirmPassword: (pw: string) => void;
   setRequirePasswordToOpen: (value: boolean) => void;
   togglePermission: (key: keyof Permissions) => void;
   setIsLoading: (loading: boolean) => void;
@@ -48,6 +50,7 @@ export const useProtectStore = create<ProtectState>((set, get) => ({
   file: "",
   destinationPath: "",
   password: "",
+  confirmPassword: "",
   requirePasswordToOpen: false,
   permissions: { ...DEFAULT_PERMISSIONS },
   isLoading: false,
@@ -55,6 +58,7 @@ export const useProtectStore = create<ProtectState>((set, get) => ({
   setFile: (file) => set({ file }),
   setDestinationPath: (path) => set({ destinationPath: path }),
   setPassword: (pw) => set({ password: pw }),
+  setConfirmPassword: (pw) => set({ confirmPassword: pw }),
   setRequirePasswordToOpen: (value) => set({ requirePasswordToOpen: value }),
   togglePermission: (key) =>
     set((state) => ({
@@ -66,6 +70,7 @@ export const useProtectStore = create<ProtectState>((set, get) => ({
       file: "",
       destinationPath: "",
       password: "",
+      confirmPassword: "",
       requirePasswordToOpen: false,
       permissions: { ...DEFAULT_PERMISSIONS },
       isLoading: false,

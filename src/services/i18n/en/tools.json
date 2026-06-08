@@ -255,6 +255,8 @@
             "action": "Protect PDF",
             "password_label": "Password",
             "password_placeholder": "Enter password (min. 8 characters)",
+            "confirm_password": "Confirm Password",
+            "password_mismatch": "Passwords do not match.",
             "password_error": {
                 "title": "Password too short",
                 "desc": "Password must be at least 8 characters."
