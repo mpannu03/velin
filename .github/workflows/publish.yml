@@ -58,7 +58,7 @@ jobs:
         run: pnpm install
 
       - name: download PDFium
-        run: pnpm pdfium -- --target ${{ matrix.pdfium }}
+        run: pnpm pdfium:release
 
       - uses: tauri-apps/tauri-action@v0
         env:
