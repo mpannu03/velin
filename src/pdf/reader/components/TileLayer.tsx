@@ -140,9 +140,6 @@ export function TileLayer({
       )}
 
       {tiles.map((tile) => {
-        // Skip hi-res rendering while scrolling fast
-        if (isScrolling) return null;
-
         const isVisible =
           tile.y + tile.height > visibleRange.viewportTop * dpr &&
           tile.y < visibleRange.viewportBottom * dpr;
@@ -157,6 +154,7 @@ export function TileLayer({
             tile={tile}
             dpr={dpr}
             priority={priority}
+            skipEnqueue={isScrolling}
           />
         );
       })}
@@ -204,7 +202,7 @@ function LowResFallback({ pixels, width, height }: any) {
  * (React reconciliation by key), avoiding unnecessary create/destroy during scroll.
  */
 const TileCanvas = memo(
-  ({ id, pageIndex, renderWidth, tile, dpr, priority }: any) => {
+  ({ id, pageIndex, renderWidth, tile, dpr, priority, skipEnqueue }: any) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const { tile: renderedTile, loading } = usePdfTile(
       id,
@@ -215,6 +213,7 @@ const TileCanvas = memo(
       tile.width,
       tile.height,
       priority,
+      skipEnqueue,
     );
 
     useEffect(() => {

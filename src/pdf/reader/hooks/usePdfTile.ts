@@ -19,6 +19,7 @@ export function usePdfTile(
   width: number,
   height: number,
   priority: number = 100,
+  skipEnqueue: boolean = false,
 ) {
   const addTile = useDocumentCacheStore((s) => s.addTile);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -44,6 +45,13 @@ export function usePdfTile(
 
   useEffect(() => {
     if (cachedTile) return;
+    if (skipEnqueue) {
+      // During scroll, don't enqueue new renders — only show cached tiles.
+      // This prevents flooding the render queue with requests for tiles that
+      // will scroll out of view before they finish.
+      setState((s) => (s.loading ? { ...s, loading: false } : s));
+      return;
+    }
 
     const taskKey = `${id}:${pageIndex}:${targetWidth}:${x}_${y}_${width}x${height}`;
 
@@ -81,7 +89,18 @@ export function usePdfTile(
           console.error(err);
         }
       });
-  }, [id, pageIndex, targetWidth, x, y, width, height, addTile, cachedTile]);
+  }, [
+    id,
+    pageIndex,
+    targetWidth,
+    x,
+    y,
+    width,
+    height,
+    addTile,
+    cachedTile,
+    skipEnqueue,
+  ]);
 
   useEffect(() => {
     return () => {
