@@ -10,9 +10,10 @@ import {
   ActionIcon,
   Alert,
   LoadingOverlay,
+  Collapse,
 } from "@mantine/core";
-import { Save, Pencil, AlertTriangle } from "lucide-react";
-import { JSX } from "react";
+import { Save, Pencil, Info, AlertTriangle } from "lucide-react";
+import { JSX, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FileSelection } from "../components";
 import { ToolPreferencesProps, TOOLS } from "../types";
@@ -33,6 +34,7 @@ export function Unlock({ onBackPressed }: ToolPreferencesProps): JSX.Element {
     runUnlock,
   } = useUnlockStore();
 
+  const [showPasswordHint, setShowPasswordHint] = useState(false);
   const hasFile = !!file;
 
   const getDefaultDestination = (sourceFile: string = "image") => {
@@ -93,6 +95,17 @@ export function Unlock({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                   })}
                   value={password}
                   onChange={(e) => setPassword(e.currentTarget.value)}
+                  description={
+                    <Group gap={4} wrap="nowrap">
+                      <Info size={14} />
+                      <Text size="xs" span>
+                        {t("tools.unlock.password_hint", {
+                          defaultValue:
+                            "Enter the password used to restrict or open this PDF.",
+                        })}
+                      </Text>
+                    </Group>
+                  }
                 />
                 <Alert
                   icon={<AlertTriangle size={16} />}
@@ -102,10 +115,41 @@ export function Unlock({ onBackPressed }: ToolPreferencesProps): JSX.Element {
                   color="red"
                   variant="light"
                 >
-                  {t("tools.unlock.warning_desc", {
-                    defaultValue:
-                      "This will permanently remove all password protection and security restrictions from the document.",
-                  })}
+                  <Stack gap="xs">
+                    <Text size="sm">
+                      {t("tools.unlock.warning_desc", {
+                        defaultValue:
+                          "This will permanently remove all password protection and security restrictions from the document.",
+                      })}
+                    </Text>
+                    <Box
+                      component="button"
+                      type="button"
+                      onClick={() => setShowPasswordHint((o) => !o)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        padding: 0,
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                        fontSize: "inherit",
+                        color: "inherit",
+                        textAlign: "left",
+                      }}
+                    >
+                      {t("tools.unlock.which_password", {
+                        defaultValue: "Which password should I enter?",
+                      })}
+                    </Box>
+                    <Collapse in={showPasswordHint}>
+                      <Text size="sm" c="dimmed">
+                        {t("tools.unlock.password_guide", {
+                          defaultValue:
+                            "If the PDF asks for a password when you open it, enter that password. If it opens without asking but has restricted features (like printing or copying), enter the password that was used to set those restrictions (the owner password).",
+                        })}
+                      </Text>
+                    </Collapse>
+                  </Stack>
                 </Alert>
               </Stack>
             </Paper>

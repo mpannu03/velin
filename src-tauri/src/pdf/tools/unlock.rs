@@ -1,4 +1,4 @@
-use lopdf::{Document, EncryptionState};
+use lopdf::Document;
 use serde::Deserialize;
 
 #[derive(Deserialize)]
@@ -10,12 +10,11 @@ pub struct UnlockInput {
 }
 
 pub fn unlock_pdf(input: UnlockInput) -> Result<(), String> {
-    let mut doc =
-        Document::load(&input.input_path).map_err(|e| format!("Failed to load PDF: {e}"))?;
+    let mut doc = Document::load_with_password(&input.input_path, &input.password)
+        .map_err(|e| format!("Failed to load PDF: {e}"))?;
 
     if doc.is_encrypted() {
-        doc.decrypt(&input.password)
-            .map_err(|e| format!("Failed to decrypt PDF: {e}"))?;
+        return Err("Failed to remove encryption from the PDF. The file may be corrupted.".into());
     }
 
     doc.save(&input.output_path)
