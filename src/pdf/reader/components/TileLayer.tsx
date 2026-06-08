@@ -177,16 +177,9 @@ function LowResFallback({ pixels, width, height }: any) {
     canvas.width = width;
     canvas.height = height;
 
-    const imageData = new ImageData(
-      new Uint8ClampedArray(pixels),
-      width,
-      height,
-    );
-
-    createImageBitmap(imageData).then((bitmap) => {
-      ctx.drawImage(bitmap, 0, 0);
-      bitmap.close();
-    });
+    // pixels is now ImageBitmap (GPU-resident) instead of Uint8Array.
+    // Draw directly without the expensive createImageBitmap + pixel readback.
+    ctx.drawImage(pixels, 0, 0);
   }, [pixels, width, height]);
 
   return (
@@ -205,6 +198,11 @@ function LowResFallback({ pixels, width, height }: any) {
   );
 }
 
+/**
+ * TileCanvas renders a single tile into a <canvas>.
+ * Memo comparison ensures tiles at the same x/y position reuse the same DOM element
+ * (React reconciliation by key), avoiding unnecessary create/destroy during scroll.
+ */
 const TileCanvas = memo(
   ({ id, pageIndex, renderWidth, tile, dpr, priority }: any) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);

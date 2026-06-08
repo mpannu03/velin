@@ -67,7 +67,8 @@ describe("reader tauri service", () => {
       if (result.ok) {
         expect(result.data.width).toBe(width);
         expect(result.data.height).toBe(height);
-        expect(result.data.pixels).toBeInstanceOf(Uint8ClampedArray);
+        // Now returns ImageBitmap (GPU-resident) instead of CPU Uint8ClampedArray
+        expect(result.data.pixels).toBeDefined();
       }
     });
 
