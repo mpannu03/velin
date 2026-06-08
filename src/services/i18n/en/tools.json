@@ -303,7 +303,43 @@
         },
         "watermark": {
             "title": "Add Watermark",
-            "description": "Add text or image watermark to your document."
+            "description": "Add text or image watermark to your document.",
+            "selection": "Select PDF File",
+            "selection_button": "Add PDF File",
+            "action": "Add Watermark",
+            "type_label": "Watermark Type",
+            "type_text": "Text",
+            "type_image": "Image",
+            "text_options": "Text Options",
+            "text_placeholder": "Enter watermark text...",
+            "font_size": "Font Size",
+            "color": "Color",
+            "image_options": "Image Options",
+            "select_image": "Click to select watermark image",
+            "browse_image": "Browse",
+            "change_image": "Change",
+            "image_scale": "Scale",
+            "opacity": "Opacity",
+            "rotation": "Rotation",
+            "position": "Position",
+            "x_offset": "X Offset",
+            "y_offset": "Y Offset",
+            "pages_label": "Pages",
+            "all_pages": "All Pages",
+            "select_pages": "Specific Pages",
+            "page_selection_description": "Use commas to separate ranges. Example: 1-10, 15, 20-25",
+            "info_title": "About Watermarking",
+            "info_desc": "The watermark will be added as an overlay on the selected pages. Text watermarks use Helvetica font. Image watermarks are embedded as JPEG at 85% quality.",
+            "notifications": {
+                "success": "Watermark added successfully.",
+                "error": "Failed to add watermark.",
+                "warning": {
+                    "no_file": "Please select a PDF file.",
+                    "no_destination": "Please select a destination file.",
+                    "no_text": "Please enter watermark text.",
+                    "no_image": "Please select a watermark image."
+                }
+            }
         }
     }
 }

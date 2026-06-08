@@ -8,6 +8,7 @@ import {
   Rotate,
   Protect,
   Unlock,
+  Watermark,
 } from "@/pdf/tools";
 import { ToolInfo, ToolPreferencesProps, TOOLS } from "@/pdf/tools";
 
@@ -63,5 +64,5 @@ export const unlockTool: ToolDefinition = {
 
 export const watermarkTool: ToolDefinition = {
   info: TOOLS.find((t) => t.id === "watermark")!,
-  Preferences: Merge,
+  Preferences: Watermark,
 };

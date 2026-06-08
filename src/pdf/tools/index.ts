@@ -8,3 +8,4 @@ export * from "./image-to-pdf";
 export * from "./rotate";
 export * from "./protect";
 export * from "./unlock";
+export * from "./watermark";

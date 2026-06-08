@@ -77,3 +77,26 @@ export const unlockPdf = async (
 ): Promise<InvokeResult<void>> => {
   return safeInvoke("unlock_pdf", { input });
 };
+
+export interface WatermarkInput {
+  inputPath: string;
+  outputPath: string;
+  watermarkType: string;
+  text?: string | null;
+  fontSize?: number | null;
+  fontColor?: string | null;
+  imagePath?: string | null;
+  imageScale?: number | null;
+  opacity: number;
+  rotation: number;
+  position: string;
+  xOffset?: number | null;
+  yOffset?: number | null;
+  pages?: string | null;
+}
+
+export const watermarkPdf = async (
+  input: WatermarkInput,
+): Promise<InvokeResult<void>> => {
+  return safeInvoke("watermark_pdf", { input });
+};
