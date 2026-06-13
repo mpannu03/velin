@@ -10,7 +10,7 @@ import chalk from "chalk";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const PDFIUM_VERSION = "7543";
+const PDFIUM_VERSION = "7763";
 const BASE_URL = `https://github.com/bblanchon/pdfium-binaries/releases/download/chromium%2F${PDFIUM_VERSION}`;
 
 interface PlatformConfig {
