@@ -96,13 +96,8 @@ type DocumentCacheState = {
 };
 
 function estimatePageMB(page: RenderedPage): number {
-  if (page.pixels instanceof ImageBitmap) {
-    // ImageBitmap is GPU-resident. Conservative estimate: 2 bytes per pixel
-    return (page.width * page.height * 2) / (1024 * 1024);
-  }
-  // Uint8Array (CPU) fallback: 4 bytes per pixel (RGBA)
-  if (page.pixels && (page.pixels as any).length > 0) {
-    return (page.pixels as any).length / (1024 * 1024);
+  if (page.pixels && page.pixels.length > 0) {
+    return page.pixels.length / (1024 * 1024);
   }
   return (page.width * page.height * 4) / (1024 * 1024);
 }

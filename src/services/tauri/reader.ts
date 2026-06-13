@@ -39,19 +39,25 @@ export const renderPage = async (
   const height = view.getUint32(4, false);
   const webpBytes = buffer.slice(8);
 
-  // Decode WebP → ImageBitmap (GPU-resident). Avoids expensive GPU→CPU readback
-  // that was previously done with getImageData(). ImageBitmap can be drawn
-  // directly to canvas in LowResFallback without intermediate pixel array.
+  // Fallback: Full page renders still use raw pixels for now
+  // because multiple things (text layer, etc) depend on it.
   const blob = new Blob([webpBytes], { type: "image/webp" });
   const bitmap = await createImageBitmap(blob);
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d")!;
+  ctx.drawImage(bitmap, 0, 0);
+  const imageData = ctx.getImageData(0, 0, width, height);
+  bitmap.close();
 
   return {
     ok: true,
     data: {
       width,
       height,
-      pixels: bitmap,
-    } as unknown as RenderedPage,
+      pixels: imageData.data,
+    } as any,
   };
 };
 
