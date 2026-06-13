@@ -32,6 +32,16 @@ export function TileLayer({
   const lowResWidth = Math.min(renderWidth, 512);
   const { page: lowResPage } = usePdfPage(id, pageIndex, lowResWidth);
 
+  const [prevLayer, setPrevLayer] = useState<{
+    renderWidth: number;
+    renderHeight: number;
+    tiles: any[];
+  } | null>(null);
+
+  const lastRenderWidth = useRef(renderWidth);
+  const lastRenderHeight = useRef(renderHeight);
+  const lastTiles = useRef<any[]>([]);
+
   useEffect(() => {
     let rafId: number;
     const update = () => {
@@ -122,6 +132,18 @@ export function TileLayer({
     return result;
   }, [visibleRange, renderWidth, renderHeight]);
 
+  if (renderWidth !== lastRenderWidth.current) {
+    setPrevLayer({
+      renderWidth: lastRenderWidth.current,
+      renderHeight: lastRenderHeight.current,
+      tiles: lastTiles.current,
+    });
+    lastRenderWidth.current = renderWidth;
+    lastRenderHeight.current = renderHeight;
+  }
+  
+  lastTiles.current = tiles;
+
   return (
     <div
       ref={containerRef}
@@ -137,6 +159,31 @@ export function TileLayer({
           width={lowResPage.width}
           height={lowResPage.height}
         />
+      )}
+
+      {prevLayer && prevLayer.renderWidth !== renderWidth && (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            transform: `scale(${renderWidth / prevLayer.renderWidth})`,
+            transformOrigin: "0 0",
+            pointerEvents: "none",
+          }}
+        >
+          {prevLayer.tiles.map((tile) => (
+            <TileCanvas
+              key={`prev-${tile.x}-${tile.y}-${prevLayer.renderWidth}`}
+              id={id}
+              pageIndex={pageIndex}
+              renderWidth={prevLayer.renderWidth}
+              tile={tile}
+              dpr={dpr}
+              priority={10}
+              skipEnqueue={true}
+            />
+          ))}
+        </div>
       )}
 
       {tiles.map((tile) => {
