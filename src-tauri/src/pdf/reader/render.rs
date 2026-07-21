@@ -46,7 +46,7 @@ pub fn render_page(
 
     let page = document
         .pages()
-        .get(page_index)
+        .get(page_index.into())
         .map_err(|e| format!("Failed to get page: {e}"))?;
 
     let config = PdfRenderConfig::new().set_target_width(target_width);
@@ -83,7 +83,7 @@ pub fn render_tile(
 
     let page = document
         .pages()
-        .get(page_index)
+        .get(page_index.into())
         .map_err(|e| format!("Failed to get page: {e}"))?;
 
     let scale = target_width as f32 / page.width().value;

@@ -20,7 +20,7 @@ pub fn get_info(
         (612.0, 792.0) // Default to Letter size if empty
     };
 
-    let pdf_info = PdfInfo::new(page_count, width, height);
+    let pdf_info = PdfInfo::new(page_count as u16, width, height);
 
     Ok(pdf_info)
 }
@@ -67,7 +67,8 @@ fn convert_bookmark(pdf_bm: &PdfBookmark) -> Result<Bookmark, String> {
         .destination()
         .map(|d| d.page_index())
         .transpose()
-        .map_err(|e| e.to_string())?;
+        .map_err(|e| e.to_string())?
+        .map(|idx| idx as u16);
 
     Ok(Bookmark {
         title: pdf_bm.title().unwrap_or_default(),

@@ -25,12 +25,12 @@ pub fn split(
                 let mut document = pdfium.create_new_pdf().map_err(|e| e.to_string())?;
 
                 for page_number in selection {
-                    let page_index = (page_number - 1) as u16;
-                    let page_length = document.pages().len() as u16;
+                    let page_index = (page_number - 1) as i32;
+                    let page_length = document.pages().len();
 
                     document
                         .pages_mut()
-                        .copy_page_from_document(&pdf_document, page_index, page_length)
+                        .copy_page_from_document(&pdf_document, page_index.into(), page_length)
                         .map_err(|e| e.to_string())?;
                 }
 

@@ -16,8 +16,8 @@ pub fn extract(pdfium: &Pdfium, input: &PageSelectionInput, dest: &str) -> Resul
             let selection = selection.resolve(total_pages).map_err(|e| e.to_string())?;
 
             for page_number in selection {
-                let page_index = (page_number - 1) as u16;
-                let page_length = document.pages().len() as u16;
+                let page_index = (page_number - 1) as i32;
+                let page_length = document.pages().len();
 
                 document
                     .pages_mut()

@@ -48,7 +48,7 @@ pub fn pdf_to_image(
     };
 
     for page_number in pages_to_convert {
-        let page_index = (page_number - 1) as u16;
+        let page_index = (page_number - 1) as i32;
         let page = pdf_document
             .pages()
             .get(page_index)

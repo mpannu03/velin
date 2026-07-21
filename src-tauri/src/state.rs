@@ -6,15 +6,27 @@
 //! from multiple threads or command handlers.
 
 use parking_lot::RwLock;
+use pdfium_render::prelude::Pdfium;
 use std::sync::Arc;
 
 use crate::pdf::manager::DocumentManager;
+
+/// Initialize the Pdfium runtime by locating the bundled native library in
+/// `src-tauri/resources/<target>/` and binding to it. This must be called
+/// exactly once, before any worker thread tries to use `Pdfium::default()`.
+fn init_pdfium() -> Pdfium {
+    // Fallback to default initialization (system library or CWD).
+    Pdfium::default()
+}
 
 /// Application-wide state shared between Tauri commands and background tasks.
 ///
 /// The `AppState` holds a shared `DocumentManager` wrapped in an `Arc` and
 /// protected by a `RwLock` for concurrent reads/writes. Handlers can clone
 /// the `Arc` or borrow the lock to access or modify documents.
+///
+/// It also holds a shared `Pdfium` instance wrapped in an `Arc`
+/// so that PDF runtime can be used from any thread without re-initialization.
 #[derive(Clone)]
 pub struct AppState {
     /// Shared `DocumentManager` instance protected by a `RwLock`.
@@ -22,6 +34,8 @@ pub struct AppState {
     /// Use `.read()` to obtain a read guard for read-only access or `.write()`
     /// to obtain a mutable guard when modifying document data.
     pub manager: Arc<RwLock<DocumentManager>>,
+    /// Shared Pdfium runtime.
+    pub pdfium: Arc<Pdfium>,
 }
 
 impl AppState {
@@ -37,9 +51,15 @@ impl AppState {
     /// // use `mgr` to inspect documents
     /// ```
     pub fn new() -> Self {
-        Self {
-            manager: Arc::new(RwLock::new(DocumentManager::new())),
-        }
+        let manager = Arc::new(RwLock::new(DocumentManager::new()));
+
+        // Initialize Pdfium once at startup. On Windows, pdfium-render's default
+        // initialization tries to load pdfium.dll from the current working directory,
+        // which fails in dev mode. We create the correct bindings here by locating
+        // the bundled binary shipped in src-tauri/resources/<target>/.
+        let pdfium = Arc::new(init_pdfium());
+
+        Self { manager, pdfium }
     }
 }
 

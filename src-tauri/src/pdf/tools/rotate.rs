@@ -1,5 +1,5 @@
 use crate::pdf::tools::PageSelectionInput;
-use pdfium_render::prelude::{Pdfium, PdfPageRenderRotation};
+use pdfium_render::prelude::{PdfPageRenderRotation, Pdfium};
 use std::path::PathBuf;
 
 pub fn rotate(
@@ -21,10 +21,10 @@ pub fn rotate(
     };
 
     for page_number in target_pages {
-        let page_index = (page_number - 1) as u16;
+        let page_index = (page_number - 1) as i32;
         let mut page = pdf_document
             .pages()
-            .get(page_index)
+            .get(page_index.into())
             .map_err(|e| e.to_string())?;
 
         let current_rotation = page.rotation().map_err(|e| e.to_string())?;
@@ -49,7 +49,9 @@ pub fn rotate(
         let _ = page.regenerate_content();
     }
 
-    pdf_document.save_to_file(&dest).map_err(|e| e.to_string())?;
+    pdf_document
+        .save_to_file(&dest)
+        .map_err(|e| e.to_string())?;
 
     Ok(())
 }

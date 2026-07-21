@@ -30,7 +30,7 @@ pub fn get_text_by_page(
 
     let page = document
         .pages()
-        .get(page_index)
+        .get(page_index.into())
         .map_err(|e| e.to_string())?;
 
     let text_page = page.text().map_err(|e| e.to_string())?;

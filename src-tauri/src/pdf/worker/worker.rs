@@ -35,7 +35,6 @@ fn worker_loop(rx: Receiver<PdfEvent>) {
     while let Ok(cmd) = rx.recv() {
         match cmd {
             PdfEvent::Open { id, path, reply } => {
-                // Just store the path and verify it exists
                 if path.exists() {
                     paths.insert(id, path);
                     let _ = reply.send(Ok(()));
@@ -267,7 +266,6 @@ mod tests {
         let worker = PdfWorker::spawn();
         let (tx, rx) = flume::bounded(1);
 
-        // Test opening a non-existent file
         worker
             .sender()
             .send(PdfEvent::Open {
@@ -280,7 +278,6 @@ mod tests {
         let result = rx.recv().unwrap();
         assert!(result.is_err());
 
-        // Test closing a document that wasn't opened
         let (tx_close, rx_close) = flume::bounded(1);
         worker
             .sender()

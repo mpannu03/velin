@@ -59,20 +59,20 @@ fn process_markup_annotation<'a>(
         .iter()
         .map(|qp| Quad {
             p1: Point {
-                x: qp.x1.value,
-                y: page_height - qp.y1.value,
+                x: qp.x1().value,
+                y: page_height - qp.y1().value,
             },
             p2: Point {
-                x: qp.x2.value,
-                y: page_height - qp.y2.value,
+                x: qp.x2().value,
+                y: page_height - qp.y2().value,
             },
             p3: Point {
-                x: qp.x3.value,
-                y: page_height - qp.y3.value,
+                x: qp.x3().value,
+                y: page_height - qp.y3().value,
             },
             p4: Point {
-                x: qp.x4.value,
-                y: page_height - qp.y4.value,
+                x: qp.x4().value,
+                y: page_height - qp.y4().value,
             },
         })
         .collect::<Vec<_>>();
