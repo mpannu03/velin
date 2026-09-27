@@ -12,12 +12,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-  material: ^1.0.1
+  material_ui: ^1.4.0
   go_router: ^18.0.1
   flutter_bloc: ^9.1.1
   flutter_localizations:
     sdk: flutter
   intl: ^0.20.3
+  get_it: ^9.3.0
 
 dev_dependencies:
   flutter_test:
