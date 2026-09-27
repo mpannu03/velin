@@ -1,173 +1,71 @@
 # Velin
 
-A modern, high-performance PDF reader built with **Tauri**, **Rust**, and **React**. Velin focuses on speed, smooth interactions, and a premium reading experience.
+**A free, open-source PDF application built with Flutter.**
 
-> [!IMPORTANT]  
-> **Project Status: Active Development**
->
-> Velin is still under active development. Core systems are functional and performance-focused, but the application is evolving rapidly. Some features may change, and minor bugs are expected.
+Velin aims to make working with PDF files simple, capable, and accessible across desktop and mobile — without locking the core experience behind a proprietary service.
 
----
+The project is being built with a focus on a **native-feeling user experience, a clean architecture, and an open-source foundation**.
 
-## 📸 Showcase
+> 🚧 Velin is currently under active development.
 
-### Modern Home Screen
+## What is Velin?
 
-A clean and intuitive landing page to manage and access your PDF collection.
-![Home Screen](assets/images/home-screen.png)
+PDF applications often split useful functionality across different tools: one application for reading, another for editing, another for merging files, and another for compressing them.
 
-### High-Performance Reader
+Velin aims to bring these everyday PDF workflows together into one application.
 
-Experience lag-free reading, instant zooming, and smooth text interactions.
-![Reader Screen](assets/images/reader-screen.png)
+The long-term goal includes functionality such as:
 
-### Personalized Themes
+- 📖 Reading and navigating PDF documents
+- ✏️ Highlighting, commenting, and annotating documents
+- 📄 Reorganizing, adding, and removing pages
+- 🔀 Merging and splitting PDFs
+- 🗜️ Compressing PDF files
+- 🔍 Extracting content from documents
+- 🌍 Localization and internationalization
+- 🖥️ Desktop and mobile support
 
-Switch between various themes — including a full dark theme — to match your workspace and reduce eye strain.
-![Multiple Themes](assets/images/multiple-themes.png)
+The project is still evolving, so the list above represents the direction of Velin rather than a promise that every feature is currently available.
 
-### Everything You Need for PDFs
+## Why Velin?
 
-Merge, split, protect, unlock, watermark, and organize PDF files with a complete set of powerful tools.
-![Multiple Tools](assets/images/tools-screen.png)
+Velin is being built as an open-source project with a simple philosophy:
 
----
+**PDF tools should be useful without unnecessarily getting in the way.**
 
-## 🚀 Tech Stack
+The project prioritizes:
 
-Velin leverages a modern stack to deliver a native-feel desktop experience with web flexibility:
+- **Open source** — the project should remain accessible and transparent.
+- **Privacy** — local workflows should not require sending documents to a remote service unnecessarily.
+- **Native-feeling UX** — the application should feel at home on the platform it runs on.
+- **Practical design** — features should solve real PDF workflows rather than exist simply because they can.
+- **Maintainable software** — clean architecture and understandable code are preferred over unnecessary complexity.
 
-- **Framework**: Tauri (v2)
-- **Backend**: Rust (High-performance PDF processing and OS integration)
-- **Frontend**: React + TypeScript
-- **UI System**: Mantine
-- **State Management**: Zustand
-- **Virtualization**: @tanstack/react-virtual
-- **Internationalization**: react-i18next
-- **Build Tool**: Vite
+## Project Status
 
----
+Velin is in the early stages of development.
 
-## 🛠 Features (Current Progress)
+The current repository contains the Flutter implementation of Velin. It replaces an earlier Tauri-based prototype as the project moves toward its long-term architecture.
 
-### 📄 Core PDF Engine
+Expect things to change while the foundation is being built.
 
-- [x] **Virtual PDF Rendering** – Efficient handling of massive PDFs with minimal memory footprint.
-- [x] **Instant Zoom** – CSS-first zoom scaling for zero-latency interaction (Ctrl + Scroll).
-- [x] **High-Performance Text Selection** – Optimized DOM structure for smooth text highlighting.
-- [x] **Text Fragment Extraction** – Backend-optimized text fragment alignment.
-- [x] **Resume Where You Left Off** – Automatically restores the last-read page and position.
+## Technology
 
-### 🏠 Application Experience
+Velin is built with:
 
-- [x] **Modern Home Screen** – Clean landing screen with quick access to documents.
-- [x] **Recent Files** – Automatically tracks recently opened PDFs.
-- [x] **Starred Documents** – Mark important PDFs for quick access.
-- [x] **Persistent Settings** – App preferences are saved across sessions.
-- [x] **Theme & Dark Mode Support** – Multiple theme colors with a fully supported dark theme.
+- [Flutter](https://flutter.dev/)
+- Dart
 
-### 📚 Integrated Dictionary
+The project targets desktop and mobile platforms, with platform support evolving alongside development.
 
-- [x] **Built-in Dictionary** – Lookup word meanings directly inside the reader.
-- [x] **Fast Word Detection** – Optimized text selection integration.
-- [x] **Local Processing** – Designed for speed and minimal overhead.
+## Getting Started
 
-### 🗂 Sidebar & Navigation
+### Requirements
 
-- [x] **Bookmarks Panel** – Navigate using embedded PDF bookmarks.
-- [x] **Smooth Navigation** – Jump between pages instantly.
+Install Flutter and make sure it is available on your `PATH`.
 
-### 🛠 PDF Tools
-
-A growing suite of built-in PDF utilities, all accessible from the tools screen:
-
-- [x] **Merge PDF** – Combine multiple PDFs into a single document.
-- [x] **Split PDF** – Separate a PDF into multiple files by page range.
-- [x] **Extract Pages** – Save specific pages as a new PDF file.
-- [x] **Compress PDF** – Reduce file size without losing quality.
-- [x] **PDF to Image** – Convert PDF pages into high-quality images.
-- [x] **Image to PDF** – Create a PDF from a collection of images.
-- [x] **Rotate PDF** – Change the orientation of your PDF pages.
-- [x] **Protect PDF** – Add a password and secure your document.
-- [x] **Unlock PDF** – Remove password protection from your PDF.
-- [x] **Watermark** – Add text or image watermarks to your PDF.
-
-### 🌐 Internationalization
-
-- [x] **English (en)** – Full English language support.
-- [x] **Hindi (हिन्दी)** – Complete Hindi language interface.
-- [x] **Extensible i18n** – Built on react-i18next, ready for additional languages.
-
-### ⚡ Performance
-
-- [x] Significant optimizations to PDF pixel rendering and caching.
-- [x] Virtualized page rendering for large documents.
-- [x] Reduced unnecessary re-renders across the app.
-- [x] Optimized tool execution with minimal overhead.
-
-### 💬 In Progress
-
-- [ ] **Modify Screen** – Edit and annotate PDF pages directly.
-- [ ] **Comments & Annotations** – PDF annotations and inline commenting.
-- [ ] **Advanced Search**
-- [ ] **Highlight Management**
-- [ ] **Cross-document indexing**
-
----
-
-## 🤝 Open Source & Contributions
-
-Velin is an open-source project, and contributions are welcome.
-
-### How You Can Help
-
-- **Testing** – Report bugs or performance issues on different operating systems.
-- **Feedback** – Suggest UI/UX improvements or new features.
-- **Code** – Check open issues or submit a Pull Request.
-
-### Contribution Protocol
-
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/amazing-feature`).
-3. Commit your changes (`git commit -m 'Add amazing feature'`).
-4. Push to the branch (`git push origin feature/amazing-feature`).
-5. Open a Pull Request.
-
----
-
-## 📦 Getting Started
-
-### Prerequisites
-
-- Rust
-- Node.js (pnpm recommended)
-
-### Setup
-
-1. Clone the repository:
+Then clone the repository:
 
 ```bash
-git clone https://github.com/mpannu03/velin.git
-```
-
-2. Install dependencies:
-
-```bash
-pnpm install
-```
-
-3. Run in development mode:
-
-```bash
-pnpm velin:dev
-```
-
----
-
-## 📄 License
-
-Velin is licensed under the **GNU General Public License v3.0**. See the [LICENSE](LICENSE) file for more details.
-
----
-
-Developed with ❤️ using Tauri and Rust.
+git clone https://github.com/mpannu03/velin
+cd velin
