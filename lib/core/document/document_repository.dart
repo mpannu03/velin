@@ -8,4 +8,6 @@ abstract interface class DocumentRepository {
   Result<void> close(String id);
 
   Document? get(String id);
+
+  Stream<List<Document>> watch();
 }

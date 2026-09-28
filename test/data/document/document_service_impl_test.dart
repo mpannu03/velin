@@ -168,4 +168,16 @@ void main() {
       ).called(1);
     });
   });
+
+  group('watch', () {
+    test('returns repository stream', () {
+      final stream = Stream<List<Document>>.empty();
+
+      when(() => repository.watch()).thenAnswer((_) => stream);
+
+      expect(service.watch(), same(stream));
+
+      verify(() => repository.watch()).called(1);
+    });
+  });
 }

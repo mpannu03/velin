@@ -5,4 +5,6 @@ abstract interface class DocumentService {
   Future<Result<Document>> open();
 
   Result<void> close(Document document);
+
+  Stream<List<Document>> watch();
 }

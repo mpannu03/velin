@@ -1,14 +1,6 @@
 import 'package:velin/core/document/document.dart';
-import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/result/result.dart';
-
-class DocumentServiceError implements VelinError {
-  const DocumentServiceError(this.message);
-
-  @override
-  final String message;
-}
 
 class DocumentServiceImpl implements DocumentService {
   DocumentServiceImpl({
@@ -48,5 +40,10 @@ class DocumentServiceImpl implements DocumentService {
   @override
   Result<void> close(Document document) {
     return _documentRepository.close(document.id);
+  }
+
+  @override
+  Stream<List<Document>> watch() {
+    return _documentRepository.watch();
   }
 }
