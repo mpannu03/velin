@@ -1,4 +1,4 @@
-import 'package:file_picker/file_picker.dart' as file_picker;
+import 'package:file_picker/file_picker.dart';
 import 'package:velin/core/file/file_picker.dart';
 
 import 'package:velin/core/result/result.dart';
@@ -9,8 +9,8 @@ class DocumentFilePickerImpl implements DocumentFilePicker {
     required List<String> allowedExtensions,
   }) async {
     try {
-      final result = await file_picker.FilePicker.pickFile(
-        type: file_picker.FileType.custom,
+      final result = await FilePicker.pickFile(
+        type: FileType.custom,
         allowedExtensions: allowedExtensions,
       );
 

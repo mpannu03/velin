@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/core/di/injection.dart' as di;
 import 'package:window_manager/window_manager.dart';
 
 import 'app/app.dart';
@@ -24,6 +25,8 @@ void main() async {
       },
     );
   }
+
+  di.configureDependencies();
 
   runApp(const VelinApp());
 }
