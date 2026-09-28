@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 abstract final class AppColors {
   static const lightBackground = Color(0xFFF7F7F7);
   static const lightSurface = Color(0xFFFFFFFF);
-  static const lightSurfaceAlt = Color(0xFFF0F0F0);
+  static const lightSurfaceAlt = Color(0xFFE8E8E8);
   static const lightBorder = Color(0xFFD9D9D9);
   static const lightText = Color(0xFF1A1A1A);
   static const lightTextSecondary = Color(0xFF6B6B6B);

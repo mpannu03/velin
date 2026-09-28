@@ -11,7 +11,9 @@ abstract final class AppTheme {
       colorScheme: const ColorScheme.light(
         primary: AppColors.velinAccent,
         surface: AppColors.lightSurface,
+        surfaceContainerHighest: AppColors.lightSurfaceAlt,
         onSurface: AppColors.lightText,
+        onSurfaceVariant: AppColors.lightTextSecondary,
       ),
       dividerColor: AppColors.lightBorder,
       textTheme: _textTheme(AppColors.lightText),
@@ -25,7 +27,9 @@ abstract final class AppTheme {
       colorScheme: const ColorScheme.dark(
         primary: AppColors.velinAccent,
         surface: AppColors.darkSurface,
+        surfaceContainerHighest: AppColors.darkSurfaceAlt,
         onSurface: AppColors.darkText,
+        onSurfaceVariant: AppColors.darkTextSecondary,
       ),
       dividerColor: AppColors.darkBorder,
       textTheme: _textTheme(AppColors.darkText),
