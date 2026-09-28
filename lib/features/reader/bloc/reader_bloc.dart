@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velin/core/bloc/bloc.dart';
 import 'package:velin/core/document/document.dart';
@@ -20,18 +18,15 @@ class ReaderBloc extends Bloc<ReaderEvent, ReaderState> with ErrorMessageMixin {
 
   final DocumentService _documentService;
 
-  StreamSubscription<List<Document>>? _documentsSubscription;
-
   Future<void> _onStarted(
     ReaderStarted event,
     Emitter<ReaderState> emit,
   ) async {
     emit(const ReaderLoading());
 
-    await _documentsSubscription?.cancel();
-
-    _documentsSubscription = _documentService.watch().listen(
-      (documents) {
+    await emit.onEach<List<Document>>(
+      _documentService.watch(),
+      onData: (documents) {
         final currentState = state;
 
         if (currentState is ReaderLoaded) {
@@ -105,11 +100,5 @@ class ReaderBloc extends Bloc<ReaderEvent, ReaderState> with ErrorMessageMixin {
     if (result case Failure<void>(:final error)) {
       emit(ReaderError(errorMessage(error)));
     }
-  }
-
-  @override
-  Future<void> close() async {
-    await _documentsSubscription?.cancel();
-    return super.close();
   }
 }
