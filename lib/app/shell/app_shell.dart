@@ -4,8 +4,6 @@ import 'package:velin/core/platform/platform.dart';
 import 'desktop_shell.dart';
 import 'mobile_shell.dart';
 
-
-
 class AppShell extends StatelessWidget {
   const AppShell({
     required this.child,
