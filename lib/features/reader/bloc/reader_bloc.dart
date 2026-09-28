@@ -9,7 +9,9 @@ part 'reader_event.dart';
 part 'reader_state.dart';
 
 class ReaderBloc extends Bloc<ReaderEvent, ReaderState> with ErrorMessageMixin {
-  ReaderBloc(this._documentService) : super(const ReaderInitial()) {
+  ReaderBloc({
+    required this._documentService
+  }) : super(const ReaderInitial()) {
     on<ReaderStarted>(_onStarted);
     on<ReaderDocumentOpened>(_onDocumentOpened);
     on<ReaderDocumentSelected>(_onDocumentSelected);

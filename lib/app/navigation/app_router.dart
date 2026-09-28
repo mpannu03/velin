@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/navigation/navigation.dart';
 import 'package:velin/app/shell/app_shell.dart';
+import 'package:velin/features/reader/reader.dart';
 
 class AppRouter {
   AppRouter._();
@@ -32,9 +33,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: '/reader',
-                builder: (context, state) => const _PlaceholderPage(
-                  title: 'Reader',
-                ),
+                builder: (context, state) => const ReaderPage(),
               ),
             ],
           ),

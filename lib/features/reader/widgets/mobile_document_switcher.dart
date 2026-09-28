@@ -7,12 +7,14 @@ class MobileDocumentSwitcher extends StatelessWidget {
     required this.documents,
     required this.selectedDocument,
     required this.onDocumentSelected,
+    required this.onDocumentClosed,
     super.key,
   });
 
   final List<Document> documents;
   final Document? selectedDocument;
   final ValueChanged<Document> onDocumentSelected;
+  final ValueChanged<Document> onDocumentClosed;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +29,20 @@ class MobileDocumentSwitcher extends StatelessWidget {
         for (final document in documents)
           DropdownMenuItem(
             value: document,
-            child: Text(
-              document.path.split('/').last,
-              overflow: TextOverflow.ellipsis,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    document.path.split('/').last,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  tooltip: 'Close document',
+                  onPressed: () => onDocumentClosed(document),
+                ),
+              ],
             ),
           ),
       ],

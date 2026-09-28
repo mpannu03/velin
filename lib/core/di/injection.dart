@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:velin/core/di/blocs.dart';
 
 import 'core.dart';
 import 'repositories.dart';
@@ -10,4 +11,5 @@ void configureDependencies() {
   registerCoreDependencies();
   registerRepositoryDependencies();
   registerServiceDependencies();
+  registerBlocDependencies();
 }
