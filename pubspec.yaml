@@ -20,6 +20,7 @@ dependencies:
   intl: ^0.20.3
   get_it: ^9.3.0
   window_manager: ^0.5.2
+  file_picker: ^13.1.0
 
 dev_dependencies:
   flutter_test:
