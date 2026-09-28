@@ -1,9 +1,11 @@
+import 'package:velin/core/result/result.dart';
+
 import 'document.dart';
 
 abstract interface class DocumentRepository {
-  Document open(String path);
+  Result<Document> open(String path, DocumentType type);
+
+  Result<void> close(String id);
 
   Document? get(String id);
-
-  void close(String id);
 }

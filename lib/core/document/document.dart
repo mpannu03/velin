@@ -1,20 +1,20 @@
+import 'package:uuid/uuid.dart';
+
 import 'document_type.dart';
 
 export 'document_repository.dart';
+export 'document_service.dart';
 export 'document_type.dart';
 
 class Document {
   Document({
     required this.path, 
     required this.type
-  }) : id = _generateId();
+  }) : id = const Uuid().v4();
 
   final String id;
   final String path;
   final DocumentType type;
-
-  static String _generateId() =>
-      DateTime.now().microsecondsSinceEpoch.toString();
 
   @override
   String toString() => 'Document(id: $id, path: $path, type: $type)';

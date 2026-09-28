@@ -1,15 +1,7 @@
 import 'package:file_picker/file_picker.dart' as file_picker;
-import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
 
 import 'package:velin/core/result/result.dart';
-
-class DocumentFilePickerError implements VelinError {
-  const DocumentFilePickerError(this.message);
-
-  @override
-  final String message;
-}
 
 class DocumentFilePickerImpl implements DocumentFilePicker {
   @override
