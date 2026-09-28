@@ -40,8 +40,8 @@ abstract final class AppTheme {
     return TextTheme(
       displaySmall: AppTypography.display.copyWith(color: color),
       titleLarge: AppTypography.title.copyWith(color: color),
-      bodyLarge: AppTypography.body.copyWith(color: color),
-      bodyMedium: AppTypography.bodyMedium.copyWith(color: color),
+      bodyLarge: AppTypography.bodyMedium.copyWith(color: color),
+      bodyMedium: AppTypography.body.copyWith(color: color),
       labelLarge: AppTypography.label.copyWith(color: color),
       bodySmall: AppTypography.caption.copyWith(color: color),
     );
