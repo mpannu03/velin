@@ -18,4 +18,6 @@ abstract interface class DocumentEngineController {
   Future<void> nextPage();
 
   Future<void> previousPage();
+
+  Future<void> dispose();
 }

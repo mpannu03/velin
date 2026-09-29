@@ -95,6 +95,7 @@ class PdfDocumentEngineController implements DocumentEngineController {
     return goToPage(page - 1);
   }
 
+  @override
   Future<void> dispose() async {
     await _currentPageController.close();
   }

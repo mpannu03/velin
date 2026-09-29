@@ -22,20 +22,47 @@ class DocumentWorkspaceBloc
 
   final Document _document;
   final DocumentEngineFactory _engineFactory;
+  DocumentEngine? _engine;
+
+  @override
+  Future<void> close() async {
+    await _engine?.dispose();
+    return super.close();
+  }
 
   void _onStarted(
     DocumentWorkspaceStarted event,
     Emitter<DocumentWorkspaceState> emit,
-  ) {
+  ) async {
     emit(const DocumentWorkspaceLoading());
 
     try {
       final engine = _engineFactory.create(_document);
+      _engine = engine;
 
       emit(
         DocumentWorkspaceLoaded(
           engine: engine,
+          currentPage: engine.controller.currentPage,
+          pageCount: engine.controller.pageCount,
         ),
+      );
+
+      await emit.onEach<int?>(
+        engine.controller.currentPageStream,
+        onData: (currentPage) {
+          final currentState = state;
+
+          if (currentState is! DocumentWorkspaceLoaded) {
+            return;
+          }
+
+          emit(
+            currentState.copyWith(
+              currentPage: currentPage,
+            ),
+          );
+        },
       );
     } on Object catch (error) {
       emit(

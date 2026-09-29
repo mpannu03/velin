@@ -15,21 +15,31 @@ final class DocumentWorkspaceLoading extends DocumentWorkspaceState {
 final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
   const DocumentWorkspaceLoaded({
     required this.engine,
+    required this.pageCount,
+    this.currentPage,
     this.selectedTool = WorkspaceTool.select,
     this.selectedPanel,
   });
 
   final DocumentEngine engine;
+  final int? currentPage;
+  final int pageCount;
   final WorkspaceTool selectedTool;
   final WorkspacePanel? selectedPanel;
 
   DocumentWorkspaceLoaded copyWith({
     DocumentEngine? engine,
+    Object? currentPage = _unset,
+    int? pageCount,
     WorkspaceTool? selectedTool,
     Object? selectedPanel = _unset,
   }) {
     return DocumentWorkspaceLoaded(
       engine: engine ?? this.engine,
+      currentPage: identical(currentPage, _unset)
+          ? this.currentPage
+          : currentPage as int?,
+      pageCount: pageCount ?? this.pageCount,
       selectedTool: selectedTool ?? this.selectedTool,
       selectedPanel: identical(selectedPanel, _unset)
           ? this.selectedPanel

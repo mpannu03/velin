@@ -14,4 +14,6 @@ abstract interface class DocumentEngine {
   Widget buildViewer({
     required Color backgroundColor,
   });
+
+  Future<void> dispose();
 }

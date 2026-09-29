@@ -46,6 +46,8 @@ class DocumentWorkspaceDesktopLayout extends StatelessWidget {
                 ),
               DocumentWorkspacePanelRail(
                 selectedPanel: viewModel.selectedPanel,
+                currentPage: viewModel.currentPage,
+                pageCount: viewModel.pageCount,
                 onPanelSelected: viewModel.onPanelSelected,
               ),
             ],

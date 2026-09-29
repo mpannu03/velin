@@ -43,4 +43,9 @@ class PdfDocumentEngine implements DocumentEngine {
       ),
     );
   }
+
+  @override
+  Future<void> dispose() {
+    return _engineController.dispose();
+  }
 }

@@ -6,6 +6,8 @@ import '../models/models.dart';
 class DocumentWorkspaceViewModel {
   const DocumentWorkspaceViewModel({
     required this.engine,
+    required this.currentPage,
+    required this.pageCount,
     required this.selectedTool,
     required this.selectedPanel,
     required this.onToolSelected,
@@ -14,6 +16,10 @@ class DocumentWorkspaceViewModel {
   });
 
   final DocumentEngine engine;
+
+  final int? currentPage;
+  final int pageCount;
+
   final WorkspaceTool selectedTool;
   final WorkspacePanel? selectedPanel;
 
