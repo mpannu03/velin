@@ -64,5 +64,4 @@ class _WindowRibbon extends StatelessWidget {
       ),
     );
   }
-  
 }
