@@ -29,34 +29,36 @@ class DesktopShell extends StatelessWidget {
 class _WindowRibbon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DragToMoveArea(
-      child: Row(
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
-            child: Text(
-              'Velin',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
+    return Row(
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
+          child: Text(
+            'Velin',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
             ),
           ),
-          VelinMenuButton(
-            label: 'File',
-            onPressed: () {},
+        ),
+        VelinMenuButton(
+          label: 'File',
+          onPressed: () {},
+        ),
+        VelinMenuButton(
+          label: 'Edit',
+          onPressed: () {},
+        ),
+        VelinMenuButton(
+          label: 'View',
+          onPressed: () {},
+        ),
+        const Expanded(
+          child: DragToMoveArea(
+            child: SizedBox(height: 40),
           ),
-          VelinMenuButton(
-            label: 'Edit',
-            onPressed: () {},
-          ),
-          VelinMenuButton(
-            label: 'View',
-            onPressed: () {},
-          ),
-          const Spacer(),
-          const VelinWindowControls(),
-        ],
-      ),
+        ),
+        const VelinWindowControls(),
+      ],
     );
   }
   
