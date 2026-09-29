@@ -1,10 +1,41 @@
+import 'dart:async';
+
 import 'package:pdfrx/pdfrx.dart';
 import 'package:velin/core/document/engine/engine.dart';
 
 class PdfDocumentEngineController implements DocumentEngineController {
-  const PdfDocumentEngineController(this._controller);
+  PdfDocumentEngineController(this._controller);
 
   final PdfViewerController _controller;
+
+  final StreamController<int?> _currentPageController =
+      StreamController<int?>.broadcast();
+
+  @override
+  Stream<int?> get currentPageStream => _currentPageController.stream;
+
+  void onPageChanged(int? pageNumber) {
+    _currentPageController.add(pageNumber);
+  }
+
+  @override
+  int? get currentPage => _controller.pageNumber;
+
+  @override
+  int get pageCount => _controller.pageCount;
+
+  @override
+  Future<void> goToPage(int page) async {
+    if (page < 1) {
+      _controller.setCurrentPageNumber(1);
+      return;
+    } else if (page > pageCount) { 
+      _controller.setCurrentPageNumber(pageCount);
+      return;
+    }
+
+    _controller.setCurrentPageNumber(page);
+  }
 
   @override
   Future<void> zoomIn() {
@@ -43,24 +74,28 @@ class PdfDocumentEngineController implements DocumentEngineController {
   }
 
   @override
-  Future<void> nextPage() async {
-    final pageNumber = _controller.pageNumber;
+  Future<void> nextPage() {
+    final page = currentPage;
 
-    if (pageNumber == null || pageNumber >= _controller.pageCount) {
-      return;
+    if (page == null || page >= pageCount) {
+      return Future.value();
     }
 
-    _controller.setCurrentPageNumber(pageNumber + 1);
+    return goToPage(page + 1);
   }
 
   @override
-  Future<void> previousPage() async {
-    final pageNumber = _controller.pageNumber;
+  Future<void> previousPage() {
+    final page = currentPage;
 
-    if (pageNumber == null || pageNumber <= 1) {
-      return;
+    if (page == null || page <= 1) {
+      return Future.value();
     }
 
-    _controller.setCurrentPageNumber(pageNumber - 1);
+    return goToPage(page - 1);
+  }
+
+  Future<void> dispose() async {
+    await _currentPageController.close();
   }
 }

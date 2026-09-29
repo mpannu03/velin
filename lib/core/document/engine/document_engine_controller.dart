@@ -1,13 +1,21 @@
 abstract interface class DocumentEngineController {
-  void zoomIn();
+  int? get currentPage;
 
-  void zoomOut();
+  int get pageCount;
 
-  void fitWidth();
+  Stream<int?> get currentPageStream;
 
-  void fitPage();
+  Future<void> goToPage(int page);
 
-  void nextPage();
+  Future<void> zoomIn();
 
-  void previousPage();
+  Future<void> zoomOut();
+
+  Future<void> fitWidth();
+
+  Future<void> fitPage();
+
+  Future<void> nextPage();
+
+  Future<void> previousPage();
 }

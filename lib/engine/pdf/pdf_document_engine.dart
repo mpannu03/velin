@@ -9,12 +9,16 @@ class PdfDocumentEngine implements DocumentEngine {
   PdfDocumentEngine({
     required this.document,
     PdfViewerController? controller,
-  }) : _controller = controller ?? PdfViewerController();
+  }) : _controller = controller ?? PdfViewerController() {
+    _engineController = PdfDocumentEngineController(_controller);
+  }
 
   @override
   final Document document;
 
   final PdfViewerController _controller;
+
+  late final PdfDocumentEngineController _engineController;
 
   @override
   DocumentEngineCapabilities get capabilities =>
@@ -24,9 +28,7 @@ class PdfDocumentEngine implements DocumentEngine {
       );
 
   @override
-  DocumentEngineController get controller => PdfDocumentEngineController(
-        _controller,
-      );
+  DocumentEngineController get controller => _engineController;
 
   @override
   Widget buildViewer({
@@ -37,6 +39,7 @@ class PdfDocumentEngine implements DocumentEngine {
       controller: _controller,
       params: PdfViewerParams(
         backgroundColor: backgroundColor,
+        onPageChanged: _engineController.onPageChanged,
       ),
     );
   }
