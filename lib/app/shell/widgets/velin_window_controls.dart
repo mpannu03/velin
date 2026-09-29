@@ -56,14 +56,42 @@ class _ResizeButton extends StatefulWidget {
   State<_ResizeButton> createState() => _ResizeButtonState();
 }
 
-class _ResizeButtonState extends State<_ResizeButton> {
+class _ResizeButtonState extends State<_ResizeButton> with WindowListener {
   bool? _isMaximized;
 
   @override
   void initState() {
     super.initState();
+    widget.windowManager.addListener(this);
     _load();
   }
+
+  @override
+  void dispose() {
+    widget.windowManager.removeListener(this);
+    super.dispose();
+  }
+
+  @override
+  void onWindowMaximize() => _syncState();
+
+  @override
+  void onWindowUnmaximize() => _syncState();
+
+  @override
+  void onWindowRestore() => _syncState();
+
+  @override
+  void onWindowEnterFullScreen() => _syncState();
+
+  @override
+  void onWindowLeaveFullScreen() => _syncState();
+
+  void _syncState() {
+    if (!mounted) return;
+    _load();
+  }
+
 
   Future<void> _load() async {
     final maximized = await widget.windowManager.isMaximized();
