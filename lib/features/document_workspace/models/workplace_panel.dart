@@ -1,0 +1,4 @@
+enum WorkspacePanel {
+  comments,
+  annotations,
+}

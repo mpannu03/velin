@@ -1,0 +1,4 @@
+enum WorkspaceTool {
+  select,
+  pan,
+}
