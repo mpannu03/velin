@@ -18,6 +18,11 @@ final class ReaderLoaded extends ReaderState {
     this.selectedDocument,
   });
 
+  factory ReaderLoaded.empty() => ReaderLoaded(
+    documents: [],
+    selectedDocument: null,
+  );
+
   final List<Document> documents;
   final Document? selectedDocument;
 
