@@ -1,6 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:velin/app/presentation/presentation.dart';
-import 'package:velin/app/theme/app_radius.dart';
+import 'package:velin/app/theme/theme.dart';
 
 class VelinMenuButton extends StatelessWidget {
   const VelinMenuButton({
@@ -17,11 +16,8 @@ class VelinMenuButton extends StatelessWidget {
     return TextButton(
       onPressed: onPressed,
       style: TextButton.styleFrom(
-        minimumSize: Size(
-          0,
-          context.presentation.controlHeight,
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.all(AppSpacing.md),
+        minimumSize: Size.zero, 
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.sm),
         ),

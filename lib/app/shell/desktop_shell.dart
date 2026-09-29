@@ -54,7 +54,7 @@ class _WindowRibbon extends StatelessWidget {
         ),
         const Expanded(
           child: DragToMoveArea(
-            child: SizedBox(height: 40),
+            child: SizedBox(height: AppDimensions.desktopRibbonHeight),
           ),
         ),
         const VelinWindowControls(),
