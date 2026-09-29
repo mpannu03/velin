@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/app/theme/app_dimensions.dart';
 import 'package:window_manager/window_manager.dart';
 
 class VelinWindowControls extends StatelessWidget {
@@ -142,8 +143,8 @@ class _WindowButtonShellState extends State<_WindowButtonShell> {
       child: GestureDetector(
         onTap: widget.onPressed,
         child: Container(
-          width: 46,
-          height: 32,
+          width: AppDimensions.desktopControlButtonWidth,
+          height: AppDimensions.desktopRibbonHeight,
           color: _hovered
               ? widget.hoverColor ?? scheme.surfaceContainerHighest
               : Colors.transparent,
