@@ -73,6 +73,11 @@ class DocumentWorkspaceBloc
       return;
     }
 
+    if (currentState.selectedPanel == event.panel) {
+      add(DocumentWorkspacePanelClosed());
+      return;
+    }
+
     emit(
       currentState.copyWith(
         selectedPanel: event.panel,

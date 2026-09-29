@@ -2,7 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 import 'package:velin/shared/widgets/widgets.dart';
 
-import '../models/models.dart';
+import '../../models/models.dart';
 
 class DocumentWorkspacePanelRail extends StatelessWidget {
   const DocumentWorkspacePanelRail({

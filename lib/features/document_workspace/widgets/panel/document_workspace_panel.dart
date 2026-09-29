@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
-import '../models/models.dart';
+import '../../models/models.dart';
 
 class DocumentWorkspacePanel extends StatelessWidget {
   const DocumentWorkspacePanel({

@@ -29,10 +29,15 @@ class PdfDocumentEngine implements DocumentEngine {
       );
 
   @override
-  Widget buildViewer() {
+  Widget buildViewer({
+    required Color backgroundColor,
+  }) {
     return PdfViewer.file(
       document.path,
       controller: _controller,
+      params: PdfViewerParams(
+        backgroundColor: backgroundColor,
+      ),
     );
   }
 }

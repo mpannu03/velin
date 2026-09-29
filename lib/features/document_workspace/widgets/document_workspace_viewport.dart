@@ -11,8 +11,12 @@ class DocumentWorkspaceViewport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return ClipRect(
-      child: engine.buildViewer(),
+      child: engine.buildViewer(
+        backgroundColor: colorScheme.surfaceContainerHighest,
+      ),
     );
   }
 }

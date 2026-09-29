@@ -11,5 +11,7 @@ abstract interface class DocumentEngine {
 
   DocumentEngineController get controller;
 
-  Widget buildViewer();
+  Widget buildViewer({
+    required Color backgroundColor,
+  });
 }
