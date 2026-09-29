@@ -1,7 +1,9 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/app/theme/theme.dart';
 
 import 'package:velin/core/document/document.dart';
-import 'package:velin/shared/widgets/widgets.dart';
+
+import 'reader_document_tab.dart';
 
 class ReaderDocumentTabs extends StatelessWidget {
   const ReaderDocumentTabs({
@@ -9,6 +11,7 @@ class ReaderDocumentTabs extends StatelessWidget {
     required this.selectedDocument,
     required this.onDocumentSelected,
     required this.onDocumentClosed,
+    required this.onOpenDocument,
     super.key,
   });
 
@@ -16,59 +19,49 @@ class ReaderDocumentTabs extends StatelessWidget {
   final Document? selectedDocument;
   final ValueChanged<Document> onDocumentSelected;
   final ValueChanged<Document> onDocumentClosed;
+  final VoidCallback onOpenDocument;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        for (final document in documents)
-          _DocumentTab(
-            document: document,
-            selected: document == selectedDocument,
-            onSelected: onDocumentSelected,
-            onClosed: onDocumentClosed,
-          ),
-      ],
-    );
-  }
-}
+    final colorScheme = Theme.of(context).colorScheme;
 
-class _DocumentTab extends StatelessWidget {
-  const _DocumentTab({
-    required this.document,
-    required this.selected,
-    required this.onSelected,
-    required this.onClosed,
-  });
-
-  final Document document;
-  final bool selected;
-  final ValueChanged<Document> onSelected;
-  final ValueChanged<Document> onClosed;
-
-  @override
-  Widget build(BuildContext context) {
-    final fileName = document.path.split('/').last;
-
-    return VelinHoverable(
-      onTap: () => onSelected(document),
-      child: Container(
-        padding: const EdgeInsets.only(left: 12),
-        decoration: BoxDecoration(
-          color: selected
-              ? Theme.of(context).colorScheme.surface
-              : null,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(fileName),
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () => onClosed(document),
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.xs),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+            child: Row(
+              children: [
+                for (final document in documents) ...[
+                  ReaderDocumentTab(
+                    document: document,
+                    isSelected: document == selectedDocument,
+                    onSelected: onDocumentSelected,
+                    onClosed: onDocumentClosed,
+                  ),
+                  Container(
+                    color: colorScheme.outline,
+                    width: 1,
+                    height: 16,
+                  ),
+                ],
+                SizedBox(width: AppSpacing.xs),
+                IconButton(
+                  onPressed: () => onOpenDocument(),
+                  icon: const Icon(Icons.add, size: 16),
+                  padding: EdgeInsets.all(AppSpacing.xs),
+                  style: IconButton.styleFrom(
+                    minimumSize: Size.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

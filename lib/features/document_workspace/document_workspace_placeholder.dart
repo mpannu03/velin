@@ -11,8 +11,13 @@ class DocumentWorkspacePlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Workspace for ${document.path}'),
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      ),
+      child: Center(
+        child: Text('Workspace for ${document.path}'),
+      ),
     );
   }
   
