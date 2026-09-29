@@ -1,5 +1,5 @@
 name: velin
-description: "A new Flutter project."
+description: "A free, open-source PDF application built with Flutter."
 
 publish_to: 'none'
 
@@ -22,10 +22,10 @@ dependencies:
   window_manager: ^0.5.2
   file_picker: ^13.1.0
   uuid: ^4.6.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^6.0.0
   bloc_lint: ^0.4.3
   bloc_test: ^10.0.0

@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:velin/app/theme/theme.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:velin/core/platform/platform.dart';
 
 import 'app_effect.dart';
@@ -90,11 +89,6 @@ class _AppEffectListenerState extends State<AppEffectListener> {
           content: Text(message),
           behavior: SnackBarBehavior.floating,
           width: 360,
-          margin: const EdgeInsets.only(
-            left: AppSpacing.xl,
-            right: AppSpacing.xl,
-            bottom: AppSpacing.xl,
-          ),
         ),
       );
   }
