@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/app/theme/theme.dart';
 
 class VelinIconButton extends StatelessWidget {
   const VelinIconButton({
@@ -18,8 +19,18 @@ class VelinIconButton extends StatelessWidget {
       message: tooltip,
       child: IconButton(
         onPressed: onPressed,
-        icon: Icon(icon),
-        padding: EdgeInsets.zero,
+        icon: Icon(icon,
+          size: AppDimensions.iconButtonSize,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        padding: EdgeInsets.all(AppSpacing.xs),
+        style: IconButton.styleFrom(
+          minimumSize: Size.zero,
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.md),
+          ),
+        ),
       ),
     );
   }
