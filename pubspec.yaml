@@ -23,6 +23,7 @@ dependencies:
   file_picker: ^13.1.0
   uuid: ^4.6.0
   pdfrx: ^2.6.5
+  material_symbols_icons: ^4.2960.0
 
 dev_dependencies:
   flutter_test:

@@ -14,32 +14,37 @@ class DocumentWorkspacePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 320,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  _title,
-                  style: Theme.of(context).textTheme.titleMedium,
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Card(
+      color: colorScheme.surface,
+      child: SizedBox(
+        width: 320,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    _title,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ),
-              ),
-              IconButton(
-                tooltip: 'Close',
-                onPressed: onClose,
-                icon: const Icon(Icons.close),
-              ),
-            ],
-          ),
-          const Divider(),
-          Expanded(
-            child: Center(
-              child: Text('$_title panel'),
+                IconButton(
+                  tooltip: 'Close',
+                  onPressed: onClose,
+                  icon: const Icon(Icons.close),
+                ),
+              ],
             ),
-          ),
-        ],
+            const Divider(),
+            Expanded(
+              child: Center(
+                child: Text('$_title panel'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

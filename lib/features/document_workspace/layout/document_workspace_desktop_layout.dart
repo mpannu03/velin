@@ -13,27 +13,43 @@ class DocumentWorkspaceDesktopLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Stack(
       children: [
-        DocumentWorkspaceToolRail(
-          selectedTool: viewModel.selectedTool,
-          onToolSelected: viewModel.onToolSelected,
-        ),
-        const VerticalDivider(width: 1),
-        Expanded(
+        Positioned.fill(
           child: DocumentWorkspaceViewport(
             engine: viewModel.engine,
           ),
         ),
-        if (viewModel.selectedPanel != null)
-          DocumentWorkspacePanel(
-            panel: viewModel.selectedPanel!,
-            onClose: viewModel.onPanelClosed,
+
+        Positioned(
+          top: 0,
+          left: 0,
+          child: DocumentWorkspaceToolRail(
+            selectedTool: viewModel.selectedTool,
+            onToolSelected: viewModel.onToolSelected,
           ),
-        const VerticalDivider(width: 1),
-        DocumentWorkspacePanelRail(
-          selectedPanel: viewModel.selectedPanel,
-          onPanelSelected: viewModel.onPanelSelected,
+        ),
+
+        // Panel + panel rail grouped and pinned to the right edge.
+        // The panel (when open) sits to the LEFT of the rail.
+        Positioned(
+          top: 0,
+          right: 0,
+          bottom: 0,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (viewModel.selectedPanel != null)
+                DocumentWorkspacePanel(
+                  panel: viewModel.selectedPanel!,
+                  onClose: viewModel.onPanelClosed,
+                ),
+              DocumentWorkspacePanelRail(
+                selectedPanel: viewModel.selectedPanel,
+                onPanelSelected: viewModel.onPanelSelected,
+              ),
+            ],
+          ),
         ),
       ],
     );

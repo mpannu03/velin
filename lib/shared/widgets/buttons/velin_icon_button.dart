@@ -6,27 +6,33 @@ class VelinIconButton extends StatelessWidget {
     required this.icon,
     required this.tooltip,
     required this.onPressed,
+    this.isSelected,
     super.key,
   });
 
   final IconData icon;
   final String tooltip;
   final VoidCallback? onPressed;
+  final bool? isSelected;
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Tooltip(
       message: tooltip,
       child: IconButton(
         onPressed: onPressed,
         icon: Icon(icon,
           size: AppDimensions.iconButtonSize,
-          color: Theme.of(context).colorScheme.primary,
+          color: isSelected ?? false 
+              ? colorScheme.onPrimary : colorScheme.primary,
         ),
-        padding: EdgeInsets.all(AppSpacing.xs),
+        padding: EdgeInsets.all(AppSpacing.sm),
         style: IconButton.styleFrom(
           minimumSize: Size.zero,
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          backgroundColor: isSelected ?? false 
+              ? colorScheme.primary : colorScheme.primaryContainer,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppRadius.md),
           ),
