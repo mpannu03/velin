@@ -43,8 +43,8 @@ class DocumentWorkspaceBloc
       emit(
         DocumentWorkspaceLoaded(
           engine: engine,
-          currentPage: engine.controller.currentPage,
-          pageCount: engine.controller.pageCount,
+          currentPage: null,
+          pageCount: 0,
         ),
       );
 
@@ -60,6 +60,7 @@ class DocumentWorkspaceBloc
           emit(
             currentState.copyWith(
               currentPage: currentPage,
+              pageCount: engine.controller.pageCount,
             ),
           );
         },
