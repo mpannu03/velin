@@ -18,7 +18,7 @@ class DocumentWorkspacePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<DocumentWorkspaceBloc>()
+      create: (_) => getIt<DocumentWorkspaceBloc>(param1: document)
           ..add(const DocumentWorkspaceStarted()),
       child: BlocBuilder<DocumentWorkspaceBloc, DocumentWorkspaceState>(
         builder: (context, state) {

@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/features/document_workspace/document_workspace.dart';
 
-import 'package:velin/features/document_workspace/document_workspace_placeholder.dart';
 import '../view/reader_view_model.dart';
 import '../widgets/widgets.dart';
 
@@ -14,20 +14,31 @@ class ReaderDesktopLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final selectedDocument = viewModel.selectedDocument;
+
     return Column(
       children: [
         ReaderDocumentTabs(
           documents: viewModel.documents,
-          selectedDocument: viewModel.selectedDocument,
+          selectedDocument: selectedDocument,
           onDocumentSelected: viewModel.onDocumentSelected,
           onDocumentClosed: viewModel.onDocumentClosed,
           onOpenDocument: viewModel.onOpenDocument,
         ),
         Expanded(
-          child: viewModel.selectedDocument == null
-              ? ReaderEmptyState(onOpenDocument: viewModel.onOpenDocument)
-              : DocumentWorkspacePlaceholder(
-                  document: viewModel.selectedDocument!,
+          child: selectedDocument == null
+              ? ReaderEmptyState(
+                  onOpenDocument: viewModel.onOpenDocument,
+                )
+              : IndexedStack(
+                  index: viewModel.documents.indexOf(selectedDocument),
+                  children: [
+                    for (final document in viewModel.documents)
+                      DocumentWorkspacePage(
+                        key: ValueKey(document.path),
+                        document: document,
+                      ),
+                  ],
                 ),
         ),
       ],
