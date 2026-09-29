@@ -103,7 +103,7 @@ class ReaderBloc extends Bloc<ReaderEvent, ReaderState> with ErrorMessageMixin {
   ) {
     final result = _documentService.close(event.document);
 
-    if (result case Failure<Document>(:final error)) {
+    if (result case Failure<void>(:final error)) {
       _appEffectController.notifyUser(
         message: errorMessage(error), 
         type: NotificationType.error,
