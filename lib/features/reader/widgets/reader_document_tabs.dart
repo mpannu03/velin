@@ -47,17 +47,18 @@ class ReaderDocumentTabs extends StatelessWidget {
                   ),
                 ],
                 SizedBox(width: AppSpacing.xs),
-                IconButton(
-                  onPressed: () => onOpenDocument(),
-                  icon: const Icon(Icons.add, size: 16),
-                  padding: EdgeInsets.all(AppSpacing.xs),
-                  style: IconButton.styleFrom(
-                    minimumSize: Size.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
+                if (documents.isNotEmpty)
+                  IconButton(
+                    onPressed: () => onOpenDocument(),
+                    icon: const Icon(Icons.add, size: 16),
+                    padding: EdgeInsets.all(AppSpacing.xs),
+                    style: IconButton.styleFrom(
+                      minimumSize: Size.zero,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),

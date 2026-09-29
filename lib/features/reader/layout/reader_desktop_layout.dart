@@ -25,9 +25,7 @@ class ReaderDesktopLayout extends StatelessWidget {
         ),
         Expanded(
           child: viewModel.selectedDocument == null
-              ? const Center(
-                  child: Text('No document selected'),
-                )
+              ? ReaderEmptyState(onOpenDocument: viewModel.onOpenDocument)
               : DocumentWorkspacePlaceholder(
                   document: viewModel.selectedDocument!,
                 ),

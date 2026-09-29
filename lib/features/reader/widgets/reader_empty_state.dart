@@ -10,17 +10,58 @@ class ReaderEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final text = theme.textTheme;
+
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text('No documents open'),
-          const SizedBox(height: 12),
-          ElevatedButton(
-            onPressed: onOpenDocument,
-            child: const Text('Open document'),
-          ),
-        ],
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 360),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(
+                color: colors.surfaceContainerHighest,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.description_outlined,
+                size: 32,
+                color: colors.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            Text(
+              'No document open',
+              style: text.titleMedium?.copyWith(
+                color: colors.onSurface,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 6),
+
+            Text(
+              'Open a file to start reading.',
+              style: text.bodyMedium?.copyWith(
+                color: colors.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+
+            FilledButton.icon(
+              onPressed: onOpenDocument,
+              icon: const Icon(Icons.folder_open_outlined, size: 18),
+              label: const Text('Open document'),
+            ),
+          ],
+        ),
       ),
     );
   }
