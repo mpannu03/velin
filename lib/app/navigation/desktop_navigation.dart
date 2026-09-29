@@ -107,12 +107,12 @@ class _NavigationItem extends StatelessWidget {
             children: [
               Icon(
                 item.icon,
-                size: 16,
+                size: 18,
                 color: selected
                       ? colorScheme.onPrimary
                       : colorScheme.onSurface.withValues(alpha: 0.65),
               ),
-              SizedBox(width: 4),
+              SizedBox(width: AppSpacing.sm),
               Text(
                 item.label,
                 style: textTheme.bodyMedium?.copyWith(

@@ -66,11 +66,6 @@ class _NavigationItem extends StatelessWidget {
           const SizedBox(height: AppSpacing.xs),
           Text(
             item.label,
-            style: AppTypography.label.copyWith(
-              color: selected
-                  ? colorScheme.primary
-                  : colorScheme.onSurface,
-            ),
           ),
         ],
       ),
