@@ -146,7 +146,7 @@ class _WindowButtonShellState extends State<_WindowButtonShell> {
           width: AppDimensions.desktopControlButtonWidth,
           height: AppDimensions.desktopRibbonHeight,
           color: _hovered
-              ? widget.hoverColor ?? scheme.surfaceContainerHighest
+              ? widget.hoverColor ?? scheme.primaryFixedDim
               : Colors.transparent,
           alignment: Alignment.center,
           child: Icon(

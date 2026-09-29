@@ -19,7 +19,7 @@ class DesktopShell extends StatelessWidget {
     return Column(
       children: [
         _WindowRibbon(),
-        const Divider(height: 1),
+        // const Divider(height: 1),
         Expanded(child: child),
       ],
     );
@@ -29,36 +29,39 @@ class DesktopShell extends StatelessWidget {
 class _WindowRibbon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
-          child: Text(
-            'Velin',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.primaryContainer,
+      child: Row(
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            child: Text(
+              'Velin',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
-        ),
-        VelinMenuButton(
-          label: 'File',
-          onPressed: () {},
-        ),
-        VelinMenuButton(
-          label: 'Edit',
-          onPressed: () {},
-        ),
-        VelinMenuButton(
-          label: 'View',
-          onPressed: () {},
-        ),
-        const Expanded(
-          child: DragToMoveArea(
-            child: SizedBox(height: AppDimensions.desktopRibbonHeight),
+          VelinMenuButton(
+            label: 'File',
+            onPressed: () {},
           ),
-        ),
-        const VelinWindowControls(),
-      ],
+          VelinMenuButton(
+            label: 'Edit',
+            onPressed: () {},
+          ),
+          VelinMenuButton(
+            label: 'View',
+            onPressed: () {},
+          ),
+          const Expanded(
+            child: DragToMoveArea(
+              child: SizedBox(height: AppDimensions.desktopRibbonHeight),
+            ),
+          ),
+          const VelinWindowControls(),
+        ],
+      ),
     );
   }
   
