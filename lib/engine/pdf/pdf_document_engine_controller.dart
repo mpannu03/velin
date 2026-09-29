@@ -18,6 +18,10 @@ class PdfDocumentEngineController implements DocumentEngineController {
     _currentPageController.add(pageNumber);
   }
 
+  void onViewerReady() {
+    _currentPageController.add(_controller.pageNumber);
+  }
+
   @override
   int? get currentPage => _controller.pageNumber;
 

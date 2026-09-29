@@ -40,6 +40,7 @@ class PdfDocumentEngine implements DocumentEngine {
       params: PdfViewerParams(
         backgroundColor: backgroundColor,
         onPageChanged: _engineController.onPageChanged,
+        onViewerReady: (_, __) => _engineController.onViewerReady(),
       ),
     );
   }
