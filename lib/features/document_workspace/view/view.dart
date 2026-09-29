@@ -1,0 +1,1 @@
+export 'document_workspace_view_model.dart';
