@@ -9,8 +9,7 @@ import '../bloc/bloc.dart';
 import 'document_workspace_view.dart';
 import 'document_workspace_view_model.dart';
 
-class DocumentWorkspacePage extends StatelessWidget
-    implements DocumentEngineListener {
+class DocumentWorkspacePage extends StatelessWidget {
   DocumentWorkspacePage({
     required this.document,
     super.key,
@@ -19,37 +18,8 @@ class DocumentWorkspacePage extends StatelessWidget
   final Document document;
   final DocumentEngine _engine;
 
-  late final DocumentWorkspaceBloc _bloc;
-
-  @override
-  void onReady() {
-    _bloc.add(
-      DocumentWorkspaceStarted(
-        currentPage: _engine.snapshot.currentPage,
-        pageCount: _engine.snapshot.pageCount,
-        currentZoom: _engine.snapshot.zoom,
-      ),
-    );
-  }
-
-  @override
-  void onPageChanged(int? page) {
-    _bloc.add(
-      DocumentWorkspacePageChanged(page),
-    );
-  }
-
-  @override
-  void onZoomChanged(double zoom) {
-    _bloc.add(
-      DocumentWorkspaceZoomChanged(zoom),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    _engine.listener = this;
-
     final documentViewer = _engine.buildViewer(
       config: DocumentEngineConfig(
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
@@ -57,12 +27,8 @@ class DocumentWorkspacePage extends StatelessWidget
     );
 
     return BlocProvider(
-      create: (_) =>_bloc = getIt<DocumentWorkspaceBloc>()
-          ..add(DocumentWorkspaceStarted(
-              currentPage: 0,
-              pageCount: 0,
-              currentZoom: 1.0,
-            )),
+      create: (_) => getIt<DocumentWorkspaceBloc>(param1: _engine)
+          ..add(DocumentWorkspaceStarted()),
       child: BlocBuilder<DocumentWorkspaceBloc, DocumentWorkspaceState>(
         builder: (context, state) {
           return switch (state) {

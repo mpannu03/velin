@@ -5,15 +5,11 @@ sealed class DocumentWorkspaceEvent {
 }
 
 final class DocumentWorkspaceStarted extends DocumentWorkspaceEvent {
-  const DocumentWorkspaceStarted({
-    required this.currentPage,
-    required this.pageCount,
-    required this.currentZoom,
-  });
+  const DocumentWorkspaceStarted();
+}
 
-  final int? currentPage;
-  final int pageCount;
-  final double currentZoom;
+final class DocumentWorkspaceReady extends DocumentWorkspaceEvent {
+  const DocumentWorkspaceReady();
 }
 
 final class DocumentWorkspacePageChanged extends DocumentWorkspaceEvent {
