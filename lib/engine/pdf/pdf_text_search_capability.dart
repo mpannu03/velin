@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:material_ui/material_ui.dart';
 import 'package:pdfrx/pdfrx.dart';
 import 'package:velin/core/document/engine/engine.dart';
 
@@ -57,8 +56,6 @@ class PdfTextSearchCapability implements TextSearchCapability {
 
   @override
   Future<void> selectResult(TextSearchResult result) async {
-    debugPrint(result.index.toString());
-    final v = await _textSearcher.goToMatchOfIndex(result.index);
-    debugPrint(v.toString());
+    final v = await _textSearcher.goToMatchOfIndex(result.index);;
   }
 }

@@ -179,7 +179,6 @@ class DocumentWorkspaceBloc
       }
     );
 
-    _engine.textSearch?.search(event.text);
   }
 
   void _onClearSearch(

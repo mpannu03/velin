@@ -22,6 +22,9 @@ class PdfDocumentEngine implements DocumentEngine {
 
   late final PdfDocumentEngineActions _actions;
 
+  late final PdfTextSearchCapability _textSearch =
+      PdfTextSearchCapability(_controller);
+
   DocumentEngineListener? _listener;
 
   double? _lastZoom;
@@ -43,7 +46,7 @@ class PdfDocumentEngine implements DocumentEngine {
   }
 
   @override
-  TextSearchCapability? get textSearch => PdfTextSearchCapability(_controller);
+  TextSearchCapability? get textSearch => _textSearch;
 
   @override
   DocumentEngineActions get actions => _actions;
