@@ -12,6 +12,7 @@ class DocumentWorkspaceViewModel {
     required this.selectedPanel,
     required this.onToolSelected,
     required this.onPanelSelected,
+    required this.onGotoPage,
     required this.onPanelClosed,
   });
 
@@ -25,5 +26,6 @@ class DocumentWorkspaceViewModel {
 
   final ValueChanged<WorkspaceTool> onToolSelected;
   final ValueChanged<WorkspacePanel> onPanelSelected;
+  final ValueChanged<int> onGotoPage;
   final VoidCallback onPanelClosed;
 }

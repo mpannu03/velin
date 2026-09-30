@@ -49,6 +49,7 @@ class DocumentWorkspaceDesktopLayout extends StatelessWidget {
                 currentPage: viewModel.currentPage,
                 pageCount: viewModel.pageCount,
                 onPanelSelected: viewModel.onPanelSelected,
+                onGotoPage: viewModel.onGotoPage,
               ),
             ],
           ),

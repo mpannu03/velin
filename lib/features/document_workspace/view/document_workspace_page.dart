@@ -50,6 +50,9 @@ class DocumentWorkspacePage extends StatelessWidget {
                         const DocumentWorkspacePanelClosed(),
                       );
                 },
+                onGotoPage: (page) {
+                  state.engine.controller.goToPage(page);
+                }
               ),
             ),
             DocumentWorkspaceError(:final message) => Center(

@@ -3,6 +3,7 @@ import 'package:velin/app/theme/theme.dart';
 import 'package:velin/shared/widgets/widgets.dart';
 
 import '../../models/models.dart';
+import 'page_indicator.dart';
 
 class DocumentWorkspacePanelRail extends StatelessWidget {
   const DocumentWorkspacePanelRail({
@@ -10,6 +11,7 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
     required this.currentPage,
     required this.pageCount,
     required this.onPanelSelected,
+    required this.onGotoPage,
     super.key,
   });
 
@@ -19,6 +21,7 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
   final int pageCount;
 
   final ValueChanged<WorkspacePanel> onPanelSelected;
+  final ValueChanged<int> onGotoPage;
 
   @override
   Widget build(BuildContext context) {
@@ -45,63 +48,13 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
               isSelected: selectedPanel == WorkspacePanel.annotations,
             ),
             Spacer(),
-            _PageIndicator(
+            PageIndicator(
               currentPage: currentPage, 
-              pageCount: pageCount
+              pageCount: pageCount,
+              onGotoPage: onGotoPage,
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _PageIndicator extends StatelessWidget {
-  const _PageIndicator({
-    required this.currentPage,
-    required this.pageCount,
-  });
-
-  final int? currentPage;
-  final int pageCount;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    // Nothing meaningful to show before a page is known.
-    if (currentPage == null || pageCount == 0) {
-      return const SizedBox.shrink();
-    }
-
-    return Tooltip(
-      message: 'Page $currentPage of $pageCount',
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '$currentPage',
-            style: theme.textTheme.labelMedium?.copyWith(
-              color: colorScheme.onSurface,
-              fontWeight: FontWeight.w600,
-              height: 1,
-            ),
-          ),
-          Container(
-            width: 16,
-            height: 1,
-            margin: const EdgeInsets.symmetric(vertical: 4),
-            color: colorScheme.outlineVariant,
-          ),
-          Text(
-            '$pageCount',
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-              height: 1,
-            ),
-          ),
-        ],
       ),
     );
   }
