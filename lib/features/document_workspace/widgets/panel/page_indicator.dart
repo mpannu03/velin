@@ -26,7 +26,6 @@ class PageIndicator extends StatelessWidget {
     return Tooltip(
       message: 'Page $currentPage of $pageCount',
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
           _PageInputField(
             currentPage: currentPage!,
@@ -94,55 +93,85 @@ class _PageInputFieldState extends State<_PageInputField> {
       _controller.text = '${widget.currentPage}';
       return;
     }
+
     widget.onGotoPage(value);
+  }
+
+  void _submitAndUnfocus() {
+    _submit();
+    _focusNode.unfocus();
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
-    return SizedBox(
-      width: 32,
-      height: 32,
-      child: TextField(
-        controller: _controller,
-        focusNode: _focusNode,
-        keyboardType: TextInputType.number,
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(
-            '${widget.pageCount}'.length,
+    return ListenableBuilder(
+      listenable: Listenable.merge([_focusNode, _controller]),
+      builder: (context, _) {
+        final isFocused = _focusNode.hasFocus;
+
+        final borderColor = isFocused
+            ? colorScheme.primary
+            : colorScheme.outlineVariant;
+        final borderWidth = isFocused ? 1.5 : 1.0;
+
+        return SizedBox(
+          width: 32,
+          height: 32,
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              textSelectionTheme: TextSelectionThemeData(
+                cursorColor: colorScheme.primary,
+                selectionColor: colorScheme.primary.withValues(alpha: 0.3),
+                selectionHandleColor: colorScheme.primary,
+              ),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: borderColor,
+                  width: borderWidth,
+                ),
+                borderRadius: BorderRadius.circular(AppRadius.md),
+              ),
+              alignment: Alignment.center,
+              child: TextField(
+                controller: _controller,
+                focusNode: _focusNode,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(
+                    '${widget.pageCount}'.length,
+                  ),
+                ],
+                textAlign: TextAlign.center,
+                textAlignVertical: TextAlignVertical.center,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => _submitAndUnfocus(),
+                onTapOutside: (_) => _submitAndUnfocus(),
+                style: textTheme.bodyMedium,
+                strutStyle: const StrutStyle(
+                  height: 1.0,
+                  forceStrutHeight: true,
+                ),
+                decoration: const InputDecoration(
+                  isCollapsed: true,
+                  contentPadding: EdgeInsets.zero,
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  focusedErrorBorder: InputBorder.none,
+                ),
+              ),
+            ),
           ),
-        ],
-        textAlign: TextAlign.center,
-        textAlignVertical: TextAlignVertical.center,
-        textInputAction: TextInputAction.done,
-        onSubmitted: (_) {
-          _submit();
-          _focusNode.unfocus();
-        },
-        onTapOutside: (_) {
-          _focusNode.unfocus();
-          _submit();
-        },
-        style: Theme.of(context).textTheme.bodyMedium,
-        decoration: InputDecoration(
-          isDense: true,
-          contentPadding: EdgeInsets.zero,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4),
-            borderSide: BorderSide(color: colorScheme.outline),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4),
-            borderSide: BorderSide(color: colorScheme.outlineVariant),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4),
-            borderSide: BorderSide(color: colorScheme.primary, width: 1.5),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

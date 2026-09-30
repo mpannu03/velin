@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+
+
+import 'package:material_ui/material_ui.dart';
 
 import '../view/view.dart';
 import '../widgets/widgets.dart';
@@ -30,8 +32,6 @@ class DocumentWorkspaceDesktopLayout extends StatelessWidget {
           ),
         ),
 
-        // Panel + panel rail grouped and pinned to the right edge.
-        // The panel (when open) sits to the LEFT of the rail.
         Positioned(
           top: 0,
           right: 0,

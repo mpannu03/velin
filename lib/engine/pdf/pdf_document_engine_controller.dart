@@ -30,15 +30,13 @@ class PdfDocumentEngineController implements DocumentEngineController {
 
   @override
   Future<void> goToPage(int page) async {
-    if (page < 1) {
-      _controller.setCurrentPageNumber(1);
-      return;
-    } else if (page > pageCount) { 
-      _controller.setCurrentPageNumber(pageCount);
+    if (page < 1 || page > pageCount) {
       return;
     }
 
-    _controller.setCurrentPageNumber(page);
+    final matrix = _controller.calcMatrixForPage(pageNumber: page);
+
+    _controller.goTo(matrix);
   }
 
   @override
