@@ -1,0 +1,1 @@
+export 'text_search_capability.dart';

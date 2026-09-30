@@ -1,11 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:velin/core/document/document.dart';
-
-import 'document_engine_actions.dart';
-import 'document_engine_capabilities.dart';
-import 'document_engine_config.dart';
-import 'document_engine_listener.dart';
-import 'document_engine_snapshot.dart';
+import 'package:velin/core/document/engine/engine.dart';
 
 abstract interface class DocumentEngine {
   Document get document;
@@ -17,6 +12,8 @@ abstract interface class DocumentEngine {
   DocumentEngineActions get actions;
 
   DocumentEngineListener? get listener;
+
+  TextSearchCapability? get textSearch;
 
   set listener(DocumentEngineListener? listener);
 

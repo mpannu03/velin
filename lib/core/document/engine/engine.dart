@@ -1,3 +1,4 @@
+export 'capabilities/capabilities.dart';
 export 'document_engine.dart';
 export 'document_engine_actions.dart';
 export 'document_engine_capabilities.dart';
