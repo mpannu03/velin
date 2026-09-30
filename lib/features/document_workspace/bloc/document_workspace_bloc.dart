@@ -19,6 +19,9 @@ class DocumentWorkspaceBloc
     on<DocumentWorkspacePanelSelected>(_onPanelSelected);
     on<DocumentWorkspacePanelClosed>(_onPanelClosed);
     on<DocumentWorkspaceReady>(_onReady);
+    on<DocumentWorkspaceSearch>(_onSearch);
+    on<DocumentWorkspaceClearSearch>(_onClearSearch);
+    on<DocumentWorkspaceSelectSearch>(_onSelectSearch);
 
     _engine.listener = DocumentWorkspaceListener(bloc: this);
   }
@@ -139,6 +142,82 @@ class DocumentWorkspaceBloc
     emit(
       currentState.copyWith(
         selectedPanel: null,
+      ),
+    );
+  }
+
+  void _onSearch(
+    DocumentWorkspaceSearch event,
+    Emitter<DocumentWorkspaceState> emit,
+  ) async {
+    final currentState = state;
+
+    if (currentState is! DocumentWorkspaceLoaded 
+          || !_engine.capabilities.textSelection
+    ) {
+      return;
+    }
+
+    currentState.copyWith(
+      searchState: currentState.searchState.copyWith(
+        results: const [],
+        isLoading: true,
+      ),
+    );
+
+    await emit.onEach(
+      _engine.textSearch!.search(event.text), 
+      onData: (textSearchResults) {
+        emit(
+          currentState.copyWith(
+            searchState: currentState.searchState.copyWith(
+              results: textSearchResults,
+              isLoading: false,
+            ),
+          ),
+        );
+      }
+    );
+
+    _engine.textSearch?.search(event.text);
+  }
+
+  void _onClearSearch(
+    DocumentWorkspaceClearSearch event,
+    Emitter<DocumentWorkspaceState> emit,
+  ) {
+    final currentState = state;
+
+    if (currentState is! DocumentWorkspaceLoaded) {
+      return;
+    }
+
+    emit(
+      currentState.copyWith(
+        searchState: SearchState(),
+      ),
+    );
+  }
+
+  void _onSelectSearch(
+    DocumentWorkspaceSelectSearch event,
+    Emitter<DocumentWorkspaceState> emit,
+  ) async {
+    final currentState = state;
+
+    if (currentState is! DocumentWorkspaceLoaded 
+          || !_engine.capabilities.textSelection
+    ) {
+      return;
+    }
+
+    await _engine.textSearch?.selectResult(event.textSearchResult);
+
+    emit(
+      currentState.copyWith(
+        searchState: currentState.searchState.copyWith(
+          currentIndex: event.textSearchResult.index
+        ),
       ),
     );
   }

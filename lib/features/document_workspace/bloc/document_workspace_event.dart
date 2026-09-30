@@ -39,3 +39,19 @@ final class DocumentWorkspacePanelSelected extends DocumentWorkspaceEvent {
 final class DocumentWorkspacePanelClosed extends DocumentWorkspaceEvent {
   const DocumentWorkspacePanelClosed();
 }
+
+final class DocumentWorkspaceSearch extends DocumentWorkspaceEvent {
+  const DocumentWorkspaceSearch(this.text);
+
+  final String text;
+}
+
+final class DocumentWorkspaceClearSearch extends DocumentWorkspaceEvent {
+  const DocumentWorkspaceClearSearch();
+}
+
+final class DocumentWorkspaceSelectSearch extends DocumentWorkspaceEvent {
+  const DocumentWorkspaceSelectSearch(this.textSearchResult);
+
+  final TextSearchResult textSearchResult;
+}

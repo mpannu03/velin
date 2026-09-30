@@ -42,7 +42,10 @@ class DocumentWorkspaceDesktopLayout extends StatelessWidget {
               if (viewModel.selectedPanel != null)
                 DocumentWorkspacePanel(
                   panel: viewModel.selectedPanel!,
-                  onClose: viewModel.onPanelClosed,
+                  onTextSearch: viewModel.onTextSearch,
+                  onClearSearch: viewModel.onClearSearch,
+                  onTextSearchResultSelected: viewModel.onTextSearchResultSelected,
+                  searchState: viewModel.searchState,
                 ),
               DocumentWorkspacePanelRail(
                 selectedPanel: viewModel.selectedPanel,

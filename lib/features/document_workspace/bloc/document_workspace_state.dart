@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'document_workspace_bloc.dart';
 
 sealed class DocumentWorkspaceState {
@@ -19,6 +20,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
     this.selectedTool = WorkspaceTool.select,
     this.selectedPanel,
     required this.currentZoom,
+    this.searchState = const SearchState()
   });
 
   final int? currentPage;
@@ -26,6 +28,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
   final double currentZoom;
   final WorkspaceTool selectedTool;
   final WorkspacePanel? selectedPanel;
+  final SearchState searchState;
 
   DocumentWorkspaceLoaded copyWith({
     Object? currentPage = _unset,
@@ -33,6 +36,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
     double? currentZoom,
     WorkspaceTool? selectedTool,
     Object? selectedPanel = _unset,
+    SearchState? searchState,
   }) {
     return DocumentWorkspaceLoaded(
       currentPage: identical(currentPage, _unset)
@@ -44,6 +48,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
       selectedPanel: identical(selectedPanel, _unset)
           ? this.selectedPanel
           : selectedPanel as WorkspacePanel?,
+      searchState: searchState ?? this.searchState,
     );
   }
 }
@@ -55,3 +60,33 @@ final class DocumentWorkspaceError extends DocumentWorkspaceState {
 }
 
 const _unset = Object();
+
+class SearchState {
+  final String? query;
+  final List<TextSearchResult> results;
+  final bool isLoading;
+  final int? currentIndex;
+
+  const SearchState({
+    this.query,
+    this.results = const [],
+    this.isLoading = false,
+    this.currentIndex,
+  });
+
+  SearchState copyWith({
+    Object? query = _unset,
+    List<TextSearchResult>? results,
+    bool? isLoading,
+    Object? currentIndex = _unset,
+  }) {
+    return SearchState(
+      query: identical(query, _unset) 
+          ? this.query : query as String?,
+      results: results ?? this.results,
+      isLoading: isLoading ?? this.isLoading,
+      currentIndex: identical(currentIndex, _unset) 
+          ? this.currentIndex : currentIndex as int?,
+    );
+  }
+}
