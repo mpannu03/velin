@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:pdfrx/pdfrx.dart';
 import 'package:velin/core/document/document.dart';
 import 'package:velin/core/document/engine/engine.dart';
+import 'package:velin/engine/pdf/pdf_text_search_capability.dart';
 
 import 'pdf_document_engine_actions.dart';
 
@@ -40,6 +41,9 @@ class PdfDocumentEngine implements DocumentEngine {
       zoom: _controller.currentZoom,
     );
   }
+
+  @override
+  TextSearchCapability? get textSearch => PdfTextSearchCapability(_controller);
 
   @override
   DocumentEngineActions get actions => _actions;
