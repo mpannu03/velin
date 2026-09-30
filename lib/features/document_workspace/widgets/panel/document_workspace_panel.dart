@@ -1,58 +1,64 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/app/theme/theme.dart';
+import 'package:velin/core/document/engine/engine.dart';
 
+import '../../bloc/bloc.dart';
 import '../../models/models.dart';
+import 'panel.dart';
 
 class DocumentWorkspacePanel extends StatelessWidget {
   const DocumentWorkspacePanel({
-    required this.panel,
-    required this.onClose,
     super.key,
+    required this.panel,
+    required this.searchState,
+    required this.onTextSearch,
+    required this.onClearSearch,
+    required this.onTextSearchResultSelected,
   });
 
   final WorkspacePanel panel;
-  final VoidCallback onClose;
+
+  final SearchState searchState;
+  final Function(String text) onTextSearch;
+  final VoidCallback onClearSearch;
+  final ValueChanged<TextSearchResult> onTextSearchResultSelected;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Card(
-      color: colorScheme.surface,
-      child: SizedBox(
-        width: 320,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    _title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-                IconButton(
-                  tooltip: 'Close',
-                  onPressed: onClose,
-                  icon: const Icon(Icons.close),
-                ),
-              ],
-            ),
-            const Divider(),
-            Expanded(
-              child: Center(
-                child: Text('$_title panel'),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return PanelShell(
+      title: panel.label,
+      trailing: trailing,
+      child: panelBody,
     );
   }
 
-  String get _title {
-    return switch (panel) {
-      WorkspacePanel.comments => 'Comments',
-      WorkspacePanel.annotations => 'Annotations',
-    };
-  }
+  Widget get panelBody => switch (panel) {
+        WorkspacePanel.comments => Text('Comments'),
+        WorkspacePanel.bookmarks => Text('Bookmarks'),
+        WorkspacePanel.search => SearchPanel(
+          onTextSearch: onTextSearch,
+          onClearSearch: onClearSearch,
+          onTextSearchResultSelected: onTextSearchResultSelected,
+          results: searchState.results,
+          currentIndex: searchState.currentIndex,
+          isLoading: searchState.isLoading,
+        ),
+      };
+  
+  Widget? get trailing => switch (panel) {
+        WorkspacePanel.comments => null,
+        WorkspacePanel.bookmarks => null,
+        WorkspacePanel.search => _clearButton(() {}),
+      };
+}
+
+Widget _clearButton(VoidCallback onPressed) {
+  return IconButton(
+    onPressed: () => onPressed(),
+    icon: const Icon(Icons.clear, size: 16),
+    padding: EdgeInsets.all(AppSpacing.xs),
+    style: IconButton.styleFrom(
+      minimumSize: Size.zero,
+    ),
+  );
 }

@@ -53,9 +53,15 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
             ),
             VelinIconButton(
               icon: Icons.sticky_note_2_outlined,
-              tooltip: 'Annotations',
-              onPressed: () => onPanelSelected(WorkspacePanel.annotations),
-              isSelected: selectedPanel == WorkspacePanel.annotations,
+              tooltip: 'Bookmarks',
+              onPressed: () => onPanelSelected(WorkspacePanel.bookmarks),
+              isSelected: selectedPanel == WorkspacePanel.bookmarks,
+            ),
+            VelinIconButton(
+              icon: Icons.search_outlined,
+              tooltip: 'Search',
+              onPressed: () => onPanelSelected(WorkspacePanel.search),
+              isSelected: selectedPanel == WorkspacePanel.search,
             ),
             Spacer(),
             PageIndicator(

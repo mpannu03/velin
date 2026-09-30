@@ -47,6 +47,7 @@ class DocumentWorkspacePage extends StatelessWidget {
                 selectedTool: state.selectedTool,
                 selectedPanel: state.selectedPanel,
                 documentViewer: documentViewer,
+                searchState: state.searchState,
                 onToolSelected: (tool) {
                   context.read<DocumentWorkspaceBloc>().add(
                         DocumentWorkspaceToolSelected(tool),
@@ -65,6 +66,21 @@ class DocumentWorkspacePage extends StatelessWidget {
                 onGotoPage: _engine.actions.goToPage,
                 zoomIn: _engine.actions.zoomIn,
                 zoomOut: _engine.actions.zoomOut,
+                onTextSearch: (text) {
+                  context.read<DocumentWorkspaceBloc>().add(
+                        DocumentWorkspaceSearch(text),
+                      );
+                },
+                onClearSearch: () {
+                  context.read<DocumentWorkspaceBloc>().add(
+                        const DocumentWorkspaceClearSearch(),
+                      );
+                },
+                onTextSearchResultSelected: (result) {
+                  context.read<DocumentWorkspaceBloc>().add(
+                        DocumentWorkspaceSelectSearch(result),
+                      );
+                },
               ),
             ),
             DocumentWorkspaceError(:final message) => Center(

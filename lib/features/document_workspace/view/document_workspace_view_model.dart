@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/core/document/engine/engine.dart';
 
+import '../bloc/bloc.dart';
 import '../models/models.dart';
 
 class DocumentWorkspaceViewModel {
@@ -18,6 +19,10 @@ class DocumentWorkspaceViewModel {
     required this.onPanelSelected,
     required this.onGotoPage,
     required this.onPanelClosed,
+    required this.searchState,
+    required this.onTextSearch,
+    required this.onClearSearch,
+    required this.onTextSearchResultSelected,
   });
 
   final DocumentEngine engine;
@@ -37,4 +42,9 @@ class DocumentWorkspaceViewModel {
   final ValueChanged<WorkspacePanel> onPanelSelected;
   final ValueChanged<int> onGotoPage;
   final VoidCallback onPanelClosed;
+
+  final SearchState searchState;
+  final Function(String text) onTextSearch;
+  final VoidCallback onClearSearch;
+  final ValueChanged<TextSearchResult> onTextSearchResultSelected;
 }
