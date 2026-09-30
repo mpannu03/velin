@@ -3,14 +3,15 @@ import 'package:pdfrx/pdfrx.dart';
 import 'package:velin/core/document/document.dart';
 import 'package:velin/core/document/engine/engine.dart';
 
-import 'pdf_document_engine_controller.dart';
+import 'pdf_document_engine_actions.dart';
 
 class PdfDocumentEngine implements DocumentEngine {
   PdfDocumentEngine({
     required this.document,
     PdfViewerController? controller,
   }) : _controller = controller ?? PdfViewerController() {
-    _engineController = PdfDocumentEngineController(_controller);
+    _actions = PdfDocumentEngineActions(_controller);
+    _controller.addListener(_onControllerChanged);
   }
 
   @override
@@ -18,7 +19,11 @@ class PdfDocumentEngine implements DocumentEngine {
 
   final PdfViewerController _controller;
 
-  late final PdfDocumentEngineController _engineController;
+  late final PdfDocumentEngineActions _actions;
+
+  DocumentEngineListener? _listener;
+
+  double? _lastZoom;
 
   @override
   DocumentEngineCapabilities get capabilities =>
@@ -28,25 +33,60 @@ class PdfDocumentEngine implements DocumentEngine {
       );
 
   @override
-  DocumentEngineController get controller => _engineController;
+  DocumentEngineSnapshot get snapshot {
+    return DocumentEngineSnapshot(
+      currentPage: _controller.pageNumber,
+      pageCount: _controller.pageCount,
+      zoom: _controller.currentZoom,
+    );
+  }
+
+  @override
+  DocumentEngineActions get actions => _actions;
+
+  @override
+  DocumentEngineListener? get listener => _listener;
+
+  @override
+  set listener(DocumentEngineListener? listener) {
+    _listener = listener;
+  }
 
   @override
   Widget buildViewer({
-    required Color backgroundColor,
+    required DocumentEngineConfig config,
   }) {
     return PdfViewer.file(
       document.path,
       controller: _controller,
       params: PdfViewerParams(
-        backgroundColor: backgroundColor,
-        onPageChanged: _engineController.onPageChanged,
-        onViewerReady: (_, _) => _engineController.onViewerReady(),
+        backgroundColor: config.backgroundColor,
+        onPageChanged: _onPageChanged,
+        onViewerReady: (_, _) => _onViewerReady(),
       ),
     );
   }
 
-  @override
-  Future<void> dispose() {
-    return _engineController.dispose();
+  void _onControllerChanged() {
+    final zoom = _controller.currentZoom;
+
+    if (_lastZoom == zoom) {
+      return;
+    }
+
+    _lastZoom = zoom;
+    _listener?.onZoomChanged(zoom);
+  }
+
+  void _onPageChanged(int? pageNumber) {
+    _listener?.onPageChanged(pageNumber);
+  }
+
+  void _onViewerReady() {
+    _lastZoom = _controller.currentZoom;
+
+    _listener?.onReady();
+    _listener?.onPageChanged(_controller.pageNumber);
+    _listener?.onZoomChanged(_controller.currentZoom);
   }
 }
