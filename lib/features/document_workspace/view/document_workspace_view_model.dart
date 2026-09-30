@@ -9,6 +9,7 @@ class DocumentWorkspaceViewModel {
     required this.currentPage,
     required this.pageCount,
     required this.currentZoom,
+    required this.documentViewer,
     required this.selectedTool,
     required this.selectedPanel,
     required this.zoomIn,
@@ -24,6 +25,7 @@ class DocumentWorkspaceViewModel {
   final int? currentPage;
   final int pageCount;
   final double currentZoom;
+  final Widget documentViewer;
 
   final WorkspaceTool selectedTool;
   final WorkspacePanel? selectedPanel;

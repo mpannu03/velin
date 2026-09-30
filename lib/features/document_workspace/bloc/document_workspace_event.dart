@@ -5,7 +5,27 @@ sealed class DocumentWorkspaceEvent {
 }
 
 final class DocumentWorkspaceStarted extends DocumentWorkspaceEvent {
-  const DocumentWorkspaceStarted();
+  const DocumentWorkspaceStarted({
+    required this.currentPage,
+    required this.pageCount,
+    required this.currentZoom,
+  });
+
+  final int? currentPage;
+  final int pageCount;
+  final double currentZoom;
+}
+
+final class DocumentWorkspacePageChanged extends DocumentWorkspaceEvent {
+  const DocumentWorkspacePageChanged(this.page);
+
+  final int? page;
+}
+
+final class DocumentWorkspaceZoomChanged extends DocumentWorkspaceEvent {
+  const DocumentWorkspaceZoomChanged(this.zoom);
+
+  final double zoom;
 }
 
 final class DocumentWorkspaceToolSelected extends DocumentWorkspaceEvent {

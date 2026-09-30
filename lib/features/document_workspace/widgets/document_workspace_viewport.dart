@@ -1,22 +1,17 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:velin/core/document/engine/engine.dart';
 
 class DocumentWorkspaceViewport extends StatelessWidget {
   const DocumentWorkspaceViewport({
-    required this.engine,
+    required this.documentViewer,
     super.key,
   });
 
-  final DocumentEngine engine;
+  final Widget documentViewer;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return ClipRect(
-      child: engine.buildViewer(
-        backgroundColor: colorScheme.surfaceContainerHighest,
-      ),
+        child: documentViewer,
     );
   }
 }

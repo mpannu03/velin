@@ -19,7 +19,7 @@ class DocumentWorkspaceDesktopLayout extends StatelessWidget {
       children: [
         Positioned.fill(
           child: DocumentWorkspaceViewport(
-            engine: viewModel.engine,
+            documentViewer: viewModel.documentViewer,
           ),
         ),
 

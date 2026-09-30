@@ -1,7 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:velin/core/document/document.dart';
-import 'package:velin/core/document/engine/engine.dart';
-import 'package:velin/engine/engine.dart';
 
 import '../models/models.dart';
 
@@ -10,87 +7,62 @@ part 'document_workspace_state.dart';
 
 class DocumentWorkspaceBloc
     extends Bloc<DocumentWorkspaceEvent, DocumentWorkspaceState> {
-  DocumentWorkspaceBloc({
-    required this._document,
-    required this._engineFactory,
-  })  : super(const DocumentWorkspaceInitial()) {
+  DocumentWorkspaceBloc() : super(const DocumentWorkspaceInitial()) {
     on<DocumentWorkspaceStarted>(_onStarted);
+    on<DocumentWorkspacePageChanged>(_onPageChanged);
+    on<DocumentWorkspaceZoomChanged>(_onZoomChanged);
     on<DocumentWorkspaceToolSelected>(_onToolSelected);
     on<DocumentWorkspacePanelSelected>(_onPanelSelected);
     on<DocumentWorkspacePanelClosed>(_onPanelClosed);
   }
 
-  final Document _document;
-  final DocumentEngineFactory _engineFactory;
-  DocumentEngine? _engine;
-
-  @override
-  Future<void> close() async {
-    await _engine?.dispose();
-    return super.close();
-  }
-
-  Future<void> _onStarted(
+  void _onStarted(
     DocumentWorkspaceStarted event,
     Emitter<DocumentWorkspaceState> emit,
-  ) async {
+  ) {
     emit(const DocumentWorkspaceLoading());
 
-    try {
-      final engine = _engineFactory.create(_document);
-      _engine = engine;
+    emit(
+      DocumentWorkspaceLoaded(
+        currentPage: event.currentPage,
+        pageCount: event.pageCount,
+        currentZoom: event.currentZoom,
+      ),
+    );
+  }
 
-      emit(
-        DocumentWorkspaceLoaded(
-          engine: engine,
-          currentPage: null,
-          pageCount: 0,
-          currentZoom: 0,
-        ),
-      );
+  void _onPageChanged(
+    DocumentWorkspacePageChanged event,
+    Emitter<DocumentWorkspaceState> emit,
+  ) {
+    final currentState = state;
 
-      await Future.wait([
-        emit.onEach<int?>(
-          engine.controller.currentPageStream,
-          onData: (currentPage) {
-            final currentState = state;
-
-            if (currentState is! DocumentWorkspaceLoaded) {
-              return;
-            }
-
-            emit(
-              currentState.copyWith(
-                currentPage: currentPage,
-                pageCount: engine.controller.pageCount,
-              ),
-            );
-          },
-        ),
-        emit.onEach<double>(
-          engine.controller.zoomStream,
-          onData: (currentZoom) {
-            final currentState = state;
-
-            if (currentState is! DocumentWorkspaceLoaded) {
-              return;
-            }
-
-            emit(
-              currentState.copyWith(
-                currentZoom: currentZoom,
-              ),
-            );
-          },
-        ),
-      ]);
-    } on Object catch (error) {
-      emit(
-        DocumentWorkspaceError(
-          error.toString(),
-        ),
-      );
+    if (currentState is! DocumentWorkspaceLoaded) {
+      return;
     }
+
+    emit(
+      currentState.copyWith(
+        currentPage: event.page,
+      ),
+    );
+  }
+
+  void _onZoomChanged(
+    DocumentWorkspaceZoomChanged event,
+    Emitter<DocumentWorkspaceState> emit,
+  ) {
+    final currentState = state;
+
+    if (currentState is! DocumentWorkspaceLoaded) {
+      return;
+    }
+
+    emit(
+      currentState.copyWith(
+        currentZoom: event.zoom,
+      ),
+    );
   }
 
   void _onToolSelected(
@@ -121,7 +93,7 @@ class DocumentWorkspaceBloc
     }
 
     if (currentState.selectedPanel == event.panel) {
-      add(DocumentWorkspacePanelClosed());
+      add(const DocumentWorkspacePanelClosed());
       return;
     }
 
