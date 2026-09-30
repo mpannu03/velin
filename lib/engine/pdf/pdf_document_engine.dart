@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:pdfrx/pdfrx.dart';
 import 'package:velin/core/document/document.dart';
 import 'package:velin/core/document/engine/engine.dart';
@@ -60,7 +60,7 @@ class PdfDocumentEngine implements DocumentEngine {
       document.path,
       controller: _controller,
       params: PdfViewerParams(
-        backgroundColor: config.backgroundColor,
+        backgroundColor: config.backgroundColor ?? Colors.grey,
         onPageChanged: _onPageChanged,
         onViewerReady: (_, _) => _onViewerReady(),
       ),

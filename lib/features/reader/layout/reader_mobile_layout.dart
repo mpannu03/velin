@@ -1,6 +1,5 @@
 import 'package:material_ui/material_ui.dart';
 
-import 'package:velin/features/document_workspace/document_workspace_placeholder.dart';
 import 'package:velin/features/reader/view/view.dart';
 import 'package:velin/shared/widgets/widgets.dart';
 
@@ -40,8 +39,8 @@ class ReaderMobileLayout extends StatelessWidget {
               ? const Center(
                   child: Text('No document selected'),
                 )
-              : DocumentWorkspacePlaceholder(
-                  document: viewModel.selectedDocument!,
+              : Text(
+                  'Selected document: ${viewModel.selectedDocument!.path}',
                 ),
         ),
       ],
