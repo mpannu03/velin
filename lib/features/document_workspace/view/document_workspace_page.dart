@@ -33,6 +33,7 @@ class DocumentWorkspacePage extends StatelessWidget {
                 engine: state.engine,
                 currentPage: state.currentPage,
                 pageCount: state.pageCount,
+                currentZoom: state.currentZoom,
                 selectedTool: state.selectedTool,
                 selectedPanel: state.selectedPanel,
                 onToolSelected: (tool) {
@@ -52,6 +53,12 @@ class DocumentWorkspacePage extends StatelessWidget {
                 },
                 onGotoPage: (page) {
                   state.engine.controller.goToPage(page);
+                },
+                zoomIn: () {
+                  state.engine.controller.zoomIn();
+                },
+                zoomOut: () {
+                  state.engine.controller.zoomOut();
                 }
               ),
             ),

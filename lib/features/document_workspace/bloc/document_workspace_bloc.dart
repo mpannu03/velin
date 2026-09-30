@@ -30,7 +30,7 @@ class DocumentWorkspaceBloc
     return super.close();
   }
 
-  void _onStarted(
+  Future<void> _onStarted(
     DocumentWorkspaceStarted event,
     Emitter<DocumentWorkspaceState> emit,
   ) async {
@@ -45,26 +45,45 @@ class DocumentWorkspaceBloc
           engine: engine,
           currentPage: null,
           pageCount: 0,
+          currentZoom: 0,
         ),
       );
 
-      await emit.onEach<int?>(
-        engine.controller.currentPageStream,
-        onData: (currentPage) {
-          final currentState = state;
+      await Future.wait([
+        emit.onEach<int?>(
+          engine.controller.currentPageStream,
+          onData: (currentPage) {
+            final currentState = state;
 
-          if (currentState is! DocumentWorkspaceLoaded) {
-            return;
-          }
+            if (currentState is! DocumentWorkspaceLoaded) {
+              return;
+            }
 
-          emit(
-            currentState.copyWith(
-              currentPage: currentPage,
-              pageCount: engine.controller.pageCount,
-            ),
-          );
-        },
-      );
+            emit(
+              currentState.copyWith(
+                currentPage: currentPage,
+                pageCount: engine.controller.pageCount,
+              ),
+            );
+          },
+        ),
+        emit.onEach<double>(
+          engine.controller.zoomStream,
+          onData: (currentZoom) {
+            final currentState = state;
+
+            if (currentState is! DocumentWorkspaceLoaded) {
+              return;
+            }
+
+            emit(
+              currentState.copyWith(
+                currentZoom: currentZoom,
+              ),
+            );
+          },
+        ),
+      ]);
     } on Object catch (error) {
       emit(
         DocumentWorkspaceError(

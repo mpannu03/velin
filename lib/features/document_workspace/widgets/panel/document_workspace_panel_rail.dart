@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/shared/utils/utils.dart';
 import 'package:velin/shared/widgets/widgets.dart';
 
 import '../../models/models.dart';
@@ -10,6 +11,9 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
     required this.selectedPanel,
     required this.currentPage,
     required this.pageCount,
+    required this.currentZoom,
+    required this.zoomIn,
+    required this.zoomOut,
     required this.onPanelSelected,
     required this.onGotoPage,
     super.key,
@@ -19,13 +23,19 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
 
   final int? currentPage;
   final int pageCount;
+  final double currentZoom;
+
+  final VoidCallback zoomIn;
+  final VoidCallback zoomOut;
 
   final ValueChanged<WorkspacePanel> onPanelSelected;
   final ValueChanged<int> onGotoPage;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
 
     return Card(
       color: colorScheme.surface,
@@ -53,6 +63,20 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
               pageCount: pageCount,
               onGotoPage: onGotoPage,
             ),
+            SizedBox(height: AppSpacing.md),
+            VelinIconButton(
+              icon: Icons.zoom_in_outlined,
+              tooltip: 'Zoom',
+              onPressed: zoomIn,
+            ),
+            Text(getPercentagefromDouble(currentZoom),
+              style: textTheme.labelSmall,
+            ),
+            VelinIconButton(
+              icon: Icons.zoom_out_outlined,
+              tooltip: 'Zoom Out',
+              onPressed: zoomOut,
+            )
           ],
         ),
       ),

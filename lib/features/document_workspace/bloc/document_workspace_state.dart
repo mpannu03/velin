@@ -19,11 +19,13 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
     this.currentPage,
     this.selectedTool = WorkspaceTool.select,
     this.selectedPanel,
+    required this.currentZoom,
   });
 
   final DocumentEngine engine;
   final int? currentPage;
   final int pageCount;
+  final double currentZoom;
   final WorkspaceTool selectedTool;
   final WorkspacePanel? selectedPanel;
 
@@ -31,6 +33,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
     DocumentEngine? engine,
     Object? currentPage = _unset,
     int? pageCount,
+    double? currentZoom,
     WorkspaceTool? selectedTool,
     Object? selectedPanel = _unset,
   }) {
@@ -40,6 +43,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
           ? this.currentPage
           : currentPage as int?,
       pageCount: pageCount ?? this.pageCount,
+      currentZoom: currentZoom ?? this.currentZoom,
       selectedTool: selectedTool ?? this.selectedTool,
       selectedPanel: identical(selectedPanel, _unset)
           ? this.selectedPanel

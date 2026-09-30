@@ -117,58 +117,37 @@ class _PageInputFieldState extends State<_PageInputField> {
             : colorScheme.outlineVariant;
         final borderWidth = isFocused ? 1.5 : 1.0;
 
-        return SizedBox(
+        return Container(
           width: 32,
           height: 32,
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              textSelectionTheme: TextSelectionThemeData(
-                cursorColor: colorScheme.primary,
-                selectionColor: colorScheme.primary.withValues(alpha: 0.3),
-                selectionHandleColor: colorScheme.primary,
-              ),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: borderColor,
+              width: borderWidth,
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: borderColor,
-                  width: borderWidth,
-                ),
-                borderRadius: BorderRadius.circular(AppRadius.md),
-              ),
-              alignment: Alignment.center,
-              child: TextField(
-                controller: _controller,
-                focusNode: _focusNode,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(
-                    '${widget.pageCount}'.length,
-                  ),
-                ],
-                textAlign: TextAlign.center,
-                textAlignVertical: TextAlignVertical.center,
-                textInputAction: TextInputAction.done,
-                onSubmitted: (_) => _submitAndUnfocus(),
-                onTapOutside: (_) => _submitAndUnfocus(),
-                style: textTheme.bodyMedium,
-                strutStyle: const StrutStyle(
-                  height: 1.0,
-                  forceStrutHeight: true,
-                ),
-                decoration: const InputDecoration(
-                  isCollapsed: true,
-                  contentPadding: EdgeInsets.zero,
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  focusedErrorBorder: InputBorder.none,
-                ),
-              ),
+            borderRadius: BorderRadius.circular(AppRadius.md),
+          ),
+          alignment: Alignment.center,
+          child: EditableText(
+            controller: _controller,
+            focusNode: _focusNode,
+            style: (textTheme.bodyMedium ?? const TextStyle()).copyWith(
+              color: colorScheme.onSurface,
+              fontSize: 14,
+              height: 1.0,
             ),
+            cursorColor: colorScheme.primary,
+            backgroundCursorColor: colorScheme.surface,
+            keyboardType: TextInputType.number,
+            textAlign: TextAlign.center,
+            textInputAction: TextInputAction.done,
+            onSubmitted: (_) => _submitAndUnfocus(),
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(
+                '${widget.pageCount}'.length,
+              ),
+            ],
           ),
         );
       },
