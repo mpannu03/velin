@@ -17,7 +17,7 @@ void main() {
       expect(find.byIcon(Icons.description_outlined), findsOneWidget);
       expect(find.text('No document open'), findsOneWidget);
       expect(find.text('Open a file to start reading.'), findsOneWidget);
-      expect(find.text('Open document'), findsOneWidget);
+      expect(find.text('Open Document'), findsOneWidget);
       expect(find.byIcon(Icons.folder_open_outlined), findsOneWidget);
     });
 
@@ -33,7 +33,7 @@ void main() {
         ),
       );
 
-      await tester.tap(find.text('Open document'));
+      await tester.tap(find.text('Open Document'));
 
       expect(opened, isTrue);
     });

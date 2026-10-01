@@ -157,7 +157,7 @@ abstract class AppLocalizations {
   /// Description for the message displayed in the Reader when no document is currently open.
   ///
   /// In en, this message translates to:
-  /// **'Open a file to start reading'**
+  /// **'Open a file to start reading.'**
   String get readerNoDocumentOpenDescription;
 
   /// Label for the File menu in the application.

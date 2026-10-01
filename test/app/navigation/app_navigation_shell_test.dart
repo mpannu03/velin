@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:velin/app/navigation/app_navigation_shell.dart';
+import 'package:velin/l10n/app_localizations.dart';
 
 void main() {
   testWidgets('shows desktop navigation and current branch content', (
@@ -59,6 +60,9 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp.router(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: Locale('en'),
         routerConfig: router,
       ),
     );

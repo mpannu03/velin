@@ -40,7 +40,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get readerNoDocumentOpen => 'No document open';
 
   @override
-  String get readerNoDocumentOpenDescription => 'Open a file to start reading';
+  String get readerNoDocumentOpenDescription => 'Open a file to start reading.';
 
   @override
   String get menuFile => 'File';

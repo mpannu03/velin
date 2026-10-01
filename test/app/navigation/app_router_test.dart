@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:velin/app/navigation/app_router.dart';
 import 'package:velin/features/reader/reader.dart';
+import 'package:velin/l10n/app_localizations.dart';
 
 class MockReaderBloc extends Mock implements ReaderBloc {}
 
@@ -26,6 +27,9 @@ void main() {
     testWidgets('opens Home at the initial location', (tester) async {
       await tester.pumpWidget(
         MaterialApp.router(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: Locale('en'),
           routerConfig: AppRouter.router,
         ),
       );
@@ -38,6 +42,9 @@ void main() {
     testWidgets('navigates between application sections', (tester) async {
       await tester.pumpWidget(
         MaterialApp.router(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: Locale('en'),
           routerConfig: AppRouter.router,
         ),
       );
