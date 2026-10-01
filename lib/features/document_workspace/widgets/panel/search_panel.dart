@@ -172,37 +172,6 @@ class _SearchPanelState extends State<SearchPanel> {
           ? context.l10n.panelSearchEnterText
           : context.l10n.panelSearchNoMatchFound,
     );
-    // return Center(
-    //   child: Padding(
-    //     padding: const EdgeInsets.all(24.0),
-    //     child: Column(
-    //       mainAxisSize: MainAxisSize.min,
-    //       children: [
-    //         _submittedQuery.isEmpty
-    //             ? Icon(
-    //                 Symbols.search,
-    //                 size: 48,
-    //                 color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-    //               )
-    //             : Icon(
-    //                 Symbols.search_off,
-    //                 size: 48,
-    //                 color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-    //               ),
-    //         const SizedBox(height: AppSpacing.sm),
-    //         Text(
-    //           _submittedQuery.isEmpty
-    //               ? context.l10n.panelSearchEnterText
-    //               : context.l10n.panelSearchNoMatchFound,
-    //           style: theme.textTheme.bodyMedium?.copyWith(
-    //             color: theme.colorScheme.onSurfaceVariant,
-    //           ),
-    //           textAlign: TextAlign.center,
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 }
 
