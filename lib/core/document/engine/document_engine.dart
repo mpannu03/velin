@@ -15,6 +15,8 @@ abstract interface class DocumentEngine {
 
   TextSearchCapability? get textSearch;
 
+  BookmarkCapability? get bookmark;
+
   set listener(DocumentEngineListener? listener);
 
   Widget buildViewer({
