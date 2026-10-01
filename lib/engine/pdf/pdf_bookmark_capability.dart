@@ -2,9 +2,8 @@ import 'package:pdfrx/pdfrx.dart';
 import 'package:velin/core/document/engine/engine.dart';
 
 class PdfBookmarkCapability implements BookmarkCapability {
-  PdfBookmarkCapability(this._document, this._controller);
+  PdfBookmarkCapability(this._controller);
 
-  final PdfDocument _document;
   final PdfViewerController _controller;
 
   final Map<String, PdfDest> _destById = {};
@@ -14,7 +13,7 @@ class PdfBookmarkCapability implements BookmarkCapability {
   Future<List<Bookmark>> get bookmarks async {
     if (_cache != null) return _cache!;
 
-    final nodes = await _document.loadOutline();
+    final nodes = await _controller.document.loadOutline();
     _destById.clear();
 
     _cache = _convert(nodes, '');
