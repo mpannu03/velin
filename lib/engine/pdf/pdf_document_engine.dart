@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:pdfrx/pdfrx.dart';
 import 'package:velin/core/document/document.dart';
 import 'package:velin/core/document/engine/engine.dart';
+import 'package:velin/engine/pdf/pdf_bookmark_capability.dart';
 import 'package:velin/engine/pdf/pdf_text_search_capability.dart';
 
 import 'pdf_document_engine_actions.dart';
@@ -24,6 +25,8 @@ class PdfDocumentEngine implements DocumentEngine {
 
   PdfTextSearchCapability? _textSearch;
 
+  PdfBookmarkCapability? _bookmark;
+
   DocumentEngineListener? _listener;
 
   double? _lastZoom;
@@ -33,6 +36,7 @@ class PdfDocumentEngine implements DocumentEngine {
       const DocumentEngineCapabilities(
         textSelection: true,
         search: true,
+        bookmarks: true,
       );
 
   @override
@@ -46,6 +50,9 @@ class PdfDocumentEngine implements DocumentEngine {
 
   @override
   TextSearchCapability? get textSearch => _textSearch;
+
+  @override
+  BookmarkCapability? get bookmark => _bookmark;
 
   @override
   DocumentEngineActions get actions => _actions;
@@ -95,6 +102,10 @@ class PdfDocumentEngine implements DocumentEngine {
 
   void _onViewerReady() {
     _textSearch ??= PdfTextSearchCapability(_controller);
+
+    _bookmark ??= PdfBookmarkCapability(
+      _controller.document, _controller
+    );
 
     _lastZoom = _controller.currentZoom;
 
