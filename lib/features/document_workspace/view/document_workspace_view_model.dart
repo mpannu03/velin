@@ -25,6 +25,8 @@ class DocumentWorkspaceViewModel {
     required this.onTextSearchResultSelected,
     required this.bookmarks,
     required this.onBookmarkSelected,
+    required this.annotations,
+    required this.onAnnotationSelected,
   });
 
   final int? currentPage;
@@ -52,4 +54,7 @@ class DocumentWorkspaceViewModel {
 
   final List<Bookmark> bookmarks;
   final ValueChanged<Bookmark> onBookmarkSelected;
+
+  final List<Annotation> annotations;
+  final ValueChanged<Annotation> onAnnotationSelected;
 }

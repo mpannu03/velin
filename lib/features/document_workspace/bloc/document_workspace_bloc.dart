@@ -23,6 +23,7 @@ class DocumentWorkspaceBloc
     on<DocumentWorkspaceClearSearch>(_onClearSearch);
     on<DocumentWorkspaceSelectSearch>(_onSelectSearch);
     on<DocumentWorkspaceSelectBookmark>(_onSelectBookmark);
+    on<DocumentWorkspaceSelectAnnotation>(_onSelectAnnotation);
 
     _engine.listener = DocumentWorkspaceListener(bloc: this);
   }
@@ -62,6 +63,24 @@ class DocumentWorkspaceBloc
         bookmarks: bookmarks,
       ),
     );
+
+    if (_engine.capabilities.comments) {
+      final annotations = await _engine.annotation!.annotations;
+
+      if (emit.isDone) return;
+
+      final currentState = state;
+
+      if (currentState is! DocumentWorkspaceLoaded) {
+        return;
+      }
+
+      emit(
+        currentState.copyWith(
+          annotations: annotations,
+        ),
+      );
+    }
   }
 
   void _onPageChanged(
@@ -244,11 +263,20 @@ class DocumentWorkspaceBloc
     }
 
     _engine.bookmark?.goto(event.bookmark);
+  }
 
-    emit(
-      currentState.copyWith(
-        bookmarks: currentState.bookmarks,
-      ),
-    );
+  void _onSelectAnnotation(
+    DocumentWorkspaceSelectAnnotation event,
+    Emitter<DocumentWorkspaceState> emit
+  ) async {
+    final currentState = state;
+
+    if (currentState is! DocumentWorkspaceLoaded
+        || !_engine.capabilities.comments
+    ) {
+      return;
+    }
+
+    _engine.annotation?.goto(event.annotation);
   }
 }

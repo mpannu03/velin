@@ -21,6 +21,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
     required this.currentZoom,
     this.searchState = const SearchState(),
     this.bookmarks = const [],
+    this.annotations = const [],
   });
 
   final int? currentPage;
@@ -30,6 +31,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
   final WorkspacePanel? selectedPanel;
   final SearchState searchState;
   final List<Bookmark> bookmarks;
+  final List<Annotation> annotations;
 
   DocumentWorkspaceLoaded copyWith({
     Object? currentPage = _unset,
@@ -39,6 +41,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
     Object? selectedPanel = _unset,
     SearchState? searchState,
     List<Bookmark>? bookmarks ,
+    List<Annotation>? annotations ,
   }) {
     return DocumentWorkspaceLoaded(
       currentPage: identical(currentPage, _unset)
@@ -52,6 +55,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
           : selectedPanel as WorkspacePanel?,
       searchState: searchState ?? this.searchState,
       bookmarks: bookmarks ?? this.bookmarks,
+      annotations: annotations ?? this.annotations,
     );
   }
 }

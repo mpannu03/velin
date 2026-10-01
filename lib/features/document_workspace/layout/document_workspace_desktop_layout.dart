@@ -49,6 +49,8 @@ class DocumentWorkspaceDesktopLayout extends StatelessWidget {
                   searchState: viewModel.searchState,
                   bookmarks: viewModel.bookmarks,
                   onBookmarkSelected: viewModel.onBookmarkSelected,
+                  annotations: viewModel.annotations,
+                  onAnnotationSelected: viewModel.onAnnotationSelected,
                 ),
               DocumentWorkspacePanelRail(
                 selectedPanel: viewModel.selectedPanel,

@@ -15,6 +15,8 @@ class DocumentWorkspacePanel extends StatelessWidget {
     required this.onTextSearchResultSelected,
     required this.bookmarks,
     required this.onBookmarkSelected,
+    required this.annotations,
+    required this.onAnnotationSelected,
   });
 
   final WorkspacePanel panel;
@@ -27,6 +29,9 @@ class DocumentWorkspacePanel extends StatelessWidget {
   final List<Bookmark> bookmarks;
   final ValueChanged<Bookmark> onBookmarkSelected;
 
+  final List<Annotation> annotations;
+  final ValueChanged<Annotation> onAnnotationSelected;
+
   @override
   Widget build(BuildContext context) {
     return PanelShell(
@@ -36,7 +41,10 @@ class DocumentWorkspacePanel extends StatelessWidget {
   }
 
   Widget get panelBody => switch (panel) {
-        WorkspacePanel.comments => Text('Comments'),
+        WorkspacePanel.comments => CommentPanel(
+          annotations: annotations, 
+          onAnnotationSelected: onAnnotationSelected,
+        ),
         WorkspacePanel.bookmarks => BookmarkPanel(
           bookmarks: bookmarks,
           onBookmarkSelected: onBookmarkSelected,

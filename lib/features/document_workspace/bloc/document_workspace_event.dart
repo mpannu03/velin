@@ -69,3 +69,11 @@ final class DocumentWorkspaceSelectBookmark extends DocumentWorkspaceEvent {
 
   final Bookmark bookmark;
 }
+
+final class DocumentWorkspaceSelectAnnotation extends DocumentWorkspaceEvent {
+  const DocumentWorkspaceSelectAnnotation(
+    this.annotation,
+  );
+
+  final Annotation annotation;
+}
