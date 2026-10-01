@@ -112,7 +112,7 @@ class PdfDocumentEngine implements DocumentEngine {
   }
 
   void _onViewerReady() {
-    _textSearch ??= PdfTextSearchCapability(_controller);
+    _textSearch ??= PdfTextSearchCapability(PdfTextSearcher(_controller));
 
     _bookmark ??= PdfBookmarkCapability(_controller);
 

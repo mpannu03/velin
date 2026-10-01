@@ -5,8 +5,7 @@ import 'package:pdfrx/pdfrx.dart';
 import 'package:velin/core/document/engine/engine.dart';
 
 class PdfTextSearchCapability implements TextSearchCapability {
-  PdfTextSearchCapability(PdfViewerController controller)
-    : _textSearcher = PdfTextSearcher(controller);
+  PdfTextSearchCapability(this._textSearcher);
 
   final PdfTextSearcher _textSearcher;
 
