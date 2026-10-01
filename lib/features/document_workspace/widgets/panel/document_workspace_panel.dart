@@ -1,6 +1,4 @@
-import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:velin/app/theme/theme.dart';
 import 'package:velin/core/document/engine/engine.dart';
 
 import '../../bloc/bloc.dart';
@@ -20,7 +18,7 @@ class DocumentWorkspacePanel extends StatelessWidget {
   final WorkspacePanel panel;
 
   final SearchState searchState;
-  final Function(String text) onTextSearch;
+  final Function(String text, bool caseInsensitive) onTextSearch;
   final VoidCallback onClearSearch;
   final ValueChanged<TextSearchResult> onTextSearchResultSelected;
 
@@ -28,7 +26,6 @@ class DocumentWorkspacePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return PanelShell(
       title: panel.label,
-      trailing: trailing,
       child: panelBody,
     );
   }
@@ -45,24 +42,4 @@ class DocumentWorkspacePanel extends StatelessWidget {
           isLoading: searchState.isLoading,
         ),
       };
-  
-  Widget? get trailing => switch (panel) {
-        WorkspacePanel.comments => null,
-        WorkspacePanel.bookmarks => null,
-        WorkspacePanel.search => null,
-      };
-}
-
-Widget _clearButton(VoidCallback onPressed, String tooltip) {
-  return Tooltip(
-    message: tooltip,
-    child: IconButton(
-      onPressed: () => onPressed(),
-      icon: const Icon(Symbols.clear, size: 16),
-      padding: EdgeInsets.all(AppSpacing.xs),
-      style: IconButton.styleFrom(
-        minimumSize: Size.zero,
-      ),
-    ),
-  );
 }
