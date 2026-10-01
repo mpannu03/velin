@@ -208,6 +208,12 @@ abstract class AppLocalizations {
   /// **'Search'**
   String get panelSearch;
 
+  /// Label for the Dictionary panel.
+  ///
+  /// In en, this message translates to:
+  /// **'Dictionary'**
+  String get panelDictionary;
+
   /// Label for the Zoom In action.
   ///
   /// In en, this message translates to:

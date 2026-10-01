@@ -1,5 +1,7 @@
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/core/document/engine/engine.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 import 'package:velin/shared/utils/utils.dart';
 import 'package:velin/shared/widgets/widgets.dart';
@@ -10,6 +12,7 @@ import 'page_indicator.dart';
 class DocumentWorkspacePanelRail extends StatelessWidget {
   const DocumentWorkspacePanelRail({
     required this.selectedPanel,
+    required this.capabilities,
     required this.currentPage,
     required this.pageCount,
     required this.currentZoom,
@@ -21,6 +24,7 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
   });
 
   final WorkspacePanel? selectedPanel;
+  final DocumentEngineCapabilities capabilities;
 
   final int? currentPage;
   final int pageCount;
@@ -46,23 +50,32 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: AppSpacing.sm,
           children: [
+            if (capabilities.comments)
+              VelinIconButton(
+                icon: Icons.comment_outlined,
+                tooltip: context.l10n.panelComments,
+                onPressed: () => onPanelSelected(WorkspacePanel.comments),
+                isSelected: selectedPanel == WorkspacePanel.comments,
+              ),
+            if (capabilities.bookmarks)
+              VelinIconButton(
+                icon: Icons.sticky_note_2_outlined,
+                tooltip: context.l10n.panelBookmarks,
+                onPressed: () => onPanelSelected(WorkspacePanel.bookmarks),
+                isSelected: selectedPanel == WorkspacePanel.bookmarks,
+              ),
+            if (capabilities.search)
+              VelinIconButton(
+                icon: Icons.search_outlined,
+                tooltip: context.l10n.panelSearch,
+                onPressed: () => onPanelSelected(WorkspacePanel.search),
+                isSelected: selectedPanel == WorkspacePanel.search,
+              ),
             VelinIconButton(
-              icon: Icons.comment_outlined,
-              tooltip: context.l10n.panelComments,
-              onPressed: () => onPanelSelected(WorkspacePanel.comments),
-              isSelected: selectedPanel == WorkspacePanel.comments,
-            ),
-            VelinIconButton(
-              icon: Icons.sticky_note_2_outlined,
-              tooltip: context.l10n.panelBookmarks,
-              onPressed: () => onPanelSelected(WorkspacePanel.bookmarks),
-              isSelected: selectedPanel == WorkspacePanel.bookmarks,
-            ),
-            VelinIconButton(
-              icon: Icons.search_outlined,
-              tooltip: context.l10n.panelSearch,
-              onPressed: () => onPanelSelected(WorkspacePanel.search),
-              isSelected: selectedPanel == WorkspacePanel.search,
+              icon: Symbols.dictionary,
+              tooltip: context.l10n.panelDictionary,
+              onPressed: () => onPanelSelected(WorkspacePanel.dictionary),
+              isSelected: selectedPanel == WorkspacePanel.dictionary,
             ),
             Spacer(),
             PageIndicator(

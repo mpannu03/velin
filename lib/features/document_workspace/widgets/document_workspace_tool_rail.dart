@@ -1,6 +1,7 @@
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/core/document/engine/engine.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 import 'package:velin/shared/widgets/widgets.dart';
 
@@ -9,11 +10,13 @@ import '../models/models.dart';
 class DocumentWorkspaceToolRail extends StatelessWidget {
   const DocumentWorkspaceToolRail({
     required this.selectedTool,
+    required this.capabilities,
     required this.onToolSelected,
     super.key,
   });
 
   final WorkspaceTool selectedTool;
+  final DocumentEngineCapabilities capabilities;
   final ValueChanged<WorkspaceTool> onToolSelected;
 
   @override
@@ -36,12 +39,13 @@ class DocumentWorkspaceToolRail extends StatelessWidget {
                 onPressed: () => onToolSelected(WorkspaceTool.select),
                 isSelected: selectedTool == WorkspaceTool.select,
               ),
-              VelinIconButton(
-                icon: Symbols.dictionary,
-                tooltip: context.l10n.toolDictionary,
-                onPressed: () => onToolSelected(WorkspaceTool.dictionary),
-                isSelected: selectedTool == WorkspaceTool.dictionary,
-              ),
+              if (capabilities.textSelection)
+                VelinIconButton(
+                  icon: Symbols.dictionary,
+                  tooltip: context.l10n.toolDictionary,
+                  onPressed: () => onToolSelected(WorkspaceTool.dictionary),
+                  isSelected: selectedTool == WorkspaceTool.dictionary,
+                ),
             ],
           ),
         ),

@@ -96,6 +96,11 @@
     "description": "Label for the Search panel."
   },
 
+  "panelDictionary": "Dictionary",
+  "@panelDictionary": {
+    "description": "Label for the Dictionary panel."
+  },
+
   "toolZoomIn": "Zoom In",
   "@toolZoomIn": {
     "description": "Label for the Zoom In action."

@@ -67,6 +67,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get panelSearch => 'Search';
 
   @override
+  String get panelDictionary => 'Dictionary';
+
+  @override
   String get toolZoomIn => 'Zoom In';
 
   @override

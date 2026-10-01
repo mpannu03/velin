@@ -35,7 +35,7 @@ class _SearchPanelState extends State<SearchPanel> {
   final FocusNode _focusNode = FocusNode();
 
   String _submittedQuery = '';
-  bool caseInsensitive = false;
+  bool caseInsensitive = true;
 
   @override
   void dispose() {

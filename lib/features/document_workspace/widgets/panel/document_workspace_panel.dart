@@ -41,5 +41,6 @@ class DocumentWorkspacePanel extends StatelessWidget {
           currentIndex: searchState.currentIndex,
           isLoading: searchState.isLoading,
         ),
+      WorkspacePanel.dictionary => Text('Dictionary'),
       };
 }

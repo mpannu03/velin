@@ -6,13 +6,13 @@ import '../models/models.dart';
 
 class DocumentWorkspaceViewModel {
   const DocumentWorkspaceViewModel({
-    required this.engine,
     required this.currentPage,
     required this.pageCount,
     required this.currentZoom,
     required this.documentViewer,
     required this.selectedTool,
     required this.selectedPanel,
+    required this.capabilities,
     required this.zoomIn,
     required this.zoomOut,
     required this.onToolSelected,
@@ -25,8 +25,6 @@ class DocumentWorkspaceViewModel {
     required this.onTextSearchResultSelected,
   });
 
-  final DocumentEngine engine;
-
   final int? currentPage;
   final int pageCount;
   final double currentZoom;
@@ -34,6 +32,8 @@ class DocumentWorkspaceViewModel {
 
   final WorkspaceTool selectedTool;
   final WorkspacePanel? selectedPanel;
+
+  final DocumentEngineCapabilities capabilities;
 
   final VoidCallback zoomIn;
   final VoidCallback zoomOut;

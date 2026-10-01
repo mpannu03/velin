@@ -40,12 +40,12 @@ class DocumentWorkspacePage extends StatelessWidget {
             DocumentWorkspaceLoaded() => 
             DocumentWorkspaceView(
               viewModel: DocumentWorkspaceViewModel(
-                engine: _engine,
                 currentPage: state.currentPage,
                 pageCount: state.pageCount,
                 currentZoom: state.currentZoom,
                 selectedTool: state.selectedTool,
                 selectedPanel: state.selectedPanel,
+                capabilities: _engine.capabilities,
                 documentViewer: documentViewer,
                 searchState: state.searchState,
                 onToolSelected: (tool) {

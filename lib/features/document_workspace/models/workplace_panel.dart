@@ -4,7 +4,8 @@ import 'package:velin/shared/extensions/extensions.dart';
 enum WorkspacePanel {
   comments,
   bookmarks,
-  search
+  search,
+  dictionary
 }
 
 extension WorkplacePanelLabel on WorkspacePanel {
@@ -13,6 +14,7 @@ extension WorkplacePanelLabel on WorkspacePanel {
       WorkspacePanel.comments => context.l10n.panelComments,
       WorkspacePanel.bookmarks => context.l10n.panelBookmarks,
       WorkspacePanel.search => context.l10n.panelSearch,
+      WorkspacePanel.dictionary => context.l10n.panelDictionary,
     };
   }
 }

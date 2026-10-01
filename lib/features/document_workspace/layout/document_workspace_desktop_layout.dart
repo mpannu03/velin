@@ -27,6 +27,7 @@ class DocumentWorkspaceDesktopLayout extends StatelessWidget {
           top: 0,
           left: 0,
           child: DocumentWorkspaceToolRail(
+            capabilities: viewModel.capabilities,
             selectedTool: viewModel.selectedTool,
             onToolSelected: viewModel.onToolSelected,
           ),
@@ -52,6 +53,7 @@ class DocumentWorkspaceDesktopLayout extends StatelessWidget {
                 currentPage: viewModel.currentPage,
                 pageCount: viewModel.pageCount,
                 currentZoom: viewModel.currentZoom,
+                capabilities: viewModel.capabilities,
                 zoomIn: viewModel.zoomIn,
                 zoomOut: viewModel.zoomOut,
                 onPanelSelected: viewModel.onPanelSelected,
