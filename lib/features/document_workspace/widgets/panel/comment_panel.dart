@@ -141,7 +141,7 @@ class _Subtitle extends StatelessWidget {
     final theme = Theme.of(context);
     final parts = <String>[
       if (title != null && title!.isNotEmpty) title!,
-      if (date != null) date!,
+      if (date != null && date!.isNotEmpty) date!,
     ];
     if (parts.isEmpty) return const SizedBox.shrink();
 

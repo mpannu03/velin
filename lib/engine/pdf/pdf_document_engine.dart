@@ -82,6 +82,11 @@ class PdfDocumentEngine implements DocumentEngine {
         backgroundColor: config.backgroundColor ?? Colors.grey,
         onPageChanged: _onPageChanged,
         onViewerReady: (_, _) => _onViewerReady(),
+        sizeDelegateProvider: PdfViewerSizeDelegateProviderLegacy(
+        calculateInitialZoom: (_, _, _, _) {
+          return config.initialZoom ?? 1.0;
+        },
+      ),
         pagePaintCallbacks: [
            (canvas, pageRect, page) {
             _textSearch?.pageTextMatchPaintCallback(canvas, pageRect, page);

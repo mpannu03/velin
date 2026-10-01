@@ -6,6 +6,8 @@ class PdfDocumentEngineActions implements DocumentEngineActions {
 
   final PdfViewerController _controller;
 
+  static const _zoomStep = 0.2;
+
   @override
   Future<void> goToPage(int page) async {
     if (page < 1 || page > _controller.pageCount) {
@@ -20,13 +22,13 @@ class PdfDocumentEngineActions implements DocumentEngineActions {
   }
 
   @override
-  Future<void> zoomIn() {
-    return _controller.zoomUp();
-  }
+Future<void> zoomIn() async {
+  return _zoomByStep(_zoomStep);
+}
 
   @override
   Future<void> zoomOut() {
-    return _controller.zoomDown();
+    return _zoomByStep(-_zoomStep);
   }
 
   @override
@@ -76,4 +78,17 @@ class PdfDocumentEngineActions implements DocumentEngineActions {
 
     return goToPage(page - 1);
   }
+
+  Future<void> _zoomByStep(double step) async {
+  final currentZoom = _controller.currentZoom;
+  final newZoom = (currentZoom + step).clamp(
+    _controller.minScale,
+    _controller.maxScale,
+  );
+
+  final visibleRect = _controller.visibleRect;
+  final centerInDocument = visibleRect.center;
+
+  await _controller.setZoom(centerInDocument, newZoom);
+}
 }
