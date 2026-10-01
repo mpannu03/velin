@@ -1,0 +1,156 @@
+{
+  "@@locale": "en",
+
+  "appName": "Velin",
+  "@appName": {
+    "description": "The name of the application."
+  },
+
+  "navigationHome": "Home",
+  "@navigationHome": {
+    "description": "Label for the Home section in the main application navigation."
+  },
+
+  "navigationReader": "Reader",
+  "@navigationReader": {
+    "description": "Label for the Reader section in the main application navigation."
+  },
+
+  "navigationEdit": "Edit",
+  "@navigationEdit": {
+    "description": "Label for the Edit section in the main application navigation."
+  },
+
+  "navigationTools": "Tools",
+  "@navigationTools": {
+    "description": "Label for the Tools section in the main application navigation."
+  },
+
+  "commonOpenDocument": "Open Document",
+  "@commonOpenDocument": {
+    "description": "Generic action to open a document or file."
+  },
+
+  "commonClose": "Close",
+  "@commonClose": {
+    "description": "Generic action to close something."
+  },
+
+  "commonCancel": "Cancel",
+  "@commonCancel": {
+    "description": "Generic action to cancel an operation."
+  },
+
+  "commonSave": "Save",
+  "@commonSave": {
+    "description": "Generic action to save changes."
+  },
+
+  "readerNoDocumentOpen": "No document open",
+  "@readerNoDocumentOpen": {
+    "description": "Message displayed in the Reader when no document is currently open."
+  },
+
+  "readerNoDocumentOpenDescription": "Open a file to start reading",
+  "@readerNoDocumentOpenDescription": {
+    "description": "Description for the message displayed in the Reader when no document is currently open."
+  },
+
+  "menuFile": "File",
+  "@menuFile": {
+    "description": "Label for the File menu in the application."
+  },
+
+  "menuEdit": "Edit",
+  "@menuEdit": {
+    "description": "Label for the Edit menu in the application."
+  },
+
+  "menuView": "View",
+  "@menuView": {
+    "description": "Label for the View menu in the application."
+  },
+
+  "toolSelect": "Select",
+  "@toolSelect": {
+    "description": "Label for the Select action."
+  },
+
+  "toolDictionary": "Dictionary",
+  "@toolDictionary": {
+    "description": "Label for the Dictionary action."
+  },
+
+  "panelComments": "Comments",
+  "@panelComments": {
+    "description": "Label for the Comments panel."
+  },
+
+  "panelBookmarks": "Bookmarks",
+  "@panelBookmarks": {
+    "description": "Label for the Bookmarks panel."
+  },
+
+  "panelSearch": "Search",
+  "@panelSearch": {
+    "description": "Label for the Search panel."
+  },
+
+  "toolZoomIn": "Zoom In",
+  "@toolZoomIn": {
+    "description": "Label for the Zoom In action."
+  },
+
+  "toolZoomOut": "Zoom Out",
+  "@toolZoomOut": {
+    "description": "Label for the Zoom Out action."
+  },
+
+  "toolPageOf": "Page {current} of {total}",
+  "@toolPageOf": {
+    "description": "Displays the current page number and total number of pages in the PDF.",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+
+  "panelSearchInDocument": "Search in Document...",
+  "@panelSearchInDocument": {
+    "description": "Label for the search functionality within the document."
+  },
+  
+  "panelSearchClear": "Clear Search",
+  "@panelSearchClear": {
+    "description": "Label for the clear search action."
+  },
+
+  "panelSearchToggleCaseSensitivity": "Toggle Case Sensitivity",
+  "@panelSearchToggleCaseSensitivity": {
+    "description": "Label for the toggle case sensitivity action."
+  },
+
+  "panelSearchEnterText": "Enter text to search",
+  "@panelSearchEnterText": {
+    "description": "Placeholder text for the search input field."
+  },
+
+  "panelSearchNoMatchFound": "No match found",
+  "@panelSearchNoMatchFound": {
+    "description": "Message displayed when no search results are found."
+  },
+
+  "panelSearchResultCount": "{count} results found",
+  "@panelSearchResultCount": {
+    "description": "Displays the number of search results found.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
