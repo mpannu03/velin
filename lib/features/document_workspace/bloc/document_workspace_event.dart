@@ -61,3 +61,11 @@ final class DocumentWorkspaceSelectSearch extends DocumentWorkspaceEvent {
 
   final TextSearchResult textSearchResult;
 }
+
+final class DocumentWorkspaceSelectBookmark extends DocumentWorkspaceEvent {
+  const DocumentWorkspaceSelectBookmark(
+    this.bookmark,
+  );
+
+  final Bookmark bookmark;
+}

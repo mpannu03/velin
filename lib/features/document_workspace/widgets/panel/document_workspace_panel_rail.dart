@@ -52,21 +52,21 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
           children: [
             if (capabilities.comments)
               VelinIconButton(
-                icon: Icons.comment_outlined,
+                icon: Symbols.comment,
                 tooltip: context.l10n.panelComments,
                 onPressed: () => onPanelSelected(WorkspacePanel.comments),
                 isSelected: selectedPanel == WorkspacePanel.comments,
               ),
             if (capabilities.bookmarks)
               VelinIconButton(
-                icon: Icons.sticky_note_2_outlined,
+                icon: Symbols.bookmark,
                 tooltip: context.l10n.panelBookmarks,
                 onPressed: () => onPanelSelected(WorkspacePanel.bookmarks),
                 isSelected: selectedPanel == WorkspacePanel.bookmarks,
               ),
             if (capabilities.search)
               VelinIconButton(
-                icon: Icons.search_outlined,
+                icon: Symbols.search,
                 tooltip: context.l10n.panelSearch,
                 onPressed: () => onPanelSelected(WorkspacePanel.search),
                 isSelected: selectedPanel == WorkspacePanel.search,

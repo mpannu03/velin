@@ -157,5 +157,10 @@
         "type": "int"
       }
     }
+  },
+
+  "panelBookmarkEmpty": "No bookmarks",
+  "@panelBookmarkEmpty": {
+    "description": "Message displayed when the bookmarks panel is empty."
   }
 }

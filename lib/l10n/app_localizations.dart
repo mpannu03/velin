@@ -267,6 +267,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} results found'**
   String panelSearchResultCount(int count);
+
+  /// Message displayed when the bookmarks panel is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No bookmarks'**
+  String get panelBookmarkEmpty;
 }
 
 class _AppLocalizationsDelegate

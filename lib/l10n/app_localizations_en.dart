@@ -99,4 +99,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String panelSearchResultCount(int count) {
     return '$count results found';
   }
+
+  @override
+  String get panelBookmarkEmpty => 'No bookmarks';
 }

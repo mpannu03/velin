@@ -48,6 +48,7 @@ class DocumentWorkspacePage extends StatelessWidget {
                 capabilities: _engine.capabilities,
                 documentViewer: documentViewer,
                 searchState: state.searchState,
+                bookmarks: state.bookmarks,
                 onToolSelected: (tool) {
                   context.read<DocumentWorkspaceBloc>().add(
                         DocumentWorkspaceToolSelected(tool),
@@ -79,6 +80,11 @@ class DocumentWorkspacePage extends StatelessWidget {
                 onTextSearchResultSelected: (result) {
                   context.read<DocumentWorkspaceBloc>().add(
                         DocumentWorkspaceSelectSearch(result),
+                      );
+                },
+                onBookmarkSelected: (bookmark) {
+                  context.read<DocumentWorkspaceBloc>().add(
+                        DocumentWorkspaceSelectBookmark(bookmark),
                       );
                 },
               ),

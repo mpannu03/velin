@@ -13,6 +13,8 @@ class DocumentWorkspacePanel extends StatelessWidget {
     required this.onTextSearch,
     required this.onClearSearch,
     required this.onTextSearchResultSelected,
+    required this.bookmarks,
+    required this.onBookmarkSelected,
   });
 
   final WorkspacePanel panel;
@@ -21,6 +23,9 @@ class DocumentWorkspacePanel extends StatelessWidget {
   final Function(String text, bool caseInsensitive) onTextSearch;
   final VoidCallback onClearSearch;
   final ValueChanged<TextSearchResult> onTextSearchResultSelected;
+
+  final List<Bookmark> bookmarks;
+  final ValueChanged<Bookmark> onBookmarkSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +37,10 @@ class DocumentWorkspacePanel extends StatelessWidget {
 
   Widget get panelBody => switch (panel) {
         WorkspacePanel.comments => Text('Comments'),
-        WorkspacePanel.bookmarks => Text('Bookmarks'),
+        WorkspacePanel.bookmarks => BookmarkPanel(
+          bookmarks: bookmarks,
+          onBookmarkSelected: onBookmarkSelected,
+        ),
         WorkspacePanel.search => SearchPanel(
           onTextSearch: onTextSearch,
           onClearSearch: onClearSearch,

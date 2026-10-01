@@ -22,6 +22,7 @@ class DocumentWorkspaceBloc
     on<DocumentWorkspaceSearch>(_onSearch);
     on<DocumentWorkspaceClearSearch>(_onClearSearch);
     on<DocumentWorkspaceSelectSearch>(_onSelectSearch);
+    on<DocumentWorkspaceSelectBookmark>(_onSelectBookmark);
 
     _engine.listener = DocumentWorkspaceListener(bloc: this);
   }
@@ -46,12 +47,19 @@ class DocumentWorkspaceBloc
   void _onReady(
     DocumentWorkspaceReady event,
     Emitter<DocumentWorkspaceState> emit,
-  ) {
+  ) async {
+    List<Bookmark> bookmarks = const [];
+
+    if (_engine.capabilities.bookmarks) {
+      bookmarks = await _engine.bookmark!.bookmarks;
+    }
+
     emit(
       DocumentWorkspaceLoaded(
         currentPage: _engine.snapshot.currentPage,
         pageCount: _engine.snapshot.pageCount,
         currentZoom: _engine.snapshot.zoom,
+        bookmarks: bookmarks,
       ),
     );
   }
@@ -219,6 +227,27 @@ class DocumentWorkspaceBloc
         searchState: currentState.searchState.copyWith(
           currentIndex: event.textSearchResult.index
         ),
+      ),
+    );
+  }
+
+  void _onSelectBookmark(
+    DocumentWorkspaceSelectBookmark event,
+    Emitter<DocumentWorkspaceState> emit,
+  ) async {
+    final currentState = state;
+
+    if (currentState is! DocumentWorkspaceLoaded
+        || !_engine.capabilities.bookmarks
+    ) {
+      return;
+    }
+
+    _engine.bookmark?.goto(event.bookmark);
+
+    emit(
+      currentState.copyWith(
+        bookmarks: currentState.bookmarks,
       ),
     );
   }

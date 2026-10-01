@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'document_workspace_bloc.dart';
 
 sealed class DocumentWorkspaceState {
@@ -20,7 +19,8 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
     this.selectedTool = WorkspaceTool.select,
     this.selectedPanel,
     required this.currentZoom,
-    this.searchState = const SearchState()
+    this.searchState = const SearchState(),
+    this.bookmarks = const [],
   });
 
   final int? currentPage;
@@ -29,6 +29,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
   final WorkspaceTool selectedTool;
   final WorkspacePanel? selectedPanel;
   final SearchState searchState;
+  final List<Bookmark> bookmarks;
 
   DocumentWorkspaceLoaded copyWith({
     Object? currentPage = _unset,
@@ -37,6 +38,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
     WorkspaceTool? selectedTool,
     Object? selectedPanel = _unset,
     SearchState? searchState,
+    List<Bookmark>? bookmarks ,
   }) {
     return DocumentWorkspaceLoaded(
       currentPage: identical(currentPage, _unset)
@@ -49,6 +51,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
           ? this.selectedPanel
           : selectedPanel as WorkspacePanel?,
       searchState: searchState ?? this.searchState,
+      bookmarks: bookmarks ?? this.bookmarks,
     );
   }
 }

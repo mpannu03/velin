@@ -23,6 +23,8 @@ class DocumentWorkspaceViewModel {
     required this.onTextSearch,
     required this.onClearSearch,
     required this.onTextSearchResultSelected,
+    required this.bookmarks,
+    required this.onBookmarkSelected,
   });
 
   final int? currentPage;
@@ -47,4 +49,7 @@ class DocumentWorkspaceViewModel {
   final Function(String text, bool caseInsensitive) onTextSearch;
   final VoidCallback onClearSearch;
   final ValueChanged<TextSearchResult> onTextSearchResultSelected;
+
+  final List<Bookmark> bookmarks;
+  final ValueChanged<Bookmark> onBookmarkSelected;
 }

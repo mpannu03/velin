@@ -5,6 +5,8 @@ import 'package:velin/core/document/engine/engine.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 import 'package:velin/shared/widgets/widgets.dart';
 
+import 'empty_state_shell.dart';
+
 class SearchPanel extends StatefulWidget {
   const SearchPanel({
     super.key,
@@ -164,37 +166,43 @@ class _SearchPanelState extends State<SearchPanel> {
   }
 
   Widget _buildEmptyState(ThemeData theme, BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _submittedQuery.isEmpty
-                ? Icon(
-                    Symbols.search,
-                    size: 48,
-                    color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-                  )
-                : Icon(
-                    Symbols.search_off,
-                    size: 48,
-                    color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-                  ),
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              _submittedQuery.isEmpty
-                  ? context.l10n.panelSearchEnterText
-                  : context.l10n.panelSearchNoMatchFound,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
+    return EmptyStateShell(
+      icon: _submittedQuery.isEmpty ? Symbols.search : Symbols.search_off,
+      message: _submittedQuery.isEmpty
+          ? context.l10n.panelSearchEnterText
+          : context.l10n.panelSearchNoMatchFound,
     );
+    // return Center(
+    //   child: Padding(
+    //     padding: const EdgeInsets.all(24.0),
+    //     child: Column(
+    //       mainAxisSize: MainAxisSize.min,
+    //       children: [
+    //         _submittedQuery.isEmpty
+    //             ? Icon(
+    //                 Symbols.search,
+    //                 size: 48,
+    //                 color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+    //               )
+    //             : Icon(
+    //                 Symbols.search_off,
+    //                 size: 48,
+    //                 color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+    //               ),
+    //         const SizedBox(height: AppSpacing.sm),
+    //         Text(
+    //           _submittedQuery.isEmpty
+    //               ? context.l10n.panelSearchEnterText
+    //               : context.l10n.panelSearchNoMatchFound,
+    //           style: theme.textTheme.bodyMedium?.copyWith(
+    //             color: theme.colorScheme.onSurfaceVariant,
+    //           ),
+    //           textAlign: TextAlign.center,
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }
 
