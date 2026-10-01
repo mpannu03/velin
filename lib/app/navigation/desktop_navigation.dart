@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:velin/app/navigation/app_navigation.dart';
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 
 class DesktopNavigation extends StatelessWidget {
   const DesktopNavigation({
@@ -19,11 +20,11 @@ class DesktopNavigation extends StatelessWidget {
   static const _horizontalItemPadding = 12.0;
 
   /// Measures the widest segment so the pill has a uniform width.
-  double _measureSegmentWidth(TextStyle? textStyle) {
+  double _measureSegmentWidth(TextStyle? textStyle, BuildContext context) {
     var widest = 0.0;
     for (final item in AppNavigationItem.values) {
       final tp = TextPainter(
-        text: TextSpan(text: item.label, style: textStyle),
+        text: TextSpan(text: item.label(context), style: textStyle),
         textDirection: TextDirection.ltr,
         maxLines: 1,
       )..layout();
@@ -39,7 +40,7 @@ class DesktopNavigation extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final textStyle = Theme.of(context).textTheme.bodyMedium;
 
-    final segmentWidth = _measureSegmentWidth(textStyle);
+    final segmentWidth = _measureSegmentWidth(textStyle, context);
     final containerWidth =
         segmentWidth * AppNavigationItem.values.length + 2 * _containerPadding;
 
@@ -140,7 +141,7 @@ class _NavigationItem extends StatelessWidget {
               const SizedBox(width: AppSpacing.xs),
               Flexible(
                 child: Text(
-                  item.label,
+                  item.label(context),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: textTheme.bodyMedium?.copyWith(color: fg),

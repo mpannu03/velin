@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 import 'package:velin/shared/utils/utils.dart';
 import 'package:velin/shared/widgets/widgets.dart';
 
@@ -47,19 +48,19 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
           children: [
             VelinIconButton(
               icon: Icons.comment_outlined,
-              tooltip: 'Comments',
+              tooltip: context.l10n.panelComments,
               onPressed: () => onPanelSelected(WorkspacePanel.comments),
               isSelected: selectedPanel == WorkspacePanel.comments,
             ),
             VelinIconButton(
               icon: Icons.sticky_note_2_outlined,
-              tooltip: 'Bookmarks',
+              tooltip: context.l10n.panelBookmarks,
               onPressed: () => onPanelSelected(WorkspacePanel.bookmarks),
               isSelected: selectedPanel == WorkspacePanel.bookmarks,
             ),
             VelinIconButton(
               icon: Icons.search_outlined,
-              tooltip: 'Search',
+              tooltip: context.l10n.panelSearch,
               onPressed: () => onPanelSelected(WorkspacePanel.search),
               isSelected: selectedPanel == WorkspacePanel.search,
             ),
@@ -72,7 +73,7 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
             SizedBox(height: AppSpacing.md),
             VelinIconButton(
               icon: Icons.zoom_in_outlined,
-              tooltip: 'Zoom',
+              tooltip: context.l10n.toolZoomIn,
               onPressed: zoomIn,
             ),
             Text(getPercentagefromDouble(currentZoom),
@@ -80,7 +81,7 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
             ),
             VelinIconButton(
               icon: Icons.zoom_out_outlined,
-              tooltip: 'Zoom Out',
+              tooltip: context.l10n.toolZoomOut,
               onPressed: zoomOut,
             )
           ],

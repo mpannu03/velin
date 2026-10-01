@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 
 class PageIndicator extends StatelessWidget {
   const PageIndicator({
@@ -24,7 +25,10 @@ class PageIndicator extends StatelessWidget {
     }
 
     return Tooltip(
-      message: 'Page $currentPage of $pageCount',
+      message: context.l10n.toolPageOf(
+        currentPage!,
+        pageCount,
+      ),
       child: Column(
         children: [
           _PageInputField(

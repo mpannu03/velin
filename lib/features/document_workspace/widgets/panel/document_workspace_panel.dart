@@ -25,7 +25,7 @@ class DocumentWorkspacePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PanelShell(
-      title: panel.label,
+      title: panel.label(context),
       child: panelBody,
     );
   }

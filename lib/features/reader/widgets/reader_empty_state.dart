@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 
 class ReaderEmptyState extends StatelessWidget {
   const ReaderEmptyState({
@@ -37,7 +38,7 @@ class ReaderEmptyState extends StatelessWidget {
             const SizedBox(height: 20),
 
             Text(
-              'No document open',
+              context.l10n.readerNoDocumentOpen,
               style: text.titleMedium?.copyWith(
                 color: colors.onSurface,
                 fontWeight: FontWeight.w600,
@@ -47,7 +48,7 @@ class ReaderEmptyState extends StatelessWidget {
             const SizedBox(height: 6),
 
             Text(
-              'Open a file to start reading.',
+              context.l10n.readerNoDocumentOpenDescription,
               style: text.bodyMedium?.copyWith(
                 color: colors.onSurfaceVariant,
               ),
@@ -58,7 +59,7 @@ class ReaderEmptyState extends StatelessWidget {
             FilledButton.icon(
               onPressed: onOpenDocument,
               icon: const Icon(Icons.folder_open_outlined, size: 18),
-              label: const Text('Open document'),
+              label: Text(context.l10n.commonOpenDocument),
             ),
           ],
         ),

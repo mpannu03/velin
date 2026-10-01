@@ -1,6 +1,7 @@
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 import 'package:velin/shared/widgets/widgets.dart';
 
 import '../models/models.dart';
@@ -31,15 +32,15 @@ class DocumentWorkspaceToolRail extends StatelessWidget {
             children: [
               VelinIconButton(
                 icon: Symbols.arrow_selector_tool,
-                tooltip: 'Select',
+                tooltip: context.l10n.toolSelect,
                 onPressed: () => onToolSelected(WorkspaceTool.select),
                 isSelected: selectedTool == WorkspaceTool.select,
               ),
               VelinIconButton(
-                icon: Symbols.drag_pan_rounded,
-                tooltip: 'Pan',
-                onPressed: () => onToolSelected(WorkspaceTool.pan),
-                isSelected: selectedTool == WorkspaceTool.pan,
+                icon: Symbols.dictionary,
+                tooltip: context.l10n.toolDictionary,
+                onPressed: () => onToolSelected(WorkspaceTool.dictionary),
+                isSelected: selectedTool == WorkspaceTool.dictionary,
               ),
             ],
           ),

@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 
 import 'package:velin/shared/widgets/widgets.dart';
 import 'package:window_manager/window_manager.dart';
@@ -33,25 +34,25 @@ class _WindowRibbon extends StatelessWidget {
       color: Theme.of(context).colorScheme.primaryContainer,
       child: Row(
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
             child: Text(
-              'Velin',
+              context.l10n.appName,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
           VelinMenuButton(
-            label: 'File',
+            label: context.l10n.menuFile,
             onPressed: () {},
           ),
           VelinMenuButton(
-            label: 'Edit',
+            label: context.l10n.menuEdit,
             onPressed: () {},
           ),
           VelinMenuButton(
-            label: 'View',
+            label: context.l10n.menuView,
             onPressed: () {},
           ),
           const Expanded(

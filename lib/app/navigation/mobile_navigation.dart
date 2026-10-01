@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'package:velin/app/navigation/app_navigation.dart';
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/shared/extensions/i10n_ext.dart';
 
 class MobileNavigation extends StatelessWidget {
   const MobileNavigation({
@@ -65,7 +66,7 @@ class _NavigationItem extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            item.label,
+            item.label(context),
           ),
         ],
       ),

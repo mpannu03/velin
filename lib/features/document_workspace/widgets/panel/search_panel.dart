@@ -2,6 +2,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 import 'package:velin/core/document/engine/engine.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 import 'package:velin/shared/widgets/widgets.dart';
 
 class SearchPanel extends StatefulWidget {
@@ -94,7 +95,7 @@ class _SearchPanelState extends State<SearchPanel> {
                 onChanged: (_) => _handleChange(),
                 onSubmitted: (_) => _handleSubmit(),
                 decoration: InputDecoration(
-                  hintText: 'Search in document...',
+                  hintText: context.l10n.panelSearchInDocument,
                   suffixIcon: hasText
                       ? IconButton(
                           onPressed: _handleSubmit, 
@@ -115,20 +116,19 @@ class _SearchPanelState extends State<SearchPanel> {
           children: [
             if (widget.results.isNotEmpty)
               Text(
-                'Results: ${widget.results.length}',
+                context.l10n.panelSearchResultCount(widget.results.length),
                 style: textTheme.bodySmall,
               ),
             Spacer(),
-            // _iconButton(Symbols.clear_all, _handleClear, 'Clear search')
             VelinToolButton(
               icon: Symbols.match_case,
-              toolTip: 'Toggle case sensitivity',
+              toolTip: context.l10n.panelSearchToggleCaseSensitivity,
               onPressed: _toggleCaseInsensitive,
               isSelected: !caseInsensitive,
             ),
             VelinToolButton(
               icon: Symbols.clear_all,
-              toolTip: 'Clear search',
+              toolTip: context.l10n.panelSearchClear,
               onPressed: _handleClear
             )
           ],
@@ -143,7 +143,7 @@ class _SearchPanelState extends State<SearchPanel> {
           child: widget.isLoading
               ? CircularProgressIndicator()
               : widget.results.isEmpty
-                  ? _buildEmptyState(theme)
+                  ? _buildEmptyState(theme, context)
                   : ListView.builder(
                       padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
                       itemCount: widget.results.length,
@@ -163,7 +163,7 @@ class _SearchPanelState extends State<SearchPanel> {
     );
   }
 
-  Widget _buildEmptyState(ThemeData theme) {
+  Widget _buildEmptyState(ThemeData theme, BuildContext context) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -184,8 +184,8 @@ class _SearchPanelState extends State<SearchPanel> {
             const SizedBox(height: AppSpacing.sm),
             Text(
               _submittedQuery.isEmpty
-                  ? 'Enter text to search'
-                  : 'No matches found',
+                  ? context.l10n.panelSearchEnterText
+                  : context.l10n.panelSearchNoMatchFound,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),

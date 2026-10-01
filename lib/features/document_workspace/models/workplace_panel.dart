@@ -1,3 +1,6 @@
+import 'package:material_ui/material_ui.dart';
+import 'package:velin/shared/extensions/extensions.dart';
+
 enum WorkspacePanel {
   comments,
   bookmarks,
@@ -5,11 +8,11 @@ enum WorkspacePanel {
 }
 
 extension WorkplacePanelLabel on WorkspacePanel {
-  String get label {
+  String label(BuildContext context) {
     return switch (this) {
-      WorkspacePanel.comments => 'Comments',
-      WorkspacePanel.bookmarks => 'Bookmarks',
-      WorkspacePanel.search => 'Search',
+      WorkspacePanel.comments => context.l10n.panelComments,
+      WorkspacePanel.bookmarks => context.l10n.panelBookmarks,
+      WorkspacePanel.search => context.l10n.panelSearch,
     };
   }
 }

@@ -1,4 +1,4 @@
 enum WorkspaceTool {
   select,
-  pan,
+  dictionary,
 }
