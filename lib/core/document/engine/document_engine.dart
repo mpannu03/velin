@@ -17,6 +17,8 @@ abstract interface class DocumentEngine {
 
   BookmarkCapability? get bookmark;
 
+  AnnotationCapability? get annotation;
+
   set listener(DocumentEngineListener? listener);
 
   Widget buildViewer({
