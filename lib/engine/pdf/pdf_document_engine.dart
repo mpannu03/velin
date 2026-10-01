@@ -22,8 +22,7 @@ class PdfDocumentEngine implements DocumentEngine {
 
   late final PdfDocumentEngineActions _actions;
 
-  late final PdfTextSearchCapability _textSearch =
-      PdfTextSearchCapability(_controller);
+  PdfTextSearchCapability? _textSearch;
 
   DocumentEngineListener? _listener;
 
@@ -70,6 +69,11 @@ class PdfDocumentEngine implements DocumentEngine {
         backgroundColor: config.backgroundColor ?? Colors.grey,
         onPageChanged: _onPageChanged,
         onViewerReady: (_, _) => _onViewerReady(),
+        pagePaintCallbacks: [
+           (canvas, pageRect, page) {
+            _textSearch?.pageTextMatchPaintCallback(canvas, pageRect, page);
+          },
+        ]
       ),
     );
   }
@@ -90,6 +94,8 @@ class PdfDocumentEngine implements DocumentEngine {
   }
 
   void _onViewerReady() {
+    _textSearch ??= PdfTextSearchCapability(_controller);
+
     _lastZoom = _controller.currentZoom;
 
     _listener?.onReady();

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:material_ui/material_ui.dart';
 import 'package:pdfrx/pdfrx.dart';
 import 'package:velin/core/document/engine/engine.dart';
 
@@ -36,8 +37,12 @@ class PdfTextSearchCapability implements TextSearchCapability {
       controller.add(getCurrentResults());
 
       if (!_textSearcher.isSearching) {
-        _textSearcher.removeListener(listener);
-        controller.close();
+        scheduleMicrotask(() {
+          if (!controller.isClosed) {
+            _textSearcher.removeListener(listener);
+            controller.close();
+          }
+        });
       }
     }
 
@@ -56,6 +61,10 @@ class PdfTextSearchCapability implements TextSearchCapability {
 
   @override
   Future<void> selectResult(TextSearchResult result) async {
-    final v = await _textSearcher.goToMatchOfIndex(result.index);;
+    await _textSearcher.goToMatchOfIndex(result.index);
+  }
+
+  void pageTextMatchPaintCallback(Canvas canvas, Rect pageRect, PdfPage page) {
+    return _textSearcher.pageTextMatchPaintCallback(canvas, pageRect, page);
   }
 }
