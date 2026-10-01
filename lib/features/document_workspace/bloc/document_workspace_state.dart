@@ -96,4 +96,22 @@ class SearchState {
           ? this.currentIndex : currentIndex as int?,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SearchState &&
+          runtimeType == other.runtimeType &&
+          query == other.query &&
+          listEquals(results, other.results) &&
+          isLoading == other.isLoading &&
+          currentIndex == other.currentIndex;
+
+  @override
+  int get hashCode => Object.hash(
+        query,
+        Object.hashAll(results),
+        isLoading,
+        currentIndex,
+      );
 }
