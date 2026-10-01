@@ -1,3 +1,4 @@
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 import 'package:velin/core/document/engine/engine.dart';
@@ -48,17 +49,20 @@ class DocumentWorkspacePanel extends StatelessWidget {
   Widget? get trailing => switch (panel) {
         WorkspacePanel.comments => null,
         WorkspacePanel.bookmarks => null,
-        WorkspacePanel.search => _clearButton(() {}),
+        WorkspacePanel.search => null,
       };
 }
 
-Widget _clearButton(VoidCallback onPressed) {
-  return IconButton(
-    onPressed: () => onPressed(),
-    icon: const Icon(Icons.clear, size: 16),
-    padding: EdgeInsets.all(AppSpacing.xs),
-    style: IconButton.styleFrom(
-      minimumSize: Size.zero,
+Widget _clearButton(VoidCallback onPressed, String tooltip) {
+  return Tooltip(
+    message: tooltip,
+    child: IconButton(
+      onPressed: () => onPressed(),
+      icon: const Icon(Symbols.clear, size: 16),
+      padding: EdgeInsets.all(AppSpacing.xs),
+      style: IconButton.styleFrom(
+        minimumSize: Size.zero,
+      ),
     ),
   );
 }
