@@ -66,9 +66,9 @@ class DocumentWorkspacePage extends StatelessWidget {
                 onGotoPage: _engine.actions.goToPage,
                 zoomIn: _engine.actions.zoomIn,
                 zoomOut: _engine.actions.zoomOut,
-                onTextSearch: (text) {
+                onTextSearch: (text, caseInsensitive) {
                   context.read<DocumentWorkspaceBloc>().add(
-                        DocumentWorkspaceSearch(text),
+                        DocumentWorkspaceSearch(text, caseInsensitive),
                       );
                 },
                 onClearSearch: () {

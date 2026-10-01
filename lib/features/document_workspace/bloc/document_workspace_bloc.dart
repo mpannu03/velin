@@ -166,7 +166,7 @@ class DocumentWorkspaceBloc
     );
 
     await emit.onEach(
-      _engine.textSearch!.search(event.text), 
+      _engine.textSearch!.search(event.text, event.caseInsensitive), 
       onData: (textSearchResults) {
         emit(
           currentState.copyWith(

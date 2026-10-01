@@ -41,9 +41,13 @@ final class DocumentWorkspacePanelClosed extends DocumentWorkspaceEvent {
 }
 
 final class DocumentWorkspaceSearch extends DocumentWorkspaceEvent {
-  const DocumentWorkspaceSearch(this.text);
+  const DocumentWorkspaceSearch(
+    this.text, 
+    this.caseInsensitive
+  );
 
   final String text;
+    final bool caseInsensitive;
 }
 
 final class DocumentWorkspaceClearSearch extends DocumentWorkspaceEvent {
@@ -51,7 +55,9 @@ final class DocumentWorkspaceClearSearch extends DocumentWorkspaceEvent {
 }
 
 final class DocumentWorkspaceSelectSearch extends DocumentWorkspaceEvent {
-  const DocumentWorkspaceSelectSearch(this.textSearchResult);
+  const DocumentWorkspaceSelectSearch(
+    this.textSearchResult,
+  );
 
   final TextSearchResult textSearchResult;
 }

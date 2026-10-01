@@ -44,7 +44,7 @@ class DocumentWorkspaceViewModel {
   final VoidCallback onPanelClosed;
 
   final SearchState searchState;
-  final Function(String text) onTextSearch;
+  final Function(String text, bool caseInsensitive) onTextSearch;
   final VoidCallback onClearSearch;
   final ValueChanged<TextSearchResult> onTextSearchResultSelected;
 }

@@ -16,7 +16,12 @@ class PdfTextSearchCapability implements TextSearchCapability {
   }
 
   @override
-  Stream<List<TextSearchResult>> search(String text) {
+  Stream<List<TextSearchResult>> search(
+    String text,
+    bool caseInsensitive,
+  ) {
+    _textSearcher.resetTextSearch();
+
     final controller = StreamController<List<TextSearchResult>>();
 
     List<TextSearchResult> getCurrentResults() {
@@ -47,7 +52,7 @@ class PdfTextSearchCapability implements TextSearchCapability {
     }
 
     _textSearcher.addListener(listener);
-    _textSearcher.startTextSearch(text, caseInsensitive: true);
+    _textSearcher.startTextSearch(text, caseInsensitive: caseInsensitive);
 
     controller.onCancel = () {
       _textSearcher.removeListener(listener);

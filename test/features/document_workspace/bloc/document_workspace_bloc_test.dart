@@ -31,19 +31,19 @@ void main() {
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'searches once and stores the returned results',
     setUp: () {
-      when(() => textSearch.search('needle')).thenAnswer(
+      when(() => textSearch.search('needle', false)).thenAnswer(
         (_) => Stream.value([result]),
       );
     },
     build: () => DocumentWorkspaceBloc(engine: engine),
     seed: () => const DocumentWorkspaceLoaded(pageCount: 1, currentZoom: 1),
-    act: (bloc) => bloc.add(const DocumentWorkspaceSearch('needle')),
+    act: (bloc) => bloc.add(const DocumentWorkspaceSearch('needle', false)),
     expect: () => [
       isA<DocumentWorkspaceLoaded>()
           .having((state) => state.searchState.results, 'results', [result])
           .having((state) => state.searchState.isLoading, 'isLoading', false),
     ],
-    verify: (_) => verify(() => textSearch.search('needle')).called(1),
+    verify: (_) => verify(() => textSearch.search('needle', false)).called(1),
   );
 
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(

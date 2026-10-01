@@ -2,6 +2,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 import 'package:velin/core/document/engine/engine.dart';
+import 'package:velin/shared/widgets/widgets.dart';
 
 class SearchPanel extends StatefulWidget {
   const SearchPanel({
@@ -14,7 +15,7 @@ class SearchPanel extends StatefulWidget {
     required this.isLoading,
   });
 
-  final Function(String text) onTextSearch;
+  final Function(String text, bool caseInsensitive) onTextSearch;
   final VoidCallback onClearSearch;
   final ValueChanged<TextSearchResult> onTextSearchResultSelected;
 
@@ -33,6 +34,7 @@ class _SearchPanelState extends State<SearchPanel> {
   final FocusNode _focusNode = FocusNode();
 
   String _submittedQuery = '';
+  bool caseInsensitive = false;
 
   @override
   void dispose() {
@@ -45,6 +47,12 @@ class _SearchPanelState extends State<SearchPanel> {
     setState(() {});
   }
 
+  void _toggleCaseInsensitive() {
+    setState(() {
+      caseInsensitive = !caseInsensitive;
+    });
+  }
+
   void _handleSubmit() {
     final query = _controller.text.trim();
     if (query.isEmpty) {
@@ -54,7 +62,7 @@ class _SearchPanelState extends State<SearchPanel> {
     setState(() {
       _submittedQuery = query;
     });
-    widget.onTextSearch(query);
+    widget.onTextSearch(query, caseInsensitive);
   }
 
   void _handleClear() {
@@ -68,6 +76,7 @@ class _SearchPanelState extends State<SearchPanel> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     final hasText = _controller.text.isNotEmpty;
 
     return Column(
@@ -104,8 +113,24 @@ class _SearchPanelState extends State<SearchPanel> {
         SizedBox(height: AppSpacing.xs),
         Row(
           children: [
+            if (widget.results.isNotEmpty)
+              Text(
+                'Results: ${widget.results.length}',
+                style: textTheme.bodySmall,
+              ),
             Spacer(),
-            _iconButton(Symbols.clear_all, _handleClear, 'Clear search')
+            // _iconButton(Symbols.clear_all, _handleClear, 'Clear search')
+            VelinToolButton(
+              icon: Symbols.match_case,
+              toolTip: 'Toggle case sensitivity',
+              onPressed: _toggleCaseInsensitive,
+              isSelected: !caseInsensitive,
+            ),
+            VelinToolButton(
+              icon: Symbols.clear_all,
+              toolTip: 'Clear search',
+              onPressed: _handleClear
+            )
           ],
         ),
         if (widget.isLoading)
@@ -156,7 +181,7 @@ class _SearchPanelState extends State<SearchPanel> {
                     size: 48,
                     color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                   ),
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.sm),
             Text(
               _submittedQuery.isEmpty
                   ? 'Enter text to search'
@@ -230,24 +255,4 @@ class SearchResultItem extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget _iconButton(
-  IconData icon, 
-  VoidCallback 
-  onPressed, String 
-  tooltip, 
-  [double? size]
-) {
-  return Tooltip(
-    message: tooltip,
-    child: IconButton(
-      onPressed: () => onPressed(),
-      icon: Icon(icon, size: size ?? 18),
-      padding: EdgeInsets.all(AppSpacing.xs),
-      style: IconButton.styleFrom(
-        minimumSize: Size.zero,
-      ),
-    ),
-  );
 }
