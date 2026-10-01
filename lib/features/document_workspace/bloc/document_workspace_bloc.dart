@@ -184,12 +184,14 @@ class DocumentWorkspaceBloc
   void _onClearSearch(
     DocumentWorkspaceClearSearch event,
     Emitter<DocumentWorkspaceState> emit,
-  ) {
+  ) async{
     final currentState = state;
 
     if (currentState is! DocumentWorkspaceLoaded) {
       return;
     }
+
+    await _engine.textSearch?.clear();
 
     emit(
       currentState.copyWith(
