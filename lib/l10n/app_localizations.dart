@@ -280,6 +280,60 @@ abstract class AppLocalizations {
   /// **'Merge PDF'**
   String get toolsMergePdf;
 
+  /// Label for the Split PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Split PDF'**
+  String get toolsSplitPdf;
+
+  /// Label for the Extract Pages tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Extract Pages'**
+  String get toolsExtractPdf;
+
+  /// Label for the Compress PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Compress PDF'**
+  String get toolsCompressPdf;
+
+  /// Label for the PDF to Image tool.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF to Image'**
+  String get toolsPdfToImage;
+
+  /// Label for the Image to PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Image to PDF'**
+  String get toolsImageToPdf;
+
+  /// Label for the Rotate PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate PDF'**
+  String get toolsRotatePdf;
+
+  /// Label for the Protect PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Protect PDF'**
+  String get toolsProtectPdf;
+
+  /// Label for the Unlock PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock PDF'**
+  String get toolsUnlockPdf;
+
+  /// Label for the Watermark tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Watermark'**
+  String get toolsWatermark;
+
   /// Label for the Edit category.
   ///
   /// In en, this message translates to:

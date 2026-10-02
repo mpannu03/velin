@@ -17,6 +17,15 @@ class ToolDefinition {
 
 enum ToolId {
   mergePdf,
+  splitPdf,
+  extractPdf,
+  compressPdf,
+  pdfToImage,
+  imageToPdf,
+  rotatePdf,
+  protectPdf,
+  unlockPdf,
+  watermark,
 }
 
 enum ToolCategory {
@@ -30,6 +39,15 @@ extension ToolDefinitionX on ToolDefinition {
   String title(BuildContext context) {
     return switch (id) {
       ToolId.mergePdf => context.l10n.toolsMergePdf,
+      ToolId.splitPdf => context.l10n.toolsSplitPdf,
+      ToolId.extractPdf => context.l10n.toolsExtractPdf,
+      ToolId.compressPdf => context.l10n.toolsCompressPdf,
+      ToolId.pdfToImage => context.l10n.toolsPdfToImage,
+      ToolId.imageToPdf => context.l10n.toolsImageToPdf,
+      ToolId.rotatePdf => context.l10n.toolsRotatePdf,
+      ToolId.protectPdf => context.l10n.toolsProtectPdf,
+      ToolId.unlockPdf => context.l10n.toolsUnlockPdf,
+      ToolId.watermark => context.l10n.toolsWatermark,
     };
   }
 

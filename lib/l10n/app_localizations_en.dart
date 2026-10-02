@@ -107,6 +107,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolsMergePdf => 'Merge PDF';
 
   @override
+  String get toolsSplitPdf => 'Split PDF';
+
+  @override
+  String get toolsExtractPdf => 'Extract Pages';
+
+  @override
+  String get toolsCompressPdf => 'Compress PDF';
+
+  @override
+  String get toolsPdfToImage => 'PDF to Image';
+
+  @override
+  String get toolsImageToPdf => 'Image to PDF';
+
+  @override
+  String get toolsRotatePdf => 'Rotate PDF';
+
+  @override
+  String get toolsProtectPdf => 'Protect PDF';
+
+  @override
+  String get toolsUnlockPdf => 'Unlock PDF';
+
+  @override
+  String get toolsWatermark => 'Watermark';
+
+  @override
   String get toolsCategoryEdit => 'Edit';
 
   @override

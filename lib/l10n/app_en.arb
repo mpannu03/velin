@@ -169,6 +169,51 @@
     "description": "Label for the Merge PDF tool."
   },
 
+  "toolsSplitPdf": "Split PDF",
+  "@toolsSplitPdf": {
+    "description": "Label for the Split PDF tool."
+  },
+
+  "toolsExtractPdf": "Extract Pages",
+  "@toolsExtractPdf": {
+    "description": "Label for the Extract Pages tool."
+  },
+
+  "toolsCompressPdf": "Compress PDF",
+  "@toolsCompressPdf": {
+    "description": "Label for the Compress PDF tool."
+  },
+
+  "toolsPdfToImage": "PDF to Image",
+  "@toolsPdfToImage": {
+    "description": "Label for the PDF to Image tool."
+  },
+
+  "toolsImageToPdf": "Image to PDF",
+  "@toolsImageToPdf": {
+    "description": "Label for the Image to PDF tool."
+  },
+
+  "toolsRotatePdf": "Rotate PDF",
+  "@toolsRotatePdf": {
+    "description": "Label for the Rotate PDF tool."
+  },
+
+  "toolsProtectPdf": "Protect PDF",
+  "@toolsProtectPdf": {
+    "description": "Label for the Protect PDF tool."
+  },
+
+  "toolsUnlockPdf": "Unlock PDF",
+  "@toolsUnlockPdf": {
+    "description": "Label for the Unlock PDF tool."
+  },
+
+  "toolsWatermark": "Watermark",
+  "@toolsWatermark": {
+    "description": "Label for the Watermark tool."
+  },
+
   "toolsCategoryEdit": "Edit",
   "@toolsCategoryEdit": {
     "description": "Label for the Edit category."
