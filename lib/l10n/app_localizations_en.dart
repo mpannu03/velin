@@ -144,4 +144,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toolsCategorySecurity => 'Security';
+
+  @override
+  String get toolsCategoryAll => 'All';
+
+  @override
+  String get toolsIntro =>
+      'Combine, split, convert, optimize and secure your PDFs — all processed locally on your device.';
+
+  @override
+  String get toolsMergePdfDescription =>
+      'Combine multiple PDF files into one document.';
+
+  @override
+  String get toolsSplitPdfDescription =>
+      'Divide a PDF into multiple separate documents.';
+
+  @override
+  String get toolsExtractPdfDescription =>
+      'Pull selected pages out into a new PDF.';
+
+  @override
+  String get toolsCompressPdfDescription =>
+      'Reduce file size while keeping quality.';
+
+  @override
+  String get toolsPdfToImageDescription =>
+      'Convert each PDF page into an image file.';
+
+  @override
+  String get toolsImageToPdfDescription =>
+      'Turn one or more images into a PDF.';
+
+  @override
+  String get toolsRotatePdfDescription =>
+      'Rotate individual pages or a whole document.';
+
+  @override
+  String get toolsProtectPdfDescription =>
+      'Add a password so only intended viewers can open it.';
+
+  @override
+  String get toolsUnlockPdfDescription =>
+      'Remove a password from a protected PDF.';
+
+  @override
+  String get toolsWatermarkDescription =>
+      'Stamp your pages with text or an image mark.';
 }

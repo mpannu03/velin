@@ -33,14 +33,14 @@ abstract final class ToolRegistry {
   static const pdfToImage = ToolDefinition(
     id: ToolId.pdfToImage,
     category: ToolCategory.convert,
-    icon: Symbols.image,
+    icon: Symbols.document_scanner,
     route: '/tools/pdf-to-image',
   );
 
   static const imageToPdf = ToolDefinition(
     id: ToolId.imageToPdf,
     category: ToolCategory.convert,
-    icon: Symbols.image,
+    icon: Symbols.upload_file,
     route: '/tools/image-to-pdf',
   );
 

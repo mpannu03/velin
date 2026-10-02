@@ -357,6 +357,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Security'**
   String get toolsCategorySecurity;
+
+  /// Label for the filter option that shows tools from every category.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get toolsCategoryAll;
+
+  /// Introductory description shown on the Tools screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Combine, split, convert, optimize and secure your PDFs — all processed locally on your device.'**
+  String get toolsIntro;
+
+  /// Short description for the Merge PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Combine multiple PDF files into one document.'**
+  String get toolsMergePdfDescription;
+
+  /// Short description for the Split PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Divide a PDF into multiple separate documents.'**
+  String get toolsSplitPdfDescription;
+
+  /// Short description for the Extract Pages tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull selected pages out into a new PDF.'**
+  String get toolsExtractPdfDescription;
+
+  /// Short description for the Compress PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Reduce file size while keeping quality.'**
+  String get toolsCompressPdfDescription;
+
+  /// Short description for the PDF to Image tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert each PDF page into an image file.'**
+  String get toolsPdfToImageDescription;
+
+  /// Short description for the Image to PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn one or more images into a PDF.'**
+  String get toolsImageToPdfDescription;
+
+  /// Short description for the Rotate PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate individual pages or a whole document.'**
+  String get toolsRotatePdfDescription;
+
+  /// Short description for the Protect PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a password so only intended viewers can open it.'**
+  String get toolsProtectPdfDescription;
+
+  /// Short description for the Unlock PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove a password from a protected PDF.'**
+  String get toolsUnlockPdfDescription;
+
+  /// Short description for the Watermark tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Stamp your pages with text or an image mark.'**
+  String get toolsWatermarkDescription;
 }
 
 class _AppLocalizationsDelegate

@@ -51,8 +51,25 @@ extension ToolDefinitionX on ToolDefinition {
     };
   }
 
-  String categoryLabel(BuildContext context) {
-    return switch (category) {
+  String description(BuildContext context) {
+    return switch (id) {
+      ToolId.mergePdf => context.l10n.toolsMergePdfDescription,
+      ToolId.splitPdf => context.l10n.toolsSplitPdfDescription,
+      ToolId.extractPdf => context.l10n.toolsExtractPdfDescription,
+      ToolId.compressPdf => context.l10n.toolsCompressPdfDescription,
+      ToolId.pdfToImage => context.l10n.toolsPdfToImageDescription,
+      ToolId.imageToPdf => context.l10n.toolsImageToPdfDescription,
+      ToolId.rotatePdf => context.l10n.toolsRotatePdfDescription,
+      ToolId.protectPdf => context.l10n.toolsProtectPdfDescription,
+      ToolId.unlockPdf => context.l10n.toolsUnlockPdfDescription,
+      ToolId.watermark => context.l10n.toolsWatermarkDescription,
+    };
+  }
+}
+
+extension ToolCategoryX on ToolCategory {
+  String label(BuildContext context) {
+    return switch (this) {
       ToolCategory.edit => context.l10n.toolsCategoryEdit,
       ToolCategory.convert => context.l10n.toolsCategoryConvert,
       ToolCategory.optimize => context.l10n.toolsCategoryOptimize,

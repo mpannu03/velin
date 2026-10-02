@@ -232,5 +232,65 @@
   "toolsCategorySecurity": "Security",
   "@toolsCategorySecurity": {
     "description": "Label for the Security category."
+  },
+
+  "toolsCategoryAll": "All",
+  "@toolsCategoryAll": {
+    "description": "Label for the filter option that shows tools from every category."
+  },
+
+  "toolsIntro": "Combine, split, convert, optimize and secure your PDFs \u2014 all processed locally on your device.",
+  "@toolsIntro": {
+    "description": "Introductory description shown on the Tools screen."
+  },
+
+  "toolsMergePdfDescription": "Combine multiple PDF files into one document.",
+  "@toolsMergePdfDescription": {
+    "description": "Short description for the Merge PDF tool."
+  },
+
+  "toolsSplitPdfDescription": "Divide a PDF into multiple separate documents.",
+  "@toolsSplitPdfDescription": {
+    "description": "Short description for the Split PDF tool."
+  },
+
+  "toolsExtractPdfDescription": "Pull selected pages out into a new PDF.",
+  "@toolsExtractPdfDescription": {
+    "description": "Short description for the Extract Pages tool."
+  },
+
+  "toolsCompressPdfDescription": "Reduce file size while keeping quality.",
+  "@toolsCompressPdfDescription": {
+    "description": "Short description for the Compress PDF tool."
+  },
+
+  "toolsPdfToImageDescription": "Convert each PDF page into an image file.",
+  "@toolsPdfToImageDescription": {
+    "description": "Short description for the PDF to Image tool."
+  },
+
+  "toolsImageToPdfDescription": "Turn one or more images into a PDF.",
+  "@toolsImageToPdfDescription": {
+    "description": "Short description for the Image to PDF tool."
+  },
+
+  "toolsRotatePdfDescription": "Rotate individual pages or a whole document.",
+  "@toolsRotatePdfDescription": {
+    "description": "Short description for the Rotate PDF tool."
+  },
+
+  "toolsProtectPdfDescription": "Add a password so only intended viewers can open it.",
+  "@toolsProtectPdfDescription": {
+    "description": "Short description for the Protect PDF tool."
+  },
+
+  "toolsUnlockPdfDescription": "Remove a password from a protected PDF.",
+  "@toolsUnlockPdfDescription": {
+    "description": "Short description for the Unlock PDF tool."
+  },
+
+  "toolsWatermarkDescription": "Stamp your pages with text or an image mark.",
+  "@toolsWatermarkDescription": {
+    "description": "Short description for the Watermark tool."
   }
 }
