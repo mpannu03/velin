@@ -24,6 +24,7 @@ dependencies:
   uuid: ^4.6.0
   pdfrx: ^2.6.5
   material_symbols_icons: ^4.2960.0
+  pdfrx_engine: ^0.6.1
 
 dev_dependencies:
   flutter_test:

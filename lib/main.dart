@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:material_ui/material_ui.dart';
+import 'package:pdfrx/pdfrx.dart';
 import 'package:velin/core/di/injection.dart' as di;
 import 'package:window_manager/window_manager.dart';
 
@@ -25,6 +26,8 @@ void main() async {
       },
     );
   }
+
+  pdfrxFlutterInitialize();
 
   di.configureDependencies();
 
