@@ -11,7 +11,7 @@ class MergePdfInitial extends MergePdfState {
 class MergePdfReady extends MergePdfState {
   const MergePdfReady({
     this.inputs = const [],
-    this.outputFileName = 'merged.pdf',
+    this.outputFileName = '',
     this.outputDirectory,
     this.isSubmitting = false,
   });
