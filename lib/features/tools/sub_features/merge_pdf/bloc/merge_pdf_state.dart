@@ -1,17 +1,9 @@
 import 'merge_pdf_input.dart';
 
-sealed class MergePdfState {
-  const MergePdfState();
-}
-
-class MergePdfInitial extends MergePdfState {
-  const MergePdfInitial();
-}
-
-class MergePdfReady extends MergePdfState {
-  const MergePdfReady({
+class MergePdfState {
+  const MergePdfState({
     this.inputs = const [],
-    this.outputFileName = '',
+    this.outputFileName = 'merged.pdf',
     this.outputDirectory,
     this.isSubmitting = false,
   });
@@ -21,23 +13,33 @@ class MergePdfReady extends MergePdfState {
   final String? outputDirectory;
   final bool isSubmitting;
 
-  MergePdfReady copyWith({
+  bool get hasInputFiles => inputs.isNotEmpty;
+
+  bool get hasValidOutputDirectory =>
+      outputDirectory != null && outputDirectory!.trim().isNotEmpty;
+
+  bool get hasValidOutputFileName => outputFileName.trim().isNotEmpty;
+
+  bool get canMerge => hasInputFiles &&
+      hasValidOutputFileName &&
+      hasValidOutputDirectory &&
+      !isSubmitting;
+
+  MergePdfState copyWith({
     List<MergePdfToolInput>? inputs,
     String? outputFileName,
-    String? outputDirectory,
+    Object? outputDirectory = _unset,
     bool? isSubmitting,
   }) {
-    return MergePdfReady(
+    return MergePdfState(
       inputs: inputs ?? this.inputs,
       outputFileName: outputFileName ?? this.outputFileName,
-      outputDirectory: outputDirectory ?? this.outputDirectory,
+      outputDirectory: identical(outputDirectory, _unset)
+          ? this.outputDirectory
+          : outputDirectory as String?,
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
   }
 }
 
-class MergePdfError extends MergePdfState {
-  const MergePdfError(this.error);
-
-  final Object error;
-}
+const _unset = Object();

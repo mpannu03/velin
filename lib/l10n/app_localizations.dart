@@ -429,6 +429,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Stamp your pages with text or an image mark.'**
   String get toolsWatermarkDescription;
+
+  /// Introductory description for the Merge PDF tool page.
+  ///
+  /// In en, this message translates to:
+  /// **'Combine multiple PDF files into one document.'**
+  String get toolsMergeIntro;
+
+  /// Heading for the input files section on the Merge PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Input PDFs'**
+  String get toolsMergeInputSectionTitle;
+
+  /// Label for the button that adds more input PDF files.
+  ///
+  /// In en, this message translates to:
+  /// **'Add files'**
+  String get toolsMergeAddFiles;
+
+  /// Empty state title shown before any input files are added.
+  ///
+  /// In en, this message translates to:
+  /// **'No files added'**
+  String get toolsMergeNoFilesTitle;
+
+  /// Empty state description for the input files section.
+  ///
+  /// In en, this message translates to:
+  /// **'Add one or more PDF files to combine them.'**
+  String get toolsMergeNoFilesDescription;
+
+  /// Heading for the output settings section on the Merge PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Output'**
+  String get toolsMergeOutputSectionTitle;
+
+  /// Label for the output file name field.
+  ///
+  /// In en, this message translates to:
+  /// **'File name'**
+  String get toolsMergeOutputFileNameLabel;
+
+  /// Label for the button that lets the user choose where to save the result.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose folder'**
+  String get toolsMergeChooseFolder;
+
+  /// Hint shown when no output folder has been selected yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an output folder'**
+  String get toolsMergeChooseOutputFolder;
+
+  /// Helper text shown when no output folder is selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Select where the merged PDF should be saved'**
+  String get toolsMergeOutputPathHint;
+
+  /// Shows the full path of the file that will be created.
+  ///
+  /// In en, this message translates to:
+  /// **'Will save as {path}'**
+  String toolsMergeWillSaveAs(String path);
+
+  /// Label for the primary merge action button.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge PDF'**
+  String get toolsMergeButton;
+
+  /// Label shown on the merge button while merging is in progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Merging…'**
+  String get toolsMergeSubmitting;
+
+  /// Tooltip shown when the merge action cannot run yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Add files and choose an output location to continue.'**
+  String get toolsMergeButtonDisabledHint;
+
+  /// Tooltip for removing an input file from the merge list.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove file'**
+  String get toolsMergeRemoveFile;
+
+  /// Label for the optional page range selection field.
+  ///
+  /// In en, this message translates to:
+  /// **'Pages'**
+  String get toolsMergePagesLabel;
+
+  /// Placeholder example for the page range field.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 1-5, 8, last'**
+  String get toolsMergePagesHint;
+
+  /// Count of selected input files shown next to the section heading.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} files'**
+  String toolsMergeFileCount(int count);
+
+  /// Warning shown when the user tries to merge with no input files.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one PDF file to merge.'**
+  String get toolsMergeWarningNoFiles;
+
+  /// Warning shown when the user tries to merge without an output folder.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an output folder.'**
+  String get toolsMergeWarningNoFolder;
+
+  /// Warning shown when the output file name is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an output file name.'**
+  String get toolsMergeWarningNoFileName;
+
+  /// Notification shown when merging completes successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF merged successfully.'**
+  String get toolsMergeSuccess;
+
+  /// Notification shown when merging fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not merge the PDFs.'**
+  String get toolsMergeFailed;
+
+  /// Notification shown when a page range is invalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the page selection for {file}.'**
+  String toolsMergePageSelectionInvalid(String file);
 }
 
 class _AppLocalizationsDelegate

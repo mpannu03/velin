@@ -1,5 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 
+import 'package:velin/app/theme/theme.dart';
+import 'package:velin/shared/extensions/extensions.dart';
+
 import 'selected_file_item.dart';
 
 class MultiFilePicker extends StatelessWidget {
@@ -27,99 +30,144 @@ class MultiFilePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
+    final l10n = context.l10n;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              'Input files',
-              style: theme.textTheme.titleMedium,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              '${filePaths.length}',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: colors.onSurfaceVariant,
+    final isEmpty = filePaths.isEmpty;
+
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: colors.surfaceContainerLow,
+        border: Border.all(color: colors.outlineVariant),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                l10n.toolsMergeInputSectionTitle,
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            const Spacer(),
-            OutlinedButton.icon(
-              onPressed: onAddFiles,
-              icon: const Icon(Icons.add, size: 18),
-              label: const Text('Add files'),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        if (filePaths.isEmpty)
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 32,
-            ),
-            decoration: BoxDecoration(
-              border: Border.all(color: colors.outlineVariant),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              children: [
-                Icon(
-                  Icons.picture_as_pdf_outlined,
-                  size: 32,
-                  color: colors.onSurfaceVariant,
+              const SizedBox(width: AppSpacing.sm),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.sm,
+                  vertical: AppSpacing.xxs,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'No files added',
-                  style: theme.textTheme.bodyMedium,
+                decoration: BoxDecoration(
+                  color: colors.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(999),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'Add PDF files to get started.',
-                  style: theme.textTheme.bodySmall?.copyWith(
+                child: Text(
+                  l10n.toolsMergeFileCount(filePaths.length),
+                  style: theme.textTheme.labelSmall?.copyWith(
                     color: colors.onSurfaceVariant,
                   ),
                 ),
-              ],
-            ),
-          )
-        else
-          ReorderableListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            buildDefaultDragHandles: false,
-            itemCount: filePaths.length,
-            onReorderItem: onReorderItem,
-            itemBuilder: (context, index) {
-              return Padding(
-                key: ValueKey(filePaths[index]),
-                padding: const EdgeInsets.only(bottom: 8),
-                child: SelectedFileItem(
-                  filePath: filePaths[index],
-                  onRemove: () => onRemoveFile(index),
-                  showPageSelection: showPageSelection,
-                  pageSelection: pageSelections != null &&
-                          index < pageSelections!.length
-                      ? pageSelections![index]
-                      : null,
-                  onPageSelectionChanged: onPageSelectionChanged == null
-                      ? null
-                      : (value) => onPageSelectionChanged!(index, value),
-                  dragHandle: ReorderableDragStartListener(
-                    index: index,
+              ),
+              const Spacer(),
+              OutlinedButton.icon(
+                onPressed: onAddFiles,
+                icon: const Icon(Icons.add, size: 18),
+                label: Text(l10n.toolsMergeAddFiles),
+              ),
+            ],
+          ),
+          if (isEmpty) ...[
+            const SizedBox(height: AppSpacing.xl),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.xl,
+                vertical: AppSpacing.xxl,
+              ),
+              decoration: BoxDecoration(
+                color: colors.surfaceContainer,
+                borderRadius: BorderRadius.circular(AppRadius.md),
+                border: Border.all(color: colors.outlineVariant),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: colors.primaryContainer,
+                      shape: BoxShape.circle,
+                    ),
                     child: Icon(
-                      Icons.drag_indicator,
+                      Icons.picture_as_pdf_outlined,
+                      size: 26,
+                      color: colors.onPrimaryContainer,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Text(
+                    l10n.toolsMergeNoFilesTitle,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    l10n.toolsMergeNoFilesDescription,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodySmall?.copyWith(
                       color: colors.onSurfaceVariant,
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-      ],
+                  const SizedBox(height: AppSpacing.lg),
+                  FilledButton.icon(
+                    onPressed: onAddFiles,
+                    icon: const Icon(Icons.add, size: 18),
+                    label: Text(l10n.toolsMergeAddFiles),
+                  ),
+                ],
+              ),
+            ),
+          ] else ...[
+            const SizedBox(height: AppSpacing.lg),
+            ReorderableListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              buildDefaultDragHandles: false,
+              itemCount: filePaths.length,
+              onReorderItem: onReorderItem,
+              itemBuilder: (context, index) {
+                return Padding(
+                  key: ValueKey('$filePaths[$index]'),
+                  padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                  child: SelectedFileItem(
+                    index: index + 1,
+                    filePath: filePaths[index],
+                    onRemove: () => onRemoveFile(index),
+                    showPageSelection: showPageSelection,
+                    pageSelection: pageSelections != null &&
+                            index < pageSelections!.length
+                        ? pageSelections![index]
+                        : null,
+                    onPageSelectionChanged: onPageSelectionChanged == null
+                        ? null
+                        : (value) => onPageSelectionChanged!(index, value),
+                    dragHandle: ReorderableDragStartListener(
+                      index: index,
+                      child: Icon(
+                        Icons.drag_indicator,
+                        color: colors.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

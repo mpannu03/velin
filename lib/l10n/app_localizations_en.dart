@@ -191,4 +191,85 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get toolsWatermarkDescription =>
       'Stamp your pages with text or an image mark.';
+
+  @override
+  String get toolsMergeIntro => 'Combine multiple PDF files into one document.';
+
+  @override
+  String get toolsMergeInputSectionTitle => 'Input PDFs';
+
+  @override
+  String get toolsMergeAddFiles => 'Add files';
+
+  @override
+  String get toolsMergeNoFilesTitle => 'No files added';
+
+  @override
+  String get toolsMergeNoFilesDescription =>
+      'Add one or more PDF files to combine them.';
+
+  @override
+  String get toolsMergeOutputSectionTitle => 'Output';
+
+  @override
+  String get toolsMergeOutputFileNameLabel => 'File name';
+
+  @override
+  String get toolsMergeChooseFolder => 'Choose folder';
+
+  @override
+  String get toolsMergeChooseOutputFolder => 'Choose an output folder';
+
+  @override
+  String get toolsMergeOutputPathHint =>
+      'Select where the merged PDF should be saved';
+
+  @override
+  String toolsMergeWillSaveAs(String path) {
+    return 'Will save as $path';
+  }
+
+  @override
+  String get toolsMergeButton => 'Merge PDF';
+
+  @override
+  String get toolsMergeSubmitting => 'Merging…';
+
+  @override
+  String get toolsMergeButtonDisabledHint =>
+      'Add files and choose an output location to continue.';
+
+  @override
+  String get toolsMergeRemoveFile => 'Remove file';
+
+  @override
+  String get toolsMergePagesLabel => 'Pages';
+
+  @override
+  String get toolsMergePagesHint => 'e.g. 1-5, 8, last';
+
+  @override
+  String toolsMergeFileCount(int count) {
+    return '$count files';
+  }
+
+  @override
+  String get toolsMergeWarningNoFiles => 'Add at least one PDF file to merge.';
+
+  @override
+  String get toolsMergeWarningNoFolder => 'Choose an output folder.';
+
+  @override
+  String get toolsMergeWarningNoFileName => 'Enter an output file name.';
+
+  @override
+  String get toolsMergeSuccess => 'PDF merged successfully.';
+
+  @override
+  String get toolsMergeFailed => 'Could not merge the PDFs.';
+
+  @override
+  String toolsMergePageSelectionInvalid(String file) {
+    return 'Check the page selection for $file.';
+  }
 }

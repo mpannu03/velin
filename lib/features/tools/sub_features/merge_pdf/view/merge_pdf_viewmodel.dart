@@ -15,6 +15,8 @@ class MergePdfViewModel {
     required this.onChooseOutputFolder,
     required this.onMerge,
     required this.isSubmitting,
+    required this.hasInputFiles,
+    required this.canMerge,
   });
 
   final List<MergePdfToolInput> inputs;
@@ -33,4 +35,6 @@ class MergePdfViewModel {
   final VoidCallback onMerge;
 
   final bool isSubmitting;
+  final bool hasInputFiles;
+  final bool canMerge;
 }

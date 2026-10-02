@@ -8,6 +8,7 @@ import 'package:velin/engine/engine.dart';
 import 'package:velin/features/document_workspace/bloc/document_workspace_bloc.dart';
 import 'package:velin/features/reader/reader.dart';
 import 'package:velin/features/tools/tools.dart';
+import 'package:velin/l10n/app_localizations.dart';
 
 void registerBlocDependencies() {
   getIt.registerFactory<ReaderBloc>(
@@ -21,11 +22,13 @@ void registerBlocDependencies() {
     (engine, _) => DocumentWorkspaceBloc(engine: engine),
   );
 
-  getIt.registerFactory<MergePdfCubit>(
-    () => MergePdfCubit(
+  getIt.registerFactoryParam<MergePdfCubit, AppLocalizations, void>(
+    (l10n, _) => MergePdfCubit(
+      l10n: l10n,
       filePicker: getIt<DocumentFilePicker>(),
       mergePdfEngine: getIt<MergePdfEngine>(),
       taskManager: getIt<TaskManager>(),
+      appEffectController: getIt<AppEffectController>(),
     ),
   );
 }

@@ -18,7 +18,7 @@ class TaskManager {
   List<AppTask> get currentTasks =>
       List.unmodifiable(_tasks.values);
 
-  void submit({
+  Future<void> submit({
     required String id,
     required String title,
     required Future<void> Function() operation,
@@ -31,16 +31,21 @@ class TaskManager {
 
     _tasks[id] = task;
 
+    final completer = Completer<void>();
+
     _queue.add(
       _TaskEntry(
         task: task,
         operation: operation,
+        completer: completer,
       ),
     );
 
     _emit();
 
     unawaited(_processQueue());
+
+    return completer.future;
   }
 
   Future<void> _processQueue() async {
@@ -68,6 +73,8 @@ class TaskManager {
               status: TaskStatus.completed,
             ),
           );
+
+          entry.completer.complete();
         } catch (error) {
           _update(
             entry.task.copyWith(
@@ -75,6 +82,8 @@ class TaskManager {
               error: error,
             ),
           );
+
+          entry.completer.completeError(error);
         }
       }
     } finally {
@@ -100,8 +109,10 @@ class _TaskEntry {
   const _TaskEntry({
     required this.task,
     required this.operation,
+    required this.completer,
   });
 
   final AppTask task;
   final Future<void> Function() operation;
+  final Completer<void> completer;
 }

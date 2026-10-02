@@ -24,7 +24,9 @@ class MergePdfToolInput {
 
 extension MergePdfMapper on MergePdfToolInput {
   MergePdfInput toPdfInput() {
-    if (pageSelection == null) {
+    final selectionText = pageSelection?.trim();
+
+    if (selectionText == null || selectionText.isEmpty) {
       return MergePdfInput(
         file: File(filePath),
       );
@@ -32,7 +34,7 @@ extension MergePdfMapper on MergePdfToolInput {
 
     return MergePdfInput(
       file: File(filePath),
-      selection: PageSelectionParser().parse(pageSelection!),
+      selection: PageSelectionParser().parse(selectionText),
     );
   }
 }

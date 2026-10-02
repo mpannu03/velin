@@ -38,13 +38,15 @@ void main() {
   });
 
   test('marks a failed task as failed', () async {
-    taskManager.submit(
+    final future = taskManager.submit(
       id: 'task-1',
       title: 'Merge PDF',
       operation: () async {
         throw Exception('Something went wrong');
       },
     );
+
+    await expectLater(future, throwsA(isA<Exception>()));
 
     await _waitUntil(
       () => taskManager.currentTasks.single.status == TaskStatus.failed,
@@ -106,7 +108,7 @@ void main() {
   test('continues with the next task after a failure', () async {
     final events = <String>[];
 
-    taskManager.submit(
+    final failedFuture = taskManager.submit(
       id: 'task-1',
       title: 'Task 1',
       operation: () async {
@@ -115,13 +117,16 @@ void main() {
       },
     );
 
-    taskManager.submit(
+    final completedFuture = taskManager.submit(
       id: 'task-2',
       title: 'Task 2',
       operation: () async {
         events.add('task-2');
       },
     );
+
+    await expectLater(failedFuture, throwsA(isA<Exception>()));
+    await completedFuture;
 
     await _waitUntil(
       () => taskManager.currentTasks

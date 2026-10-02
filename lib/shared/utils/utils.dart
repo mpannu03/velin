@@ -16,3 +16,24 @@ bool listEquals<T>(List<T>? a, List<T>? b) {
   }
   return true;
 }
+
+String normalizePdfFileName(String name) {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return '';
+    return trimmed.toLowerCase().endsWith('.pdf') ? trimmed : '$trimmed.pdf';
+}
+
+String directoryWithTrailingSeparator(String filePath) {
+  if (filePath.isEmpty) return '';
+
+  final isWindows = filePath.contains(r'\') &&
+      !filePath.startsWith('/') &&
+      !filePath.startsWith('\\');
+  final sep = isWindows ? r'\' : '/';
+
+  final idx = filePath.lastIndexOf(sep);
+  if (idx < 0) return '';
+
+  final dir = filePath.substring(0, idx + 1);
+  return dir;
+}

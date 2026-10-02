@@ -292,5 +292,140 @@
   "toolsWatermarkDescription": "Stamp your pages with text or an image mark.",
   "@toolsWatermarkDescription": {
     "description": "Short description for the Watermark tool."
+  },
+
+  "toolsMergeIntro": "Combine multiple PDF files into one document.",
+  "@toolsMergeIntro": {
+    "description": "Introductory description for the Merge PDF tool page."
+  },
+
+  "toolsMergeInputSectionTitle": "Input PDFs",
+  "@toolsMergeInputSectionTitle": {
+    "description": "Heading for the input files section on the Merge PDF page."
+  },
+
+  "toolsMergeAddFiles": "Add files",
+  "@toolsMergeAddFiles": {
+    "description": "Label for the button that adds more input PDF files."
+  },
+
+  "toolsMergeNoFilesTitle": "No files added",
+  "@toolsMergeNoFilesTitle": {
+    "description": "Empty state title shown before any input files are added."
+  },
+
+  "toolsMergeNoFilesDescription": "Add one or more PDF files to combine them.",
+  "@toolsMergeNoFilesDescription": {
+    "description": "Empty state description for the input files section."
+  },
+
+  "toolsMergeOutputSectionTitle": "Output",
+  "@toolsMergeOutputSectionTitle": {
+    "description": "Heading for the output settings section on the Merge PDF page."
+  },
+
+  "toolsMergeOutputFileNameLabel": "File name",
+  "@toolsMergeOutputFileNameLabel": {
+    "description": "Label for the output file name field."
+  },
+
+  "toolsMergeChooseFolder": "Choose folder",
+  "@toolsMergeChooseFolder": {
+    "description": "Label for the button that lets the user choose where to save the result."
+  },
+
+  "toolsMergeChooseOutputFolder": "Choose an output folder",
+  "@toolsMergeChooseOutputFolder": {
+    "description": "Hint shown when no output folder has been selected yet."
+  },
+
+  "toolsMergeOutputPathHint": "Select where the merged PDF should be saved",
+  "@toolsMergeOutputPathHint": {
+    "description": "Helper text shown when no output folder is selected."
+  },
+
+  "toolsMergeWillSaveAs": "Will save as {path}",
+  "@toolsMergeWillSaveAs": {
+    "description": "Shows the full path of the file that will be created.",
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+
+  "toolsMergeButton": "Merge PDF",
+  "@toolsMergeButton": {
+    "description": "Label for the primary merge action button."
+  },
+
+  "toolsMergeSubmitting": "Merging\u2026",
+  "@toolsMergeSubmitting": {
+    "description": "Label shown on the merge button while merging is in progress."
+  },
+
+  "toolsMergeButtonDisabledHint": "Add files and choose an output location to continue.",
+  "@toolsMergeButtonDisabledHint": {
+    "description": "Tooltip shown when the merge action cannot run yet."
+  },
+
+  "toolsMergeRemoveFile": "Remove file",
+  "@toolsMergeRemoveFile": {
+    "description": "Tooltip for removing an input file from the merge list."
+  },
+
+  "toolsMergePagesLabel": "Pages",
+  "@toolsMergePagesLabel": {
+    "description": "Label for the optional page range selection field."
+  },
+
+  "toolsMergePagesHint": "e.g. 1-5, 8, last",
+  "@toolsMergePagesHint": {
+    "description": "Placeholder example for the page range field."
+  },
+
+  "toolsMergeFileCount": "{count} files",
+  "@toolsMergeFileCount": {
+    "description": "Count of selected input files shown next to the section heading.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "toolsMergeWarningNoFiles": "Add at least one PDF file to merge.",
+  "@toolsMergeWarningNoFiles": {
+    "description": "Warning shown when the user tries to merge with no input files."
+  },
+
+  "toolsMergeWarningNoFolder": "Choose an output folder.",
+  "@toolsMergeWarningNoFolder": {
+    "description": "Warning shown when the user tries to merge without an output folder."
+  },
+
+  "toolsMergeWarningNoFileName": "Enter an output file name.",
+  "@toolsMergeWarningNoFileName": {
+    "description": "Warning shown when the output file name is empty."
+  },
+
+  "toolsMergeSuccess": "PDF merged successfully.",
+  "@toolsMergeSuccess": {
+    "description": "Notification shown when merging completes successfully."
+  },
+
+  "toolsMergeFailed": "Could not merge the PDFs.",
+  "@toolsMergeFailed": {
+    "description": "Notification shown when merging fails."
+  },
+
+  "toolsMergePageSelectionInvalid": "Check the page selection for {file}.",
+  "@toolsMergePageSelectionInvalid": {
+    "description": "Notification shown when a page range is invalid.",
+    "placeholders": {
+      "file": {
+        "type": "String"
+      }
+    }
   }
 }
