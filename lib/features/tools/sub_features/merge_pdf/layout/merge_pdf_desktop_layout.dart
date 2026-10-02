@@ -43,6 +43,8 @@ class MergePdfDesktopLayout extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
+    final l10n = context.l10n;
+
     final inputPicker = MultiFilePicker(
       filePaths: [
         for (final input in viewModel.inputs) input.filePath,
@@ -51,6 +53,7 @@ class MergePdfDesktopLayout extends StatelessWidget {
         for (final input in viewModel.inputs) input.pageSelection,
       ],
       showPageSelection: true,
+      emptyStateDescription: l10n.toolsMergeNoFilesDescription,
       onAddFiles: viewModel.onAddFiles,
       onRemoveFile: viewModel.onRemoveFile,
       onReorderItem: viewModel.onReorder,

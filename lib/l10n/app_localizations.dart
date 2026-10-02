@@ -436,23 +436,23 @@ abstract class AppLocalizations {
   /// **'Combine multiple PDF files into one document.'**
   String get toolsMergeIntro;
 
-  /// Heading for the input files section on the Merge PDF page.
+  /// Heading for the input files section on a PDF tool page.
   ///
   /// In en, this message translates to:
   /// **'Input PDFs'**
-  String get toolsMergeInputSectionTitle;
+  String get toolsInputSectionTitle;
 
   /// Label for the button that adds more input PDF files.
   ///
   /// In en, this message translates to:
   /// **'Add files'**
-  String get toolsMergeAddFiles;
+  String get toolsAddFiles;
 
   /// Empty state title shown before any input files are added.
   ///
   /// In en, this message translates to:
   /// **'No files added'**
-  String get toolsMergeNoFilesTitle;
+  String get toolsNoFilesTitle;
 
   /// Empty state description for the input files section.
   ///
@@ -460,41 +460,41 @@ abstract class AppLocalizations {
   /// **'Add one or more PDF files to combine them.'**
   String get toolsMergeNoFilesDescription;
 
-  /// Heading for the output settings section on the Merge PDF page.
+  /// Heading for the output settings section on a PDF tool page.
   ///
   /// In en, this message translates to:
   /// **'Output'**
-  String get toolsMergeOutputSectionTitle;
+  String get toolsOutputSectionTitle;
 
   /// Label for the output file name field.
   ///
   /// In en, this message translates to:
   /// **'File name'**
-  String get toolsMergeOutputFileNameLabel;
+  String get toolsOutputFileNameLabel;
 
   /// Label for the button that lets the user choose where to save the result.
   ///
   /// In en, this message translates to:
   /// **'Choose folder'**
-  String get toolsMergeChooseFolder;
+  String get toolsChooseFolder;
 
   /// Hint shown when no output folder has been selected yet.
   ///
   /// In en, this message translates to:
   /// **'Choose an output folder'**
-  String get toolsMergeChooseOutputFolder;
+  String get toolsChooseOutputFolder;
 
   /// Helper text shown when no output folder is selected.
   ///
   /// In en, this message translates to:
-  /// **'Select where the merged PDF should be saved'**
-  String get toolsMergeOutputPathHint;
+  /// **'Select where the output files should be saved.'**
+  String get toolsOutputPathHint;
 
   /// Shows the full path of the file that will be created.
   ///
   /// In en, this message translates to:
   /// **'Will save as {path}'**
-  String toolsMergeWillSaveAs(String path);
+  String toolsWillSaveAs(String path);
 
   /// Label for the primary merge action button.
   ///
@@ -514,29 +514,29 @@ abstract class AppLocalizations {
   /// **'Add files and choose an output location to continue.'**
   String get toolsMergeButtonDisabledHint;
 
-  /// Tooltip for removing an input file from the merge list.
+  /// Tooltip for removing an input file from a tool list.
   ///
   /// In en, this message translates to:
   /// **'Remove file'**
-  String get toolsMergeRemoveFile;
+  String get toolsRemoveFile;
 
   /// Label for the optional page range selection field.
   ///
   /// In en, this message translates to:
   /// **'Page Selection'**
-  String get toolsMergePagesLabel;
+  String get toolsPagesLabel;
 
   /// Placeholder example for the page range field.
   ///
   /// In en, this message translates to:
   /// **'e.g. 1-5, 8, last'**
-  String get toolsMergePagesHint;
+  String get toolsPagesHint;
 
   /// Count of selected input files shown next to the section heading.
   ///
   /// In en, this message translates to:
   /// **'{count} files'**
-  String toolsMergeFileCount(int count);
+  String toolsFileCount(int count);
 
   /// Warning shown when the user tries to merge with no input files.
   ///
@@ -573,6 +573,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check the page selection for {file}.'**
   String toolsMergePageSelectionInvalid(String file);
+
+  /// Label for the button to select a source file.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose file'**
+  String get toolsChooseFile;
+
+  /// Label for the button to replace an already selected source file.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace file'**
+  String get toolsReplaceFile;
+
+  /// Placeholder shown when no source file has been selected.
+  ///
+  /// In en, this message translates to:
+  /// **'No file selected'**
+  String get toolsNoFileSelected;
+
+  /// Helper text shown under an empty source file picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a file to get started'**
+  String get toolsChooseFileHint;
+
+  /// Introductory description for the Split PDF tool page.
+  ///
+  /// In en, this message translates to:
+  /// **'Divide a PDF into multiple separate documents.'**
+  String get toolsSplitIntro;
+
+  /// Heading for the source file section on the Split PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Source PDF'**
+  String get toolsSplitSourceSectionTitle;
+
+  /// Heading for the split mode selector section.
+  ///
+  /// In en, this message translates to:
+  /// **'Split mode'**
+  String get toolsSplitModeSectionTitle;
+
+  /// Label for the mode that splits a PDF every N pages.
+  ///
+  /// In en, this message translates to:
+  /// **'By page count'**
+  String get toolsSplitModeByPageCount;
+
+  /// Label for the mode that splits a PDF into the given page groups.
+  ///
+  /// In en, this message translates to:
+  /// **'By selection'**
+  String get toolsSplitModeBySelection;
+
+  /// Label for the mode that saves every page as its own PDF.
+  ///
+  /// In en, this message translates to:
+  /// **'Extract all pages'**
+  String get toolsSplitModeExtractAll;
+
+  /// Label for the number of pages in each output PDF.
+  ///
+  /// In en, this message translates to:
+  /// **'Pages per file'**
+  String get toolsSplitPagesPerFileLabel;
+
+  /// Placeholder example for the pages-per-file field.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 5'**
+  String get toolsSplitPagesPerFileHint;
+
+  /// Label for the button that adds another page selection group.
+  ///
+  /// In en, this message translates to:
+  /// **'Add pages'**
+  String get toolsSplitSelectionAdd;
+
+  /// Helper text shown when no page selection groups are added yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Add groups of pages — each group becomes its own PDF.'**
+  String get toolsSplitSelectionHint;
+
+  /// Tooltip for removing a page selection group.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove pages'**
+  String get toolsSplitSelectionRemove;
+
+  /// Info text shown for the extract-all-pages split mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Every page will be saved as its own separate PDF file.'**
+  String get toolsSplitExtractAllInfo;
+
+  /// Label for the primary split action button.
+  ///
+  /// In en, this message translates to:
+  /// **'Split PDF'**
+  String get toolsSplitButton;
+
+  /// Label shown on the split button while splitting is in progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Splitting…'**
+  String get toolsSplitSubmitting;
+
+  /// Tooltip shown when the split action cannot run yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a file, a split option and an output location to continue.'**
+  String get toolsSplitButtonDisabledHint;
+
+  /// Warning shown when trying to split with no source file.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a PDF file to split.'**
+  String get toolsSplitWarningNoFile;
+
+  /// Warning shown when trying to split without an output folder.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an output folder.'**
+  String get toolsSplitWarningNoFolder;
+
+  /// Warning shown when the pages-per-file value is invalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a page count greater than zero.'**
+  String get toolsSplitWarningPagesPerFile;
+
+  /// Warning shown when trying to split without page selections.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one page selection.'**
+  String get toolsSplitWarningNoSelection;
+
+  /// Notification shown when splitting completes successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF split into {count} files.'**
+  String toolsSplitSuccess(int count);
+
+  /// Notification shown when splitting fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not split the PDF.'**
+  String get toolsSplitFailed;
+
+  /// Notification shown when a page selection group is invalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your page selections.'**
+  String get toolsSplitSelectionInvalid;
 }
 
 class _AppLocalizationsDelegate

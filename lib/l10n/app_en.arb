@@ -299,18 +299,18 @@
     "description": "Introductory description for the Merge PDF tool page."
   },
 
-  "toolsMergeInputSectionTitle": "Input PDFs",
-  "@toolsMergeInputSectionTitle": {
-    "description": "Heading for the input files section on the Merge PDF page."
+  "toolsInputSectionTitle": "Input PDFs",
+  "@toolsInputSectionTitle": {
+    "description": "Heading for the input files section on a PDF tool page."
   },
 
-  "toolsMergeAddFiles": "Add files",
-  "@toolsMergeAddFiles": {
+  "toolsAddFiles": "Add files",
+  "@toolsAddFiles": {
     "description": "Label for the button that adds more input PDF files."
   },
 
-  "toolsMergeNoFilesTitle": "No files added",
-  "@toolsMergeNoFilesTitle": {
+  "toolsNoFilesTitle": "No files added",
+  "@toolsNoFilesTitle": {
     "description": "Empty state title shown before any input files are added."
   },
 
@@ -319,33 +319,33 @@
     "description": "Empty state description for the input files section."
   },
 
-  "toolsMergeOutputSectionTitle": "Output",
-  "@toolsMergeOutputSectionTitle": {
-    "description": "Heading for the output settings section on the Merge PDF page."
+  "toolsOutputSectionTitle": "Output",
+  "@toolsOutputSectionTitle": {
+    "description": "Heading for the output settings section on a PDF tool page."
   },
 
-  "toolsMergeOutputFileNameLabel": "File name",
-  "@toolsMergeOutputFileNameLabel": {
+  "toolsOutputFileNameLabel": "File name",
+  "@toolsOutputFileNameLabel": {
     "description": "Label for the output file name field."
   },
 
-  "toolsMergeChooseFolder": "Choose folder",
-  "@toolsMergeChooseFolder": {
+  "toolsChooseFolder": "Choose folder",
+  "@toolsChooseFolder": {
     "description": "Label for the button that lets the user choose where to save the result."
   },
 
-  "toolsMergeChooseOutputFolder": "Choose an output folder",
-  "@toolsMergeChooseOutputFolder": {
+  "toolsChooseOutputFolder": "Choose an output folder",
+  "@toolsChooseOutputFolder": {
     "description": "Hint shown when no output folder has been selected yet."
   },
 
-  "toolsMergeOutputPathHint": "Select where the merged PDF should be saved",
-  "@toolsMergeOutputPathHint": {
+  "toolsOutputPathHint": "Select where the output files should be saved.",
+  "@toolsOutputPathHint": {
     "description": "Helper text shown when no output folder is selected."
   },
 
-  "toolsMergeWillSaveAs": "Will save as {path}",
-  "@toolsMergeWillSaveAs": {
+  "toolsWillSaveAs": "Will save as {path}",
+  "@toolsWillSaveAs": {
     "description": "Shows the full path of the file that will be created.",
     "placeholders": {
       "path": {
@@ -369,23 +369,23 @@
     "description": "Tooltip shown when the merge action cannot run yet."
   },
 
-  "toolsMergeRemoveFile": "Remove file",
-  "@toolsMergeRemoveFile": {
-    "description": "Tooltip for removing an input file from the merge list."
+  "toolsRemoveFile": "Remove file",
+  "@toolsRemoveFile": {
+    "description": "Tooltip for removing an input file from a tool list."
   },
 
-  "toolsMergePagesLabel": "Page Selection",
-  "@toolsMergePagesLabel": {
+  "toolsPagesLabel": "Page Selection",
+  "@toolsPagesLabel": {
     "description": "Label for the optional page range selection field."
   },
 
-  "toolsMergePagesHint": "e.g. 1-5, 8, last",
-  "@toolsMergePagesHint": {
+  "toolsPagesHint": "e.g. 1-5, 8, last",
+  "@toolsPagesHint": {
     "description": "Placeholder example for the page range field."
   },
 
-  "toolsMergeFileCount": "{count} files",
-  "@toolsMergeFileCount": {
+  "toolsFileCount": "{count} files",
+  "@toolsFileCount": {
     "description": "Count of selected input files shown next to the section heading.",
     "placeholders": {
       "count": {
@@ -427,5 +427,140 @@
         "type": "String"
       }
     }
+  },
+
+  "toolsChooseFile": "Choose file",
+  "@toolsChooseFile": {
+    "description": "Label for the button to select a source file."
+  },
+
+  "toolsReplaceFile": "Replace file",
+  "@toolsReplaceFile": {
+    "description": "Label for the button to replace an already selected source file."
+  },
+
+  "toolsNoFileSelected": "No file selected",
+  "@toolsNoFileSelected": {
+    "description": "Placeholder shown when no source file has been selected."
+  },
+
+  "toolsChooseFileHint": "Choose a file to get started",
+  "@toolsChooseFileHint": {
+    "description": "Helper text shown under an empty source file picker."
+  },
+
+  "toolsSplitIntro": "Divide a PDF into multiple separate documents.",
+  "@toolsSplitIntro": {
+    "description": "Introductory description for the Split PDF tool page."
+  },
+
+  "toolsSplitSourceSectionTitle": "Source PDF",
+  "@toolsSplitSourceSectionTitle": {
+    "description": "Heading for the source file section on the Split PDF page."
+  },
+
+  "toolsSplitModeSectionTitle": "Split mode",
+  "@toolsSplitModeSectionTitle": {
+    "description": "Heading for the split mode selector section."
+  },
+
+  "toolsSplitModeByPageCount": "By page count",
+  "@toolsSplitModeByPageCount": {
+    "description": "Label for the mode that splits a PDF every N pages."
+  },
+
+  "toolsSplitModeBySelection": "By selection",
+  "@toolsSplitModeBySelection": {
+    "description": "Label for the mode that splits a PDF into the given page groups."
+  },
+
+  "toolsSplitModeExtractAll": "Extract all pages",
+  "@toolsSplitModeExtractAll": {
+    "description": "Label for the mode that saves every page as its own PDF."
+  },
+
+  "toolsSplitPagesPerFileLabel": "Pages per file",
+  "@toolsSplitPagesPerFileLabel": {
+    "description": "Label for the number of pages in each output PDF."
+  },
+
+  "toolsSplitPagesPerFileHint": "e.g. 5",
+  "@toolsSplitPagesPerFileHint": {
+    "description": "Placeholder example for the pages-per-file field."
+  },
+
+  "toolsSplitSelectionAdd": "Add pages",
+  "@toolsSplitSelectionAdd": {
+    "description": "Label for the button that adds another page selection group."
+  },
+
+  "toolsSplitSelectionHint": "Add groups of pages \u2014 each group becomes its own PDF.",
+  "@toolsSplitSelectionHint": {
+    "description": "Helper text shown when no page selection groups are added yet."
+  },
+
+  "toolsSplitSelectionRemove": "Remove pages",
+  "@toolsSplitSelectionRemove": {
+    "description": "Tooltip for removing a page selection group."
+  },
+
+  "toolsSplitExtractAllInfo": "Every page will be saved as its own separate PDF file.",
+  "@toolsSplitExtractAllInfo": {
+    "description": "Info text shown for the extract-all-pages split mode."
+  },
+
+  "toolsSplitButton": "Split PDF",
+  "@toolsSplitButton": {
+    "description": "Label for the primary split action button."
+  },
+
+  "toolsSplitSubmitting": "Splitting\u2026",
+  "@toolsSplitSubmitting": {
+    "description": "Label shown on the split button while splitting is in progress."
+  },
+
+  "toolsSplitButtonDisabledHint": "Choose a file, a split option and an output location to continue.",
+  "@toolsSplitButtonDisabledHint": {
+    "description": "Tooltip shown when the split action cannot run yet."
+  },
+
+  "toolsSplitWarningNoFile": "Choose a PDF file to split.",
+  "@toolsSplitWarningNoFile": {
+    "description": "Warning shown when trying to split with no source file."
+  },
+
+  "toolsSplitWarningNoFolder": "Choose an output folder.",
+  "@toolsSplitWarningNoFolder": {
+    "description": "Warning shown when trying to split without an output folder."
+  },
+
+  "toolsSplitWarningPagesPerFile": "Enter a page count greater than zero.",
+  "@toolsSplitWarningPagesPerFile": {
+    "description": "Warning shown when the pages-per-file value is invalid."
+  },
+
+  "toolsSplitWarningNoSelection": "Add at least one page selection.",
+  "@toolsSplitWarningNoSelection": {
+    "description": "Warning shown when trying to split without page selections."
+  },
+
+  "toolsSplitSuccess": "PDF split into {count} files.",
+  "@toolsSplitSuccess": {
+    "description": "Notification shown when splitting completes successfully.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "toolsSplitFailed": "Could not split the PDF.",
+  "@toolsSplitFailed": {
+    "description": "Notification shown when splitting fails."
+  },
+
+  "toolsSplitSelectionInvalid": "Check your page selections.",
+  "@toolsSplitSelectionInvalid": {
+    "description": "Notification shown when a page selection group is invalid."
   }
 }

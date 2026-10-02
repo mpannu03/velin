@@ -58,6 +58,10 @@ class AppRouter {
                     path: 'merge-pdf',
                     builder: (context, state) => const MergePdfPage(),
                   ),
+                  GoRoute(
+                    path: 'split-pdf',
+                    builder: (context, state) => const SplitPdfPage(),
+                  ),
                 ],
               ),
             ],

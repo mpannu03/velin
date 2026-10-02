@@ -124,8 +124,8 @@ class SelectedFileItem extends StatelessWidget {
                     initialValue: pageSelection ?? '',
                     onChanged: onPageSelectionChanged,
                     decoration: InputDecoration(
-                      labelText: l10n.toolsMergePagesLabel,
-                      hintText: l10n.toolsMergePagesHint,
+                      labelText: l10n.toolsPagesLabel,
+                      hintText: l10n.toolsPagesHint,
                       isDense: true,
                       border: const OutlineInputBorder(),
                     ),
@@ -137,7 +137,7 @@ class SelectedFileItem extends StatelessWidget {
           const SizedBox(width: AppSpacing.xs),
           IconButton(
             onPressed: onRemove,
-            tooltip: l10n.toolsMergeRemoveFile,
+            tooltip: l10n.toolsRemoveFile,
             icon: const Icon(Icons.close),
             visualDensity: VisualDensity.compact,
           ),

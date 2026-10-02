@@ -31,4 +31,14 @@ void registerBlocDependencies() {
       appEffectController: getIt<AppEffectController>(),
     ),
   );
+
+  getIt.registerFactoryParam<SplitPdfCubit, AppLocalizations, void>(
+    (l10n, _) => SplitPdfCubit(
+      l10n: l10n,
+      filePicker: getIt<DocumentFilePicker>(),
+      splitPdfEngine: getIt<SplitPdfEngine>(),
+      taskManager: getIt<TaskManager>(),
+      appEffectController: getIt<AppEffectController>(),
+    ),
+  );
 }

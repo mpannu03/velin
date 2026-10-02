@@ -1,5 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
+import 'package:velin/shared/extensions/extensions.dart';
+
 class SingleFilePicker extends StatelessWidget {
   const SingleFilePicker({
     required this.onPickFile,
@@ -14,12 +16,12 @@ class SingleFilePicker extends StatelessWidget {
 
   String get fileName {
     final path = filePath!;
-    return path.split(RegExp(r'[/\\]')).last;
+    return path.split(RegExp(r'[/\\\\]')).last;
   }
 
   String get directoryPath {
     final path = filePath!;
-    final separator = RegExp(r'[/\\]').allMatches(path).lastOrNull;
+    final separator = RegExp(r'[/\\\\]').allMatches(path).lastOrNull;
 
     return separator == null
         ? ''
@@ -30,6 +32,7 @@ class SingleFilePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
+    final l10n = context.l10n;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -61,7 +64,7 @@ class SingleFilePicker extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  hasFile ? fileName : 'No file selected',
+                  hasFile ? fileName : l10n.toolsNoFileSelected,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -70,9 +73,7 @@ class SingleFilePicker extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  hasFile
-                      ? directoryPath
-                      : 'Choose a file to get started',
+                  hasFile ? directoryPath : l10n.toolsChooseFileHint,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodySmall?.copyWith(
@@ -91,7 +92,7 @@ class SingleFilePicker extends StatelessWidget {
                   : Icons.folder_open_outlined,
               size: 18,
             ),
-            label: Text(hasFile ? 'Replace file' : 'Choose file'),
+            label: Text(hasFile ? l10n.toolsReplaceFile : l10n.toolsChooseFile),
           ),
         ],
       ),

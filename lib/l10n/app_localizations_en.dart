@@ -196,36 +196,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolsMergeIntro => 'Combine multiple PDF files into one document.';
 
   @override
-  String get toolsMergeInputSectionTitle => 'Input PDFs';
+  String get toolsInputSectionTitle => 'Input PDFs';
 
   @override
-  String get toolsMergeAddFiles => 'Add files';
+  String get toolsAddFiles => 'Add files';
 
   @override
-  String get toolsMergeNoFilesTitle => 'No files added';
+  String get toolsNoFilesTitle => 'No files added';
 
   @override
   String get toolsMergeNoFilesDescription =>
       'Add one or more PDF files to combine them.';
 
   @override
-  String get toolsMergeOutputSectionTitle => 'Output';
+  String get toolsOutputSectionTitle => 'Output';
 
   @override
-  String get toolsMergeOutputFileNameLabel => 'File name';
+  String get toolsOutputFileNameLabel => 'File name';
 
   @override
-  String get toolsMergeChooseFolder => 'Choose folder';
+  String get toolsChooseFolder => 'Choose folder';
 
   @override
-  String get toolsMergeChooseOutputFolder => 'Choose an output folder';
+  String get toolsChooseOutputFolder => 'Choose an output folder';
 
   @override
-  String get toolsMergeOutputPathHint =>
-      'Select where the merged PDF should be saved';
+  String get toolsOutputPathHint =>
+      'Select where the output files should be saved.';
 
   @override
-  String toolsMergeWillSaveAs(String path) {
+  String toolsWillSaveAs(String path) {
     return 'Will save as $path';
   }
 
@@ -240,16 +240,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Add files and choose an output location to continue.';
 
   @override
-  String get toolsMergeRemoveFile => 'Remove file';
+  String get toolsRemoveFile => 'Remove file';
 
   @override
-  String get toolsMergePagesLabel => 'Page Selection';
+  String get toolsPagesLabel => 'Page Selection';
 
   @override
-  String get toolsMergePagesHint => 'e.g. 1-5, 8, last';
+  String get toolsPagesHint => 'e.g. 1-5, 8, last';
 
   @override
-  String toolsMergeFileCount(int count) {
+  String toolsFileCount(int count) {
     return '$count files';
   }
 
@@ -272,4 +272,89 @@ class AppLocalizationsEn extends AppLocalizations {
   String toolsMergePageSelectionInvalid(String file) {
     return 'Check the page selection for $file.';
   }
+
+  @override
+  String get toolsChooseFile => 'Choose file';
+
+  @override
+  String get toolsReplaceFile => 'Replace file';
+
+  @override
+  String get toolsNoFileSelected => 'No file selected';
+
+  @override
+  String get toolsChooseFileHint => 'Choose a file to get started';
+
+  @override
+  String get toolsSplitIntro =>
+      'Divide a PDF into multiple separate documents.';
+
+  @override
+  String get toolsSplitSourceSectionTitle => 'Source PDF';
+
+  @override
+  String get toolsSplitModeSectionTitle => 'Split mode';
+
+  @override
+  String get toolsSplitModeByPageCount => 'By page count';
+
+  @override
+  String get toolsSplitModeBySelection => 'By selection';
+
+  @override
+  String get toolsSplitModeExtractAll => 'Extract all pages';
+
+  @override
+  String get toolsSplitPagesPerFileLabel => 'Pages per file';
+
+  @override
+  String get toolsSplitPagesPerFileHint => 'e.g. 5';
+
+  @override
+  String get toolsSplitSelectionAdd => 'Add pages';
+
+  @override
+  String get toolsSplitSelectionHint =>
+      'Add groups of pages — each group becomes its own PDF.';
+
+  @override
+  String get toolsSplitSelectionRemove => 'Remove pages';
+
+  @override
+  String get toolsSplitExtractAllInfo =>
+      'Every page will be saved as its own separate PDF file.';
+
+  @override
+  String get toolsSplitButton => 'Split PDF';
+
+  @override
+  String get toolsSplitSubmitting => 'Splitting…';
+
+  @override
+  String get toolsSplitButtonDisabledHint =>
+      'Choose a file, a split option and an output location to continue.';
+
+  @override
+  String get toolsSplitWarningNoFile => 'Choose a PDF file to split.';
+
+  @override
+  String get toolsSplitWarningNoFolder => 'Choose an output folder.';
+
+  @override
+  String get toolsSplitWarningPagesPerFile =>
+      'Enter a page count greater than zero.';
+
+  @override
+  String get toolsSplitWarningNoSelection => 'Add at least one page selection.';
+
+  @override
+  String toolsSplitSuccess(int count) {
+    return 'PDF split into $count files.';
+  }
+
+  @override
+  String get toolsSplitFailed => 'Could not split the PDF.';
+
+  @override
+  String get toolsSplitSelectionInvalid => 'Check your page selections.';
 }
