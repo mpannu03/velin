@@ -3,7 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/navigation/navigation.dart';
 import 'package:velin/app/shell/app_shell.dart';
 import 'package:velin/features/reader/reader.dart';
-import 'package:velin/features/tools/view/tools_page.dart';
+import 'package:velin/features/tools/tools.dart';
 
 class AppRouter {
   AppRouter._();
@@ -56,7 +56,7 @@ class AppRouter {
                 routes: [
                   GoRoute(
                     path: 'merge-pdf',
-                    builder: (context, state) => const Text('Merge PDF'),
+                    builder: (context, state) => const MergePdfPage(),
                   ),
                 ],
               ),

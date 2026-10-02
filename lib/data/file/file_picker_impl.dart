@@ -53,4 +53,21 @@ class DocumentFilePickerImpl implements DocumentFilePicker {
       return Failure(error, stackTrace);
     }
   }
+
+  @override
+  Future<Result<String>> pickDirectory() async {
+    try {
+      final path = await FilePicker.getDirectoryPath();
+
+      if (path == null) {
+        return const Failure(
+          DocumentFilePickerError('No directory was selected.'),
+        );
+      }
+
+      return Success(path);
+    } catch (error, stackTrace) {
+      return Failure(error, stackTrace);
+    }
+  }
 }

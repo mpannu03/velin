@@ -10,4 +10,6 @@ abstract interface class DocumentFilePicker {
   Future<Result<List<String>>> pickFiles({
     required List<String> allowedExtensions
   });
+
+  Future<Result<String>> pickDirectory();
 }
