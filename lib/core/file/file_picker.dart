@@ -6,4 +6,8 @@ abstract interface class DocumentFilePicker {
   Future<Result<String>> pickFile({
     required List<String> allowedExtensions,
   });
+
+  Future<Result<List<String>>> pickFiles({
+    required List<String> allowedExtensions
+  });
 }

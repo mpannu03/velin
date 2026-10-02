@@ -27,4 +27,30 @@ class DocumentFilePickerImpl implements DocumentFilePicker {
       return Failure(error, stackTrace);
     }
   }
+
+  @override
+  Future<Result<List<String>>> pickFiles({
+    required List<String> allowedExtensions
+  }) async {
+    try {
+      final result = await FilePicker.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: allowedExtensions,
+      );
+
+      if (result.isEmpty) {
+        return const Failure(
+          DocumentFilePickerError('No files were selected.'),
+        );
+      }
+
+      return Success(
+        result.map(
+          (file) => file.path
+        ).whereType<String>().toList()
+      );
+    } catch (error, stackTrace) {
+      return Failure(error, stackTrace);
+    }
+  }
 }
