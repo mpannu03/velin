@@ -273,6 +273,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No bookmarks'**
   String get panelBookmarkEmpty;
+
+  /// Label for the Merge PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge PDF'**
+  String get toolsMergePdf;
+
+  /// Label for the Edit category.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get toolsCategoryEdit;
+
+  /// Label for the Convert category.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert'**
+  String get toolsCategoryConvert;
+
+  /// Label for the Optimize category.
+  ///
+  /// In en, this message translates to:
+  /// **'Optimize'**
+  String get toolsCategoryOptimize;
+
+  /// Label for the Security category.
+  ///
+  /// In en, this message translates to:
+  /// **'Security'**
+  String get toolsCategorySecurity;
 }
 
 class _AppLocalizationsDelegate

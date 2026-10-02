@@ -162,5 +162,30 @@
   "panelBookmarkEmpty": "No bookmarks",
   "@panelBookmarkEmpty": {
     "description": "Message displayed when the bookmarks panel is empty."
+  },
+
+  "toolsMergePdf": "Merge PDF",
+  "@toolsMergePdf": {
+    "description": "Label for the Merge PDF tool."
+  },
+
+  "toolsCategoryEdit": "Edit",
+  "@toolsCategoryEdit": {
+    "description": "Label for the Edit category."
+  },
+
+  "toolsCategoryConvert": "Convert",
+  "@toolsCategoryConvert": {
+    "description": "Label for the Convert category."
+  },
+
+  "toolsCategoryOptimize": "Optimize",
+  "@toolsCategoryOptimize": {
+    "description": "Label for the Optimize category."
+  },
+
+  "toolsCategorySecurity": "Security",
+  "@toolsCategorySecurity": {
+    "description": "Label for the Security category."
   }
 }

@@ -102,4 +102,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get panelBookmarkEmpty => 'No bookmarks';
+
+  @override
+  String get toolsMergePdf => 'Merge PDF';
+
+  @override
+  String get toolsCategoryEdit => 'Edit';
+
+  @override
+  String get toolsCategoryConvert => 'Convert';
+
+  @override
+  String get toolsCategoryOptimize => 'Optimize';
+
+  @override
+  String get toolsCategorySecurity => 'Security';
 }
