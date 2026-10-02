@@ -523,7 +523,7 @@ abstract class AppLocalizations {
   /// Label for the optional page range selection field.
   ///
   /// In en, this message translates to:
-  /// **'Pages'**
+  /// **'Page Selection'**
   String get toolsMergePagesLabel;
 
   /// Placeholder example for the page range field.

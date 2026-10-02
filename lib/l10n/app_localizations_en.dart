@@ -243,7 +243,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolsMergeRemoveFile => 'Remove file';
 
   @override
-  String get toolsMergePagesLabel => 'Pages';
+  String get toolsMergePagesLabel => 'Page Selection';
 
   @override
   String get toolsMergePagesHint => 'e.g. 1-5, 8, last';

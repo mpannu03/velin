@@ -374,7 +374,7 @@
     "description": "Tooltip for removing an input file from the merge list."
   },
 
-  "toolsMergePagesLabel": "Pages",
+  "toolsMergePagesLabel": "Page Selection",
   "@toolsMergePagesLabel": {
     "description": "Label for the optional page range selection field."
   },
