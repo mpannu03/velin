@@ -17,6 +17,9 @@ class SplitPdfDesktopLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final hasInputFile = 
+        viewModel.inputFilePath != null && 
+        viewModel.inputFilePath!.isNotEmpty;
 
     return ToolScaffold(
       title: l10n.toolsSplitPdf,
@@ -25,49 +28,40 @@ class SplitPdfDesktopLayout extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildContent(context),
-          const SizedBox(height: AppSpacing.xl),
-          ToolActionBar(
-            isSubmitting: viewModel.isSubmitting, 
-            submittingText: l10n.toolsSplitSubmitting, 
-            canAction: viewModel.canSplit, 
-            icon: Icons.call_split, 
-            label: l10n.toolsSplitButton, 
-            hintText: l10n.toolsSplitButtonDisabledHint, 
-            onAction: () {  },
+          ToolSectionCard(
+            title: l10n.toolsSplitSourceSectionTitle,
+            child: SingleFilePicker(
+              filePath: viewModel.inputFilePath,
+              onPickFile: viewModel.onPickFile,
+            ),
           ),
+          if (hasInputFile) ...[
+            const SizedBox(height: AppSpacing.lg),
+            ToolSectionCard(
+              title: l10n.toolsSplitModeSectionTitle,
+              child: _SplitModeEditor(viewModel: viewModel),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            OutputFilePicker(
+              fileName: '',
+              directoryPath: viewModel.outputDirectory,
+              showFileName: false,
+              onFileNameChanged: (_) {},
+              onChooseFolder: viewModel.onChooseOutputFolder,
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            ToolActionBar(
+              isSubmitting: viewModel.isSubmitting, 
+              submittingText: l10n.toolsSplitSubmitting, 
+              canAction: viewModel.canSplit, 
+              icon: Icons.call_split, 
+              label: l10n.toolsSplitButton, 
+              hintText: l10n.toolsSplitButtonDisabledHint, 
+              onAction: viewModel.onSplit,
+            ),
+          ],
         ],
       ),
-    );
-  }
-
-  Widget _buildContent(BuildContext context) {
-    final l10n = context.l10n;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        ToolSectionCard(
-          title: l10n.toolsSplitSourceSectionTitle,
-          child: SingleFilePicker(
-            filePath: viewModel.inputFilePath,
-            onPickFile: viewModel.onPickFile,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        ToolSectionCard(
-          title: l10n.toolsSplitModeSectionTitle,
-          child: _SplitModeEditor(viewModel: viewModel),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        OutputFilePicker(
-          fileName: '',
-          directoryPath: viewModel.outputDirectory,
-          showFileName: false,
-          onFileNameChanged: (_) {},
-          onChooseFolder: viewModel.onChooseOutputFolder,
-        ),
-      ],
     );
   }
 }

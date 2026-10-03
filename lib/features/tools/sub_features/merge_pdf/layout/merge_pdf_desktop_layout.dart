@@ -16,6 +16,7 @@ class MergePdfDesktopLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final hasInputFiles = viewModel.inputs.isNotEmpty;
 
     return ToolScaffold(
       title: l10n.toolsMergePdf,
@@ -24,54 +25,41 @@ class MergePdfDesktopLayout extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _buildContent(context),
-          const SizedBox(height: AppSpacing.xl),
-          ToolActionBar(
-            isSubmitting: viewModel.isSubmitting, 
-            submittingText: l10n.toolsMergeSubmitting, 
-            canAction: viewModel.canMerge, 
-            icon: Icons.merge_type, 
-            label: l10n.toolsMergeButton, 
-            hintText: l10n.toolsMergeButtonDisabledHint, 
-            onAction: () {  },
+          MultiFilePicker(
+            filePaths: [
+              for (final input in viewModel.inputs) input.filePath,
+            ],
+            pageSelections: [
+              for (final input in viewModel.inputs) input.pageSelection,
+            ],
+            showPageSelection: true,
+            emptyStateDescription: l10n.toolsMergeNoFilesDescription,
+            onAddFiles: viewModel.onAddFiles,
+            onRemoveFile: viewModel.onRemoveFile,
+            onReorderItem: viewModel.onReorder,
+            onPageSelectionChanged: viewModel.onPageSelectionChanged,
           ),
+          if (hasInputFiles) ...[
+            const SizedBox(height: AppSpacing.lg),
+            OutputFilePicker(
+              fileName: viewModel.outputFileName,
+              directoryPath: viewModel.outputDirectory,
+              onFileNameChanged: viewModel.onOutputFileNameChanged,
+              onChooseFolder: viewModel.onChooseOutputFolder,
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            ToolActionBar(
+              isSubmitting: viewModel.isSubmitting, 
+              submittingText: l10n.toolsMergeSubmitting, 
+              canAction: viewModel.canMerge, 
+              icon: Icons.merge_type, 
+              label: l10n.toolsMergeButton, 
+              hintText: l10n.toolsMergeButtonDisabledHint, 
+              onAction: viewModel.onMerge,
+            ),
+          ],
         ],
       ),
-    );
-  }
-
-  Widget _buildContent(BuildContext context) {
-    final l10n = context.l10n;
-
-    final inputPicker = MultiFilePicker(
-      filePaths: [
-        for (final input in viewModel.inputs) input.filePath,
-      ],
-      pageSelections: [
-        for (final input in viewModel.inputs) input.pageSelection,
-      ],
-      showPageSelection: true,
-      emptyStateDescription: l10n.toolsMergeNoFilesDescription,
-      onAddFiles: viewModel.onAddFiles,
-      onRemoveFile: viewModel.onRemoveFile,
-      onReorderItem: viewModel.onReorder,
-      onPageSelectionChanged: viewModel.onPageSelectionChanged,
-    );
-
-    final outputPicker = OutputFilePicker(
-      fileName: viewModel.outputFileName,
-      directoryPath: viewModel.outputDirectory,
-      onFileNameChanged: viewModel.onOutputFileNameChanged,
-      onChooseFolder: viewModel.onChooseOutputFolder,
-    );
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        inputPicker,
-        const SizedBox(height: AppSpacing.lg),
-        outputPicker,
-      ],
     );
   }
 }
