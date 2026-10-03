@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/features/tools/widgets/widgets.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
 class OutputFilePicker extends StatefulWidget {
@@ -80,129 +81,112 @@ class _OutputFilePickerState extends State<OutputFilePicker> {
       }
     }
 
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: colors.surfaceContainerLow,
-        border: Border.all(color: colors.outlineVariant),
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-      ),
-      child: Column(
+    return ToolSectionCard(
+      title: l10n.toolsOutputSectionTitle, 
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            l10n.toolsOutputSectionTitle,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w600,
+          Container(
+            width: 44,
+            height: 44,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: colors.primaryContainer,
+              borderRadius: BorderRadius.circular(AppRadius.md),
+            ),
+            child: Icon(
+              Icons.save_outlined,
+              size: 22,
+              color: colors.onPrimaryContainer,
             ),
           ),
-          const SizedBox(height: AppSpacing.lg),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: colors.primaryContainer,
-                  borderRadius: BorderRadius.circular(AppRadius.md),
-                ),
-                child: Icon(
-                  Icons.save_outlined,
-                  size: 22,
-                  color: colors.onPrimaryContainer,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (showFileName) ...[
-                      TextField(
-                        key: const ValueKey('output-file-name'),
-                        controller: _fileNameController,
-                        onSubmitted: (value) =>
-                            widget.onFileNameChanged?.call(value),
-                        onTapOutside: (_) => 
-                            widget.onFileNameChanged?.call(_fileNameController.text),
-                        decoration: InputDecoration(
-                          labelText: l10n.toolsOutputFileNameLabel,
-                          isDense: true,
-                          border: const OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                    ],
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: InkWell(
-                        onTap: widget.onChooseFolder,
-                        borderRadius: BorderRadius.circular(AppRadius.sm),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: AppSpacing.xs,
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                _hasDirectory
-                                    ? Icons.folder_outlined
-                                    : Icons.folder_open_outlined,
-                                size: 16,
-                                color: colors.onSurfaceVariant,
-                              ),
-                              const SizedBox(width: AppSpacing.xs),
-                              Flexible(
-                                child: Text(
-                                  _hasDirectory
-                                      ? widget.directoryPath!
-                                      : l10n.toolsChooseOutputFolder,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: colors.onSurfaceVariant,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (showFileName) ...[
+                  TextField(
+                    key: const ValueKey('output-file-name'),
+                    controller: _fileNameController,
+                    onSubmitted: (value) =>
+                        widget.onFileNameChanged?.call(value),
+                    onTapOutside: (_) => 
+                        widget.onFileNameChanged?.call(_fileNameController.text),
+                    decoration: InputDecoration(
+                      labelText: l10n.toolsOutputFileNameLabel,
+                      isDense: true,
+                      border: const OutlineInputBorder(),
                     ),
-                    if (showFileName) ...[
-                      const SizedBox(height: AppSpacing.sm),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.md,
-                          vertical: AppSpacing.sm,
-                        ),
-                        decoration: BoxDecoration(
-                          color: colors.surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(AppRadius.sm),
-                        ),
-                        child: Text(
-                          pathDisplay,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall?.copyWith(
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                ],
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: InkWell(
+                    onTap: widget.onChooseFolder,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.xs,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            _hasDirectory
+                                ? Icons.folder_outlined
+                                : Icons.folder_open_outlined,
+                            size: 16,
                             color: colors.onSurfaceVariant,
                           ),
-                        ),
+                          const SizedBox(width: AppSpacing.xs),
+                          Flexible(
+                            child: Text(
+                              _hasDirectory
+                                  ? widget.directoryPath!
+                                  : l10n.toolsChooseOutputFolder,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ],
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              OutlinedButton.icon(
-                onPressed: widget.onChooseFolder,
-                icon: const Icon(Icons.folder_open_outlined, size: 18),
-                label: Text(l10n.toolsChooseFolder),
-              ),
-            ],
+                if (showFileName) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.md,
+                      vertical: AppSpacing.sm,
+                    ),
+                    decoration: BoxDecoration(
+                      color: colors.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
+                    ),
+                    child: Text(
+                      pathDisplay,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colors.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          OutlinedButton.icon(
+            onPressed: widget.onChooseFolder,
+            icon: const Icon(Icons.folder_open_outlined, size: 18),
+            label: Text(l10n.toolsChooseFolder),
           ),
         ],
       ),

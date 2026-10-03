@@ -44,7 +44,7 @@ class ExtractPdfDesktopLayout extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _SectionCard(
+        ToolSectionCard(
           title: l10n.toolsExtractSourceSectionTitle,
           child: SingleFilePicker(
             filePath: viewModel.inputFilePath,
@@ -52,7 +52,7 @@ class ExtractPdfDesktopLayout extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppSpacing.lg),
-        _SectionCard(
+        ToolSectionCard(
           title: l10n.toolsExtractSelectionSectionTitle,
           child: PageSelectionField(
             value: viewModel.pageSelection ?? '',
@@ -70,44 +70,6 @@ class ExtractPdfDesktopLayout extends StatelessWidget {
           onChooseFolder: viewModel.onChooseOutputFolder,
         ),
       ],
-    );
-  }
-}
-
-class _SectionCard extends StatelessWidget {
-  const _SectionCard({
-    required this.title,
-    required this.child,
-  });
-
-  final String title;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: colors.surfaceContainerLow,
-        border: Border.all(color: colors.outlineVariant),
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          child,
-        ],
-      ),
     );
   }
 }
