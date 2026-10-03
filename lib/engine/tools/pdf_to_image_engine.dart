@@ -68,6 +68,8 @@ class PdfToImageEngine {
         final rendered = await page.render(
           width: width,
           height: height,
+          fullWidth: width.toDouble(),
+          fullHeight: height.toDouble(),
           backgroundColor: 0xFFFFFFFF,
         );
 
