@@ -627,5 +627,110 @@
   "toolsExtractSelectionInvalid": "Check the pages you want to extract.",
   "@toolsExtractSelectionInvalid": {
     "description": "Warning shown when the page selection cannot be parsed."
+  },
+
+  "toolsRotateIntro": "Turn pages a quarter, half or three quarters of the way around.",
+  "@toolsRotateIntro": {
+    "description": "Introductory description shown at the top of the Rotate PDF page."
+  },
+
+  "toolsRotateSourceSectionTitle": "Source PDF",
+  "@toolsRotateSourceSectionTitle": {
+    "description": "Heading for the source file section on the Rotate PDF page."
+  },
+
+  "toolsRotateDirectionSectionTitle": "Rotation",
+  "@toolsRotateDirectionSectionTitle": {
+    "description": "Heading for the rotation direction selector on the Rotate PDF page."
+  },
+
+  "toolsRotateDirection90": "90\u00b0 clockwise",
+  "@toolsRotateDirection90": {
+    "description": "Label for the 90 degree clockwise rotation option."
+  },
+
+  "toolsRotateDirection180": "180\u00b0",
+  "@toolsRotateDirection180": {
+    "description": "Label for the 180 degree (upside down) rotation option."
+  },
+
+  "toolsRotateDirection270": "90\u00b0 counter-clockwise",
+  "@toolsRotateDirection270": {
+    "description": "Label for the 90 degree counter-clockwise rotation option."
+  },
+
+  "toolsRotatePagesSectionTitle": "Pages to rotate",
+  "@toolsRotatePagesSectionTitle": {
+    "description": "Heading for the page scope selector on the Rotate PDF page."
+  },
+
+  "toolsRotateScopeAll": "All pages",
+  "@toolsRotateScopeAll": {
+    "description": "Option to rotate every page of the document."
+  },
+
+  "toolsRotateScopeSelected": "Selected pages",
+  "@toolsRotateScopeSelected": {
+    "description": "Option to rotate only the pages entered in the selection field."
+  },
+
+  "toolsRotateSelectionHint": "e.g. 1-5, 8, last",
+  "@toolsRotateSelectionHint": {
+    "description": "Hint text for the rotation page selection field."
+  },
+
+  "toolsRotateSelectionHelper": "Only the pages you pick are turned. Everything else stays as it is.",
+  "@toolsRotateSelectionHelper": {
+    "description": "Helper text explaining the effect of a partial page selection."
+  },
+
+  "toolsRotateSelectionInvalid": "Check the pages you want to rotate.",
+  "@toolsRotateSelectionInvalid": {
+    "description": "Warning shown when the rotation page selection cannot be parsed."
+  },
+
+  "toolsRotateWarningNoFile": "Choose a pdf file to rotate.",
+  "@toolsRotateWarningNoFile": {
+    "description": "Warning shown when the user tries to rotate with no input file."
+  },
+
+  "toolsRotateWarningNoFolder": "Choose an output folder.",
+  "@toolsRotateWarningNoFolder": {
+    "description": "Warning shown when the user tries to rotate without an output folder."
+  },
+
+  "toolsRotateWarningNoFileName": "Enter an output file name.",
+  "@toolsRotateWarningNoFileName": {
+    "description": "Warning shown when the output file name is empty."
+  },
+
+  "toolsRotateWarningNoSelection": "Enter the pages you want to rotate.",
+  "@toolsRotateWarningNoSelection": {
+    "description": "Warning shown when the page scope requires a selection but none was given."
+  },
+
+  "toolsRotateSuccess": "PDF rotated successfully.",
+  "@toolsRotateSuccess": {
+    "description": "Notification shown when rotation completes successfully."
+  },
+
+  "toolsRotateFailed": "Could not rotate the PDF.",
+  "@toolsRotateFailed": {
+    "description": "Notification shown when rotation fails."
+  },
+
+  "toolsRotateButton": "Rotate PDF",
+  "@toolsRotateButton": {
+    "description": "Label for the primary rotate action button."
+  },
+
+  "toolsRotateSubmitting": "Rotating\u2026",
+  "@toolsRotateSubmitting": {
+    "description": "Label shown on the rotate button while rotation is running."
+  },
+
+  "toolsRotateButtonDisabledHint": "Choose a file, a rotation and an output location to continue.",
+  "@toolsRotateButtonDisabledHint": {
+    "description": "Tooltip explaining why the rotate button is disabled."
   }
 }

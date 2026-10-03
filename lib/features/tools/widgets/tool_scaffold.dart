@@ -61,12 +61,14 @@ class ToolScaffold extends StatelessWidget {
             ],
           ),
         ),
-        SingleChildScrollView(
-          padding: const EdgeInsets.all(AppSpacing.xxl),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: _maxContentWidth),
-              child: child
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppSpacing.xxl),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: _maxContentWidth),
+                child: child
+              ),
             ),
           ),
         ),

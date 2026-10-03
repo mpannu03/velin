@@ -51,4 +51,14 @@ void registerBlocDependencies() {
       appEffectController: getIt<AppEffectController>(),
     ),
   );
+
+  getIt.registerFactoryParam<RotatePdfCubit, AppLocalizations, void>(
+    (l10n, _) => RotatePdfCubit(
+      l10n: l10n,
+      filePicker: getIt<DocumentFilePicker>(),
+      rotatePdfEngine: getIt<RotatePdfEngine>(),
+      taskManager: getIt<TaskManager>(),
+      appEffectController: getIt<AppEffectController>(),
+    ),
+  );
 }

@@ -31,9 +31,7 @@ class RotatePdfEngine {
 
       final totalPages = sourceDocument.pages.length;
 
-      final selectedPages = selection == null
-          ? null
-          : selection.resolve(totalPages).toSet();
+      final selectedPages = selection?.resolve(totalPages).toSet();
 
       if (selectedPages != null) {
         for (final page in selectedPages) {

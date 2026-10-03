@@ -398,4 +398,72 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get toolsExtractSelectionInvalid =>
       'Check the pages you want to extract.';
+
+  @override
+  String get toolsRotateIntro =>
+      'Turn pages a quarter, half or three quarters of the way around.';
+
+  @override
+  String get toolsRotateSourceSectionTitle => 'Source PDF';
+
+  @override
+  String get toolsRotateDirectionSectionTitle => 'Rotation';
+
+  @override
+  String get toolsRotateDirection90 => '90° clockwise';
+
+  @override
+  String get toolsRotateDirection180 => '180°';
+
+  @override
+  String get toolsRotateDirection270 => '90° counter-clockwise';
+
+  @override
+  String get toolsRotatePagesSectionTitle => 'Pages to rotate';
+
+  @override
+  String get toolsRotateScopeAll => 'All pages';
+
+  @override
+  String get toolsRotateScopeSelected => 'Selected pages';
+
+  @override
+  String get toolsRotateSelectionHint => 'e.g. 1-5, 8, last';
+
+  @override
+  String get toolsRotateSelectionHelper =>
+      'Only the pages you pick are turned. Everything else stays as it is.';
+
+  @override
+  String get toolsRotateSelectionInvalid =>
+      'Check the pages you want to rotate.';
+
+  @override
+  String get toolsRotateWarningNoFile => 'Choose a pdf file to rotate.';
+
+  @override
+  String get toolsRotateWarningNoFolder => 'Choose an output folder.';
+
+  @override
+  String get toolsRotateWarningNoFileName => 'Enter an output file name.';
+
+  @override
+  String get toolsRotateWarningNoSelection =>
+      'Enter the pages you want to rotate.';
+
+  @override
+  String get toolsRotateSuccess => 'PDF rotated successfully.';
+
+  @override
+  String get toolsRotateFailed => 'Could not rotate the PDF.';
+
+  @override
+  String get toolsRotateButton => 'Rotate PDF';
+
+  @override
+  String get toolsRotateSubmitting => 'Rotating…';
+
+  @override
+  String get toolsRotateButtonDisabledHint =>
+      'Choose a file, a rotation and an output location to continue.';
 }

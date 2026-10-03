@@ -66,6 +66,10 @@ class AppRouter {
                     path: 'extract-pdf',
                     builder: (context, state) => const ExtractPdfPage(),
                   ),
+                  GoRoute(
+                    path: 'rotate-pdf',
+                    builder: (context, state) => const RotatePdfPage(),
+                  ),
                 ],
               ),
             ],

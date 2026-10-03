@@ -807,6 +807,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check the pages you want to extract.'**
   String get toolsExtractSelectionInvalid;
+
+  /// Introductory description shown at the top of the Rotate PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn pages a quarter, half or three quarters of the way around.'**
+  String get toolsRotateIntro;
+
+  /// Heading for the source file section on the Rotate PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Source PDF'**
+  String get toolsRotateSourceSectionTitle;
+
+  /// Heading for the rotation direction selector on the Rotate PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotation'**
+  String get toolsRotateDirectionSectionTitle;
+
+  /// Label for the 90 degree clockwise rotation option.
+  ///
+  /// In en, this message translates to:
+  /// **'90° clockwise'**
+  String get toolsRotateDirection90;
+
+  /// Label for the 180 degree (upside down) rotation option.
+  ///
+  /// In en, this message translates to:
+  /// **'180°'**
+  String get toolsRotateDirection180;
+
+  /// Label for the 90 degree counter-clockwise rotation option.
+  ///
+  /// In en, this message translates to:
+  /// **'90° counter-clockwise'**
+  String get toolsRotateDirection270;
+
+  /// Heading for the page scope selector on the Rotate PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Pages to rotate'**
+  String get toolsRotatePagesSectionTitle;
+
+  /// Option to rotate every page of the document.
+  ///
+  /// In en, this message translates to:
+  /// **'All pages'**
+  String get toolsRotateScopeAll;
+
+  /// Option to rotate only the pages entered in the selection field.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected pages'**
+  String get toolsRotateScopeSelected;
+
+  /// Hint text for the rotation page selection field.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 1-5, 8, last'**
+  String get toolsRotateSelectionHint;
+
+  /// Helper text explaining the effect of a partial page selection.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the pages you pick are turned. Everything else stays as it is.'**
+  String get toolsRotateSelectionHelper;
+
+  /// Warning shown when the rotation page selection cannot be parsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the pages you want to rotate.'**
+  String get toolsRotateSelectionInvalid;
+
+  /// Warning shown when the user tries to rotate with no input file.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a pdf file to rotate.'**
+  String get toolsRotateWarningNoFile;
+
+  /// Warning shown when the user tries to rotate without an output folder.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an output folder.'**
+  String get toolsRotateWarningNoFolder;
+
+  /// Warning shown when the output file name is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an output file name.'**
+  String get toolsRotateWarningNoFileName;
+
+  /// Warning shown when the page scope requires a selection but none was given.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the pages you want to rotate.'**
+  String get toolsRotateWarningNoSelection;
+
+  /// Notification shown when rotation completes successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF rotated successfully.'**
+  String get toolsRotateSuccess;
+
+  /// Notification shown when rotation fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not rotate the PDF.'**
+  String get toolsRotateFailed;
+
+  /// Label for the primary rotate action button.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate PDF'**
+  String get toolsRotateButton;
+
+  /// Label shown on the rotate button while rotation is running.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotating…'**
+  String get toolsRotateSubmitting;
+
+  /// Tooltip explaining why the rotate button is disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a file, a rotation and an output location to continue.'**
+  String get toolsRotateButtonDisabledHint;
 }
 
 class _AppLocalizationsDelegate
