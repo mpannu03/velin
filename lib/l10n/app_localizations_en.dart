@@ -563,4 +563,103 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get toolsPdfToImageButtonDisabledHint =>
       'Choose a file and an output location to continue.';
+
+  @override
+  String get toolsImageToPdfIntro =>
+      'Combine images into a single PDF document.';
+
+  @override
+  String get toolsImageToPdfSourceSectionTitle => 'Images';
+
+  @override
+  String get toolsImageToPdfNoImagesDescription =>
+      'Add one or more images to combine them into a PDF.';
+
+  @override
+  String get toolsImageToPdfViewModeLabel => 'View mode';
+
+  @override
+  String get toolsImageToPdfViewModeList => 'List';
+
+  @override
+  String get toolsImageToPdfViewModeGrid => 'Grid';
+
+  @override
+  String get toolsImageToPdfPageSetupSectionTitle => 'Page setup';
+
+  @override
+  String get toolsImageToPdfPageSizeLabel => 'Page size';
+
+  @override
+  String get toolsImageToPdfPageSizeAuto => 'Auto';
+
+  @override
+  String get toolsImageToPdfPageSizeA4 => 'A4';
+
+  @override
+  String get toolsImageToPdfPageSizeLetter => 'Letter';
+
+  @override
+  String get toolsImageToPdfPageSizeHelper =>
+      'Auto sizes every page to match its image. A4 and Letter give every page the same size.';
+
+  @override
+  String get toolsImageToPdfOrientationLabel => 'Orientation';
+
+  @override
+  String get toolsImageToPdfOrientationAuto => 'Auto';
+
+  @override
+  String get toolsImageToPdfOrientationPortrait => 'Portrait';
+
+  @override
+  String get toolsImageToPdfOrientationLandscape => 'Landscape';
+
+  @override
+  String get toolsImageToPdfOrientationHelper =>
+      'Auto turns each page to match its image. Portrait and landscape force the same direction for every page.';
+
+  @override
+  String get toolsImageToPdfFitLabel => 'Image fit';
+
+  @override
+  String get toolsImageToPdfFitContain => 'Fit page';
+
+  @override
+  String get toolsImageToPdfFitCover => 'Fill page';
+
+  @override
+  String get toolsImageToPdfFitStretch => 'Stretch';
+
+  @override
+  String get toolsImageToPdfFitHelper =>
+      'Fit page keeps the whole image visible, fill page crops it, and stretch distorts it to fill the page.';
+
+  @override
+  String get toolsImageToPdfWarningNoImages =>
+      'Add at least one image to convert.';
+
+  @override
+  String get toolsImageToPdfWarningNoFolder => 'Choose an output folder.';
+
+  @override
+  String get toolsImageToPdfWarningNoFileName => 'Enter an output file name.';
+
+  @override
+  String toolsImageToPdfSuccess(int count) {
+    return 'Created a PDF from $count images.';
+  }
+
+  @override
+  String get toolsImageToPdfFailed => 'Could not convert the images to a PDF.';
+
+  @override
+  String get toolsImageToPdfButton => 'Create PDF';
+
+  @override
+  String get toolsImageToPdfSubmitting => 'Creating…';
+
+  @override
+  String get toolsImageToPdfButtonDisabledHint =>
+      'Add images and choose an output location to continue.';
 }

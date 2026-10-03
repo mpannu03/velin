@@ -90,6 +90,13 @@ class AppRouter {
                       child: const PdfToImagePage(),
                     ),
                   ),
+                  GoRoute(
+                    path: 'image-to-pdf',
+                    pageBuilder: (context, state) => _toolPage(
+                      key: state.pageKey,
+                      child: const ImageToPdfPage(),
+                    ),
+                  ),
                 ],
               ),
             ],

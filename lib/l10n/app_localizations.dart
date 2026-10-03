@@ -1107,6 +1107,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose a file and an output location to continue.'**
   String get toolsPdfToImageButtonDisabledHint;
+
+  /// Intro text shown at the top of the Image to PDF tool page.
+  ///
+  /// In en, this message translates to:
+  /// **'Combine images into a single PDF document.'**
+  String get toolsImageToPdfIntro;
+
+  /// Heading for the image selection section on the Image to PDF tool page.
+  ///
+  /// In en, this message translates to:
+  /// **'Images'**
+  String get toolsImageToPdfSourceSectionTitle;
+
+  /// Tool-specific copy shown when no image has been added yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Add one or more images to combine them into a PDF.'**
+  String get toolsImageToPdfNoImagesDescription;
+
+  /// Accessibility label for the list/grid view mode toggle.
+  ///
+  /// In en, this message translates to:
+  /// **'View mode'**
+  String get toolsImageToPdfViewModeLabel;
+
+  /// Tooltip for switching the selected images to list view.
+  ///
+  /// In en, this message translates to:
+  /// **'List'**
+  String get toolsImageToPdfViewModeList;
+
+  /// Tooltip for switching the selected images to grid view.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid'**
+  String get toolsImageToPdfViewModeGrid;
+
+  /// Heading for the page setup section on the Image to PDF tool page.
+  ///
+  /// In en, this message translates to:
+  /// **'Page setup'**
+  String get toolsImageToPdfPageSetupSectionTitle;
+
+  /// Label for the page size selector.
+  ///
+  /// In en, this message translates to:
+  /// **'Page size'**
+  String get toolsImageToPdfPageSizeLabel;
+
+  /// Page size option that matches each image to the page.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get toolsImageToPdfPageSizeAuto;
+
+  /// A4 page size option.
+  ///
+  /// In en, this message translates to:
+  /// **'A4'**
+  String get toolsImageToPdfPageSizeA4;
+
+  /// Letter page size option.
+  ///
+  /// In en, this message translates to:
+  /// **'Letter'**
+  String get toolsImageToPdfPageSizeLetter;
+
+  /// Helper text explaining the page size options.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto sizes every page to match its image. A4 and Letter give every page the same size.'**
+  String get toolsImageToPdfPageSizeHelper;
+
+  /// Label for the orientation selector.
+  ///
+  /// In en, this message translates to:
+  /// **'Orientation'**
+  String get toolsImageToPdfOrientationLabel;
+
+  /// Orientation option that follows the shape of each image.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get toolsImageToPdfOrientationAuto;
+
+  /// Portrait orientation option.
+  ///
+  /// In en, this message translates to:
+  /// **'Portrait'**
+  String get toolsImageToPdfOrientationPortrait;
+
+  /// Landscape orientation option.
+  ///
+  /// In en, this message translates to:
+  /// **'Landscape'**
+  String get toolsImageToPdfOrientationLandscape;
+
+  /// Helper text explaining the orientation options.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto turns each page to match its image. Portrait and landscape force the same direction for every page.'**
+  String get toolsImageToPdfOrientationHelper;
+
+  /// Label for the image fit selector.
+  ///
+  /// In en, this message translates to:
+  /// **'Image fit'**
+  String get toolsImageToPdfFitLabel;
+
+  /// Image fit option that scales the whole image onto the page.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit page'**
+  String get toolsImageToPdfFitContain;
+
+  /// Image fit option that fills the page and crops the overflow.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill page'**
+  String get toolsImageToPdfFitCover;
+
+  /// Image fit option that stretches the image to the page.
+  ///
+  /// In en, this message translates to:
+  /// **'Stretch'**
+  String get toolsImageToPdfFitStretch;
+
+  /// Helper text explaining the image fit options.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit page keeps the whole image visible, fill page crops it, and stretch distorts it to fill the page.'**
+  String get toolsImageToPdfFitHelper;
+
+  /// Warning shown when the user tries to convert with no images.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one image to convert.'**
+  String get toolsImageToPdfWarningNoImages;
+
+  /// Warning shown when the user tries to convert with no output folder.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an output folder.'**
+  String get toolsImageToPdfWarningNoFolder;
+
+  /// Warning shown when the user tries to convert with no output file name.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an output file name.'**
+  String get toolsImageToPdfWarningNoFileName;
+
+  /// Success message shown once the images have been converted. {count} is the number of images.
+  ///
+  /// In en, this message translates to:
+  /// **'Created a PDF from {count} images.'**
+  String toolsImageToPdfSuccess(int count);
+
+  /// Error shown when the conversion fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not convert the images to a PDF.'**
+  String get toolsImageToPdfFailed;
+
+  /// Label for the main action button of the Image to PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Create PDF'**
+  String get toolsImageToPdfButton;
+
+  /// Label shown while the images are being converted.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating…'**
+  String get toolsImageToPdfSubmitting;
+
+  /// Tooltip explaining why the create button is disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Add images and choose an output location to continue.'**
+  String get toolsImageToPdfButtonDisabledHint;
 }
 
 class _AppLocalizationsDelegate

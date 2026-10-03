@@ -882,5 +882,132 @@
   "toolsPdfToImageButtonDisabledHint": "Choose a file and an output location to continue.",
   "@toolsPdfToImageButtonDisabledHint": {
     "description": "Tooltip explaining why the convert button is disabled."
+  },
+
+  "toolsImageToPdfIntro": "Combine images into a single PDF document.",
+  "@toolsImageToPdfIntro": {
+    "description": "Intro text shown at the top of the Image to PDF tool page."
+  },
+  "toolsImageToPdfSourceSectionTitle": "Images",
+  "@toolsImageToPdfSourceSectionTitle": {
+    "description": "Heading for the image selection section on the Image to PDF tool page."
+  },
+  "toolsImageToPdfNoImagesDescription": "Add one or more images to combine them into a PDF.",
+  "@toolsImageToPdfNoImagesDescription": {
+    "description": "Tool-specific copy shown when no image has been added yet."
+  },
+  "toolsImageToPdfViewModeLabel": "View mode",
+  "@toolsImageToPdfViewModeLabel": {
+    "description": "Accessibility label for the list/grid view mode toggle."
+  },
+  "toolsImageToPdfViewModeList": "List",
+  "@toolsImageToPdfViewModeList": {
+    "description": "Tooltip for switching the selected images to list view."
+  },
+  "toolsImageToPdfViewModeGrid": "Grid",
+  "@toolsImageToPdfViewModeGrid": {
+    "description": "Tooltip for switching the selected images to grid view."
+  },
+  "toolsImageToPdfPageSetupSectionTitle": "Page setup",
+  "@toolsImageToPdfPageSetupSectionTitle": {
+    "description": "Heading for the page setup section on the Image to PDF tool page."
+  },
+  "toolsImageToPdfPageSizeLabel": "Page size",
+  "@toolsImageToPdfPageSizeLabel": {
+    "description": "Label for the page size selector."
+  },
+  "toolsImageToPdfPageSizeAuto": "Auto",
+  "@toolsImageToPdfPageSizeAuto": {
+    "description": "Page size option that matches each image to the page."
+  },
+  "toolsImageToPdfPageSizeA4": "A4",
+  "@toolsImageToPdfPageSizeA4": {
+    "description": "A4 page size option."
+  },
+  "toolsImageToPdfPageSizeLetter": "Letter",
+  "@toolsImageToPdfPageSizeLetter": {
+    "description": "Letter page size option."
+  },
+  "toolsImageToPdfPageSizeHelper": "Auto sizes every page to match its image. A4 and Letter give every page the same size.",
+  "@toolsImageToPdfPageSizeHelper": {
+    "description": "Helper text explaining the page size options."
+  },
+  "toolsImageToPdfOrientationLabel": "Orientation",
+  "@toolsImageToPdfOrientationLabel": {
+    "description": "Label for the orientation selector."
+  },
+  "toolsImageToPdfOrientationAuto": "Auto",
+  "@toolsImageToPdfOrientationAuto": {
+    "description": "Orientation option that follows the shape of each image."
+  },
+  "toolsImageToPdfOrientationPortrait": "Portrait",
+  "@toolsImageToPdfOrientationPortrait": {
+    "description": "Portrait orientation option."
+  },
+  "toolsImageToPdfOrientationLandscape": "Landscape",
+  "@toolsImageToPdfOrientationLandscape": {
+    "description": "Landscape orientation option."
+  },
+  "toolsImageToPdfOrientationHelper": "Auto turns each page to match its image. Portrait and landscape force the same direction for every page.",
+  "@toolsImageToPdfOrientationHelper": {
+    "description": "Helper text explaining the orientation options."
+  },
+  "toolsImageToPdfFitLabel": "Image fit",
+  "@toolsImageToPdfFitLabel": {
+    "description": "Label for the image fit selector."
+  },
+  "toolsImageToPdfFitContain": "Fit page",
+  "@toolsImageToPdfFitContain": {
+    "description": "Image fit option that scales the whole image onto the page."
+  },
+  "toolsImageToPdfFitCover": "Fill page",
+  "@toolsImageToPdfFitCover": {
+    "description": "Image fit option that fills the page and crops the overflow."
+  },
+  "toolsImageToPdfFitStretch": "Stretch",
+  "@toolsImageToPdfFitStretch": {
+    "description": "Image fit option that stretches the image to the page."
+  },
+  "toolsImageToPdfFitHelper": "Fit page keeps the whole image visible, fill page crops it, and stretch distorts it to fill the page.",
+  "@toolsImageToPdfFitHelper": {
+    "description": "Helper text explaining the image fit options."
+  },
+  "toolsImageToPdfWarningNoImages": "Add at least one image to convert.",
+  "@toolsImageToPdfWarningNoImages": {
+    "description": "Warning shown when the user tries to convert with no images."
+  },
+  "toolsImageToPdfWarningNoFolder": "Choose an output folder.",
+  "@toolsImageToPdfWarningNoFolder": {
+    "description": "Warning shown when the user tries to convert with no output folder."
+  },
+  "toolsImageToPdfWarningNoFileName": "Enter an output file name.",
+  "@toolsImageToPdfWarningNoFileName": {
+    "description": "Warning shown when the user tries to convert with no output file name."
+  },
+  "toolsImageToPdfSuccess": "Created a PDF from {count} images.",
+  "@toolsImageToPdfSuccess": {
+    "description": "Success message shown once the images have been converted. {count} is the number of images.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "toolsImageToPdfFailed": "Could not convert the images to a PDF.",
+  "@toolsImageToPdfFailed": {
+    "description": "Error shown when the conversion fails."
+  },
+  "toolsImageToPdfButton": "Create PDF",
+  "@toolsImageToPdfButton": {
+    "description": "Label for the main action button of the Image to PDF tool."
+  },
+  "toolsImageToPdfSubmitting": "Creating\u2026",
+  "@toolsImageToPdfSubmitting": {
+    "description": "Label shown while the images are being converted."
+  },
+  "toolsImageToPdfButtonDisabledHint": "Add images and choose an output location to continue.",
+  "@toolsImageToPdfButtonDisabledHint": {
+    "description": "Tooltip explaining why the create button is disabled."
   }
 }
