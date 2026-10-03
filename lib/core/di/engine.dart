@@ -21,4 +21,8 @@ void registerEngineDependencies() {
   getIt.registerLazySingleton<RotatePdfEngine>(
     () => RotatePdfEngine()
   );
+
+  getIt.registerLazySingleton<PdfToImageEngine>(
+    () => PdfToImageEngine()
+  );
 }
