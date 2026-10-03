@@ -62,6 +62,10 @@ class AppRouter {
                     path: 'split-pdf',
                     builder: (context, state) => const SplitPdfPage(),
                   ),
+                  GoRoute(
+                    path: 'extract-pdf',
+                    builder: (context, state) => const ExtractPdfPage(),
+                  ),
                 ],
               ),
             ],

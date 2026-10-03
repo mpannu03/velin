@@ -37,3 +37,19 @@ String directoryWithTrailingSeparator(String filePath) {
   final dir = filePath.substring(0, idx + 1);
   return dir;
 }
+
+String fileNameFromPath(String filePath) {
+  if (filePath.isEmpty) return '';
+
+  final isWindows = filePath.contains(r'\') &&
+      !filePath.startsWith('/') &&
+      !filePath.startsWith('\\');
+  final sep = isWindows ? r'\' : '/';
+
+  final idx = filePath.lastIndexOf(sep);
+  final name = idx < 0 ? filePath : filePath.substring(idx + 1);
+
+  final dot = name.lastIndexOf('.');
+  if (dot <= 0) return name;
+  return name.substring(0, dot);
+}

@@ -375,4 +375,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toolsExtractButton => 'Extract PDF';
+
+  @override
+  String get toolsExtractIntro => 'Pull selected pages out into a new PDF.';
+
+  @override
+  String get toolsExtractSourceSectionTitle => 'Source PDF';
+
+  @override
+  String get toolsExtractSelectionSectionTitle => 'Pages to extract';
+
+  @override
+  String get toolsExtractSelectionHint => 'e.g. 1-5, 8, last';
+
+  @override
+  String get toolsExtractSubmitting => 'Extracting…';
+
+  @override
+  String get toolsExtractButtonDisabledHint =>
+      'Choose a file, pages and an output location to continue.';
+
+  @override
+  String get toolsExtractSelectionInvalid =>
+      'Check the pages you want to extract.';
 }

@@ -765,6 +765,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Extract PDF'**
   String get toolsExtractButton;
+
+  /// Intro description shown at the top of the Extract Pages page.
+  ///
+  /// In en, this message translates to:
+  /// **'Pull selected pages out into a new PDF.'**
+  String get toolsExtractIntro;
+
+  /// Heading for the source file section on the Extract Pages page.
+  ///
+  /// In en, this message translates to:
+  /// **'Source PDF'**
+  String get toolsExtractSourceSectionTitle;
+
+  /// Heading for the page selection section on the Extract Pages page.
+  ///
+  /// In en, this message translates to:
+  /// **'Pages to extract'**
+  String get toolsExtractSelectionSectionTitle;
+
+  /// Hint text for the page selection field.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 1-5, 8, last'**
+  String get toolsExtractSelectionHint;
+
+  /// Label shown on the extract button while extraction is running.
+  ///
+  /// In en, this message translates to:
+  /// **'Extracting…'**
+  String get toolsExtractSubmitting;
+
+  /// Tooltip explaining why the extract button is disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a file, pages and an output location to continue.'**
+  String get toolsExtractButtonDisabledHint;
+
+  /// Warning shown when the page selection cannot be parsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the pages you want to extract.'**
+  String get toolsExtractSelectionInvalid;
 }
 
 class _AppLocalizationsDelegate

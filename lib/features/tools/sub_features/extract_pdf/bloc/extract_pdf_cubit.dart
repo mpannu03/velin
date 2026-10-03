@@ -33,12 +33,15 @@ class ExtractPdfCubit extends Cubit<ExtractPdfState> {
     );
 
     switch (result) {
-      case Success(data: final filePaths):
-        final dirName = directoryWithTrailingSeparator(filePaths);
+      case Success(data: final filePath):
+        final outputFileName ='${fileNameFromPath(filePath)}_extracted.pdf';
+
         emit(
           state.copyWith(
-            filePath: filePaths,
-            outputDirectory: state.outputDirectory ?? dirName,
+            filePath: filePath,
+            outputDirectory: state.outputDirectory ??
+                directoryWithTrailingSeparator(filePath),
+            outputFileName: outputFileName,
           ),
         );
 
@@ -89,13 +92,25 @@ class ExtractPdfCubit extends Cubit<ExtractPdfState> {
       return;
     }
 
+    late final PageSelection pageSelection;
+
+    try {
+      pageSelection = PageSelectionParser().parse(state.pageSelection ?? '');
+    } on PageSelectionError {
+      _appEffectController.notifyUser(
+        message: _l10n.toolsExtractSelectionInvalid,
+        type: NotificationType.warning,
+      );
+      return;
+    }
+
     emit(state.copyWith(isSubmitting: true));
 
     try {
       final filePath = File(state.filePath!);
-      final pageSelection = PageSelectionParser().parse(state.pageSelection ?? '');
+      final directory = _normalizedDirectory(state.outputDirectory!);
       final outputFile = File(
-        '${state.outputDirectory}'
+        '$directory'
         '${Platform.pathSeparator}'
         '${state.outputFileName!.trim()}',
       );
@@ -105,25 +120,24 @@ class ExtractPdfCubit extends Cubit<ExtractPdfState> {
         title: _l10n.toolsExtractButton,
         operation: () async {
           await _extractPdfEngine.extract(
-            inputFile: filePath, 
-            selection: pageSelection, 
-            outputFile: outputFile
+            inputFile: filePath,
+            selection: pageSelection,
+            outputFile: outputFile,
           );
           _appEffectController.notifyUser(
             message: _l10n.toolsExtractSuccess,
             type: NotificationType.success,
           );
-        }
+        },
       );
     } catch (_) {
       _appEffectController.notifyUser(
-        message: _l10n.toolsExtractFailed, 
-        type: NotificationType.error
+        message: _l10n.toolsExtractFailed,
+        type: NotificationType.error,
       );
     } finally {
       emit(state.copyWith(isSubmitting: false));
     }
-
   }
 
   bool _validateInputs() {
@@ -154,19 +168,14 @@ class ExtractPdfCubit extends Cubit<ExtractPdfState> {
     return true;
   }
 
-  void updateFilePath(String? filePath) {
-    emit(state.copyWith(filePath: filePath));
-  }
-
-  void updatePageSelection(String? pageSelection) {
-    emit(state.copyWith(pageSelection: pageSelection));
-  }
-
-  void updateOutputDirectory(String? outputDirectory) {
-    emit(state.copyWith(outputDirectory: outputDirectory));
+  /// Strips trailing separators so joining with [Platform.pathSeparator]
+  /// never produces a doubled separator.
+  String _normalizedDirectory(String directory) {
+    return directory.replaceFirst(RegExp(r'[/\\]+$'), '');
   }
 
   void updateOutputFileName(String? outputFileName) {
-    emit(state.copyWith(outputFileName: outputFileName));
+    final fileName = normalizePdfFileName(outputFileName ?? '');
+    emit(state.copyWith(outputFileName: fileName));
   }
 }

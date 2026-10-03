@@ -41,4 +41,14 @@ void registerBlocDependencies() {
       appEffectController: getIt<AppEffectController>(),
     ),
   );
+
+  getIt.registerFactoryParam<ExtractPdfCubit, AppLocalizations, void>(
+    (l10n, _) => ExtractPdfCubit(
+      l10n: l10n,
+      filePicker: getIt<DocumentFilePicker>(),
+      extractPdfEngine: getIt<ExtractPdfEngine>(),
+      taskManager: getIt<TaskManager>(),
+      appEffectController: getIt<AppEffectController>(),
+    ),
+  );
 }

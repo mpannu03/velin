@@ -592,5 +592,40 @@
   "toolsExtractButton": "Extract PDF",
   "@toolsExtractButton": {
     "description": "Label for the primary extract action button."
+  },
+
+  "toolsExtractIntro": "Pull selected pages out into a new PDF.",
+  "@toolsExtractIntro": {
+    "description": "Intro description shown at the top of the Extract Pages page."
+  },
+
+  "toolsExtractSourceSectionTitle": "Source PDF",
+  "@toolsExtractSourceSectionTitle": {
+    "description": "Heading for the source file section on the Extract Pages page."
+  },
+
+  "toolsExtractSelectionSectionTitle": "Pages to extract",
+  "@toolsExtractSelectionSectionTitle": {
+    "description": "Heading for the page selection section on the Extract Pages page."
+  },
+
+  "toolsExtractSelectionHint": "e.g. 1-5, 8, last",
+  "@toolsExtractSelectionHint": {
+    "description": "Hint text for the page selection field."
+  },
+
+  "toolsExtractSubmitting": "Extracting\u2026",
+  "@toolsExtractSubmitting": {
+    "description": "Label shown on the extract button while extraction is running."
+  },
+
+  "toolsExtractButtonDisabledHint": "Choose a file, pages and an output location to continue.",
+  "@toolsExtractButtonDisabledHint": {
+    "description": "Tooltip explaining why the extract button is disabled."
+  },
+
+  "toolsExtractSelectionInvalid": "Check the pages you want to extract.",
+  "@toolsExtractSelectionInvalid": {
+    "description": "Warning shown when the page selection cannot be parsed."
   }
 }

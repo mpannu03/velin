@@ -35,13 +35,13 @@ class ExtractPdfState {
     bool? isSubmitting,
   }) {
     return ExtractPdfState(
-      filePath: filePath == identical(filePath, _unset) 
+      filePath: identical(filePath, _unset) 
           ? this.filePath : filePath as String?,
-      pageSelection: pageSelection == identical(pageSelection, _unset)
+      pageSelection: identical(pageSelection, _unset)
           ? this.pageSelection : pageSelection as String?,
-      outputDirectory: outputDirectory == identical(outputDirectory, _unset)
+      outputDirectory: identical(outputDirectory, _unset)
           ? this.outputDirectory : outputDirectory as String?,
-      outputFileName: outputFileName == identical(outputFileName, _unset)
+      outputFileName: identical(outputFileName, _unset)
           ? this.outputFileName : outputFileName as String?,
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
