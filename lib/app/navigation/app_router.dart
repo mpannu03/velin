@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/navigation/navigation.dart';
 import 'package:velin/app/shell/app_shell.dart';
+import 'package:velin/core/platform/platform.dart';
 import 'package:velin/features/reader/reader.dart';
 import 'package:velin/features/tools/tools.dart';
 
@@ -56,19 +57,31 @@ class AppRouter {
                 routes: [
                   GoRoute(
                     path: 'merge-pdf',
-                    builder: (context, state) => const MergePdfPage(),
+                    pageBuilder: (context, state) => _toolPage(
+                      key: state.pageKey,
+                      child: const MergePdfPage(),
+                    ),
                   ),
                   GoRoute(
                     path: 'split-pdf',
-                    builder: (context, state) => const SplitPdfPage(),
+                    pageBuilder: (context, state) => _toolPage(
+                      key: state.pageKey,
+                      child: const SplitPdfPage(),
+                    ),
                   ),
                   GoRoute(
                     path: 'extract-pdf',
-                    builder: (context, state) => const ExtractPdfPage(),
+                    pageBuilder: (context, state) => _toolPage(
+                      key: state.pageKey,
+                      child: const ExtractPdfPage(),
+                    ),
                   ),
                   GoRoute(
                     path: 'rotate-pdf',
-                    builder: (context, state) => const RotatePdfPage(),
+                    pageBuilder: (context, state) => _toolPage(
+                      key: state.pageKey,
+                      child: const RotatePdfPage(),
+                    ),
                   ),
                 ],
               ),
@@ -78,6 +91,23 @@ class AppRouter {
       ),
     ],
   );
+}
+
+Page<void> _toolPage({
+  required LocalKey key,
+  required Widget child,
+}) {
+  if (appPlatform == AppPlatform.desktop) {
+    return CustomTransitionPage(
+      key: key,
+      child: child,
+      transitionDuration: const Duration(milliseconds: 150),
+      reverseTransitionDuration: const Duration(milliseconds: 150),
+      transitionsBuilder: (_, animation, __, child) =>
+          FadeTransition(opacity: animation, child: child),
+    );
+  }
+  return MaterialPage(key: key, child: child);
 }
 
 class _PlaceholderPage extends StatelessWidget {
