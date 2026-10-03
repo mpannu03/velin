@@ -1,5 +1,7 @@
 export 'extract_pdf_engine.dart';
 export 'merge_pdf_engine.dart';
+export 'pdf_to_image_engine.dart';
+export 'pdf_to_image_input.dart';
 export 'rotate_pdf_engine.dart';
 export 'split_pdf_engine.dart';
 export 'split_pdf_input.dart';

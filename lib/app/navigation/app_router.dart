@@ -83,6 +83,13 @@ class AppRouter {
                       child: const RotatePdfPage(),
                     ),
                   ),
+                  GoRoute(
+                    path: 'pdf-to-image',
+                    pageBuilder: (context, state) => _toolPage(
+                      key: state.pageKey,
+                      child: const PdfToImagePage(),
+                    ),
+                  ),
                 ],
               ),
             ],

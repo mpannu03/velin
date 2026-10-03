@@ -466,4 +466,101 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get toolsRotateButtonDisabledHint =>
       'Choose a file, a rotation and an output location to continue.';
+
+  @override
+  String get toolsPdfToImageIntro =>
+      'Convert the pages of a PDF into image files.';
+
+  @override
+  String get toolsPdfToImageSourceSectionTitle => 'Source PDF';
+
+  @override
+  String get toolsPdfToImageFormatSectionTitle => 'Image format';
+
+  @override
+  String get toolsPdfToImageFormatPng => 'PNG';
+
+  @override
+  String get toolsPdfToImageFormatJpeg => 'JPEG';
+
+  @override
+  String get toolsPdfToImageFormatWebp => 'WebP';
+
+  @override
+  String get toolsPdfToImageFormatHelper =>
+      'PNG keeps every detail but produces larger files. JPEG and WebP are smaller thanks to the quality setting.';
+
+  @override
+  String get toolsPdfToImageColorSectionTitle => 'Colour mode';
+
+  @override
+  String get toolsPdfToImageColorModeColor => 'Colour';
+
+  @override
+  String get toolsPdfToImageColorModeGreyscale => 'Greyscale';
+
+  @override
+  String get toolsPdfToImageResolutionSectionTitle => 'Resolution';
+
+  @override
+  String get toolsPdfToImageDpiLabel => 'Resolution (DPI)';
+
+  @override
+  String get toolsPdfToImageDpiHelper =>
+      'Higher resolutions look sharper but take longer and use more disk space.';
+
+  @override
+  String get toolsPdfToImageQualityLabel => 'Quality';
+
+  @override
+  String get toolsPdfToImageQualityHelper =>
+      'Applies to JPEG and WebP only. PNG is always lossless.';
+
+  @override
+  String get toolsPdfToImagePagesSectionTitle => 'Pages to convert';
+
+  @override
+  String get toolsPdfToImageScopeAll => 'All pages';
+
+  @override
+  String get toolsPdfToImageScopeSelected => 'Selected pages';
+
+  @override
+  String get toolsPdfToImageSelectionHint => 'e.g. 1-5, 8, last';
+
+  @override
+  String get toolsPdfToImageSelectionHelper =>
+      'Each selected page is written as its own image file.';
+
+  @override
+  String get toolsPdfToImageSelectionInvalid =>
+      'Check the pages you want to convert.';
+
+  @override
+  String get toolsPdfToImageWarningNoFile => 'Choose a pdf file to convert.';
+
+  @override
+  String get toolsPdfToImageWarningNoFolder => 'Choose an output folder.';
+
+  @override
+  String get toolsPdfToImageWarningNoSelection =>
+      'Enter the pages you want to convert.';
+
+  @override
+  String toolsPdfToImageSuccess(int count) {
+    return 'Created $count image files.';
+  }
+
+  @override
+  String get toolsPdfToImageFailed => 'Could not convert the PDF to images.';
+
+  @override
+  String get toolsPdfToImageButton => 'Convert to Images';
+
+  @override
+  String get toolsPdfToImageSubmitting => 'Converting…';
+
+  @override
+  String get toolsPdfToImageButtonDisabledHint =>
+      'Choose a file and an output location to continue.';
 }

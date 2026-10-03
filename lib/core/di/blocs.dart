@@ -61,4 +61,14 @@ void registerBlocDependencies() {
       appEffectController: getIt<AppEffectController>(),
     ),
   );
+
+  getIt.registerFactoryParam<PdfToImageCubit, AppLocalizations, void>(
+    (l10n, _) => PdfToImageCubit(
+      l10n: l10n,
+      filePicker: getIt<DocumentFilePicker>(),
+      pdfToImageEngine: getIt<PdfToImageEngine>(),
+      taskManager: getIt<TaskManager>(),
+      appEffectController: getIt<AppEffectController>(),
+    ),
+  );
 }

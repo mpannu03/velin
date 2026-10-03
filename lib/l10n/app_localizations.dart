@@ -933,6 +933,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose a file, a rotation and an output location to continue.'**
   String get toolsRotateButtonDisabledHint;
+
+  /// Introductory description for the PDF to Image tool page.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert the pages of a PDF into image files.'**
+  String get toolsPdfToImageIntro;
+
+  /// Heading for the source file section on the PDF to Image page.
+  ///
+  /// In en, this message translates to:
+  /// **'Source PDF'**
+  String get toolsPdfToImageSourceSectionTitle;
+
+  /// Heading for the image format selector on the PDF to Image page.
+  ///
+  /// In en, this message translates to:
+  /// **'Image format'**
+  String get toolsPdfToImageFormatSectionTitle;
+
+  /// Label for the PNG image format option.
+  ///
+  /// In en, this message translates to:
+  /// **'PNG'**
+  String get toolsPdfToImageFormatPng;
+
+  /// Label for the JPEG image format option.
+  ///
+  /// In en, this message translates to:
+  /// **'JPEG'**
+  String get toolsPdfToImageFormatJpeg;
+
+  /// Label for the WebP image format option.
+  ///
+  /// In en, this message translates to:
+  /// **'WebP'**
+  String get toolsPdfToImageFormatWebp;
+
+  /// Helper text explaining the differences between the supported image formats.
+  ///
+  /// In en, this message translates to:
+  /// **'PNG keeps every detail but produces larger files. JPEG and WebP are smaller thanks to the quality setting.'**
+  String get toolsPdfToImageFormatHelper;
+
+  /// Heading for the colour mode selector on the PDF to Image page.
+  ///
+  /// In en, this message translates to:
+  /// **'Colour mode'**
+  String get toolsPdfToImageColorSectionTitle;
+
+  /// Option to render the pages in full colour.
+  ///
+  /// In en, this message translates to:
+  /// **'Colour'**
+  String get toolsPdfToImageColorModeColor;
+
+  /// Option to render the pages in greyscale.
+  ///
+  /// In en, this message translates to:
+  /// **'Greyscale'**
+  String get toolsPdfToImageColorModeGreyscale;
+
+  /// Heading for the resolution and quality settings on the PDF to Image page.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolution'**
+  String get toolsPdfToImageResolutionSectionTitle;
+
+  /// Label for the resolution selector on the PDF to Image page.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolution (DPI)'**
+  String get toolsPdfToImageDpiLabel;
+
+  /// Helper text explaining the effect of the resolution setting.
+  ///
+  /// In en, this message translates to:
+  /// **'Higher resolutions look sharper but take longer and use more disk space.'**
+  String get toolsPdfToImageDpiHelper;
+
+  /// Label for the image quality slider on the PDF to Image page.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality'**
+  String get toolsPdfToImageQualityLabel;
+
+  /// Helper text explaining that quality does not apply to PNG.
+  ///
+  /// In en, this message translates to:
+  /// **'Applies to JPEG and WebP only. PNG is always lossless.'**
+  String get toolsPdfToImageQualityHelper;
+
+  /// Heading for the page scope selector on the PDF to Image page.
+  ///
+  /// In en, this message translates to:
+  /// **'Pages to convert'**
+  String get toolsPdfToImagePagesSectionTitle;
+
+  /// Option to convert every page of the document.
+  ///
+  /// In en, this message translates to:
+  /// **'All pages'**
+  String get toolsPdfToImageScopeAll;
+
+  /// Option to convert only the pages entered in the selection field.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected pages'**
+  String get toolsPdfToImageScopeSelected;
+
+  /// Hint text for the PDF to Image page selection field.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 1-5, 8, last'**
+  String get toolsPdfToImageSelectionHint;
+
+  /// Helper text explaining that every page becomes a separate image file.
+  ///
+  /// In en, this message translates to:
+  /// **'Each selected page is written as its own image file.'**
+  String get toolsPdfToImageSelectionHelper;
+
+  /// Warning shown when the PDF to Image page selection cannot be parsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the pages you want to convert.'**
+  String get toolsPdfToImageSelectionInvalid;
+
+  /// Warning shown when the user tries to convert with no input file.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a pdf file to convert.'**
+  String get toolsPdfToImageWarningNoFile;
+
+  /// Warning shown when the user tries to convert without an output folder.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an output folder.'**
+  String get toolsPdfToImageWarningNoFolder;
+
+  /// Warning shown when the page scope requires a selection but none was given.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the pages you want to convert.'**
+  String get toolsPdfToImageWarningNoSelection;
+
+  /// Notification shown when the conversion completes successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Created {count} image files.'**
+  String toolsPdfToImageSuccess(int count);
+
+  /// Notification shown when the conversion fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not convert the PDF to images.'**
+  String get toolsPdfToImageFailed;
+
+  /// Label for the primary convert action button.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert to Images'**
+  String get toolsPdfToImageButton;
+
+  /// Label shown on the convert button while the conversion is running.
+  ///
+  /// In en, this message translates to:
+  /// **'Converting…'**
+  String get toolsPdfToImageSubmitting;
+
+  /// Tooltip explaining why the convert button is disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a file and an output location to continue.'**
+  String get toolsPdfToImageButtonDisabledHint;
 }
 
 class _AppLocalizationsDelegate

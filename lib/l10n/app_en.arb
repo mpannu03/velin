@@ -732,5 +732,155 @@
   "toolsRotateButtonDisabledHint": "Choose a file, a rotation and an output location to continue.",
   "@toolsRotateButtonDisabledHint": {
     "description": "Tooltip explaining why the rotate button is disabled."
+  },
+
+  "toolsPdfToImageIntro": "Convert the pages of a PDF into image files.",
+  "@toolsPdfToImageIntro": {
+    "description": "Introductory description for the PDF to Image tool page."
+  },
+
+  "toolsPdfToImageSourceSectionTitle": "Source PDF",
+  "@toolsPdfToImageSourceSectionTitle": {
+    "description": "Heading for the source file section on the PDF to Image page."
+  },
+
+  "toolsPdfToImageFormatSectionTitle": "Image format",
+  "@toolsPdfToImageFormatSectionTitle": {
+    "description": "Heading for the image format selector on the PDF to Image page."
+  },
+
+  "toolsPdfToImageFormatPng": "PNG",
+  "@toolsPdfToImageFormatPng": {
+    "description": "Label for the PNG image format option."
+  },
+
+  "toolsPdfToImageFormatJpeg": "JPEG",
+  "@toolsPdfToImageFormatJpeg": {
+    "description": "Label for the JPEG image format option."
+  },
+
+  "toolsPdfToImageFormatWebp": "WebP",
+  "@toolsPdfToImageFormatWebp": {
+    "description": "Label for the WebP image format option."
+  },
+
+  "toolsPdfToImageFormatHelper": "PNG keeps every detail but produces larger files. JPEG and WebP are smaller thanks to the quality setting.",
+  "@toolsPdfToImageFormatHelper": {
+    "description": "Helper text explaining the differences between the supported image formats."
+  },
+
+  "toolsPdfToImageColorSectionTitle": "Colour mode",
+  "@toolsPdfToImageColorSectionTitle": {
+    "description": "Heading for the colour mode selector on the PDF to Image page."
+  },
+
+  "toolsPdfToImageColorModeColor": "Colour",
+  "@toolsPdfToImageColorModeColor": {
+    "description": "Option to render the pages in full colour."
+  },
+
+  "toolsPdfToImageColorModeGreyscale": "Greyscale",
+  "@toolsPdfToImageColorModeGreyscale": {
+    "description": "Option to render the pages in greyscale."
+  },
+
+  "toolsPdfToImageResolutionSectionTitle": "Resolution",
+  "@toolsPdfToImageResolutionSectionTitle": {
+    "description": "Heading for the resolution and quality settings on the PDF to Image page."
+  },
+
+  "toolsPdfToImageDpiLabel": "Resolution (DPI)",
+  "@toolsPdfToImageDpiLabel": {
+    "description": "Label for the resolution selector on the PDF to Image page."
+  },
+
+  "toolsPdfToImageDpiHelper": "Higher resolutions look sharper but take longer and use more disk space.",
+  "@toolsPdfToImageDpiHelper": {
+    "description": "Helper text explaining the effect of the resolution setting."
+  },
+
+  "toolsPdfToImageQualityLabel": "Quality",
+  "@toolsPdfToImageQualityLabel": {
+    "description": "Label for the image quality slider on the PDF to Image page."
+  },
+
+  "toolsPdfToImageQualityHelper": "Applies to JPEG and WebP only. PNG is always lossless.",
+  "@toolsPdfToImageQualityHelper": {
+    "description": "Helper text explaining that quality does not apply to PNG."
+  },
+
+  "toolsPdfToImagePagesSectionTitle": "Pages to convert",
+  "@toolsPdfToImagePagesSectionTitle": {
+    "description": "Heading for the page scope selector on the PDF to Image page."
+  },
+
+  "toolsPdfToImageScopeAll": "All pages",
+  "@toolsPdfToImageScopeAll": {
+    "description": "Option to convert every page of the document."
+  },
+
+  "toolsPdfToImageScopeSelected": "Selected pages",
+  "@toolsPdfToImageScopeSelected": {
+    "description": "Option to convert only the pages entered in the selection field."
+  },
+
+  "toolsPdfToImageSelectionHint": "e.g. 1-5, 8, last",
+  "@toolsPdfToImageSelectionHint": {
+    "description": "Hint text for the PDF to Image page selection field."
+  },
+
+  "toolsPdfToImageSelectionHelper": "Each selected page is written as its own image file.",
+  "@toolsPdfToImageSelectionHelper": {
+    "description": "Helper text explaining that every page becomes a separate image file."
+  },
+
+  "toolsPdfToImageSelectionInvalid": "Check the pages you want to convert.",
+  "@toolsPdfToImageSelectionInvalid": {
+    "description": "Warning shown when the PDF to Image page selection cannot be parsed."
+  },
+
+  "toolsPdfToImageWarningNoFile": "Choose a pdf file to convert.",
+  "@toolsPdfToImageWarningNoFile": {
+    "description": "Warning shown when the user tries to convert with no input file."
+  },
+
+  "toolsPdfToImageWarningNoFolder": "Choose an output folder.",
+  "@toolsPdfToImageWarningNoFolder": {
+    "description": "Warning shown when the user tries to convert without an output folder."
+  },
+
+  "toolsPdfToImageWarningNoSelection": "Enter the pages you want to convert.",
+  "@toolsPdfToImageWarningNoSelection": {
+    "description": "Warning shown when the page scope requires a selection but none was given."
+  },
+
+  "toolsPdfToImageSuccess": "Created {count} image files.",
+  "@toolsPdfToImageSuccess": {
+    "description": "Notification shown when the conversion completes successfully.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "toolsPdfToImageFailed": "Could not convert the PDF to images.",
+  "@toolsPdfToImageFailed": {
+    "description": "Notification shown when the conversion fails."
+  },
+
+  "toolsPdfToImageButton": "Convert to Images",
+  "@toolsPdfToImageButton": {
+    "description": "Label for the primary convert action button."
+  },
+
+  "toolsPdfToImageSubmitting": "Converting…",
+  "@toolsPdfToImageSubmitting": {
+    "description": "Label shown on the convert button while the conversion is running."
+  },
+
+  "toolsPdfToImageButtonDisabledHint": "Choose a file and an output location to continue.",
+  "@toolsPdfToImageButtonDisabledHint": {
+    "description": "Tooltip explaining why the convert button is disabled."
   }
 }
