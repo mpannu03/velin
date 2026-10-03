@@ -25,4 +25,8 @@ void registerEngineDependencies() {
   getIt.registerLazySingleton<PdfToImageEngine>(
     () => PdfToImageEngine()
   );
+
+  getIt.registerLazySingleton<ImageToPdfEngine>(
+    () => ImageToPdfEngine()
+  );
 }

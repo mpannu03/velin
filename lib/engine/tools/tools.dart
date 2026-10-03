@@ -1,4 +1,6 @@
 export 'extract_pdf_engine.dart';
+export 'image_to_pdf_engine.dart';
+export 'image_to_pdf_input.dart';
 export 'merge_pdf_engine.dart';
 export 'pdf_to_image_engine.dart';
 export 'pdf_to_image_input.dart';
