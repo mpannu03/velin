@@ -13,4 +13,8 @@ void registerEngineDependencies() {
   getIt.registerLazySingleton<SplitPdfEngine>(
     () => SplitPdfEngine()
   );
+
+  getIt.registerLazySingleton<ExtractPdfEngine>(
+    () => ExtractPdfEngine()
+  );
 }

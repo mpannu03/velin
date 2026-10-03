@@ -357,4 +357,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toolsSplitSelectionInvalid => 'Check your page selections.';
+
+  @override
+  String get toolsExtractWarningNoFile => 'Choose a pdf file to extract.';
+
+  @override
+  String get toolsExtractWarningNoFolder => 'Choose an output folder.';
+
+  @override
+  String get toolsExtractWarningNoFileName => 'Enter an output file name.';
+
+  @override
+  String get toolsExtractSuccess => 'PDF extracted successfully.';
+
+  @override
+  String get toolsExtractFailed => 'Could not extract from the PDF.';
+
+  @override
+  String get toolsExtractButton => 'Extract PDF';
 }

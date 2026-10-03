@@ -562,5 +562,35 @@
   "toolsSplitSelectionInvalid": "Check your page selections.",
   "@toolsSplitSelectionInvalid": {
     "description": "Notification shown when a page selection group is invalid."
+  },
+
+  "toolsExtractWarningNoFile": "Choose a pdf file to extract.",
+  "@toolsExtractWarningNoFile": {
+    "description": "Warning shown when the user tries to extract with no input file."
+  },
+
+  "toolsExtractWarningNoFolder": "Choose an output folder.",
+  "@toolsExtractWarningNoFolder": {
+    "description": "Warning shown when the user tries to extract without an output folder."
+  },
+
+  "toolsExtractWarningNoFileName": "Enter an output file name.",
+  "@toolsExtractWarningNoFileName": {
+    "description": "Warning shown when the output file name is empty."
+  },
+
+  "toolsExtractSuccess": "PDF extracted successfully.",
+  "@toolsExtractSuccess": {
+    "description": "Notification shown when extraction completes successfully."
+  },
+
+  "toolsExtractFailed": "Could not extract from the PDF.",
+  "@toolsExtractFailed": {
+    "description": "Notification shown when pdf extraction fails."
+  },
+
+  "toolsExtractButton": "Extract PDF",
+  "@toolsExtractButton": {
+    "description": "Label for the primary extract action button."
   }
 }

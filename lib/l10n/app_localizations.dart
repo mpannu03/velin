@@ -729,6 +729,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check your page selections.'**
   String get toolsSplitSelectionInvalid;
+
+  /// Warning shown when the user tries to extract with no input file.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a pdf file to extract.'**
+  String get toolsExtractWarningNoFile;
+
+  /// Warning shown when the user tries to extract without an output folder.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an output folder.'**
+  String get toolsExtractWarningNoFolder;
+
+  /// Warning shown when the output file name is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an output file name.'**
+  String get toolsExtractWarningNoFileName;
+
+  /// Notification shown when extraction completes successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF extracted successfully.'**
+  String get toolsExtractSuccess;
+
+  /// Notification shown when pdf extraction fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not extract from the PDF.'**
+  String get toolsExtractFailed;
+
+  /// Label for the primary extract action button.
+  ///
+  /// In en, this message translates to:
+  /// **'Extract PDF'**
+  String get toolsExtractButton;
 }
 
 class _AppLocalizationsDelegate

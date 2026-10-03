@@ -123,8 +123,10 @@ class _OutputFilePickerState extends State<OutputFilePicker> {
                       TextField(
                         key: const ValueKey('output-file-name'),
                         controller: _fileNameController,
-                        onChanged: (value) =>
+                        onSubmitted: (value) =>
                             widget.onFileNameChanged?.call(value),
+                        onTapOutside: (_) => 
+                            widget.onFileNameChanged?.call(_fileNameController.text),
                         decoration: InputDecoration(
                           labelText: l10n.toolsOutputFileNameLabel,
                           isDense: true,
