@@ -17,4 +17,8 @@ void registerEngineDependencies() {
   getIt.registerLazySingleton<ExtractPdfEngine>(
     () => ExtractPdfEngine()
   );
+
+  getIt.registerLazySingleton<RotatePdfEngine>(
+    () => RotatePdfEngine()
+  );
 }
