@@ -189,20 +189,12 @@ class _BySelectionEditor extends StatelessWidget {
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(
-                    child: TextField(
-                      key: ValueKey('selection-field-$index'),
-                      controller: TextEditingController(
-                        text: viewModel.selections[index],
-                      ),
+                    child: PageSelectionField(
+                      value: viewModel.selections[index],
+                      fieldKey: ValueKey('selection-field-$index'),
                       onChanged: (value) => viewModel.onSelectionChanged(
                         index,
                         value,
-                      ),
-                      decoration: InputDecoration(
-                        labelText: l10n.toolsPagesLabel,
-                        hintText: l10n.toolsPagesHint,
-                        isDense: true,
-                        border: const OutlineInputBorder(),
                       ),
                     ),
                   ),

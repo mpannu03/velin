@@ -54,21 +54,12 @@ class ExtractPdfDesktopLayout extends StatelessWidget {
         const SizedBox(height: AppSpacing.lg),
         _SectionCard(
           title: l10n.toolsExtractSelectionSectionTitle,
-          child: SizedBox(
+          child: PageSelectionField(
+            value: viewModel.pageSelection ?? '',
+            fieldKey: const ValueKey('extract-page-selection'),
             width: 260,
-            child: TextField(
-              key: const ValueKey('extract-page-selection'),
-              controller: TextEditingController(
-                text: viewModel.pageSelection ?? '',
-              ),
-              onSubmitted: viewModel.onSelectionChanged,
-              decoration: InputDecoration(
-                labelText: l10n.toolsPagesLabel,
-                hintText: l10n.toolsExtractSelectionHint,
-                isDense: true,
-                border: const OutlineInputBorder(),
-              ),
-            ),
+            hintText: l10n.toolsExtractSelectionHint,
+            onSubmitted: viewModel.onSelectionChanged,
           ),
         ),
         const SizedBox(height: AppSpacing.lg),
