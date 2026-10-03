@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/app/theme/theme.dart';
 
 class ToolScaffold extends StatelessWidget {
   const ToolScaffold({
@@ -13,6 +14,8 @@ class ToolScaffold extends StatelessWidget {
   final String? description;
   final VoidCallback? onBack;
   final Widget child;
+
+  static const _maxContentWidth = 1000.0;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +61,15 @@ class ToolScaffold extends StatelessWidget {
             ],
           ),
         ),
-        Expanded(child: child),
+        SingleChildScrollView(
+          padding: const EdgeInsets.all(AppSpacing.xxl),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: _maxContentWidth),
+              child: Expanded(child: child)
+            ),
+          ),
+        ),
       ],
     );
   }

@@ -11,8 +11,6 @@ class MergePdfDesktopLayout extends StatelessWidget {
     super.key,
   });
 
-  static const _maxContentWidth = 1000.0;
-
   final MergePdfViewModel viewModel;
 
   @override
@@ -23,21 +21,21 @@ class MergePdfDesktopLayout extends StatelessWidget {
       title: l10n.toolsMergePdf,
       description: l10n.toolsMergeIntro,
       onBack: context.pop,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppSpacing.xxl),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: _maxContentWidth),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildContent(context),
-                const SizedBox(height: AppSpacing.xl),
-                _MergeActionBar(viewModel: viewModel),
-              ],
-            ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildContent(context),
+          const SizedBox(height: AppSpacing.xl),
+          ToolActionBar(
+            isSubmitting: viewModel.isSubmitting, 
+            submittingText: l10n.toolsMergeSubmitting, 
+            canAction: viewModel.canMerge, 
+            icon: Icons.merge_type, 
+            label: l10n.toolsMergeButton, 
+            hintText: l10n.toolsMergeButtonDisabledHint, 
+            onAction: () {  },
           ),
-        ),
+        ],
       ),
     );
   }
@@ -74,52 +72,6 @@ class MergePdfDesktopLayout extends StatelessWidget {
         const SizedBox(height: AppSpacing.lg),
         outputPicker,
       ],
-    );
-  }
-}
-
-class _MergeActionBar extends StatelessWidget {
-  const _MergeActionBar({required this.viewModel});
-
-  final MergePdfViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
-    if (viewModel.isSubmitting) {
-      return Align(
-        alignment: Alignment.centerRight,
-        child: FilledButton.icon(
-          onPressed: null,
-          icon: const SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
-          label: Text(l10n.toolsMergeSubmitting),
-        ),
-      );
-    }
-
-    final button = viewModel.canMerge
-        ? FilledButton.icon(
-            onPressed: viewModel.onMerge,
-            icon: const Icon(Icons.merge_type, size: 18),
-            label: Text(l10n.toolsMergeButton),
-          )
-        : OutlinedButton.icon(
-            onPressed: viewModel.onMerge,
-            icon: const Icon(Icons.merge_type, size: 18),
-            label: Text(l10n.toolsMergeButton),
-          );
-
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Tooltip(
-        message: viewModel.canMerge ? '' : l10n.toolsMergeButtonDisabledHint,
-        child: button,
-      ),
     );
   }
 }

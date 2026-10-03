@@ -12,8 +12,6 @@ class SplitPdfDesktopLayout extends StatelessWidget {
     super.key,
   });
 
-  static const _maxContentWidth = 1000.0;
-
   final SplitPdfViewModel viewModel;
 
   @override
@@ -24,21 +22,21 @@ class SplitPdfDesktopLayout extends StatelessWidget {
       title: l10n.toolsSplitPdf,
       description: l10n.toolsSplitIntro,
       onBack: context.pop,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppSpacing.xxl),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: _maxContentWidth),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildContent(context),
-                const SizedBox(height: AppSpacing.xl),
-                _SplitActionBar(viewModel: viewModel),
-              ],
-            ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildContent(context),
+          const SizedBox(height: AppSpacing.xl),
+          ToolActionBar(
+            isSubmitting: viewModel.isSubmitting, 
+            submittingText: l10n.toolsSplitSubmitting, 
+            canAction: viewModel.canSplit, 
+            icon: Icons.call_split, 
+            label: l10n.toolsSplitButton, 
+            hintText: l10n.toolsSplitButtonDisabledHint, 
+            onAction: () {  },
           ),
-        ),
+        ],
       ),
     );
   }
@@ -274,52 +272,6 @@ class _SectionCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.lg),
           child,
         ],
-      ),
-    );
-  }
-}
-
-class _SplitActionBar extends StatelessWidget {
-  const _SplitActionBar({required this.viewModel});
-
-  final SplitPdfViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
-    if (viewModel.isSubmitting) {
-      return Align(
-        alignment: Alignment.centerRight,
-        child: FilledButton.icon(
-          onPressed: null,
-          icon: const SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
-          label: Text(l10n.toolsSplitSubmitting),
-        ),
-      );
-    }
-
-    final button = viewModel.canSplit
-        ? FilledButton.icon(
-            onPressed: viewModel.onSplit,
-            icon: const Icon(Icons.call_split, size: 18),
-            label: Text(l10n.toolsSplitButton),
-          )
-        : OutlinedButton.icon(
-            onPressed: viewModel.onSplit,
-            icon: const Icon(Icons.call_split, size: 18),
-            label: Text(l10n.toolsSplitButton),
-          );
-
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Tooltip(
-        message: viewModel.canSplit ? '' : l10n.toolsSplitButtonDisabledHint,
-        child: button,
       ),
     );
   }
