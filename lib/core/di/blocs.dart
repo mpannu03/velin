@@ -101,4 +101,14 @@ void registerBlocDependencies() {
       appEffectController: getIt<AppEffectController>(),
     ),
   );
+
+  getIt.registerFactoryParam<CompressPdfCubit, AppLocalizations, void>(
+    (l10n, _) => CompressPdfCubit(
+      l10n: l10n,
+      filePicker: getIt<DocumentFilePicker>(),
+      compressPdfEngine: getIt<CompressPdfEngine>(),
+      taskManager: getIt<TaskManager>(),
+      appEffectController: getIt<AppEffectController>(),
+    ),
+  );
 }

@@ -823,4 +823,53 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get toolsUnlockButtonDisabledHint =>
       'Choose a file and an output location to continue.';
+
+  @override
+  String get toolsCompressButtonDisabledHint =>
+      'Choose a file and an output location to continue.';
+
+  @override
+  String get toolsCompressIntro =>
+      'Reduce the file size of a PDF while keeping its quality.';
+
+  @override
+  String get toolsCompressSourceSectionTitle => 'Source PDF';
+
+  @override
+  String get toolsCompressSourceDescription => 'Choose a PDF to compress.';
+
+  @override
+  String get toolsCompressQualitySectionTitle => 'Quality';
+
+  @override
+  String get toolsCompressQualityLabel => 'Quality';
+
+  @override
+  String get toolsCompressQualityHelper =>
+      'A lower quality compresses more. Text stays sharp either way.';
+
+  @override
+  String get toolsCompressWarningNoFile => 'Choose a pdf file to compress.';
+
+  @override
+  String get toolsCompressWarningNoFolder => 'Choose an output folder.';
+
+  @override
+  String get toolsCompressWarningNoFileName => 'Enter an output file name.';
+
+  @override
+  String get toolsCompressEncrypted =>
+      'Password protected PDFs cannot be compressed.';
+
+  @override
+  String get toolsCompressSuccess => 'PDF compressed successfully.';
+
+  @override
+  String get toolsCompressFailed => 'Could not compress the PDF.';
+
+  @override
+  String get toolsCompressButton => 'Compress PDF';
+
+  @override
+  String get toolsCompressSubmitting => 'Compressing…';
 }

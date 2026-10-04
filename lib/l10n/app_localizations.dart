@@ -1575,6 +1575,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose a file and an output location to continue.'**
   String get toolsUnlockButtonDisabledHint;
+
+  /// Tooltip explaining why the compress button is disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a file and an output location to continue.'**
+  String get toolsCompressButtonDisabledHint;
+
+  /// Introductory description shown at the top of the Compress PDF tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Reduce the file size of a PDF while keeping its quality.'**
+  String get toolsCompressIntro;
+
+  /// Section title for the source file picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Source PDF'**
+  String get toolsCompressSourceSectionTitle;
+
+  /// Empty state description for the source file picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a PDF to compress.'**
+  String get toolsCompressSourceDescription;
+
+  /// Section title for the quality slider.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality'**
+  String get toolsCompressQualitySectionTitle;
+
+  /// Label next to the quality slider.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality'**
+  String get toolsCompressQualityLabel;
+
+  /// Helper text explaining what the quality setting does.
+  ///
+  /// In en, this message translates to:
+  /// **'A lower quality compresses more. Text stays sharp either way.'**
+  String get toolsCompressQualityHelper;
+
+  /// Warning shown when no input file has been chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a pdf file to compress.'**
+  String get toolsCompressWarningNoFile;
+
+  /// Warning shown when no output folder has been chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an output folder.'**
+  String get toolsCompressWarningNoFolder;
+
+  /// Warning shown when the output file name is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an output file name.'**
+  String get toolsCompressWarningNoFileName;
+
+  /// Warning shown when the source document is encrypted.
+  ///
+  /// In en, this message translates to:
+  /// **'Password protected PDFs cannot be compressed.'**
+  String get toolsCompressEncrypted;
+
+  /// Notification shown when compressing completes successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF compressed successfully.'**
+  String get toolsCompressSuccess;
+
+  /// Notification shown when compressing fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not compress the PDF.'**
+  String get toolsCompressFailed;
+
+  /// Label for the primary compress action button.
+  ///
+  /// In en, this message translates to:
+  /// **'Compress PDF'**
+  String get toolsCompressButton;
+
+  /// Label shown on the compress button while compressing is running.
+  ///
+  /// In en, this message translates to:
+  /// **'Compressing…'**
+  String get toolsCompressSubmitting;
 }
 
 class _AppLocalizationsDelegate

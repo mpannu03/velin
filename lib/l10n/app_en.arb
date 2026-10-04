@@ -1249,5 +1249,80 @@
   "toolsUnlockButtonDisabledHint": "Choose a file and an output location to continue.",
   "@toolsUnlockButtonDisabledHint": {
     "description": "Tooltip explaining why the unlock button is disabled."
+  },
+
+  "toolsCompressButtonDisabledHint": "Choose a file and an output location to continue.",
+  "@toolsCompressButtonDisabledHint": {
+    "description": "Tooltip explaining why the compress button is disabled."
+  },
+
+  "toolsCompressIntro": "Reduce the file size of a PDF while keeping its quality.",
+  "@toolsCompressIntro": {
+    "description": "Introductory description shown at the top of the Compress PDF tool."
+  },
+
+  "toolsCompressSourceSectionTitle": "Source PDF",
+  "@toolsCompressSourceSectionTitle": {
+    "description": "Section title for the source file picker."
+  },
+
+  "toolsCompressSourceDescription": "Choose a PDF to compress.",
+  "@toolsCompressSourceDescription": {
+    "description": "Empty state description for the source file picker."
+  },
+
+  "toolsCompressQualitySectionTitle": "Quality",
+  "@toolsCompressQualitySectionTitle": {
+    "description": "Section title for the quality slider."
+  },
+
+  "toolsCompressQualityLabel": "Quality",
+  "@toolsCompressQualityLabel": {
+    "description": "Label next to the quality slider."
+  },
+
+  "toolsCompressQualityHelper": "A lower quality compresses more. Text stays sharp either way.",
+  "@toolsCompressQualityHelper": {
+    "description": "Helper text explaining what the quality setting does."
+  },
+
+  "toolsCompressWarningNoFile": "Choose a pdf file to compress.",
+  "@toolsCompressWarningNoFile": {
+    "description": "Warning shown when no input file has been chosen."
+  },
+
+  "toolsCompressWarningNoFolder": "Choose an output folder.",
+  "@toolsCompressWarningNoFolder": {
+    "description": "Warning shown when no output folder has been chosen."
+  },
+
+  "toolsCompressWarningNoFileName": "Enter an output file name.",
+  "@toolsCompressWarningNoFileName": {
+    "description": "Warning shown when the output file name is empty."
+  },
+
+  "toolsCompressEncrypted": "Password protected PDFs cannot be compressed.",
+  "@toolsCompressEncrypted": {
+    "description": "Warning shown when the source document is encrypted."
+  },
+
+  "toolsCompressSuccess": "PDF compressed successfully.",
+  "@toolsCompressSuccess": {
+    "description": "Notification shown when compressing completes successfully."
+  },
+
+  "toolsCompressFailed": "Could not compress the PDF.",
+  "@toolsCompressFailed": {
+    "description": "Notification shown when compressing fails."
+  },
+
+  "toolsCompressButton": "Compress PDF",
+  "@toolsCompressButton": {
+    "description": "Label for the primary compress action button."
+  },
+
+  "toolsCompressSubmitting": "Compressing\u2026",
+  "@toolsCompressSubmitting": {
+    "description": "Label shown on the compress button while compressing is running."
   }
 }

@@ -107,6 +107,13 @@ class AppRouter {
                       child: const DecryptPdfPage(),
                     ),
                   ),
+                  GoRoute(
+                    path: 'compress-pdf',
+                    pageBuilder: (context, state) => _toolPage(
+                      key: state.pageKey,
+                      child: const CompressPdfPage(),
+                    ),
+                  ),
                 ],
               ),
             ],
