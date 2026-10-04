@@ -11,7 +11,6 @@ class EncryptPdfState {
     this.ownerPassword = '',
     this.level = EncryptPdfEncryptionLevel.aes256,
     this.permissions = EncryptPdfPermissionPreset.all,
-    this.encryptMetadata = true,
     this.isSubmitting = false,
   });
 
@@ -29,9 +28,6 @@ class EncryptPdfState {
 
   final EncryptPdfEncryptionLevel level;
   final EncryptPdfPermissionPreset permissions;
-
-  /// When false the document's metadata stream stays in the clear.
-  final bool encryptMetadata;
 
   final bool isSubmitting;
 
@@ -83,7 +79,6 @@ class EncryptPdfState {
       ownerPassword: ownerPassword,
       level: level,
       permissions: permissions,
-      encryptMetadata: encryptMetadata,
     );
   }
 
@@ -95,7 +90,6 @@ class EncryptPdfState {
     String? ownerPassword,
     EncryptPdfEncryptionLevel? level,
     EncryptPdfPermissionPreset? permissions,
-    bool? encryptMetadata,
     bool? isSubmitting,
   }) {
     return EncryptPdfState(
@@ -112,7 +106,6 @@ class EncryptPdfState {
       ownerPassword: ownerPassword ?? this.ownerPassword,
       level: level ?? this.level,
       permissions: permissions ?? this.permissions,
-      encryptMetadata: encryptMetadata ?? this.encryptMetadata,
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
   }

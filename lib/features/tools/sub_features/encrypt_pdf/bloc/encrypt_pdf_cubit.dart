@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pdf_cos/pdf_cos.dart';
+import 'package:pdf_manipulator/pdf_manipulator.dart';
 import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/result/result.dart';
@@ -75,14 +75,6 @@ class EncryptPdfCubit extends Cubit<EncryptPdfState> {
     emit(state.copyWith(permissions: permissions));
   }
 
-  void toggleEncryptMetadata(bool encryptMetadata) {
-    if (encryptMetadata == state.encryptMetadata) {
-      return;
-    }
-
-    emit(state.copyWith(encryptMetadata: encryptMetadata));
-  }
-
   void updateOutputFileName(String? outputFileName) {
     emit(
       state.copyWith(
@@ -133,9 +125,10 @@ class EncryptPdfCubit extends Cubit<EncryptPdfState> {
         message: _l10n.toolsProtectSuccess,
         type: NotificationType.success,
       );
-    } on UnsupportedEncryptionException {
-      // The source is already protected: say so instead of a generic failure,
-      // because the fix is to unlock it first.
+    } on PdfPasswordRequired {
+      // The source is already protected: the engine opens it without a
+      // password, so this is how that surfaces. Say so instead of a generic
+      // failure, because the fix is to unlock it first.
       _notifyWarning(_l10n.toolsProtectAlreadyEncrypted);
     } catch (_) {
       _notifyError(_l10n.toolsProtectFailed);

@@ -11,7 +11,6 @@ class EncryptPdfViewModel {
     required this.ownerPassword,
     required this.level,
     required this.permissions,
-    required this.encryptMetadata,
     required this.isSubmitting,
     required this.canProtect,
     required this.onPickFile,
@@ -19,7 +18,6 @@ class EncryptPdfViewModel {
     required this.onOwnerPasswordChanged,
     required this.onLevelChanged,
     required this.onPermissionsChanged,
-    required this.onEncryptMetadataChanged,
     required this.onOutputFileNameChanged,
     required this.onChooseOutputFolder,
     required this.onProtect,
@@ -34,7 +32,6 @@ class EncryptPdfViewModel {
   final String ownerPassword;
   final EncryptPdfEncryptionLevel level;
   final EncryptPdfPermissionPreset permissions;
-  final bool encryptMetadata;
 
   final bool isSubmitting;
   final bool canProtect;
@@ -44,7 +41,6 @@ class EncryptPdfViewModel {
   final ValueChanged<String> onOwnerPasswordChanged;
   final ValueChanged<EncryptPdfEncryptionLevel> onLevelChanged;
   final ValueChanged<EncryptPdfPermissionPreset> onPermissionsChanged;
-  final ValueChanged<bool> onEncryptMetadataChanged;
   final ValueChanged<String> onOutputFileNameChanged;
   final VoidCallback onChooseOutputFolder;
   final VoidCallback onProtect;

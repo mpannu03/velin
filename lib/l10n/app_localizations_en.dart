@@ -727,13 +727,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Permissions are enforced by the viewer, not by the file. Anyone holding the owner password is unaffected.';
 
   @override
-  String get toolsProtectMetadataLabel => 'Encrypt document metadata';
-
-  @override
-  String get toolsProtectMetadataHelper =>
-      'Turn off to leave titles and author names readable to software that scans files.';
-
-  @override
   String get toolsProtectWarningNoFile => 'Choose a pdf file to protect.';
 
   @override

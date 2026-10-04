@@ -1402,18 +1402,6 @@ abstract class AppLocalizations {
   /// **'Permissions are enforced by the viewer, not by the file. Anyone holding the owner password is unaffected.'**
   String get toolsProtectPermissionsHelper;
 
-  /// Label for the switch that keeps the metadata stream encrypted.
-  ///
-  /// In en, this message translates to:
-  /// **'Encrypt document metadata'**
-  String get toolsProtectMetadataLabel;
-
-  /// Helper text explaining the metadata encryption switch.
-  ///
-  /// In en, this message translates to:
-  /// **'Turn off to leave titles and author names readable to software that scans files.'**
-  String get toolsProtectMetadataHelper;
-
   /// Warning shown when the user tries to protect with no input file.
   ///
   /// In en, this message translates to:

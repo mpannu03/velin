@@ -1106,16 +1106,6 @@
     "description": "Helper text explaining how permissions are enforced."
   },
 
-  "toolsProtectMetadataLabel": "Encrypt document metadata",
-  "@toolsProtectMetadataLabel": {
-    "description": "Label for the switch that keeps the metadata stream encrypted."
-  },
-
-  "toolsProtectMetadataHelper": "Turn off to leave titles and author names readable to software that scans files.",
-  "@toolsProtectMetadataHelper": {
-    "description": "Helper text explaining the metadata encryption switch."
-  },
-
   "toolsProtectWarningNoFile": "Choose a pdf file to protect.",
   "@toolsProtectWarningNoFile": {
     "description": "Warning shown when the user tries to protect with no input file."

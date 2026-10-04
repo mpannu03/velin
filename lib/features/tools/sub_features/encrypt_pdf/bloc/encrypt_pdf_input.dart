@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:velin/engine/engine.dart';
 
@@ -17,14 +18,10 @@ enum EncryptPdfEncryptionLevel {
   final PdfEncryptionLevel level;
 }
 
-/// How much a viewer is allowed to do with the protected document.
-///
-/// These are the three presets that cover real use. The engine's finer grained
-/// [PdfPermissions] stays available for callers that need a custom combination.
 enum EncryptPdfPermissionPreset {
-  all(PdfPermissions.all),
-  readOnly(PdfPermissions.readOnly),
-  none(PdfPermissions.none);
+  all(PdfPermissions.all()),
+  readOnly(PdfPermissions.readOnly()),
+  none(PdfPermissions.none());
 
   const EncryptPdfPermissionPreset(this.permissions);
 
@@ -41,7 +38,6 @@ class EncryptPdfToolInput {
     this.ownerPassword = '',
     this.level = EncryptPdfEncryptionLevel.aes256,
     this.permissions = EncryptPdfPermissionPreset.all,
-    this.encryptMetadata = true,
   });
 
   final String filePath;
@@ -51,15 +47,13 @@ class EncryptPdfToolInput {
   /// required, but the permissions still apply.
   final String userPassword;
 
-  /// Password that lifts the permission restrictions. Empty means the engine
-  /// generates a random one, matching what Acrobat and qpdf do.
+  /// Password that lifts the permission restrictions. Empty means a random one
+  /// is generated when the request is mapped to the engine, matching what
+  /// Acrobat and qpdf do.
   final String ownerPassword;
 
   final EncryptPdfEncryptionLevel level;
   final EncryptPdfPermissionPreset permissions;
-
-  /// When false the document's metadata stream stays in the clear.
-  final bool encryptMetadata;
 
   /// Whether protection would do anything at all.
   ///
@@ -80,7 +74,6 @@ class EncryptPdfToolInput {
     String? ownerPassword,
     EncryptPdfEncryptionLevel? level,
     EncryptPdfPermissionPreset? permissions,
-    bool? encryptMetadata,
   }) {
     return EncryptPdfToolInput(
       filePath: filePath,
@@ -89,7 +82,6 @@ class EncryptPdfToolInput {
       ownerPassword: ownerPassword ?? this.ownerPassword,
       level: level ?? this.level,
       permissions: permissions ?? this.permissions,
-      encryptMetadata: encryptMetadata ?? this.encryptMetadata,
     );
   }
 }
@@ -100,12 +92,25 @@ extension EncryptPdfMapper on EncryptPdfToolInput {
       inputFile: File(filePath),
       outputFile: File(outputFilePath),
       userPassword: userPassword,
-      // A blank owner password is left null so the engine generates one rather
-      // than writing an empty owner door anyone could walk through.
-      ownerPassword: ownerPassword.isEmpty ? null : ownerPassword,
+      // The engine always writes an owner password, so a blank field gets a
+      // random one. An owner password nobody knows is what makes "open freely,
+      // restrict editing" safe to offer without handing out full access.
+      ownerPassword: ownerPassword.isEmpty
+          ? _randomOwnerPassword()
+          : ownerPassword,
       permissions: permissions.permissions,
       level: level.level,
-      encryptMetadata: encryptMetadata,
     );
   }
+}
+
+/// 32 printable ASCII characters, which keeps the value out of the way of PDF
+/// string escaping rules while staying long enough to be unguessable.
+String _randomOwnerPassword() {
+  final random = math.Random.secure();
+
+  return List.generate(
+    32,
+    (_) => String.fromCharCode(33 + random.nextInt(94)),
+  ).join();
 }

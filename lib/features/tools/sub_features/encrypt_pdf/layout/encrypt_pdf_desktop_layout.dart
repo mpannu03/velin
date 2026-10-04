@@ -254,15 +254,6 @@ class _SecurityEditor extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.sm),
         _HelperText(l10n.toolsProtectPermissionsHelper),
-        const SizedBox(height: AppSpacing.md),
-        SwitchListTile(
-          key: const ValueKey('encrypt-metadata'),
-          contentPadding: EdgeInsets.zero,
-          value: viewModel.encryptMetadata,
-          title: Text(l10n.toolsProtectMetadataLabel),
-          subtitle: _HelperText(l10n.toolsProtectMetadataHelper),
-          onChanged: viewModel.onEncryptMetadataChanged,
-        ),
       ],
     );
   }
