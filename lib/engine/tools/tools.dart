@@ -1,3 +1,5 @@
+export 'add_watermark_engine.dart';
+export 'add_watermark_input.dart';
 export 'compress_pdf_engine.dart';
 export 'decrypt_pdf_engine.dart';
 export 'encrypt_pdf_engine.dart';

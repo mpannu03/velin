@@ -41,4 +41,8 @@ void registerEngineDependencies() {
   getIt.registerLazySingleton<CompressPdfEngine>(
     () => CompressPdfEngine()
   );
+
+  getIt.registerLazySingleton<AddWatermarkEngine>(
+    () => AddWatermarkEngine()
+  );
 }

@@ -28,6 +28,7 @@ dependencies:
   image: ^4.10.1
   pdf_cos: ^6.0.0
   crypto: ^3.0.7
+  pdf_manipulator: ^5.0.1
 
 dev_dependencies:
   flutter_test:
@@ -41,3 +42,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+
+hooks:
+  user_defines:
+    pdf_manipulator:
+      version: ^5.0.1
+      keep: auto
