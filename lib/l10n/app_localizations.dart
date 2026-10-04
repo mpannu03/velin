@@ -1665,6 +1665,330 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Compressing…'**
   String get toolsCompressSubmitting;
+
+  /// Introductory description shown at the top of the Watermark tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Stamp text or an image over the pages of a PDF.'**
+  String get toolsWatermarkIntro;
+
+  /// Heading for the source file section on the Watermark page.
+  ///
+  /// In en, this message translates to:
+  /// **'Source PDF'**
+  String get toolsWatermarkSourceSectionTitle;
+
+  /// Empty state copy for the source file picker on the Watermark page.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a PDF to watermark.'**
+  String get toolsWatermarkSourceDescription;
+
+  /// Heading for the watermark type section on the Watermark page.
+  ///
+  /// In en, this message translates to:
+  /// **'Watermark'**
+  String get toolsWatermarkTypeSectionTitle;
+
+  /// Option to stamp a text watermark.
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get toolsWatermarkTypeText;
+
+  /// Option to stamp an image watermark.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get toolsWatermarkTypeImage;
+
+  /// Label for the watermark text field.
+  ///
+  /// In en, this message translates to:
+  /// **'Watermark text'**
+  String get toolsWatermarkTextLabel;
+
+  /// Hint text for the watermark text field.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. CONFIDENTIAL'**
+  String get toolsWatermarkTextHint;
+
+  /// Label for the watermark font dropdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Font'**
+  String get toolsWatermarkFontLabel;
+
+  /// Option that lets the engine pick the default watermark font.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get toolsWatermarkFontDefault;
+
+  /// Label for the watermark font size slider.
+  ///
+  /// In en, this message translates to:
+  /// **'Font size'**
+  String get toolsWatermarkFontSizeLabel;
+
+  /// Label for the watermark color picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get toolsWatermarkColorLabel;
+
+  /// Hint text for the watermark hexadecimal color field.
+  ///
+  /// In en, this message translates to:
+  /// **'#RRGGBB'**
+  String get toolsWatermarkColorHint;
+
+  /// Error text shown when the hexadecimal color is malformed.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a color like #808080.'**
+  String get toolsWatermarkColorInvalid;
+
+  /// Empty state copy for the watermark image picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an image to stamp on the pages.'**
+  String get toolsWatermarkImageDescription;
+
+  /// Button label for picking a watermark image.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose image'**
+  String get toolsWatermarkImageChoose;
+
+  /// Button label for replacing a chosen watermark image.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get toolsWatermarkImageReplace;
+
+  /// Button label for clearing the chosen watermark image.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get toolsWatermarkImageRemove;
+
+  /// Label for the watermark image width slider.
+  ///
+  /// In en, this message translates to:
+  /// **'Image width'**
+  String get toolsWatermarkImageWidthLabel;
+
+  /// Helper text under the watermark image width slider.
+  ///
+  /// In en, this message translates to:
+  /// **'Percentage of the page width the image covers.'**
+  String get toolsWatermarkImageWidthHelper;
+
+  /// Heading for the style section on the Watermark page.
+  ///
+  /// In en, this message translates to:
+  /// **'Layout and style'**
+  String get toolsWatermarkStyleSectionTitle;
+
+  /// Label for the watermark opacity slider.
+  ///
+  /// In en, this message translates to:
+  /// **'Opacity'**
+  String get toolsWatermarkOpacityLabel;
+
+  /// Label for the watermark rotation slider.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotation'**
+  String get toolsWatermarkRotationLabel;
+
+  /// Helper text under the watermark rotation slider.
+  ///
+  /// In en, this message translates to:
+  /// **'Degrees. Negative values tilt the watermark upwards.'**
+  String get toolsWatermarkRotationHelper;
+
+  /// Label for the watermark position selector.
+  ///
+  /// In en, this message translates to:
+  /// **'Position'**
+  String get toolsWatermarkPositionLabel;
+
+  /// Position option that centers the watermark.
+  ///
+  /// In en, this message translates to:
+  /// **'Center'**
+  String get toolsWatermarkPositionCenter;
+
+  /// Position option that anchors the watermark to the top left.
+  ///
+  /// In en, this message translates to:
+  /// **'Top left'**
+  String get toolsWatermarkPositionTopLeft;
+
+  /// Position option that anchors the watermark to the top right.
+  ///
+  /// In en, this message translates to:
+  /// **'Top right'**
+  String get toolsWatermarkPositionTopRight;
+
+  /// Position option that anchors the watermark to the bottom left.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottom left'**
+  String get toolsWatermarkPositionBottomLeft;
+
+  /// Position option that anchors the watermark to the bottom right.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottom right'**
+  String get toolsWatermarkPositionBottomRight;
+
+  /// Label for the horizontal watermark offset slider.
+  ///
+  /// In en, this message translates to:
+  /// **'X offset'**
+  String get toolsWatermarkOffsetXLabel;
+
+  /// Label for the vertical watermark offset slider.
+  ///
+  /// In en, this message translates to:
+  /// **'Y offset'**
+  String get toolsWatermarkOffsetYLabel;
+
+  /// Helper text under the watermark offset sliders.
+  ///
+  /// In en, this message translates to:
+  /// **'Shift the watermark from its anchor, in PDF points.'**
+  String get toolsWatermarkOffsetHelper;
+
+  /// Label for the watermark layer selector.
+  ///
+  /// In en, this message translates to:
+  /// **'Layer'**
+  String get toolsWatermarkLayerLabel;
+
+  /// Option to draw the watermark above the page content.
+  ///
+  /// In en, this message translates to:
+  /// **'On top'**
+  String get toolsWatermarkLayerForeground;
+
+  /// Option to draw the watermark below the page content.
+  ///
+  /// In en, this message translates to:
+  /// **'Behind'**
+  String get toolsWatermarkLayerBackground;
+
+  /// Heading for the page scope selector on the Watermark page.
+  ///
+  /// In en, this message translates to:
+  /// **'Pages to mark'**
+  String get toolsWatermarkPagesSectionTitle;
+
+  /// Option to stamp every page of the document.
+  ///
+  /// In en, this message translates to:
+  /// **'All pages'**
+  String get toolsWatermarkScopeAll;
+
+  /// Option to stamp only the pages entered in the selection field.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected pages'**
+  String get toolsWatermarkScopeSelected;
+
+  /// Hint text for the Watermark page selection field.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 1-5, 8, last'**
+  String get toolsWatermarkSelectionHint;
+
+  /// Helper text under the Watermark page selection field.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to selected pages to mark only part of the document.'**
+  String get toolsWatermarkSelectionHelper;
+
+  /// Warning shown when no input file has been chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a pdf file to watermark.'**
+  String get toolsWatermarkWarningNoFile;
+
+  /// Warning shown when no output folder has been chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an output folder.'**
+  String get toolsWatermarkWarningNoFolder;
+
+  /// Warning shown when the output file name is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an output file name.'**
+  String get toolsWatermarkWarningNoFileName;
+
+  /// Warning shown when a text watermark has no content.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the text to stamp.'**
+  String get toolsWatermarkWarningNoText;
+
+  /// Warning shown when an image watermark has no image.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a watermark image.'**
+  String get toolsWatermarkWarningNoImage;
+
+  /// Warning shown when the page selection field is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the pages to mark.'**
+  String get toolsWatermarkWarningNoSelection;
+
+  /// Warning shown when the hexadecimal color is malformed.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a color like #808080.'**
+  String get toolsWatermarkWarningInvalidColor;
+
+  /// Warning shown when the page selection cannot be parsed.
+  ///
+  /// In en, this message translates to:
+  /// **'That page selection could not be read.'**
+  String get toolsWatermarkSelectionInvalid;
+
+  /// Notification shown when applying a watermark completes successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Watermark applied successfully.'**
+  String get toolsWatermarkSuccess;
+
+  /// Notification shown when applying a watermark fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not apply the watermark.'**
+  String get toolsWatermarkFailed;
+
+  /// Label for the primary watermark action button.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply watermark'**
+  String get toolsWatermarkButton;
+
+  /// Tooltip explaining why the watermark button is disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a file, a watermark and an output location to continue.'**
+  String get toolsWatermarkButtonDisabledHint;
+
+  /// Label shown on the watermark button while the operation is running.
+  ///
+  /// In en, this message translates to:
+  /// **'Applying watermark…'**
+  String get toolsWatermarkSubmitting;
 }
 
 class _AppLocalizationsDelegate

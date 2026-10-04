@@ -114,6 +114,13 @@ class AppRouter {
                       child: const CompressPdfPage(),
                     ),
                   ),
+                  GoRoute(
+                    path: 'watermark',
+                    pageBuilder: (context, state) => _toolPage(
+                      key: state.pageKey,
+                      child: const AddWatermarkPage(),
+                    ),
+                  ),
                 ],
               ),
             ],

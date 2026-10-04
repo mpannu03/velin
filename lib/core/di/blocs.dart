@@ -111,4 +111,14 @@ void registerBlocDependencies() {
       appEffectController: getIt<AppEffectController>(),
     ),
   );
+
+  getIt.registerFactoryParam<AddWatermarkCubit, AppLocalizations, void>(
+    (l10n, _) => AddWatermarkCubit(
+      l10n: l10n,
+      filePicker: getIt<DocumentFilePicker>(),
+      addWatermarkEngine: getIt<AddWatermarkEngine>(),
+      taskManager: getIt<TaskManager>(),
+      appEffectController: getIt<AppEffectController>(),
+    ),
+  );
 }

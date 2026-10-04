@@ -1324,5 +1324,275 @@
   "toolsCompressSubmitting": "Compressing\u2026",
   "@toolsCompressSubmitting": {
     "description": "Label shown on the compress button while compressing is running."
+  },
+
+  "toolsWatermarkIntro": "Stamp text or an image over the pages of a PDF.",
+  "@toolsWatermarkIntro": {
+    "description": "Introductory description shown at the top of the Watermark tool."
+  },
+
+  "toolsWatermarkSourceSectionTitle": "Source PDF",
+  "@toolsWatermarkSourceSectionTitle": {
+    "description": "Heading for the source file section on the Watermark page."
+  },
+
+  "toolsWatermarkSourceDescription": "Choose a PDF to watermark.",
+  "@toolsWatermarkSourceDescription": {
+    "description": "Empty state copy for the source file picker on the Watermark page."
+  },
+
+  "toolsWatermarkTypeSectionTitle": "Watermark",
+  "@toolsWatermarkTypeSectionTitle": {
+    "description": "Heading for the watermark type section on the Watermark page."
+  },
+
+  "toolsWatermarkTypeText": "Text",
+  "@toolsWatermarkTypeText": {
+    "description": "Option to stamp a text watermark."
+  },
+
+  "toolsWatermarkTypeImage": "Image",
+  "@toolsWatermarkTypeImage": {
+    "description": "Option to stamp an image watermark."
+  },
+
+  "toolsWatermarkTextLabel": "Watermark text",
+  "@toolsWatermarkTextLabel": {
+    "description": "Label for the watermark text field."
+  },
+
+  "toolsWatermarkTextHint": "e.g. CONFIDENTIAL",
+  "@toolsWatermarkTextHint": {
+    "description": "Hint text for the watermark text field."
+  },
+
+  "toolsWatermarkFontLabel": "Font",
+  "@toolsWatermarkFontLabel": {
+    "description": "Label for the watermark font dropdown."
+  },
+
+  "toolsWatermarkFontDefault": "Default",
+  "@toolsWatermarkFontDefault": {
+    "description": "Option that lets the engine pick the default watermark font."
+  },
+
+  "toolsWatermarkFontSizeLabel": "Font size",
+  "@toolsWatermarkFontSizeLabel": {
+    "description": "Label for the watermark font size slider."
+  },
+
+  "toolsWatermarkColorLabel": "Color",
+  "@toolsWatermarkColorLabel": {
+    "description": "Label for the watermark color picker."
+  },
+
+  "toolsWatermarkColorHint": "#RRGGBB",
+  "@toolsWatermarkColorHint": {
+    "description": "Hint text for the watermark hexadecimal color field."
+  },
+
+  "toolsWatermarkColorInvalid": "Enter a color like #808080.",
+  "@toolsWatermarkColorInvalid": {
+    "description": "Error text shown when the hexadecimal color is malformed."
+  },
+
+  "toolsWatermarkImageDescription": "Choose an image to stamp on the pages.",
+  "@toolsWatermarkImageDescription": {
+    "description": "Empty state copy for the watermark image picker."
+  },
+
+  "toolsWatermarkImageChoose": "Choose image",
+  "@toolsWatermarkImageChoose": {
+    "description": "Button label for picking a watermark image."
+  },
+
+  "toolsWatermarkImageReplace": "Replace",
+  "@toolsWatermarkImageReplace": {
+    "description": "Button label for replacing a chosen watermark image."
+  },
+
+  "toolsWatermarkImageRemove": "Remove",
+  "@toolsWatermarkImageRemove": {
+    "description": "Button label for clearing the chosen watermark image."
+  },
+
+  "toolsWatermarkImageWidthLabel": "Image width",
+  "@toolsWatermarkImageWidthLabel": {
+    "description": "Label for the watermark image width slider."
+  },
+
+  "toolsWatermarkImageWidthHelper": "Percentage of the page width the image covers.",
+  "@toolsWatermarkImageWidthHelper": {
+    "description": "Helper text under the watermark image width slider."
+  },
+
+  "toolsWatermarkStyleSectionTitle": "Layout and style",
+  "@toolsWatermarkStyleSectionTitle": {
+    "description": "Heading for the style section on the Watermark page."
+  },
+
+  "toolsWatermarkOpacityLabel": "Opacity",
+  "@toolsWatermarkOpacityLabel": {
+    "description": "Label for the watermark opacity slider."
+  },
+
+  "toolsWatermarkRotationLabel": "Rotation",
+  "@toolsWatermarkRotationLabel": {
+    "description": "Label for the watermark rotation slider."
+  },
+
+  "toolsWatermarkRotationHelper": "Degrees. Negative values tilt the watermark upwards.",
+  "@toolsWatermarkRotationHelper": {
+    "description": "Helper text under the watermark rotation slider."
+  },
+
+  "toolsWatermarkPositionLabel": "Position",
+  "@toolsWatermarkPositionLabel": {
+    "description": "Label for the watermark position selector."
+  },
+
+  "toolsWatermarkPositionCenter": "Center",
+  "@toolsWatermarkPositionCenter": {
+    "description": "Position option that centers the watermark."
+  },
+
+  "toolsWatermarkPositionTopLeft": "Top left",
+  "@toolsWatermarkPositionTopLeft": {
+    "description": "Position option that anchors the watermark to the top left."
+  },
+
+  "toolsWatermarkPositionTopRight": "Top right",
+  "@toolsWatermarkPositionTopRight": {
+    "description": "Position option that anchors the watermark to the top right."
+  },
+
+  "toolsWatermarkPositionBottomLeft": "Bottom left",
+  "@toolsWatermarkPositionBottomLeft": {
+    "description": "Position option that anchors the watermark to the bottom left."
+  },
+
+  "toolsWatermarkPositionBottomRight": "Bottom right",
+  "@toolsWatermarkPositionBottomRight": {
+    "description": "Position option that anchors the watermark to the bottom right."
+  },
+
+  "toolsWatermarkOffsetXLabel": "X offset",
+  "@toolsWatermarkOffsetXLabel": {
+    "description": "Label for the horizontal watermark offset slider."
+  },
+
+  "toolsWatermarkOffsetYLabel": "Y offset",
+  "@toolsWatermarkOffsetYLabel": {
+    "description": "Label for the vertical watermark offset slider."
+  },
+
+  "toolsWatermarkOffsetHelper": "Shift the watermark from its anchor, in PDF points.",
+  "@toolsWatermarkOffsetHelper": {
+    "description": "Helper text under the watermark offset sliders."
+  },
+
+  "toolsWatermarkLayerLabel": "Layer",
+  "@toolsWatermarkLayerLabel": {
+    "description": "Label for the watermark layer selector."
+  },
+
+  "toolsWatermarkLayerForeground": "On top",
+  "@toolsWatermarkLayerForeground": {
+    "description": "Option to draw the watermark above the page content."
+  },
+
+  "toolsWatermarkLayerBackground": "Behind",
+  "@toolsWatermarkLayerBackground": {
+    "description": "Option to draw the watermark below the page content."
+  },
+
+  "toolsWatermarkPagesSectionTitle": "Pages to mark",
+  "@toolsWatermarkPagesSectionTitle": {
+    "description": "Heading for the page scope selector on the Watermark page."
+  },
+
+  "toolsWatermarkScopeAll": "All pages",
+  "@toolsWatermarkScopeAll": {
+    "description": "Option to stamp every page of the document."
+  },
+
+  "toolsWatermarkScopeSelected": "Selected pages",
+  "@toolsWatermarkScopeSelected": {
+    "description": "Option to stamp only the pages entered in the selection field."
+  },
+
+  "toolsWatermarkSelectionHint": "e.g. 1-5, 8, last",
+  "@toolsWatermarkSelectionHint": {
+    "description": "Hint text for the Watermark page selection field."
+  },
+
+  "toolsWatermarkSelectionHelper": "Switch to selected pages to mark only part of the document.",
+  "@toolsWatermarkSelectionHelper": {
+    "description": "Helper text under the Watermark page selection field."
+  },
+
+  "toolsWatermarkWarningNoFile": "Choose a pdf file to watermark.",
+  "@toolsWatermarkWarningNoFile": {
+    "description": "Warning shown when no input file has been chosen."
+  },
+
+  "toolsWatermarkWarningNoFolder": "Choose an output folder.",
+  "@toolsWatermarkWarningNoFolder": {
+    "description": "Warning shown when no output folder has been chosen."
+  },
+
+  "toolsWatermarkWarningNoFileName": "Enter an output file name.",
+  "@toolsWatermarkWarningNoFileName": {
+    "description": "Warning shown when the output file name is empty."
+  },
+
+  "toolsWatermarkWarningNoText": "Enter the text to stamp.",
+  "@toolsWatermarkWarningNoText": {
+    "description": "Warning shown when a text watermark has no content."
+  },
+
+  "toolsWatermarkWarningNoImage": "Choose a watermark image.",
+  "@toolsWatermarkWarningNoImage": {
+    "description": "Warning shown when an image watermark has no image."
+  },
+
+  "toolsWatermarkWarningNoSelection": "Enter the pages to mark.",
+  "@toolsWatermarkWarningNoSelection": {
+    "description": "Warning shown when the page selection field is empty."
+  },
+
+  "toolsWatermarkWarningInvalidColor": "Enter a color like #808080.",
+  "@toolsWatermarkWarningInvalidColor": {
+    "description": "Warning shown when the hexadecimal color is malformed."
+  },
+
+  "toolsWatermarkSelectionInvalid": "That page selection could not be read.",
+  "@toolsWatermarkSelectionInvalid": {
+    "description": "Warning shown when the page selection cannot be parsed."
+  },
+
+  "toolsWatermarkSuccess": "Watermark applied successfully.",
+  "@toolsWatermarkSuccess": {
+    "description": "Notification shown when applying a watermark completes successfully."
+  },
+
+  "toolsWatermarkFailed": "Could not apply the watermark.",
+  "@toolsWatermarkFailed": {
+    "description": "Notification shown when applying a watermark fails."
+  },
+
+  "toolsWatermarkButton": "Apply watermark",
+  "@toolsWatermarkButton": {
+    "description": "Label for the primary watermark action button."
+  },
+
+  "toolsWatermarkButtonDisabledHint": "Choose a file, a watermark and an output location to continue.",
+  "@toolsWatermarkButtonDisabledHint": {
+    "description": "Tooltip explaining why the watermark button is disabled."
+  },
+
+  "toolsWatermarkSubmitting": "Applying watermark\u2026",
+  "@toolsWatermarkSubmitting": {
+    "description": "Label shown on the watermark button while the operation is running."
   }
 }

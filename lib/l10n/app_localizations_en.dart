@@ -872,4 +872,174 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toolsCompressSubmitting => 'Compressing…';
+
+  @override
+  String get toolsWatermarkIntro =>
+      'Stamp text or an image over the pages of a PDF.';
+
+  @override
+  String get toolsWatermarkSourceSectionTitle => 'Source PDF';
+
+  @override
+  String get toolsWatermarkSourceDescription => 'Choose a PDF to watermark.';
+
+  @override
+  String get toolsWatermarkTypeSectionTitle => 'Watermark';
+
+  @override
+  String get toolsWatermarkTypeText => 'Text';
+
+  @override
+  String get toolsWatermarkTypeImage => 'Image';
+
+  @override
+  String get toolsWatermarkTextLabel => 'Watermark text';
+
+  @override
+  String get toolsWatermarkTextHint => 'e.g. CONFIDENTIAL';
+
+  @override
+  String get toolsWatermarkFontLabel => 'Font';
+
+  @override
+  String get toolsWatermarkFontDefault => 'Default';
+
+  @override
+  String get toolsWatermarkFontSizeLabel => 'Font size';
+
+  @override
+  String get toolsWatermarkColorLabel => 'Color';
+
+  @override
+  String get toolsWatermarkColorHint => '#RRGGBB';
+
+  @override
+  String get toolsWatermarkColorInvalid => 'Enter a color like #808080.';
+
+  @override
+  String get toolsWatermarkImageDescription =>
+      'Choose an image to stamp on the pages.';
+
+  @override
+  String get toolsWatermarkImageChoose => 'Choose image';
+
+  @override
+  String get toolsWatermarkImageReplace => 'Replace';
+
+  @override
+  String get toolsWatermarkImageRemove => 'Remove';
+
+  @override
+  String get toolsWatermarkImageWidthLabel => 'Image width';
+
+  @override
+  String get toolsWatermarkImageWidthHelper =>
+      'Percentage of the page width the image covers.';
+
+  @override
+  String get toolsWatermarkStyleSectionTitle => 'Layout and style';
+
+  @override
+  String get toolsWatermarkOpacityLabel => 'Opacity';
+
+  @override
+  String get toolsWatermarkRotationLabel => 'Rotation';
+
+  @override
+  String get toolsWatermarkRotationHelper =>
+      'Degrees. Negative values tilt the watermark upwards.';
+
+  @override
+  String get toolsWatermarkPositionLabel => 'Position';
+
+  @override
+  String get toolsWatermarkPositionCenter => 'Center';
+
+  @override
+  String get toolsWatermarkPositionTopLeft => 'Top left';
+
+  @override
+  String get toolsWatermarkPositionTopRight => 'Top right';
+
+  @override
+  String get toolsWatermarkPositionBottomLeft => 'Bottom left';
+
+  @override
+  String get toolsWatermarkPositionBottomRight => 'Bottom right';
+
+  @override
+  String get toolsWatermarkOffsetXLabel => 'X offset';
+
+  @override
+  String get toolsWatermarkOffsetYLabel => 'Y offset';
+
+  @override
+  String get toolsWatermarkOffsetHelper =>
+      'Shift the watermark from its anchor, in PDF points.';
+
+  @override
+  String get toolsWatermarkLayerLabel => 'Layer';
+
+  @override
+  String get toolsWatermarkLayerForeground => 'On top';
+
+  @override
+  String get toolsWatermarkLayerBackground => 'Behind';
+
+  @override
+  String get toolsWatermarkPagesSectionTitle => 'Pages to mark';
+
+  @override
+  String get toolsWatermarkScopeAll => 'All pages';
+
+  @override
+  String get toolsWatermarkScopeSelected => 'Selected pages';
+
+  @override
+  String get toolsWatermarkSelectionHint => 'e.g. 1-5, 8, last';
+
+  @override
+  String get toolsWatermarkSelectionHelper =>
+      'Switch to selected pages to mark only part of the document.';
+
+  @override
+  String get toolsWatermarkWarningNoFile => 'Choose a pdf file to watermark.';
+
+  @override
+  String get toolsWatermarkWarningNoFolder => 'Choose an output folder.';
+
+  @override
+  String get toolsWatermarkWarningNoFileName => 'Enter an output file name.';
+
+  @override
+  String get toolsWatermarkWarningNoText => 'Enter the text to stamp.';
+
+  @override
+  String get toolsWatermarkWarningNoImage => 'Choose a watermark image.';
+
+  @override
+  String get toolsWatermarkWarningNoSelection => 'Enter the pages to mark.';
+
+  @override
+  String get toolsWatermarkWarningInvalidColor => 'Enter a color like #808080.';
+
+  @override
+  String get toolsWatermarkSelectionInvalid =>
+      'That page selection could not be read.';
+
+  @override
+  String get toolsWatermarkSuccess => 'Watermark applied successfully.';
+
+  @override
+  String get toolsWatermarkFailed => 'Could not apply the watermark.';
+
+  @override
+  String get toolsWatermarkButton => 'Apply watermark';
+
+  @override
+  String get toolsWatermarkButtonDisabledHint =>
+      'Choose a file, a watermark and an output location to continue.';
+
+  @override
+  String get toolsWatermarkSubmitting => 'Applying watermark…';
 }

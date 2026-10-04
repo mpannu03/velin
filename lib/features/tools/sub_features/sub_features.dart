@@ -1,3 +1,4 @@
+export 'add_watermark/add_watermark.dart';
 export 'compress_pdf/compress_pdf.dart';
 export 'decrypt_pdf/decrypt_pdf.dart';
 export 'encrypt_pdf/encrypt_pdf.dart';
