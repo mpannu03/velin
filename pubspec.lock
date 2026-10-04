@@ -202,7 +202,7 @@ packages:
     source: hosted
     version: "0.3.5+5"
   crypto:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: crypto
       sha256: c8ea0233063ba03258fbcf2ca4d6dadfefe14f02fab57702265467a19f27fadf
@@ -669,6 +669,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  pdf_cos:
+    dependency: "direct main"
+    description:
+      name: pdf_cos
+      sha256: bbcebd153bfc0560d9576292d9c4de6ec59b82a1356e80cafee30f662d0a651e
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
   pdfium_dart:
     dependency: transitive
     description:

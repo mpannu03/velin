@@ -26,6 +26,8 @@ dependencies:
   material_symbols_icons: ^4.2960.0
   pdfrx_engine: ^0.6.1
   image: ^4.10.1
+  pdf_cos: ^6.0.0
+  crypto: ^3.0.7
 
 dev_dependencies:
   flutter_test:

@@ -29,4 +29,12 @@ void registerEngineDependencies() {
   getIt.registerLazySingleton<ImageToPdfEngine>(
     () => ImageToPdfEngine()
   );
+
+  getIt.registerLazySingleton<EncryptPdfEngine>(
+    () => EncryptPdfEngine()
+  );
+
+  getIt.registerLazySingleton<DecryptPdfEngine>(
+    () => DecryptPdfEngine()
+  );
 }

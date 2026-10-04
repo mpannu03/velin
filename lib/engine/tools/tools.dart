@@ -1,9 +1,14 @@
+export 'decrypt_pdf_engine.dart';
+export 'encrypt_pdf_engine.dart';
 export 'extract_pdf_engine.dart';
 export 'image_to_pdf_engine.dart';
 export 'image_to_pdf_input.dart';
 export 'merge_pdf_engine.dart';
+export 'pdf_encryption_level.dart';
+export 'pdf_permissions.dart';
 export 'pdf_to_image_engine.dart';
 export 'pdf_to_image_input.dart';
+export 'protect/protect.dart';
 export 'rotate_pdf_engine.dart';
 export 'split_pdf_engine.dart';
 export 'split_pdf_input.dart';
