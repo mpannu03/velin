@@ -662,4 +662,165 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get toolsImageToPdfButtonDisabledHint =>
       'Add images and choose an output location to continue.';
+
+  @override
+  String get toolsProtectIntro =>
+      'Add a password and choose what viewers are allowed to do.';
+
+  @override
+  String get toolsProtectSourceSectionTitle => 'Source PDF';
+
+  @override
+  String get toolsProtectAlreadyProtectedDescription =>
+      'Choose a PDF that is not password protected yet.';
+
+  @override
+  String get toolsProtectPasswordSectionTitle => 'Passwords';
+
+  @override
+  String get toolsProtectUserPasswordLabel => 'Password to open';
+
+  @override
+  String get toolsProtectUserPasswordHelper =>
+      'Leave empty to let anyone open the document, while the permissions below still apply.';
+
+  @override
+  String get toolsProtectOwnerPasswordLabel => 'Owner password';
+
+  @override
+  String get toolsProtectOwnerPasswordHelper =>
+      'Optional. Leave empty and a random owner password is generated, so nobody can lift the restrictions.';
+
+  @override
+  String get toolsProtectSecuritySectionTitle => 'Protection';
+
+  @override
+  String get toolsProtectEncryptionLabel => 'Encryption';
+
+  @override
+  String get toolsProtectEncryptionAes256 => 'AES-256';
+
+  @override
+  String get toolsProtectEncryptionAes128 => 'AES-128';
+
+  @override
+  String get toolsProtectEncryptionRc4 => 'RC4-128';
+
+  @override
+  String get toolsProtectEncryptionHelper =>
+      'AES-256 is what every current reader supports. Choose an older level only for software that cannot manage it.';
+
+  @override
+  String get toolsProtectPermissionsLabel => 'Permissions';
+
+  @override
+  String get toolsProtectPermissionsAll => 'Allow everything';
+
+  @override
+  String get toolsProtectPermissionsReadOnly => 'Allow printing';
+
+  @override
+  String get toolsProtectPermissionsNone => 'Allow nothing';
+
+  @override
+  String get toolsProtectPermissionsHelper =>
+      'Permissions are enforced by the viewer, not by the file. Anyone holding the owner password is unaffected.';
+
+  @override
+  String get toolsProtectMetadataLabel => 'Encrypt document metadata';
+
+  @override
+  String get toolsProtectMetadataHelper =>
+      'Turn off to leave titles and author names readable to software that scans files.';
+
+  @override
+  String get toolsProtectWarningNoFile => 'Choose a pdf file to protect.';
+
+  @override
+  String get toolsProtectWarningNoFolder => 'Choose an output folder.';
+
+  @override
+  String get toolsProtectWarningNoFileName => 'Enter an output file name.';
+
+  @override
+  String get toolsProtectWarningNoProtection =>
+      'Choose a password or restrict what viewers can do.';
+
+  @override
+  String get toolsProtectWarningPasswordsMatch =>
+      'The two passwords are the same. Use different ones, or leave the owner password empty.';
+
+  @override
+  String get toolsProtectAlreadyEncrypted =>
+      'That document is already protected. Remove its password first.';
+
+  @override
+  String get toolsProtectSuccess => 'PDF protected successfully.';
+
+  @override
+  String get toolsProtectFailed => 'Could not protect the PDF.';
+
+  @override
+  String get toolsProtectButton => 'Protect PDF';
+
+  @override
+  String get toolsProtectSubmitting => 'Protecting…';
+
+  @override
+  String get toolsProtectButtonDisabledHint =>
+      'Choose a file and an output location to continue.';
+
+  @override
+  String get toolsUnlockIntro =>
+      'Remove the password and the restrictions from a protected PDF.';
+
+  @override
+  String get toolsUnlockSourceSectionTitle => 'Source PDF';
+
+  @override
+  String get toolsUnlockAlreadyProtectedDescription =>
+      'Choose a PDF that is password protected.';
+
+  @override
+  String get toolsUnlockPasswordSectionTitle => 'Password';
+
+  @override
+  String get toolsUnlockPasswordLabel => 'Password';
+
+  @override
+  String get toolsUnlockPasswordHelper =>
+      'Leave empty for documents that are restricted but open without a password.';
+
+  @override
+  String get toolsUnlockWarningNoFile => 'Choose a pdf file to unlock.';
+
+  @override
+  String get toolsUnlockWarningNoFolder => 'Choose an output folder.';
+
+  @override
+  String get toolsUnlockWarningNoFileName => 'Enter an output file name.';
+
+  @override
+  String get toolsUnlockWrongPassword =>
+      'That password does not open this document.';
+
+  @override
+  String get toolsUnlockNotEncrypted =>
+      'That document is not password protected.';
+
+  @override
+  String get toolsUnlockSuccess => 'PDF unlocked successfully.';
+
+  @override
+  String get toolsUnlockFailed => 'Could not unlock the PDF.';
+
+  @override
+  String get toolsUnlockButton => 'Unlock PDF';
+
+  @override
+  String get toolsUnlockSubmitting => 'Unlocking…';
+
+  @override
+  String get toolsUnlockButtonDisabledHint =>
+      'Choose a file and an output location to continue.';
 }

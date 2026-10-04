@@ -1287,6 +1287,294 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add images and choose an output location to continue.'**
   String get toolsImageToPdfButtonDisabledHint;
+
+  /// Introductory description shown at the top of the Protect PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a password and choose what viewers are allowed to do.'**
+  String get toolsProtectIntro;
+
+  /// Heading for the source file section on the Protect PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Source PDF'**
+  String get toolsProtectSourceSectionTitle;
+
+  /// Tool-specific copy shown in the Protect PDF empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a PDF that is not password protected yet.'**
+  String get toolsProtectAlreadyProtectedDescription;
+
+  /// Heading for the password section on the Protect PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords'**
+  String get toolsProtectPasswordSectionTitle;
+
+  /// Label for the field holding the password required to open the document.
+  ///
+  /// In en, this message translates to:
+  /// **'Password to open'**
+  String get toolsProtectUserPasswordLabel;
+
+  /// Helper text explaining that an empty open password only restricts permissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave empty to let anyone open the document, while the permissions below still apply.'**
+  String get toolsProtectUserPasswordHelper;
+
+  /// Label for the field holding the password that lifts the restrictions.
+  ///
+  /// In en, this message translates to:
+  /// **'Owner password'**
+  String get toolsProtectOwnerPasswordLabel;
+
+  /// Helper text explaining the random owner password default.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. Leave empty and a random owner password is generated, so nobody can lift the restrictions.'**
+  String get toolsProtectOwnerPasswordHelper;
+
+  /// Heading for the protection settings section on the Protect PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Protection'**
+  String get toolsProtectSecuritySectionTitle;
+
+  /// Label for the encryption level selector.
+  ///
+  /// In en, this message translates to:
+  /// **'Encryption'**
+  String get toolsProtectEncryptionLabel;
+
+  /// Label for the AES-256 encryption level option.
+  ///
+  /// In en, this message translates to:
+  /// **'AES-256'**
+  String get toolsProtectEncryptionAes256;
+
+  /// Label for the AES-128 encryption level option.
+  ///
+  /// In en, this message translates to:
+  /// **'AES-128'**
+  String get toolsProtectEncryptionAes128;
+
+  /// Label for the RC4 128 bit encryption level option.
+  ///
+  /// In en, this message translates to:
+  /// **'RC4-128'**
+  String get toolsProtectEncryptionRc4;
+
+  /// Helper text explaining the differences between the encryption levels.
+  ///
+  /// In en, this message translates to:
+  /// **'AES-256 is what every current reader supports. Choose an older level only for software that cannot manage it.'**
+  String get toolsProtectEncryptionHelper;
+
+  /// Label for the permissions preset selector.
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions'**
+  String get toolsProtectPermissionsLabel;
+
+  /// Permission preset that grants every capability.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow everything'**
+  String get toolsProtectPermissionsAll;
+
+  /// Permission preset that allows printing but no editing.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow printing'**
+  String get toolsProtectPermissionsReadOnly;
+
+  /// Permission preset that allows viewing only.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow nothing'**
+  String get toolsProtectPermissionsNone;
+
+  /// Helper text explaining how permissions are enforced.
+  ///
+  /// In en, this message translates to:
+  /// **'Permissions are enforced by the viewer, not by the file. Anyone holding the owner password is unaffected.'**
+  String get toolsProtectPermissionsHelper;
+
+  /// Label for the switch that keeps the metadata stream encrypted.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypt document metadata'**
+  String get toolsProtectMetadataLabel;
+
+  /// Helper text explaining the metadata encryption switch.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off to leave titles and author names readable to software that scans files.'**
+  String get toolsProtectMetadataHelper;
+
+  /// Warning shown when the user tries to protect with no input file.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a pdf file to protect.'**
+  String get toolsProtectWarningNoFile;
+
+  /// Warning shown when the user tries to protect without an output folder.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an output folder.'**
+  String get toolsProtectWarningNoFolder;
+
+  /// Warning shown when the output file name is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an output file name.'**
+  String get toolsProtectWarningNoFileName;
+
+  /// Warning shown when the chosen settings would not protect anything.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a password or restrict what viewers can do.'**
+  String get toolsProtectWarningNoProtection;
+
+  /// Warning shown when the open and owner passwords are identical.
+  ///
+  /// In en, this message translates to:
+  /// **'The two passwords are the same. Use different ones, or leave the owner password empty.'**
+  String get toolsProtectWarningPasswordsMatch;
+
+  /// Notification shown when the source document already carries an /Encrypt entry.
+  ///
+  /// In en, this message translates to:
+  /// **'That document is already protected. Remove its password first.'**
+  String get toolsProtectAlreadyEncrypted;
+
+  /// Notification shown when protection completes successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF protected successfully.'**
+  String get toolsProtectSuccess;
+
+  /// Notification shown when protection fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not protect the PDF.'**
+  String get toolsProtectFailed;
+
+  /// Label for the primary protect action button.
+  ///
+  /// In en, this message translates to:
+  /// **'Protect PDF'**
+  String get toolsProtectButton;
+
+  /// Label shown on the protect button while protection is running.
+  ///
+  /// In en, this message translates to:
+  /// **'Protecting…'**
+  String get toolsProtectSubmitting;
+
+  /// Tooltip explaining why the protect button is disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a file and an output location to continue.'**
+  String get toolsProtectButtonDisabledHint;
+
+  /// Introductory description shown at the top of the Unlock PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove the password and the restrictions from a protected PDF.'**
+  String get toolsUnlockIntro;
+
+  /// Heading for the source file section on the Unlock PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Source PDF'**
+  String get toolsUnlockSourceSectionTitle;
+
+  /// Tool-specific copy shown in the Unlock PDF empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a PDF that is password protected.'**
+  String get toolsUnlockAlreadyProtectedDescription;
+
+  /// Heading for the password section on the Unlock PDF page.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get toolsUnlockPasswordSectionTitle;
+
+  /// Label for the field holding the current document password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get toolsUnlockPasswordLabel;
+
+  /// Helper text explaining that the password may be empty for permission-only documents.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave empty for documents that are restricted but open without a password.'**
+  String get toolsUnlockPasswordHelper;
+
+  /// Warning shown when the user tries to unlock with no input file.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a pdf file to unlock.'**
+  String get toolsUnlockWarningNoFile;
+
+  /// Warning shown when the user tries to unlock without an output folder.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an output folder.'**
+  String get toolsUnlockWarningNoFolder;
+
+  /// Warning shown when the output file name is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an output file name.'**
+  String get toolsUnlockWarningNoFileName;
+
+  /// Notification shown when the supplied password fails authentication.
+  ///
+  /// In en, this message translates to:
+  /// **'That password does not open this document.'**
+  String get toolsUnlockWrongPassword;
+
+  /// Notification shown when the source document has no /Encrypt entry.
+  ///
+  /// In en, this message translates to:
+  /// **'That document is not password protected.'**
+  String get toolsUnlockNotEncrypted;
+
+  /// Notification shown when unlocking completes successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF unlocked successfully.'**
+  String get toolsUnlockSuccess;
+
+  /// Notification shown when unlocking fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not unlock the PDF.'**
+  String get toolsUnlockFailed;
+
+  /// Label for the primary unlock action button.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock PDF'**
+  String get toolsUnlockButton;
+
+  /// Label shown on the unlock button while unlocking is running.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocking…'**
+  String get toolsUnlockSubmitting;
+
+  /// Tooltip explaining why the unlock button is disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a file and an output location to continue.'**
+  String get toolsUnlockButtonDisabledHint;
 }
 
 class _AppLocalizationsDelegate

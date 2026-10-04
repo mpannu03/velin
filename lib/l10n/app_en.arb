@@ -1009,5 +1009,245 @@
   "toolsImageToPdfButtonDisabledHint": "Add images and choose an output location to continue.",
   "@toolsImageToPdfButtonDisabledHint": {
     "description": "Tooltip explaining why the create button is disabled."
+  },
+
+  "toolsProtectIntro": "Add a password and choose what viewers are allowed to do.",
+  "@toolsProtectIntro": {
+    "description": "Introductory description shown at the top of the Protect PDF page."
+  },
+
+  "toolsProtectSourceSectionTitle": "Source PDF",
+  "@toolsProtectSourceSectionTitle": {
+    "description": "Heading for the source file section on the Protect PDF page."
+  },
+
+  "toolsProtectAlreadyProtectedDescription": "Choose a PDF that is not password protected yet.",
+  "@toolsProtectAlreadyProtectedDescription": {
+    "description": "Tool-specific copy shown in the Protect PDF empty state."
+  },
+
+  "toolsProtectPasswordSectionTitle": "Passwords",
+  "@toolsProtectPasswordSectionTitle": {
+    "description": "Heading for the password section on the Protect PDF page."
+  },
+
+  "toolsProtectUserPasswordLabel": "Password to open",
+  "@toolsProtectUserPasswordLabel": {
+    "description": "Label for the field holding the password required to open the document."
+  },
+
+  "toolsProtectUserPasswordHelper": "Leave empty to let anyone open the document, while the permissions below still apply.",
+  "@toolsProtectUserPasswordHelper": {
+    "description": "Helper text explaining that an empty open password only restricts permissions."
+  },
+
+  "toolsProtectOwnerPasswordLabel": "Owner password",
+  "@toolsProtectOwnerPasswordLabel": {
+    "description": "Label for the field holding the password that lifts the restrictions."
+  },
+
+  "toolsProtectOwnerPasswordHelper": "Optional. Leave empty and a random owner password is generated, so nobody can lift the restrictions.",
+  "@toolsProtectOwnerPasswordHelper": {
+    "description": "Helper text explaining the random owner password default."
+  },
+
+  "toolsProtectSecuritySectionTitle": "Protection",
+  "@toolsProtectSecuritySectionTitle": {
+    "description": "Heading for the protection settings section on the Protect PDF page."
+  },
+
+  "toolsProtectEncryptionLabel": "Encryption",
+  "@toolsProtectEncryptionLabel": {
+    "description": "Label for the encryption level selector."
+  },
+
+  "toolsProtectEncryptionAes256": "AES-256",
+  "@toolsProtectEncryptionAes256": {
+    "description": "Label for the AES-256 encryption level option."
+  },
+
+  "toolsProtectEncryptionAes128": "AES-128",
+  "@toolsProtectEncryptionAes128": {
+    "description": "Label for the AES-128 encryption level option."
+  },
+
+  "toolsProtectEncryptionRc4": "RC4-128",
+  "@toolsProtectEncryptionRc4": {
+    "description": "Label for the RC4 128 bit encryption level option."
+  },
+
+  "toolsProtectEncryptionHelper": "AES-256 is what every current reader supports. Choose an older level only for software that cannot manage it.",
+  "@toolsProtectEncryptionHelper": {
+    "description": "Helper text explaining the differences between the encryption levels."
+  },
+
+  "toolsProtectPermissionsLabel": "Permissions",
+  "@toolsProtectPermissionsLabel": {
+    "description": "Label for the permissions preset selector."
+  },
+
+  "toolsProtectPermissionsAll": "Allow everything",
+  "@toolsProtectPermissionsAll": {
+    "description": "Permission preset that grants every capability."
+  },
+
+  "toolsProtectPermissionsReadOnly": "Allow printing",
+  "@toolsProtectPermissionsReadOnly": {
+    "description": "Permission preset that allows printing but no editing."
+  },
+
+  "toolsProtectPermissionsNone": "Allow nothing",
+  "@toolsProtectPermissionsNone": {
+    "description": "Permission preset that allows viewing only."
+  },
+
+  "toolsProtectPermissionsHelper": "Permissions are enforced by the viewer, not by the file. Anyone holding the owner password is unaffected.",
+  "@toolsProtectPermissionsHelper": {
+    "description": "Helper text explaining how permissions are enforced."
+  },
+
+  "toolsProtectMetadataLabel": "Encrypt document metadata",
+  "@toolsProtectMetadataLabel": {
+    "description": "Label for the switch that keeps the metadata stream encrypted."
+  },
+
+  "toolsProtectMetadataHelper": "Turn off to leave titles and author names readable to software that scans files.",
+  "@toolsProtectMetadataHelper": {
+    "description": "Helper text explaining the metadata encryption switch."
+  },
+
+  "toolsProtectWarningNoFile": "Choose a pdf file to protect.",
+  "@toolsProtectWarningNoFile": {
+    "description": "Warning shown when the user tries to protect with no input file."
+  },
+
+  "toolsProtectWarningNoFolder": "Choose an output folder.",
+  "@toolsProtectWarningNoFolder": {
+    "description": "Warning shown when the user tries to protect without an output folder."
+  },
+
+  "toolsProtectWarningNoFileName": "Enter an output file name.",
+  "@toolsProtectWarningNoFileName": {
+    "description": "Warning shown when the output file name is empty."
+  },
+
+  "toolsProtectWarningNoProtection": "Choose a password or restrict what viewers can do.",
+  "@toolsProtectWarningNoProtection": {
+    "description": "Warning shown when the chosen settings would not protect anything."
+  },
+
+  "toolsProtectWarningPasswordsMatch": "The two passwords are the same. Use different ones, or leave the owner password empty.",
+  "@toolsProtectWarningPasswordsMatch": {
+    "description": "Warning shown when the open and owner passwords are identical."
+  },
+
+  "toolsProtectAlreadyEncrypted": "That document is already protected. Remove its password first.",
+  "@toolsProtectAlreadyEncrypted": {
+    "description": "Notification shown when the source document already carries an /Encrypt entry."
+  },
+
+  "toolsProtectSuccess": "PDF protected successfully.",
+  "@toolsProtectSuccess": {
+    "description": "Notification shown when protection completes successfully."
+  },
+
+  "toolsProtectFailed": "Could not protect the PDF.",
+  "@toolsProtectFailed": {
+    "description": "Notification shown when protection fails."
+  },
+
+  "toolsProtectButton": "Protect PDF",
+  "@toolsProtectButton": {
+    "description": "Label for the primary protect action button."
+  },
+
+  "toolsProtectSubmitting": "Protecting\u2026",
+  "@toolsProtectSubmitting": {
+    "description": "Label shown on the protect button while protection is running."
+  },
+
+  "toolsProtectButtonDisabledHint": "Choose a file and an output location to continue.",
+  "@toolsProtectButtonDisabledHint": {
+    "description": "Tooltip explaining why the protect button is disabled."
+  },
+
+  "toolsUnlockIntro": "Remove the password and the restrictions from a protected PDF.",
+  "@toolsUnlockIntro": {
+    "description": "Introductory description shown at the top of the Unlock PDF page."
+  },
+
+  "toolsUnlockSourceSectionTitle": "Source PDF",
+  "@toolsUnlockSourceSectionTitle": {
+    "description": "Heading for the source file section on the Unlock PDF page."
+  },
+
+  "toolsUnlockAlreadyProtectedDescription": "Choose a PDF that is password protected.",
+  "@toolsUnlockAlreadyProtectedDescription": {
+    "description": "Tool-specific copy shown in the Unlock PDF empty state."
+  },
+
+  "toolsUnlockPasswordSectionTitle": "Password",
+  "@toolsUnlockPasswordSectionTitle": {
+    "description": "Heading for the password section on the Unlock PDF page."
+  },
+
+  "toolsUnlockPasswordLabel": "Password",
+  "@toolsUnlockPasswordLabel": {
+    "description": "Label for the field holding the current document password."
+  },
+
+  "toolsUnlockPasswordHelper": "Leave empty for documents that are restricted but open without a password.",
+  "@toolsUnlockPasswordHelper": {
+    "description": "Helper text explaining that the password may be empty for permission-only documents."
+  },
+
+  "toolsUnlockWarningNoFile": "Choose a pdf file to unlock.",
+  "@toolsUnlockWarningNoFile": {
+    "description": "Warning shown when the user tries to unlock with no input file."
+  },
+
+  "toolsUnlockWarningNoFolder": "Choose an output folder.",
+  "@toolsUnlockWarningNoFolder": {
+    "description": "Warning shown when the user tries to unlock without an output folder."
+  },
+
+  "toolsUnlockWarningNoFileName": "Enter an output file name.",
+  "@toolsUnlockWarningNoFileName": {
+    "description": "Warning shown when the output file name is empty."
+  },
+
+  "toolsUnlockWrongPassword": "That password does not open this document.",
+  "@toolsUnlockWrongPassword": {
+    "description": "Notification shown when the supplied password fails authentication."
+  },
+
+  "toolsUnlockNotEncrypted": "That document is not password protected.",
+  "@toolsUnlockNotEncrypted": {
+    "description": "Notification shown when the source document has no /Encrypt entry."
+  },
+
+  "toolsUnlockSuccess": "PDF unlocked successfully.",
+  "@toolsUnlockSuccess": {
+    "description": "Notification shown when unlocking completes successfully."
+  },
+
+  "toolsUnlockFailed": "Could not unlock the PDF.",
+  "@toolsUnlockFailed": {
+    "description": "Notification shown when unlocking fails."
+  },
+
+  "toolsUnlockButton": "Unlock PDF",
+  "@toolsUnlockButton": {
+    "description": "Label for the primary unlock action button."
+  },
+
+  "toolsUnlockSubmitting": "Unlocking\u2026",
+  "@toolsUnlockSubmitting": {
+    "description": "Label shown on the unlock button while unlocking is running."
+  },
+
+  "toolsUnlockButtonDisabledHint": "Choose a file and an output location to continue.",
+  "@toolsUnlockButtonDisabledHint": {
+    "description": "Tooltip explaining why the unlock button is disabled."
   }
 }
