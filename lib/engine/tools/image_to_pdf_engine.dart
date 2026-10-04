@@ -43,10 +43,14 @@ class ImageToPdfEngine {
 
     PdfDocument? outputDocument;
 
+    final sourceDocuments = <PdfDocument>[];
+
     try {
       outputDocument = await PdfDocument.createNew(
         sourceName: outputFile.path,
       );
+
+      final pages = <PdfPage>[];
 
       for (final imageFile in input.images) {
         final bytes = await imageFile.readAsBytes();
@@ -78,26 +82,12 @@ class ImageToPdfEngine {
           sourceName: imageFile.path,
         );
 
-        try {
-          var page = imageDocument.pages.first;
+        sourceDocuments.add(imageDocument);
 
-          page = _fitPage(
-            page,
-            image,
-            pageSize,
-            input,
-          );
-
-          outputDocument.pages = [
-            ...outputDocument.pages,
-            page,
-          ];
-        } finally {
-          await imageDocument.dispose();
-        }
+        pages.add(imageDocument.pages.first);
       }
 
-      await outputDocument.assemble();
+      outputDocument.pages = pages;
 
       final data = await outputDocument.encodePdf();
 
@@ -106,6 +96,10 @@ class ImageToPdfEngine {
 
       return outputFile;
     } finally {
+      for (final document in sourceDocuments) {
+        await document.dispose();
+      }
+
       await outputDocument?.dispose();
     }
   }
@@ -173,31 +167,6 @@ class ImageToPdfEngine {
             width: _millimetresToPoints(heightMm),
             height: _millimetresToPoints(widthMm),
           );
-  }
-
-  PdfPage _fitPage(
-    PdfPage page,
-    img.Image image,
-    _PageSize pageSize,
-    ImageToPdfInput input,
-  ) {
-    // The page returned by createFromJpegData already contains
-    // the complete image. At this point, the page dimensions
-    // determine how the image is scaled.
-    //
-    // For Auto, the page has exactly the image's physical size,
-    // so no additional fitting is necessary.
-    if (input.pageSize == ImageToPdfPageSize.auto) {
-      return page;
-    }
-
-    // `createFromJpegData` embeds the image to fill the page.
-    //
-    // Contain/Cover require creating a differently sized page
-    // around the image, which cannot be expressed by PdfPage
-    // alone. Therefore these modes need native PDF construction
-    // rather than the createFromJpegData convenience API.
-    return page;
   }
 
   double _pixelsToPoints(
