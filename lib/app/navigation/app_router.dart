@@ -15,9 +15,7 @@ class AppRouter {
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return AppShell(
-            child: AppNavigationShell(
-              navigationShell: navigationShell,
-            ),
+            child: AppNavigationShell(navigationShell: navigationShell),
           );
         },
         branches: [
@@ -25,9 +23,8 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: '/',
-                builder: (context, state) => const _PlaceholderPage(
-                  title: 'Home',
-                ),
+                builder: (context, state) =>
+                    const _PlaceholderPage(title: 'Home'),
               ),
             ],
           ),
@@ -43,9 +40,8 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: '/edit',
-                builder: (context, state) => const _PlaceholderPage(
-                  title: 'Edit',
-                ),
+                builder: (context, state) =>
+                    const _PlaceholderPage(title: 'Edit'),
               ),
             ],
           ),
@@ -97,6 +93,20 @@ class AppRouter {
                       child: const ImageToPdfPage(),
                     ),
                   ),
+                  GoRoute(
+                    path: 'protect-pdf',
+                    pageBuilder: (context, state) => _toolPage(
+                      key: state.pageKey,
+                      child: const EncryptPdfPage(),
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'unlock-pdf',
+                    pageBuilder: (context, state) => _toolPage(
+                      key: state.pageKey,
+                      child: const DecryptPdfPage(),
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -107,10 +117,7 @@ class AppRouter {
   );
 }
 
-Page<void> _toolPage({
-  required LocalKey key,
-  required Widget child,
-}) {
+Page<void> _toolPage({required LocalKey key, required Widget child}) {
   if (appPlatform == AppPlatform.desktop) {
     return CustomTransitionPage(
       key: key,
@@ -125,16 +132,12 @@ Page<void> _toolPage({
 }
 
 class _PlaceholderPage extends StatelessWidget {
-  const _PlaceholderPage({
-    required this.title,
-  });
+  const _PlaceholderPage({required this.title});
 
   final String title;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(title),
-    );
+    return Center(child: Text(title));
   }
 }

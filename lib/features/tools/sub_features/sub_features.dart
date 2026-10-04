@@ -1,3 +1,5 @@
+export 'decrypt_pdf/decrypt_pdf.dart';
+export 'encrypt_pdf/encrypt_pdf.dart';
 export 'extract_pdf/extract_pdf.dart';
 export 'image_to_pdf/image_to_pdf.dart';
 export 'merge_pdf/merge_pdf.dart';

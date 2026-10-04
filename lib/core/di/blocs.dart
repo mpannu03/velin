@@ -81,4 +81,24 @@ void registerBlocDependencies() {
       appEffectController: getIt<AppEffectController>(),
     ),
   );
+
+  getIt.registerFactoryParam<EncryptPdfCubit, AppLocalizations, void>(
+    (l10n, _) => EncryptPdfCubit(
+      l10n: l10n,
+      filePicker: getIt<DocumentFilePicker>(),
+      encryptPdfEngine: getIt<EncryptPdfEngine>(),
+      taskManager: getIt<TaskManager>(),
+      appEffectController: getIt<AppEffectController>(),
+    ),
+  );
+
+  getIt.registerFactoryParam<DecryptPdfCubit, AppLocalizations, void>(
+    (l10n, _) => DecryptPdfCubit(
+      l10n: l10n,
+      filePicker: getIt<DocumentFilePicker>(),
+      decryptPdfEngine: getIt<DecryptPdfEngine>(),
+      taskManager: getIt<TaskManager>(),
+      appEffectController: getIt<AppEffectController>(),
+    ),
+  );
 }
