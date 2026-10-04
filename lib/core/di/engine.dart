@@ -1,3 +1,4 @@
+import 'package:pdf_manipulator/pdf_manipulator.dart';
 import 'package:velin/core/di/injection.dart';
 import 'package:velin/engine/engine.dart';
 
@@ -43,6 +44,8 @@ void registerEngineDependencies() {
   );
 
   getIt.registerLazySingleton<AddWatermarkEngine>(
-    () => AddWatermarkEngine()
+    () => AddWatermarkEngine(
+      pdf: getIt<Pdf>()
+    )
   );
 }

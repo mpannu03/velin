@@ -11,8 +11,8 @@ import 'add_watermark_input.dart';
 
 class AddWatermarkEngine {
   AddWatermarkEngine({
-    Pdf? pdf,
-  }) : _pdf = pdf ?? Pdf();
+    required this._pdf,
+  });
 
   final Pdf _pdf;
 
@@ -57,7 +57,7 @@ class AddWatermarkEngine {
     } finally {
       await editor?.dispose();
       await output.close();
-      await _pdf.dispose();
+      // await _pdf.dispose();
     }
   }
 
