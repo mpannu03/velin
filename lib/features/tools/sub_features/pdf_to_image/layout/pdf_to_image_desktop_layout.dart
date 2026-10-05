@@ -52,7 +52,21 @@ class PdfToImageDesktopLayout extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
             ToolSectionCard(
               title: l10n.toolsPdfToImagePagesSectionTitle,
-              child: _PageScopeEditor(viewModel: viewModel),
+              child: PageScopeEditor<PdfToImagePageScope>(
+                allPagesScope: PdfToImagePageScope.allPages,
+                selectedPagesScope: PdfToImagePageScope.selectedPages,
+                scope: viewModel.scope,
+                requiresSelection: viewModel.scope.requiresSelection,
+                allPagesLabel: l10n.toolsPdfToImageScopeAll,
+                selectedPagesLabel: l10n.toolsPdfToImageScopeSelected,
+                onScopeChanged: viewModel.onScopeChanged,
+                selection: viewModel.selection,
+                selectionFieldKey:
+                    const ValueKey('pdf-to-image-page-selection'),
+                selectionHintText: l10n.toolsPdfToImageSelectionHint,
+                selectionHelperText: l10n.toolsPdfToImageSelectionHelper,
+                onSelectionChanged: viewModel.onSelectionChanged,
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
             OutputFilePicker(
@@ -74,22 +88,6 @@ class PdfToImageDesktopLayout extends StatelessWidget {
             ),
           ],
         ],
-      ),
-    );
-  }
-}
-
-class _HelperText extends StatelessWidget {
-  const _HelperText(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
   }
@@ -121,7 +119,7 @@ class _FormatSelector extends StatelessWidget {
           },
         ),
         const SizedBox(height: AppSpacing.sm),
-        _HelperText(context.l10n.toolsPdfToImageFormatHelper),
+        HelperText(context.l10n.toolsPdfToImageFormatHelper),
       ],
     );
   }
@@ -211,7 +209,7 @@ class _ResolutionEditor extends StatelessWidget {
           ],
         ),
         const SizedBox(height: AppSpacing.sm),
-        _HelperText(l10n.toolsPdfToImageDpiHelper),
+        HelperText(l10n.toolsPdfToImageDpiHelper),
         const SizedBox(height: AppSpacing.lg),
         _QualityEditor(viewModel: viewModel),
       ],
@@ -260,7 +258,7 @@ class _QualityEditor extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.sm),
-          _HelperText(l10n.toolsPdfToImageQualityHelper),
+          HelperText(l10n.toolsPdfToImageQualityHelper),
         ],
       );
     }
@@ -295,56 +293,9 @@ class _QualityEditor extends StatelessWidget {
           ],
         ),
         const SizedBox(height: AppSpacing.sm),
-        _HelperText(l10n.toolsPdfToImageQualityHelper),
+        HelperText(l10n.toolsPdfToImageQualityHelper),
       ],
     );
   }
 }
 
-class _PageScopeEditor extends StatelessWidget {
-  const _PageScopeEditor({required this.viewModel});
-
-  final PdfToImageViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SegmentedButton<PdfToImagePageScope>(
-          showSelectedIcon: true,
-          segments: [
-            ButtonSegment(
-              value: PdfToImagePageScope.allPages,
-              icon: const Icon(Icons.auto_stories_outlined, size: 18),
-              label: Text(l10n.toolsPdfToImageScopeAll),
-            ),
-            ButtonSegment(
-              value: PdfToImagePageScope.selectedPages,
-              icon: const Icon(Icons.tune_outlined, size: 18),
-              label: Text(l10n.toolsPdfToImageScopeSelected),
-            ),
-          ],
-          selected: {viewModel.scope},
-          onSelectionChanged: (selection) {
-            viewModel.onScopeChanged(selection.first);
-          },
-        ),
-        if (viewModel.scope.requiresSelection) ...[
-          const SizedBox(height: AppSpacing.lg),
-          PageSelectionField(
-            value: viewModel.selection,
-            fieldKey: const ValueKey('pdf-to-image-page-selection'),
-            width: 260,
-            hintText: l10n.toolsPdfToImageSelectionHint,
-            onChanged: viewModel.onSelectionChanged,
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          _HelperText(l10n.toolsPdfToImageSelectionHelper),
-        ],
-      ],
-    );
-  }
-}

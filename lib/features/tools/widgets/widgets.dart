@@ -1,6 +1,9 @@
 export 'file_selection/file_selection.dart';
+export 'helper_text.dart';
 export 'image_selection/image_selection.dart';
+export 'page_selection/page_scope_editor.dart';
 export 'page_selection/page_selection.dart';
+export 'password_field.dart';
 export 'tool_action_bar.dart';
 export 'tool_card.dart';
 export 'tool_category_filter.dart';

@@ -4,8 +4,6 @@ import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
-import '../widgets/password_field.dart';
-
 class DecryptPdfDesktopLayout extends StatelessWidget {
   const DecryptPdfDesktopLayout({super.key, required this.viewModel});
 
@@ -39,8 +37,11 @@ class DecryptPdfDesktopLayout extends StatelessWidget {
             ToolSectionCard(
               title: l10n.toolsUnlockPasswordSectionTitle,
               child: PasswordField(
-                password: viewModel.password,
-                onPasswordChanged: viewModel.onPasswordChanged,
+                fieldKey: const ValueKey('decrypt-password'),
+                value: viewModel.password,
+                labelText: l10n.toolsUnlockPasswordLabel,
+                helperText: l10n.toolsUnlockPasswordHelper,
+                onChanged: viewModel.onPasswordChanged,
               ),
             ),
             const SizedBox(height: AppSpacing.lg),

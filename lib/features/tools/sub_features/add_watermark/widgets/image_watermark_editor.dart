@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
-import 'package:velin/features/tools/sub_features/sub_features.dart';
+import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
 import 'widgets.dart';

@@ -79,10 +79,20 @@ class AddWatermarkDesktopLayout extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
             ToolSectionCard(
               title: l10n.toolsWatermarkPagesSectionTitle,
-              child: PageScopeEditor(
+              child: PageScopeEditor<WatermarkPageScope>(
+                allPagesScope: WatermarkPageScope.allPages,
+                selectedPagesScope: WatermarkPageScope.selectedPages,
                 scope: viewModel.scope,
-                selection: viewModel.selection,
+                requiresSelection: viewModel.scope.requiresSelection,
+                scopeKey: const ValueKey('add-watermark-scope'),
+                allPagesLabel: l10n.toolsWatermarkScopeAll,
+                selectedPagesLabel: l10n.toolsWatermarkScopeSelected,
                 onScopeChanged: viewModel.onScopeChanged,
+                selection: viewModel.selection,
+                selectionFieldKey:
+                    const ValueKey('add-watermark-page-selection'),
+                selectionHintText: l10n.toolsWatermarkSelectionHint,
+                selectionHelperText: l10n.toolsWatermarkSelectionHelper,
                 onSelectionChanged: viewModel.onSelectionChanged,
               ),
             ),

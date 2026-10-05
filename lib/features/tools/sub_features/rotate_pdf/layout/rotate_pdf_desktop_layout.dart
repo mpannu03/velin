@@ -41,7 +41,20 @@ class RotatePdfDesktopLayout extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
             ToolSectionCard(
               title: l10n.toolsRotatePagesSectionTitle,
-              child: _PageScopeEditor(viewModel: viewModel),
+              child: PageScopeEditor<RotatePdfPageScope>(
+                allPagesScope: RotatePdfPageScope.allPages,
+                selectedPagesScope: RotatePdfPageScope.selectedPages,
+                scope: viewModel.scope,
+                requiresSelection: viewModel.scope.requiresSelection,
+                allPagesLabel: l10n.toolsRotateScopeAll,
+                selectedPagesLabel: l10n.toolsRotateScopeSelected,
+                onScopeChanged: viewModel.onScopeChanged,
+                selection: viewModel.selection,
+                selectionFieldKey: const ValueKey('rotate-page-selection'),
+                selectionHintText: l10n.toolsRotateSelectionHint,
+                selectionHelperText: l10n.toolsRotateSelectionHelper,
+                onSelectionChanged: viewModel.onSelectionChanged,
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
             OutputFilePicker(
@@ -107,60 +120,5 @@ class _DirectionSelector extends StatelessWidget {
       RotatePdfDirection.upsideDown => Icons.flip,
       RotatePdfDirection.counterClockwise90 => Icons.rotate_90_degrees_ccw,
     };
-  }
-}
-
-class _PageScopeEditor extends StatelessWidget {
-  const _PageScopeEditor({required this.viewModel});
-
-  final RotatePdfViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SegmentedButton<RotatePdfPageScope>(
-          showSelectedIcon: true,
-          segments: [
-            ButtonSegment(
-              value: RotatePdfPageScope.allPages,
-              icon: const Icon(Icons.auto_stories_outlined, size: 18),
-              label: Text(l10n.toolsRotateScopeAll),
-            ),
-            ButtonSegment(
-              value: RotatePdfPageScope.selectedPages,
-              icon: const Icon(Icons.tune_outlined, size: 18),
-              label: Text(l10n.toolsRotateScopeSelected),
-            ),
-          ],
-          selected: {viewModel.scope},
-          onSelectionChanged: (selection) {
-            viewModel.onScopeChanged(selection.first);
-          },
-        ),
-        if (viewModel.scope.requiresSelection) ...[
-          const SizedBox(height: AppSpacing.lg),
-          PageSelectionField(
-            value: viewModel.selection,
-            fieldKey: const ValueKey('rotate-page-selection'),
-            width: 260,
-            hintText: l10n.toolsRotateSelectionHint,
-            onChanged: viewModel.onSelectionChanged,
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            l10n.toolsRotateSelectionHelper,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: colors.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ],
-    );
   }
 }
