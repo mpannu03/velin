@@ -4,6 +4,7 @@ import 'package:velin/core/di/injection.dart';
 import 'package:velin/core/document/document.dart';
 import 'package:velin/core/document/engine/engine.dart';
 import 'package:velin/engine/engine.dart';
+import 'package:velin/shared/widgets/widgets.dart';
 
 import '../bloc/bloc.dart';
 import 'document_workspace_view.dart';
@@ -23,6 +24,7 @@ class DocumentWorkspacePage extends StatelessWidget {
     final documentViewer = _engine.buildViewer(
       config: DocumentEngineConfig(
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+        passwordProvider: () => showPasswordDialog(context: context),
       ),
     );
 

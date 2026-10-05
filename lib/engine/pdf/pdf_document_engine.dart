@@ -78,6 +78,7 @@ class PdfDocumentEngine implements DocumentEngine {
     return PdfViewer.file(
       document.path,
       controller: _controller,
+      passwordProvider: config.passwordProvider,
       params: PdfViewerParams(
         backgroundColor: config.backgroundColor ?? Colors.grey,
         onPageChanged: _onPageChanged,
