@@ -1,8 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 
 import 'package:velin/app/theme/theme.dart';
-import 'package:velin/engine/engine.dart';
-import 'package:velin/features/tools/tools.dart';
+import 'package:velin/features/tools/sub_features/sub_features.dart';
+import 'package:velin/features/tools/widgets/widgets.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
 class PdfToImageDesktopLayout extends StatelessWidget {
@@ -37,17 +37,29 @@ class PdfToImageDesktopLayout extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
             ToolSectionCard(
               title: l10n.toolsPdfToImageFormatSectionTitle,
-              child: _FormatSelector(viewModel: viewModel),
+              child: FormatSelector(
+                format: viewModel.format,
+                onFormatChanged: viewModel.onFormatChanged,
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
             ToolSectionCard(
               title: l10n.toolsPdfToImageColorSectionTitle,
-              child: _ColorModeSelector(viewModel: viewModel),
+              child: ColorModeSelector(
+                colorMode: viewModel.colorMode,
+                onColorModeChanged: viewModel.onColorModeChanged,
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
             ToolSectionCard(
               title: l10n.toolsPdfToImageResolutionSectionTitle,
-              child: _ResolutionEditor(viewModel: viewModel),
+              child: ResolutionEditor(
+                quality: viewModel.quality,
+                onQualityChanged: viewModel.onQualityChanged,
+                supportsQuality: viewModel.supportsQuality,
+                dpi: viewModel.dpi,
+                onDpiChanged: viewModel.onDpiChanged,
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
             ToolSectionCard(
@@ -92,210 +104,3 @@ class PdfToImageDesktopLayout extends StatelessWidget {
     );
   }
 }
-
-class _FormatSelector extends StatelessWidget {
-  const _FormatSelector({required this.viewModel});
-
-  final PdfToImageViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SegmentedButton<PdfImageFormat>(
-          showSelectedIcon: true,
-          segments: [
-            for (final format in PdfImageFormat.values)
-              ButtonSegment(
-                value: format,
-                icon: Icon(_iconFor(format), size: 18),
-                label: Text(_labelFor(context, format)),
-              ),
-          ],
-          selected: {viewModel.format},
-          onSelectionChanged: (selection) {
-            viewModel.onFormatChanged(selection.first);
-          },
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        HelperText(context.l10n.toolsPdfToImageFormatHelper),
-      ],
-    );
-  }
-
-  String _labelFor(BuildContext context, PdfImageFormat format) {
-    final l10n = context.l10n;
-
-    return switch (format) {
-      PdfImageFormat.png => l10n.toolsPdfToImageFormatPng,
-      PdfImageFormat.jpeg => l10n.toolsPdfToImageFormatJpeg,
-      PdfImageFormat.webp => l10n.toolsPdfToImageFormatWebp,
-    };
-  }
-
-  IconData _iconFor(PdfImageFormat format) {
-    return switch (format) {
-      PdfImageFormat.png => Icons.image_outlined,
-      PdfImageFormat.jpeg => Icons.photo_outlined,
-      PdfImageFormat.webp => Icons.data_object,
-    };
-  }
-}
-
-class _ColorModeSelector extends StatelessWidget {
-  const _ColorModeSelector({required this.viewModel});
-
-  final PdfToImageViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
-    return SegmentedButton<PdfImageColorMode>(
-      showSelectedIcon: true,
-      segments: [
-        ButtonSegment(
-          value: PdfImageColorMode.color,
-          icon: const Icon(Icons.palette_outlined, size: 18),
-          label: Text(l10n.toolsPdfToImageColorModeColor),
-        ),
-        ButtonSegment(
-          value: PdfImageColorMode.grayscale,
-          icon: const Icon(Icons.gradient_outlined, size: 18),
-          label: Text(l10n.toolsPdfToImageColorModeGreyscale),
-        ),
-      ],
-      selected: {viewModel.colorMode},
-      onSelectionChanged: (selection) {
-        viewModel.onColorModeChanged(selection.first);
-      },
-    );
-  }
-}
-
-class _ResolutionEditor extends StatelessWidget {
-  const _ResolutionEditor({required this.viewModel});
-
-  final PdfToImageViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(l10n.toolsPdfToImageDpiLabel),
-            const SizedBox(width: AppSpacing.md),
-            DropdownButton<int>(
-              key: const ValueKey('pdf-to-image-dpi'),
-              value: viewModel.dpi,
-              onChanged: (value) {
-                if (value != null) {
-                  viewModel.onDpiChanged(value);
-                }
-              },
-              items: [
-                for (final dpi in PdfToImageToolInput.supportedDpi)
-                  DropdownMenuItem(
-                    value: dpi,
-                    child: Text('$dpi DPI'),
-                  ),
-              ],
-            ),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        HelperText(l10n.toolsPdfToImageDpiHelper),
-        const SizedBox(height: AppSpacing.lg),
-        _QualityEditor(viewModel: viewModel),
-      ],
-    );
-  }
-}
-
-class _QualityEditor extends StatelessWidget {
-  const _QualityEditor({required this.viewModel});
-
-  final PdfToImageViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
-
-    // PNG is lossless: the setting has no effect, so it stays disabled.
-    if (!viewModel.supportsQuality) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                l10n.toolsPdfToImageQualityLabel,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: Opacity(
-                  opacity: 0.5,
-                  child: Slider(
-                    key: const ValueKey('pdf-to-image-quality'),
-                    value: viewModel.quality.toDouble(),
-                    min: 1,
-                    max: 100,
-                    divisions: 99,
-                    label: '${viewModel.quality}',
-                    onChanged: null,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          HelperText(l10n.toolsPdfToImageQualityHelper),
-        ],
-      );
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(l10n.toolsPdfToImageQualityLabel),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Slider(
-                key: const ValueKey('pdf-to-image-quality'),
-                value: viewModel.quality.toDouble(),
-                min: 1,
-                max: 100,
-                divisions: 99,
-                label: '${viewModel.quality}',
-                onChanged: (value) =>
-                    viewModel.onQualityChanged(value.round()),
-              ),
-            ),
-            SizedBox(
-              width: 40,
-              child: Text(
-                '${viewModel.quality}',
-                textAlign: TextAlign.end,
-                style: theme.textTheme.bodyMedium,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        HelperText(l10n.toolsPdfToImageQualityHelper),
-      ],
-    );
-  }
-}
-
