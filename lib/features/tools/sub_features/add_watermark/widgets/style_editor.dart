@@ -4,8 +4,6 @@ import 'package:velin/engine/engine.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
-import 'widgets.dart';
-
 /// Opacity, rotation, position, offsets and layer. Everything here applies to
 /// both text and image watermarks.
 class StyleEditor extends StatelessWidget {

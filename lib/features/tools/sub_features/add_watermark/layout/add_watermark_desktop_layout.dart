@@ -4,8 +4,6 @@ import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
-import '../widgets/widgets.dart';
-
 class AddWatermarkDesktopLayout extends StatelessWidget {
   const AddWatermarkDesktopLayout({super.key, required this.viewModel});
 

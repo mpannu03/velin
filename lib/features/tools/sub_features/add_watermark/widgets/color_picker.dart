@@ -3,8 +3,6 @@ import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/sub_features/sub_features.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
-import 'widgets.dart';
-
 /// One-tap swatches plus a free-form `#RRGGBB` field.
 class ColorPicker extends StatefulWidget {
   const ColorPicker({
@@ -68,7 +66,8 @@ class _ColorPickerState extends State<ColorPicker> {
             for (final hex in AddWatermarkToolInput.commonColors)
               VColorSwatch(
                 hex: hex,
-                isSelected: hex.toUpperCase() == normalizeHexColor(currentHex),
+                isSelected:
+                    normalizeHexColor(hex) == normalizeHexColor(currentHex),
                 onTap: () => _commit(hex),
               ),
           ],

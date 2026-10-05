@@ -3,8 +3,6 @@ import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
-import 'widgets.dart';
-
 class ImageWatermarkEditor extends StatelessWidget {
   const ImageWatermarkEditor({
     super.key,
