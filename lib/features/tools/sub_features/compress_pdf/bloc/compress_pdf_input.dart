@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
 import 'package:velin/engine/engine.dart';
@@ -32,6 +33,19 @@ class CompressPdfToolInput {
       quality: quality ?? this.quality,
     );
   }
+
+  @override
+  bool operator ==(covariant CompressPdfToolInput other) {
+    if (identical(this, other)) return true;
+
+    return other.filePath == filePath &&
+        other.outputFilePath == outputFilePath &&
+        other.quality == quality;
+  }
+
+  @override
+  int get hashCode =>
+      filePath.hashCode ^ outputFilePath.hashCode ^ quality.hashCode;
 }
 
 extension CompressPdfMapper on CompressPdfToolInput {
