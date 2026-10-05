@@ -7,7 +7,7 @@ import 'encrypt_pdf_input.dart';
 
 class EncryptPdfEngine {
   const EncryptPdfEngine({
-    required this._pdf
+    required this._pdf,
   });
 
   final manipulator.Pdf _pdf;
@@ -25,27 +25,31 @@ class EncryptPdfEngine {
     final source = FileSource(input.inputFile);
     final output = await FileSink.create(input.outputFile);
 
-    await _pdf.encrypt(
-      source,
-      output,
-      encryption: manipulator.PdfEncryptionConfig(
-        ownerPassword: input.ownerPassword,
-        userPassword: input.userPassword,
-        algorithm: _toAlgorithm(input.level),
-        permissions: manipulator.PdfPermissions(
-          print: input.permissions.print,
-          printHq: input.permissions.printHq,
-          modify: input.permissions.modify,
-          copy: input.permissions.copy,
-          annotate: input.permissions.annotate,
-          fillForms: input.permissions.fillForms,
-          accessibility: input.permissions.accessibility,
-          assemble: input.permissions.assemble,
+    try {
+      await _pdf.encrypt(
+        source,
+        output,
+        encryption: manipulator.PdfEncryptionConfig(
+          ownerPassword: input.ownerPassword,
+          userPassword: input.userPassword,
+          algorithm: _toAlgorithm(input.level),
+          permissions: manipulator.PdfPermissions(
+            print: input.permissions.print,
+            printHq: input.permissions.printHq,
+            modify: input.permissions.modify,
+            copy: input.permissions.copy,
+            annotate: input.permissions.annotate,
+            fillForms: input.permissions.fillForms,
+            accessibility: input.permissions.accessibility,
+            assemble: input.permissions.assemble,
+          ),
         ),
-      ),
-    );
+      );
 
-    return input.outputFile;
+      return input.outputFile;
+    } finally {
+      await output.close();
+    }
   }
 
   manipulator.PdfEncryptionAlgorithm _toAlgorithm(
