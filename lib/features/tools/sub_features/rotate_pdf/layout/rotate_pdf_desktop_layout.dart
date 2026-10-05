@@ -36,7 +36,10 @@ class RotatePdfDesktopLayout extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
             ToolSectionCard(
               title: l10n.toolsRotateDirectionSectionTitle,
-              child: _DirectionSelector(viewModel: viewModel),
+              child: DirectionSelector(
+                direction: viewModel.direction,
+                onDirectionChanged: viewModel.onDirectionChanged,
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
             ToolSectionCard(
@@ -77,48 +80,5 @@ class RotatePdfDesktopLayout extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class _DirectionSelector extends StatelessWidget {
-  const _DirectionSelector({required this.viewModel});
-
-  final RotatePdfViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return SegmentedButton<RotatePdfDirection>(
-      showSelectedIcon: true,
-      segments: [
-        for (final direction in RotatePdfDirection.values)
-          ButtonSegment(
-            value: direction,
-            icon: Icon(_iconFor(direction), size: 18),
-            label: Text(_labelFor(context, direction)),
-          ),
-      ],
-      selected: {viewModel.direction},
-      onSelectionChanged: (selection) {
-        viewModel.onDirectionChanged(selection.first);
-      },
-    );
-  }
-
-  String _labelFor(BuildContext context, RotatePdfDirection direction) {
-    final l10n = context.l10n;
-
-    return switch (direction) {
-      RotatePdfDirection.clockwise90 => l10n.toolsRotateDirection90,
-      RotatePdfDirection.upsideDown => l10n.toolsRotateDirection180,
-      RotatePdfDirection.counterClockwise90 => l10n.toolsRotateDirection270,
-    };
-  }
-
-  IconData _iconFor(RotatePdfDirection direction) {
-    return switch (direction) {
-      RotatePdfDirection.clockwise90 => Icons.rotate_90_degrees_cw,
-      RotatePdfDirection.upsideDown => Icons.flip,
-      RotatePdfDirection.counterClockwise90 => Icons.rotate_90_degrees_ccw,
-    };
   }
 }
