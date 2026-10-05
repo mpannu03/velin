@@ -24,6 +24,19 @@ class DecryptPdfToolInput {
       password: password ?? this.password,
     );
   }
+
+  @override
+  bool operator ==(covariant DecryptPdfToolInput other) {
+    if (identical(this, other)) return true;
+
+    return other.filePath == filePath &&
+        other.outputFilePath == outputFilePath &&
+        other.password == password;
+  }
+
+  @override
+  int get hashCode =>
+      filePath.hashCode ^ outputFilePath.hashCode ^ password.hashCode;
 }
 
 extension DecryptPdfMapper on DecryptPdfToolInput {

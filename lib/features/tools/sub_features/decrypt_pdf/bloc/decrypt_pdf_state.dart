@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
 import 'decrypt_pdf_input.dart';
@@ -80,6 +81,26 @@ class DecryptPdfState {
       password: password ?? this.password,
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
+  }
+
+  @override
+  bool operator ==(covariant DecryptPdfState other) {
+    if (identical(this, other)) return true;
+
+    return other.inputFilePath == inputFilePath &&
+        other.outputDirectory == outputDirectory &&
+        other.outputFileName == outputFileName &&
+        other.password == password &&
+        other.isSubmitting == isSubmitting;
+  }
+
+  @override
+  int get hashCode {
+    return inputFilePath.hashCode ^
+        outputDirectory.hashCode ^
+        outputFileName.hashCode ^
+        password.hashCode ^
+        isSubmitting.hashCode;
   }
 }
 
