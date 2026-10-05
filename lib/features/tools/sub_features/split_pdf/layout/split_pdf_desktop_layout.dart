@@ -2,7 +2,6 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'package:velin/app/theme/theme.dart';
-import 'package:velin/engine/engine.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
@@ -39,7 +38,16 @@ class SplitPdfDesktopLayout extends StatelessWidget {
             const SizedBox(height: AppSpacing.lg),
             ToolSectionCard(
               title: l10n.toolsSplitModeSectionTitle,
-              child: _SplitModeEditor(viewModel: viewModel),
+              child: SplitModeEditor(
+                mode: viewModel.mode,
+                onModeChanged: viewModel.onModeChanged,
+                pageCount: viewModel.pageCount,
+                onPageCountChanged: viewModel.onPageCountChanged,
+                selections: viewModel.selections,
+                onSelectionChanged: viewModel.onSelectionChanged,
+                onAddSelection: viewModel.onAddSelection,
+                onRemoveSelection: viewModel.onRemoveSelection,
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
             OutputFilePicker(
@@ -62,165 +70,6 @@ class SplitPdfDesktopLayout extends StatelessWidget {
           ],
         ],
       ),
-    );
-  }
-}
-
-class _SplitModeEditor extends StatelessWidget {
-  const _SplitModeEditor({required this.viewModel});
-
-  final SplitPdfViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SegmentedButton<SplitPdfMode>(
-          showSelectedIcon: true,
-          segments: [
-            ButtonSegment(
-              value: SplitPdfMode.byPageCount,
-              icon: const Icon(Icons.numbers_outlined, size: 18),
-              label: Text(l10n.toolsSplitModeByPageCount),
-            ),
-            ButtonSegment(
-              value: SplitPdfMode.bySelection,
-              icon: const Icon(Icons.tune_outlined, size: 18),
-              label: Text(l10n.toolsSplitModeBySelection),
-            ),
-            ButtonSegment(
-              value: SplitPdfMode.extractAllPages,
-              icon: const Icon(Icons.content_copy_outlined, size: 18),
-              label: Text(l10n.toolsSplitModeExtractAll),
-            ),
-          ],
-          selected: {viewModel.mode},
-          onSelectionChanged: (selection) =>
-              viewModel.onModeChanged(selection.first),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        switch (viewModel.mode) {
-          SplitPdfMode.byPageCount => _ByPageCountEditor(viewModel: viewModel),
-          SplitPdfMode.bySelection => _BySelectionEditor(viewModel: viewModel),
-          SplitPdfMode.extractAllPages => Text(
-              l10n.toolsSplitExtractAllInfo,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-        },
-      ],
-    );
-  }
-}
-
-class _ByPageCountEditor extends StatelessWidget {
-  const _ByPageCountEditor({required this.viewModel});
-
-  final SplitPdfViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-
-    return SizedBox(
-      width: 220,
-      child: TextField(
-        key: const ValueKey('split-pages-per-file'),
-        controller: TextEditingController(text: viewModel.pageCount),
-        keyboardType: TextInputType.number,
-        onChanged: viewModel.onPageCountChanged,
-        decoration: InputDecoration(
-          labelText: l10n.toolsSplitPagesPerFileLabel,
-          hintText: l10n.toolsSplitPagesPerFileHint,
-          isDense: true,
-          border: const OutlineInputBorder(),
-        ),
-      ),
-    );
-  }
-}
-
-class _BySelectionEditor extends StatelessWidget {
-  const _BySelectionEditor({required this.viewModel});
-
-  final SplitPdfViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final colors = Theme.of(context).colorScheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (viewModel.selections.isNotEmpty)
-          for (var index = 0; index < viewModel.selections.length; index++)
-            Padding(
-              key: ValueKey('selection-$index'),
-              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-              child: Row(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: colors.secondaryContainer,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '${index + 1}',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: colors.onSecondaryContainer,
-                            fontWeight: FontWeight.w600,
-                          ),
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: PageSelectionField(
-                      value: viewModel.selections[index],
-                      fieldKey: ValueKey('selection-field-$index'),
-                      onChanged: (value) => viewModel.onSelectionChanged(
-                        index,
-                        value,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.xs),
-                  IconButton(
-                    onPressed: () => viewModel.onRemoveSelection(index),
-                    tooltip: l10n.toolsSplitSelectionRemove,
-                    icon: const Icon(Icons.close),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                ],
-              ),
-            ),
-        if (viewModel.selections.isEmpty)
-          Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-            child: Text(
-              l10n.toolsSplitSelectionHint,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: colors.onSurfaceVariant,
-                  ),
-            ),
-          ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: TextButton.icon(
-            onPressed: viewModel.onAddSelection,
-            icon: const Icon(Icons.add, size: 18),
-            label: Text(l10n.toolsSplitSelectionAdd),
-          ),
-        ),
-      ],
     );
   }
 }
