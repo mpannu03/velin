@@ -511,7 +511,7 @@ abstract class AppLocalizations {
   /// Shows the full path of the file that will be created.
   ///
   /// In en, this message translates to:
-  /// **'Will save as {path}'**
+  /// **'Will save as: {path}'**
   String toolsWillSaveAs(String path);
 
   /// Label for the primary merge action button.

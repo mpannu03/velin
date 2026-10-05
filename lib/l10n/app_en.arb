@@ -359,7 +359,7 @@
     "description": "Helper text shown when no output folder is selected."
   },
 
-  "toolsWillSaveAs": "Will save as {path}",
+  "toolsWillSaveAs": "Will save as: {path}",
   "@toolsWillSaveAs": {
     "description": "Shows the full path of the file that will be created.",
     "placeholders": {

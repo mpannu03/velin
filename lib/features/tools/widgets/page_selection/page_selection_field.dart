@@ -108,6 +108,8 @@ class _PageSelectionFieldState extends State<PageSelectionField> {
       ),
     );
 
-    return widget.width == null ? field : SizedBox(width: widget.width, child: field);
+    return widget.width == null
+        ? field
+        : SizedBox(width: widget.width, child: field);
   }
 }

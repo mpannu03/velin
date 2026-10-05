@@ -235,7 +235,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String toolsWillSaveAs(String path) {
-    return 'Will save as $path';
+    return 'Will save as: $path';
   }
 
   @override

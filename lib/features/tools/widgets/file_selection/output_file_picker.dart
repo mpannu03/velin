@@ -124,6 +124,7 @@ class _OutputFilePickerState extends State<OutputFilePicker> {
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: InkWell(
+                    key: const ValueKey('output-directory-row'),
                     onTap: widget.onChooseFolder,
                     borderRadius: BorderRadius.circular(AppRadius.sm),
                     child: Padding(
