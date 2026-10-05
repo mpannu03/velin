@@ -2,23 +2,11 @@ import 'dart:io';
 
 import 'package:velin/core/page_selection/page_selection.dart';
 
-enum WatermarkType {
-  text,
-  image,
-}
+enum WatermarkType { text, image }
 
-enum WatermarkPosition {
-  center,
-  topLeft,
-  topRight,
-  bottomLeft,
-  bottomRight,
-}
+enum WatermarkPosition { center, topLeft, topRight, bottomLeft, bottomRight }
 
-enum WatermarkLayer {
-  foreground,
-  background,
-}
+enum WatermarkLayer { foreground, background }
 
 class AddWatermarkInput {
   const AddWatermarkInput({
@@ -38,9 +26,9 @@ class AddWatermarkInput {
     this.imageWidthPercent = 30,
     this.layer = WatermarkLayer.foreground,
     this.selection,
-  })  : assert(fontSize > 0),
-        assert(opacity >= 0.05 && opacity <= 1),
-        assert(imageWidthPercent > 0 && imageWidthPercent <= 100);
+  }) : assert(fontSize > 0),
+       assert(opacity >= 0.05 && opacity <= 1),
+       assert(imageWidthPercent > 0 && imageWidthPercent <= 100);
 
   final File file;
   final File outputFile;

@@ -10,15 +10,11 @@ import 'package:velin/core/page_selection/page_selection.dart';
 import 'add_watermark_input.dart';
 
 class AddWatermarkEngine {
-  AddWatermarkEngine({
-    required this._pdf,
-  });
+  AddWatermarkEngine({required this._pdf});
 
   final Pdf _pdf;
 
-  Future<File> addWatermark({
-    required AddWatermarkInput input,
-  }) async {
+  Future<File> addWatermark({required AddWatermarkInput input}) async {
     _validate(input);
 
     final source = FileSource(input.file);
@@ -30,25 +26,14 @@ class AddWatermarkEngine {
       editor = await _pdf.edit(source);
 
       final pageCount = await editor.pageCount;
-      final pages = _resolvePages(
-        input.selection,
-        pageCount,
-      );
+      final pages = _resolvePages(input.selection, pageCount);
 
       switch (input.type) {
         case WatermarkType.text:
-          await _addTextWatermark(
-            editor,
-            input,
-            pages,
-          );
+          await _addTextWatermark(editor, input, pages);
 
         case WatermarkType.image:
-          await _addImageWatermark(
-            editor,
-            input,
-            pages,
-          );
+          await _addImageWatermark(editor, input, pages);
       }
 
       await editor.save(output);
@@ -75,11 +60,7 @@ class AddWatermarkEngine {
     );
 
     for (final page in pages) {
-      final position = await _textPosition(
-        editor,
-        page,
-        input,
-      );
+      final position = await _textPosition(editor, page, input);
 
       await editor.addWatermark(
         page,
@@ -110,14 +91,9 @@ class AddWatermarkEngine {
       );
     }
 
-    final rotated = _rotateImage(
-      decoded,
-      input.rotation,
-    );
+    final rotated = _rotateImage(decoded, input.rotation);
 
-    final encodedBytes = Uint8List.fromList(
-      img.encodePng(rotated),
-    );
+    final encodedBytes = Uint8List.fromList(img.encodePng(rotated));
 
     final imageSource = MemorySource(encodedBytes);
 
@@ -127,11 +103,9 @@ class AddWatermarkEngine {
       final pageWidth = mediaBox.width;
       final pageHeight = mediaBox.height;
 
-      final width = pageWidth *
-          (input.imageWidthPercent / 100);
+      final width = pageWidth * (input.imageWidthPercent / 100);
 
-      final aspectRatio =
-          rotated.height / rotated.width;
+      final aspectRatio = rotated.height / rotated.width;
 
       final height = width * aspectRatio;
 
@@ -165,10 +139,7 @@ class AddWatermarkEngine {
 
     final mediaBox = await editor.pageMediaBox(page);
 
-    final width = _estimateTextWidth(
-      input.text,
-      input.fontSize,
-    );
+    final width = _estimateTextWidth(input.text, input.fontSize);
 
     final height = input.fontSize * 1.4;
 
@@ -190,32 +161,25 @@ class AddWatermarkEngine {
     );
   }
 
-  PdfWatermarkPosition _resolveNamedPosition(
-    WatermarkPosition position,
-  ) {
+  PdfWatermarkPosition _resolveNamedPosition(WatermarkPosition position) {
     return switch (position) {
-      WatermarkPosition.center =>
-        const PdfWatermarkPosition.center(),
+      WatermarkPosition.center => const PdfWatermarkPosition.center(),
 
-      WatermarkPosition.topLeft =>
-        const PdfWatermarkPosition.corner(
-          PdfCorner.topLeft,
-        ),
+      WatermarkPosition.topLeft => const PdfWatermarkPosition.corner(
+        PdfCorner.topLeft,
+      ),
 
-      WatermarkPosition.topRight =>
-        const PdfWatermarkPosition.corner(
-          PdfCorner.topRight,
-        ),
+      WatermarkPosition.topRight => const PdfWatermarkPosition.corner(
+        PdfCorner.topRight,
+      ),
 
-      WatermarkPosition.bottomLeft =>
-        const PdfWatermarkPosition.corner(
-          PdfCorner.bottomLeft,
-        ),
+      WatermarkPosition.bottomLeft => const PdfWatermarkPosition.corner(
+        PdfCorner.bottomLeft,
+      ),
 
-      WatermarkPosition.bottomRight =>
-        const PdfWatermarkPosition.corner(
-          PdfCorner.bottomRight,
-        ),
+      WatermarkPosition.bottomRight => const PdfWatermarkPosition.corner(
+        PdfCorner.bottomRight,
+      ),
     };
   }
 
@@ -261,68 +225,40 @@ class AddWatermarkEngine {
     );
   }
 
-  img.Image _rotateImage(
-    img.Image image,
-    double degrees,
-  ) {
-    final normalized =
-        degrees % 360;
+  img.Image _rotateImage(img.Image image, double degrees) {
+    final normalized = degrees % 360;
 
     if (normalized == 0) {
       return image;
     }
 
-    return img.copyRotate(
-      image,
-      angle: normalized,
-    );
+    return img.copyRotate(image, angle: normalized);
   }
 
-  double _estimateTextWidth(
-    String text,
-    double fontSize,
-  ) {
+  double _estimateTextWidth(String text, double fontSize) {
     // A conservative approximation for the standard
     // sans-serif watermark font.
-    return math.max(
-      fontSize * 2,
-      text.length * fontSize * 0.58,
-    );
+    return math.max(fontSize * 2, text.length * fontSize * 0.58);
   }
 
-  List<int> _resolvePages(
-    PageSelection? selection,
-    int pageCount,
-  ) {
+  List<int> _resolvePages(PageSelection? selection, int pageCount) {
     if (selection == null) {
-      return [
-        for (var page = 0; page < pageCount; page++)
-          page,
-      ];
+      return [for (var page = 0; page < pageCount; page++) page];
     }
 
-    return [
-      for (final page in selection.resolve(pageCount))
-        page - 1,
-    ];
+    return [for (final page in selection.resolve(pageCount)) page - 1];
   }
 
-  PdfWatermarkLayer _resolveLayer(
-    WatermarkLayer layer,
-  ) {
+  PdfWatermarkLayer _resolveLayer(WatermarkLayer layer) {
     return switch (layer) {
-      WatermarkLayer.foreground =>
-        PdfWatermarkLayer.foreground,
+      WatermarkLayer.foreground => PdfWatermarkLayer.foreground,
 
-      WatermarkLayer.background =>
-        PdfWatermarkLayer.background,
+      WatermarkLayer.background => PdfWatermarkLayer.background,
     };
   }
 
   PdfColor _parseColor(String value) {
-    final hex = value
-        .replaceFirst('#', '')
-        .trim();
+    final hex = value.replaceFirst('#', '').trim();
 
     if (hex.length != 6) {
       throw ArgumentError.value(
@@ -332,10 +268,7 @@ class AddWatermarkEngine {
       );
     }
 
-    final rgb = int.tryParse(
-      hex,
-      radix: 16,
-    );
+    final rgb = int.tryParse(hex, radix: 16);
 
     if (rgb == null) {
       throw ArgumentError.value(
@@ -352,9 +285,7 @@ class AddWatermarkEngine {
     );
   }
 
-  void _validate(
-    AddWatermarkInput input,
-  ) {
+  void _validate(AddWatermarkInput input) {
     if (!input.file.existsSync()) {
       throw ArgumentError.value(
         input.file,
@@ -363,15 +294,11 @@ class AddWatermarkEngine {
       );
     }
 
-    if (input.outputFile.absolute.path ==
-        input.file.absolute.path) {
-      throw ArgumentError(
-        'The output file must differ from the input file.',
-      );
+    if (input.outputFile.absolute.path == input.file.absolute.path) {
+      throw ArgumentError('The output file must differ from the input file.');
     }
 
-    if (input.type == WatermarkType.text &&
-        input.text.trim().isEmpty) {
+    if (input.type == WatermarkType.text && input.text.trim().isEmpty) {
       throw ArgumentError.value(
         input.text,
         'text',
@@ -379,15 +306,11 @@ class AddWatermarkEngine {
       );
     }
 
-    if (input.type == WatermarkType.image &&
-        input.imageFile == null) {
-      throw ArgumentError(
-        'An image file is required for an image watermark.',
-      );
+    if (input.type == WatermarkType.image && input.imageFile == null) {
+      throw ArgumentError('An image file is required for an image watermark.');
     }
 
-    if (input.type == WatermarkType.image &&
-        !input.imageFile!.existsSync()) {
+    if (input.type == WatermarkType.image && !input.imageFile!.existsSync()) {
       throw ArgumentError.value(
         input.imageFile,
         'imageFile',
@@ -395,8 +318,7 @@ class AddWatermarkEngine {
       );
     }
 
-    if (input.opacity < 0.05 ||
-        input.opacity > 1) {
+    if (input.opacity < 0.05 || input.opacity > 1) {
       throw ArgumentError.value(
         input.opacity,
         'opacity',
@@ -412,8 +334,7 @@ class AddWatermarkEngine {
       );
     }
 
-    if (input.imageWidthPercent <= 0 ||
-        input.imageWidthPercent > 100) {
+    if (input.imageWidthPercent <= 0 || input.imageWidthPercent > 100) {
       throw ArgumentError.value(
         input.imageWidthPercent,
         'imageWidthPercent',

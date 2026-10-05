@@ -6,17 +6,15 @@ import 'package:velin/features/tools/widgets/widgets.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
 class PdfToImageDesktopLayout extends StatelessWidget {
-  const PdfToImageDesktopLayout({
-    super.key,
-    required this.viewModel,
-  });
+  const PdfToImageDesktopLayout({super.key, required this.viewModel});
 
   final PdfToImageViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final hasInputFile = viewModel.inputFilePath != null &&
+    final hasInputFile =
+        viewModel.inputFilePath != null &&
         viewModel.inputFilePath!.trim().isNotEmpty;
 
     return ToolScaffold(
@@ -73,8 +71,9 @@ class PdfToImageDesktopLayout extends StatelessWidget {
                 selectedPagesLabel: l10n.toolsPdfToImageScopeSelected,
                 onScopeChanged: viewModel.onScopeChanged,
                 selection: viewModel.selection,
-                selectionFieldKey:
-                    const ValueKey('pdf-to-image-page-selection'),
+                selectionFieldKey: const ValueKey(
+                  'pdf-to-image-page-selection',
+                ),
                 selectionHintText: l10n.toolsPdfToImageSelectionHint,
                 selectionHelperText: l10n.toolsPdfToImageSelectionHelper,
                 onSelectionChanged: viewModel.onSelectionChanged,

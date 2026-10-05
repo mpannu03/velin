@@ -14,16 +14,10 @@ void main() {
   });
 
   testWidgets('renders window controls', (tester) async {
-    when(
-      () => windowManager.isMaximized()
-    ).thenAnswer((_) async => false);
+    when(() => windowManager.isMaximized()).thenAnswer((_) async => false);
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: VelinWindowControls(
-          windowManager: windowManager,
-        ),
-      ),
+      MaterialApp(home: VelinWindowControls(windowManager: windowManager)),
     );
 
     await tester.pump();
@@ -34,20 +28,12 @@ void main() {
   });
 
   testWidgets('minimize button minimizes window', (tester) async {
-    when(
-      () => windowManager.isMaximized()
-    ).thenAnswer((_) async => false);
+    when(() => windowManager.isMaximized()).thenAnswer((_) async => false);
 
-    when(
-      () => windowManager.minimize()
-    ).thenAnswer((_) async {});
+    when(() => windowManager.minimize()).thenAnswer((_) async {});
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: VelinWindowControls(
-          windowManager: windowManager,
-        ),
-      ),
+      MaterialApp(home: VelinWindowControls(windowManager: windowManager)),
     );
 
     await tester.tap(find.byIcon(Icons.remove));
@@ -56,20 +42,12 @@ void main() {
   });
 
   testWidgets('close button closes window', (tester) async {
-    when(
-      () => windowManager.isMaximized()
-    ).thenAnswer((_) async => false);
+    when(() => windowManager.isMaximized()).thenAnswer((_) async => false);
 
-    when(
-      () => windowManager.close()
-    ).thenAnswer((_) async {});
+    when(() => windowManager.close()).thenAnswer((_) async {});
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: VelinWindowControls(
-          windowManager: windowManager,
-        ),
-      ),
+      MaterialApp(home: VelinWindowControls(windowManager: windowManager)),
     );
 
     await tester.tap(find.byIcon(Icons.close));
@@ -77,21 +55,14 @@ void main() {
     verify(() => windowManager.close()).called(1);
   });
 
-  testWidgets('maximize button maximizes window when not maximized',
-      (tester) async {
-    when(
-      () => windowManager.isMaximized()
-    ).thenAnswer((_) async => false);
-    when(
-      () => windowManager.maximize()
-    ).thenAnswer((_) async {});
+  testWidgets('maximize button maximizes window when not maximized', (
+    tester,
+  ) async {
+    when(() => windowManager.isMaximized()).thenAnswer((_) async => false);
+    when(() => windowManager.maximize()).thenAnswer((_) async {});
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: VelinWindowControls(
-          windowManager: windowManager,
-        ),
-      ),
+      MaterialApp(home: VelinWindowControls(windowManager: windowManager)),
     );
 
     await tester.tap(find.byIcon(Icons.crop_square));
@@ -101,19 +72,11 @@ void main() {
   });
 
   testWidgets('resize button restores window when maximized', (tester) async {
-    when(
-      () => windowManager.isMaximized()
-    ).thenAnswer((_) async => true);
-    when(
-      () => windowManager.restore()
-    ).thenAnswer((_) async {});
+    when(() => windowManager.isMaximized()).thenAnswer((_) async => true);
+    when(() => windowManager.restore()).thenAnswer((_) async {});
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: VelinWindowControls(
-          windowManager: windowManager,
-        ),
-      ),
+      MaterialApp(home: VelinWindowControls(windowManager: windowManager)),
     );
 
     await tester.pump();

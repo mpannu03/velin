@@ -36,7 +36,7 @@ class _ColorPickerState extends State<ColorPicker> {
     // The state is the source of truth: a rejected hex is not echoed back
     // into the field, so only push when the two actually diverge.
     if (widget.colorHex != _controller.text) {
-      _controller.text = widget .colorHex;
+      _controller.text = widget.colorHex;
     }
   }
 
@@ -68,8 +68,7 @@ class _ColorPickerState extends State<ColorPicker> {
             for (final hex in AddWatermarkToolInput.commonColors)
               VColorSwatch(
                 hex: hex,
-                isSelected:
-                    hex.toUpperCase() == normalizeHexColor(currentHex),
+                isSelected: hex.toUpperCase() == normalizeHexColor(currentHex),
                 onTap: () => _commit(hex),
               ),
           ],
@@ -85,9 +84,7 @@ class _ColorPickerState extends State<ColorPicker> {
               decoration: BoxDecoration(
                 color: colorFromHex(currentHex),
                 borderRadius: BorderRadius.circular(AppRadius.md),
-                border: Border.all(
-                  color: theme.colorScheme.outlineVariant,
-                ),
+                border: Border.all(color: theme.colorScheme.outlineVariant),
               ),
               child: Icon(
                 Icons.colorize,

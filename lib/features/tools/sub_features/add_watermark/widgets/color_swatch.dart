@@ -37,11 +37,7 @@ class VColorSwatch extends StatelessWidget {
               ),
             ),
             child: isSelected
-                ? Icon(
-                    Icons.check,
-                    size: 16,
-                    color: contrastColorFromHex(hex),
-                  )
+                ? Icon(Icons.check, size: 16, color: contrastColorFromHex(hex))
                 : null,
           ),
         ),

@@ -17,7 +17,7 @@ class SplitModeEditor extends StatelessWidget {
     required this.onAddSelection,
     required this.onRemoveSelection,
   });
-  
+
   final SplitPdfMode mode;
   final ValueChanged<SplitPdfMode> onModeChanged;
 
@@ -57,27 +57,26 @@ class SplitModeEditor extends StatelessWidget {
             ),
           ],
           selected: {mode},
-          onSelectionChanged: (selection) =>
-              onModeChanged(selection.first),
+          onSelectionChanged: (selection) => onModeChanged(selection.first),
         ),
         const SizedBox(height: AppSpacing.lg),
         switch (mode) {
           SplitPdfMode.byPageCount => ByPageCountEditor(
             pageCount: pageCount,
-            onPageCountChanged: onPageCountChanged
+            onPageCountChanged: onPageCountChanged,
           ),
           SplitPdfMode.bySelection => BySelectionEditor(
-              selections: selections,
-              onSelectionChanged: onSelectionChanged,
-              onAddSelection: onAddSelection,
-              onRemoveSelection: onRemoveSelection,
-            ),
+            selections: selections,
+            onSelectionChanged: onSelectionChanged,
+            onAddSelection: onAddSelection,
+            onRemoveSelection: onRemoveSelection,
+          ),
           SplitPdfMode.extractAllPages => Text(
-              l10n.toolsSplitExtractAllInfo,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
+            l10n.toolsSplitExtractAllInfo,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
             ),
+          ),
         },
       ],
     );

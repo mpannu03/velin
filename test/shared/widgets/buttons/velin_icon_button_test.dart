@@ -9,18 +9,12 @@ void main() {
     testWidgets('shows icon and tooltip', (tester) async {
       await pumpApp(
         tester,
-        VelinIconButton(
-          icon: Icons.close,
-          tooltip: 'Close',
-          onPressed: () {},
-        ),
+        VelinIconButton(icon: Icons.close, tooltip: 'Close', onPressed: () {}),
       );
 
       expect(find.byIcon(Icons.close), findsOneWidget);
 
-      final tooltip = tester.widget<Tooltip>(
-        find.byType(Tooltip),
-      );
+      final tooltip = tester.widget<Tooltip>(find.byType(Tooltip));
 
       expect(tooltip.message, 'Close');
     });
@@ -47,11 +41,7 @@ void main() {
 
       await pumpApp(
         tester,
-        VelinIconButton(
-          icon: Icons.close,
-          tooltip: 'Close',
-          onPressed: null,
-        ),
+        VelinIconButton(icon: Icons.close, tooltip: 'Close', onPressed: null),
       );
 
       await tester.tap(find.byIcon(Icons.close));

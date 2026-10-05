@@ -16,10 +16,7 @@ void main() {
 
   group('open', () {
     test('creates and stores a document', () {
-      final result = repository.open(
-        '/documents/test.pdf',
-        DocumentType.pdf,
-      );
+      final result = repository.open('/documents/test.pdf', DocumentType.pdf);
 
       expect(result, isA<Success<Document>>());
 
@@ -39,10 +36,7 @@ void main() {
 
   group('close', () {
     test('removes the document', () {
-      final result = repository.open(
-        '/documents/test.pdf',
-        DocumentType.pdf,
-      );
+      final result = repository.open('/documents/test.pdf', DocumentType.pdf);
 
       final document = (result as Success<Document>).data;
       final closeResult = repository.close(document.id);
@@ -62,10 +56,7 @@ void main() {
     test('emits documents when a document is opened', () async {
       final future = repository.watch().first;
 
-      repository.open(
-        '/documents/test.pdf',
-        DocumentType.pdf,
-      );
+      repository.open('/documents/test.pdf', DocumentType.pdf);
 
       final documents = await future;
 
@@ -74,10 +65,7 @@ void main() {
     });
 
     test('emits documents when a document is closed', () async {
-      final result = repository.open(
-        '/documents/test.pdf',
-        DocumentType.pdf,
-      );
+      final result = repository.open('/documents/test.pdf', DocumentType.pdf);
 
       final document = (result as Success<Document>).data;
       final future = repository.watch().first;
@@ -90,15 +78,9 @@ void main() {
     });
 
     test('emits all currently opened documents', () async {
-      final first = repository.open(
-        '/documents/first.pdf',
-        DocumentType.pdf,
-      );
+      final first = repository.open('/documents/first.pdf', DocumentType.pdf);
 
-      repository.open(
-        '/documents/second.pdf',
-        DocumentType.pdf,
-      );
+      repository.open('/documents/second.pdf', DocumentType.pdf);
 
       final future = repository.watch().first;
 

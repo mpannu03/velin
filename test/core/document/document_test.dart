@@ -33,10 +33,7 @@ void main() {
         type: DocumentType.pdf,
       );
 
-      final copy = Document(
-        path: document.path,
-        type: document.type,
-      );
+      final copy = Document(path: document.path, type: document.type);
 
       expect(copy, isNot(equals(document)));
     });

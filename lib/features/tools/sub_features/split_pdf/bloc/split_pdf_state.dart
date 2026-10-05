@@ -39,10 +39,10 @@ class SplitPdfState {
       selections.isNotEmpty && selections.every((s) => s.trim().isNotEmpty);
 
   bool get hasValidModeConfig => switch (mode) {
-        SplitPdfMode.byPageCount => hasValidPageCount,
-        SplitPdfMode.bySelection => hasValidSelections,
-        SplitPdfMode.extractAllPages => true,
-      };
+    SplitPdfMode.byPageCount => hasValidPageCount,
+    SplitPdfMode.bySelection => hasValidSelections,
+    SplitPdfMode.extractAllPages => true,
+  };
 
   bool get canSplit =>
       hasInputFile &&

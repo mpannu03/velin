@@ -29,16 +29,15 @@ class SplitPdfCubit extends Cubit<SplitPdfState> {
   final AppEffectController _appEffectController;
 
   Future<void> pickFile() async {
-    final result = await _filePicker.pickFile(
-      allowedExtensions: ['pdf'],
-    );
+    final result = await _filePicker.pickFile(allowedExtensions: ['pdf']);
 
     switch (result) {
       case Success(data: final filePath):
         emit(
           state.copyWith(
             inputFilePath: filePath,
-            outputDirectory: state.outputDirectory ??
+            outputDirectory:
+                state.outputDirectory ??
                 directoryWithTrailingSeparator(filePath),
           ),
         );
@@ -66,11 +65,7 @@ class SplitPdfCubit extends Cubit<SplitPdfState> {
   }
 
   void addSelection() {
-    emit(
-      state.copyWith(
-        selections: [...state.selections, ''],
-      ),
-    );
+    emit(state.copyWith(selections: [...state.selections, '']));
   }
 
   void updateSelection(int index, String value) {
@@ -102,9 +97,7 @@ class SplitPdfCubit extends Cubit<SplitPdfState> {
 
     switch (result) {
       case Success(data: final directoryPath):
-        emit(
-          state.copyWith(outputDirectory: directoryPath),
-        );
+        emit(state.copyWith(outputDirectory: directoryPath));
 
       case Failure(error: final error):
         if (error is DocumentFilePickerError) {

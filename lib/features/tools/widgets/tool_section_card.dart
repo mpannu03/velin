@@ -2,11 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 
 class ToolSectionCard extends StatelessWidget {
-  const ToolSectionCard({
-    super.key,
-    required this.title,
-    required this.child,
-  });
+  const ToolSectionCard({super.key, required this.title, required this.child});
 
   final String title;
   final Widget child;

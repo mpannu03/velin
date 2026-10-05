@@ -9,10 +9,13 @@ void main() {
   testWidgets('shows desktop layout on desktop platform', (tester) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.windows;
 
-    await pumpApp(tester, const ResponsiveLayout(
-      desktop: Text('Desktop'),
-      mobilePortrait: Text('Mobile Portrait'),
-    ));
+    await pumpApp(
+      tester,
+      const ResponsiveLayout(
+        desktop: Text('Desktop'),
+        mobilePortrait: Text('Mobile Portrait'),
+      ),
+    );
 
     expect(find.text('Desktop'), findsOneWidget);
     expect(find.text('Mobile Portrait'), findsNothing);
@@ -21,16 +24,21 @@ void main() {
     await tester.binding.setSurfaceSize(null);
   });
 
-  testWidgets('shows mobile portrait layout on mobile portrait', (tester) async {
+  testWidgets('shows mobile portrait layout on mobile portrait', (
+    tester,
+  ) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     await setViewSize(tester, const Size(400, 800));
 
-    await pumpApp(tester, const ResponsiveLayout(
-      desktop: Text('Desktop'),
-      mobilePortrait: Text('Mobile Portrait'),
-      mobileLandscape: Text('Mobile Landscape'),
-    ));
+    await pumpApp(
+      tester,
+      const ResponsiveLayout(
+        desktop: Text('Desktop'),
+        mobilePortrait: Text('Mobile Portrait'),
+        mobileLandscape: Text('Mobile Landscape'),
+      ),
+    );
 
     expect(find.text('Mobile Portrait'), findsOneWidget);
     expect(find.text('Mobile Landscape'), findsNothing);
@@ -39,17 +47,21 @@ void main() {
     await resetViewSize(tester);
   });
 
-  testWidgets('shows mobile landscape layout on mobile landscape',
-      (tester) async {
+  testWidgets('shows mobile landscape layout on mobile landscape', (
+    tester,
+  ) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
     await setViewSize(tester, const Size(800, 400));
 
-    await pumpApp(tester, const ResponsiveLayout(
-      desktop: Text('Desktop'),
-      mobilePortrait: Text('Mobile Portrait'),
-      mobileLandscape: Text('Mobile Landscape'),
-    ));
+    await pumpApp(
+      tester,
+      const ResponsiveLayout(
+        desktop: Text('Desktop'),
+        mobilePortrait: Text('Mobile Portrait'),
+        mobileLandscape: Text('Mobile Landscape'),
+      ),
+    );
 
     expect(find.text('Mobile Landscape'), findsOneWidget);
     expect(find.text('Mobile Portrait'), findsNothing);
@@ -65,10 +77,13 @@ void main() {
 
       await setViewSize(tester, const Size(800, 400));
 
-      await pumpApp(tester, const ResponsiveLayout(
-        desktop: Text('Desktop'),
-        mobilePortrait: Text('Mobile Portrait'),
-      ));
+      await pumpApp(
+        tester,
+        const ResponsiveLayout(
+          desktop: Text('Desktop'),
+          mobilePortrait: Text('Mobile Portrait'),
+        ),
+      );
 
       expect(find.text('Mobile Portrait'), findsOneWidget);
       expect(find.text('Desktop'), findsNothing);

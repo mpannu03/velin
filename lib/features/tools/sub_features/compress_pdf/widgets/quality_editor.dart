@@ -33,10 +33,9 @@ class QualityEditor extends StatelessWidget {
                 max: CompressPdfToolInput.maxQuality.toDouble(),
                 divisions:
                     CompressPdfToolInput.maxQuality -
-                        CompressPdfToolInput.minQuality,
+                    CompressPdfToolInput.minQuality,
                 label: '$quality',
-                onChanged: (value) =>
-                    onQualityChanged(value.round()),
+                onChanged: (value) => onQualityChanged(value.round()),
               ),
             ),
             SizedBox(

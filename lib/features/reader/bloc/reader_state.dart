@@ -13,15 +13,10 @@ final class ReaderLoading extends ReaderState {
 }
 
 final class ReaderLoaded extends ReaderState {
-  const ReaderLoaded({
-    required this.documents,
-    this.selectedDocument,
-  });
+  const ReaderLoaded({required this.documents, this.selectedDocument});
 
-  factory ReaderLoaded.empty() => ReaderLoaded(
-    documents: [],
-    selectedDocument: null,
-  );
+  factory ReaderLoaded.empty() =>
+      ReaderLoaded(documents: [], selectedDocument: null);
 
   final List<Document> documents;
   final Document? selectedDocument;

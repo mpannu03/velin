@@ -11,10 +11,8 @@ import 'document_workspace_view.dart';
 import 'document_workspace_view_model.dart';
 
 class DocumentWorkspacePage extends StatelessWidget {
-  DocumentWorkspacePage({
-    required this.document,
-    super.key,
-  }) : _engine = getIt<DocumentEngineFactory>().create(document);
+  DocumentWorkspacePage({required this.document, super.key})
+    : _engine = getIt<DocumentEngineFactory>().create(document);
 
   final Document document;
   final DocumentEngine _engine;
@@ -29,18 +27,15 @@ class DocumentWorkspacePage extends StatelessWidget {
     );
 
     return BlocProvider(
-      create: (_) => getIt<DocumentWorkspaceBloc>(param1: _engine)
-          ..add(DocumentWorkspaceStarted()),
+      create: (_) =>
+          getIt<DocumentWorkspaceBloc>(param1: _engine)
+            ..add(DocumentWorkspaceStarted()),
       child: BlocBuilder<DocumentWorkspaceBloc, DocumentWorkspaceState>(
         builder: (context, state) {
           return switch (state) {
-            DocumentWorkspaceInitial() ||
-            DocumentWorkspaceLoading() =>
-              const Center(
-                child: CircularProgressIndicator(),
-              ),
-            DocumentWorkspaceLoaded() => 
-            DocumentWorkspaceView(
+            DocumentWorkspaceInitial() || DocumentWorkspaceLoading() =>
+              const Center(child: CircularProgressIndicator()),
+            DocumentWorkspaceLoaded() => DocumentWorkspaceView(
               viewModel: DocumentWorkspaceViewModel(
                 currentPage: state.currentPage,
                 pageCount: state.pageCount,
@@ -54,46 +49,46 @@ class DocumentWorkspacePage extends StatelessWidget {
                 annotations: state.annotations,
                 onToolSelected: (tool) {
                   context.read<DocumentWorkspaceBloc>().add(
-                        DocumentWorkspaceToolSelected(tool),
-                      );
+                    DocumentWorkspaceToolSelected(tool),
+                  );
                 },
                 onPanelSelected: (panel) {
                   context.read<DocumentWorkspaceBloc>().add(
-                        DocumentWorkspacePanelSelected(panel),
-                      );
+                    DocumentWorkspacePanelSelected(panel),
+                  );
                 },
                 onPanelClosed: () {
                   context.read<DocumentWorkspaceBloc>().add(
-                        const DocumentWorkspacePanelClosed(),
-                      );
+                    const DocumentWorkspacePanelClosed(),
+                  );
                 },
                 onGotoPage: _engine.actions.goToPage,
                 zoomIn: _engine.actions.zoomIn,
                 zoomOut: _engine.actions.zoomOut,
                 onTextSearch: (text, caseInsensitive) {
                   context.read<DocumentWorkspaceBloc>().add(
-                        DocumentWorkspaceSearch(text, caseInsensitive),
-                      );
+                    DocumentWorkspaceSearch(text, caseInsensitive),
+                  );
                 },
                 onClearSearch: () {
                   context.read<DocumentWorkspaceBloc>().add(
-                        const DocumentWorkspaceClearSearch(),
-                      );
+                    const DocumentWorkspaceClearSearch(),
+                  );
                 },
                 onTextSearchResultSelected: (result) {
                   context.read<DocumentWorkspaceBloc>().add(
-                        DocumentWorkspaceSelectSearch(result),
-                      );
+                    DocumentWorkspaceSelectSearch(result),
+                  );
                 },
                 onBookmarkSelected: (bookmark) {
                   context.read<DocumentWorkspaceBloc>().add(
-                        DocumentWorkspaceSelectBookmark(bookmark),
-                      );
+                    DocumentWorkspaceSelectBookmark(bookmark),
+                  );
                 },
                 onAnnotationSelected: (annotation) {
                   context.read<DocumentWorkspaceBloc>().add(
-                        DocumentWorkspaceSelectAnnotation(annotation),
-                      );
+                    DocumentWorkspaceSelectAnnotation(annotation),
+                  );
                 },
               ),
             ),

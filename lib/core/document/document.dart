@@ -8,10 +8,7 @@ export 'document_service_error.dart';
 export 'document_type.dart';
 
 class Document {
-  Document({
-    required this.path, 
-    required this.type
-  }) : id = const Uuid().v4();
+  Document({required this.path, required this.type}) : id = const Uuid().v4();
 
   final String id;
   final String path;

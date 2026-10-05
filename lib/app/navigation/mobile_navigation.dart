@@ -60,14 +60,10 @@ class _NavigationItem extends StatelessWidget {
           Icon(
             item.icon,
             size: 22,
-            color: selected
-                ? colorScheme.primary
-                : colorScheme.onSurface,
+            color: selected ? colorScheme.primary : colorScheme.onSurface,
           ),
           const SizedBox(height: AppSpacing.xs),
-          Text(
-            item.label(context),
-          ),
+          Text(item.label(context)),
         ],
       ),
     );

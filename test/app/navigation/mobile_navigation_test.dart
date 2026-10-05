@@ -7,11 +7,13 @@ import '../../helpers/helpers.dart';
 void main() {
   group('MobileNavigation', () {
     testWidgets('renders all navigation items', (tester) async {
-      await pumpApp(tester, 
+      await pumpApp(
+        tester,
         MobileNavigation(
-        selectedItem: AppNavigationItem.home,
-        onItemSelected: (_) {},
-      ));
+          selectedItem: AppNavigationItem.home,
+          onItemSelected: (_) {},
+        ),
+      );
 
       expect(find.text('Home'), findsOneWidget);
       expect(find.text('Reader'), findsOneWidget);
@@ -19,16 +21,16 @@ void main() {
       expect(find.text('Tools'), findsOneWidget);
     });
 
-    testWidgets('calls onItemSelected when an item is tapped', (
-      tester,
-    ) async {
+    testWidgets('calls onItemSelected when an item is tapped', (tester) async {
       AppNavigationItem? selectedItem;
 
-      await pumpApp(tester, 
+      await pumpApp(
+        tester,
         MobileNavigation(
-        selectedItem: AppNavigationItem.home,
-        onItemSelected: (item) => selectedItem = item,
-      ));
+          selectedItem: AppNavigationItem.home,
+          onItemSelected: (item) => selectedItem = item,
+        ),
+      );
 
       await tester.tap(find.text('Reader'));
       await tester.pump();

@@ -2,11 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 
 class EmptyStateShell extends StatelessWidget {
-  const EmptyStateShell({
-    super.key, 
-    required this.icon, 
-    required this.message
-  });
+  const EmptyStateShell({super.key, required this.icon, required this.message});
 
   final IconData icon;
   final String message;

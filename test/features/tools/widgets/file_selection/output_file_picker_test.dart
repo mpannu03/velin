@@ -10,24 +10,16 @@ void main() {
     testWidgets('shows output section', (tester) async {
       await pumpApp(
         tester,
-        OutputFilePicker(
-          directoryPath: null,
-          onChooseFolder: () {},
-        ),
+        OutputFilePicker(directoryPath: null, onChooseFolder: () {}),
       );
 
       expect(find.text('Output'), findsOneWidget);
     });
 
-    testWidgets('shows empty filename when fileName is null', (
-      tester,
-    ) async {
+    testWidgets('shows empty filename when fileName is null', (tester) async {
       await pumpApp(
         tester,
-        OutputFilePicker(
-          directoryPath: null,
-          onChooseFolder: () {},
-        ),
+        OutputFilePicker(directoryPath: null, onChooseFolder: () {}),
       );
 
       final field = tester.widget<TextField>(
@@ -72,9 +64,7 @@ void main() {
         ),
       );
 
-      final field = find.byKey(
-        const ValueKey('output-file-name'),
-      );
+      final field = find.byKey(const ValueKey('output-file-name'));
 
       await tester.enterText(field, 'final.pdf');
       await tester.testTextInput.receiveAction(TextInputAction.done);
@@ -82,46 +72,42 @@ void main() {
       expect(changedValue, 'final.pdf');
     });
 
-    testWidgets('calls onFileNameChanged with current value when tapping outside', (
-      tester,
-    ) async {
-      String? changedValue;
+    testWidgets(
+      'calls onFileNameChanged with current value when tapping outside',
+      (tester) async {
+        String? changedValue;
 
-      await pumpApp(
-        tester,
-        OutputFilePicker(
-          directoryPath: '/documents/output',
-          fileName: 'merged.pdf',
-          onFileNameChanged: (value) {
-            changedValue = value;
-          },
-          onChooseFolder: () {},
-        ),
-      );
+        await pumpApp(
+          tester,
+          OutputFilePicker(
+            directoryPath: '/documents/output',
+            fileName: 'merged.pdf',
+            onFileNameChanged: (value) {
+              changedValue = value;
+            },
+            onChooseFolder: () {},
+          ),
+        );
 
-      final field = find.byKey(
-        const ValueKey('output-file-name'),
-      );
+        final field = find.byKey(const ValueKey('output-file-name'));
 
-      await tester.tap(field);
-      await tester.enterText(field, 'final.pdf');
+        await tester.tap(field);
+        await tester.enterText(field, 'final.pdf');
 
-      // Tap outside the text field.
-      await tester.tapAt(const Offset(10, 10));
-      await tester.pump();
+        // Tap outside the text field.
+        await tester.tapAt(const Offset(10, 10));
+        await tester.pump();
 
-      expect(changedValue, 'final.pdf');
-    });
+        expect(changedValue, 'final.pdf');
+      },
+    );
 
     testWidgets('shows choose output folder when directory is missing', (
       tester,
     ) async {
       await pumpApp(
         tester,
-        OutputFilePicker(
-          directoryPath: null,
-          onChooseFolder: () {},
-        ),
+        OutputFilePicker(directoryPath: null, onChooseFolder: () {}),
       );
 
       expect(find.text('Choose an output folder'), findsOneWidget);
@@ -137,7 +123,10 @@ void main() {
         ),
       );
 
-      expect(find.byKey(const ValueKey('output-directory-row')), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('output-directory-row')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('calls onChooseFolder from choose folder button', (
@@ -241,10 +230,7 @@ void main() {
         ),
       );
 
-      expect(
-        find.byKey(const ValueKey('output-file-name')),
-        findsNothing,
-      );
+      expect(find.byKey(const ValueKey('output-file-name')), findsNothing);
       expect(
         find.text('Will save as: /documents/output/merged.pdf'),
         findsNothing,
@@ -252,9 +238,7 @@ void main() {
       expect(find.text('/documents/output'), findsOneWidget);
     });
 
-    testWidgets('shows directory when showFileName is false', (
-      tester,
-    ) async {
+    testWidgets('shows directory when showFileName is false', (tester) async {
       await pumpApp(
         tester,
         OutputFilePicker(
@@ -291,16 +275,11 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           locale: const Locale('en'),
-          home: Scaffold(
-            body: _OutputFilePickerHost(),
-          ),
+          home: Scaffold(body: _OutputFilePickerHost()),
         ),
       );
 
-      expect(
-        find.byKey(const ValueKey('output-file-name')),
-        findsOneWidget,
-      );
+      expect(find.byKey(const ValueKey('output-file-name')), findsOneWidget);
 
       final initialField = tester.widget<TextField>(
         find.byKey(const ValueKey('output-file-name')),

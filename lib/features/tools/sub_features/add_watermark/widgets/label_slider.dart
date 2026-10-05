@@ -33,10 +33,7 @@ class LabeledSlider extends StatelessWidget {
 
     return Row(
       children: [
-        SizedBox(
-          width: 110,
-          child: Text(label),
-        ),
+        SizedBox(width: 110, child: Text(label)),
         Expanded(
           child: Slider(
             key: sliderKey,

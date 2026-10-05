@@ -12,7 +12,8 @@ class CompressPdfDesktopLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final hasInputFile = viewModel.inputFilePath != null &&
+    final hasInputFile =
+        viewModel.inputFilePath != null &&
         viewModel.inputFilePath!.trim().isNotEmpty;
 
     return ToolScaffold(

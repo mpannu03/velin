@@ -1,22 +1,10 @@
 import 'dart:io';
 
-enum ImageToPdfPageSize {
-  auto,
-  a4,
-  letter,
-}
+enum ImageToPdfPageSize { auto, a4, letter }
 
-enum ImageToPdfOrientation {
-  auto,
-  portrait,
-  landscape,
-}
+enum ImageToPdfOrientation { auto, portrait, landscape }
 
-enum ImageToPdfFit {
-  contain,
-  cover,
-  stretch,
-}
+enum ImageToPdfFit { contain, cover, stretch }
 
 class ImageToPdfInput {
   const ImageToPdfInput({

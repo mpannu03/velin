@@ -60,12 +60,9 @@ class ToolCategorySection extends StatelessWidget {
             builder: (context, constraints) {
               final width = constraints.maxWidth;
               const minCardWidth = 220.0;
-              final columns = (width / minCardWidth)
-                  .floor()
-                  .clamp(1, 5);
+              final columns = (width / minCardWidth).floor().clamp(1, 5);
               final cardGap = AppSpacing.lg;
-              final itemWidth =
-                  (width - (cardGap * (columns - 1))) / columns;
+              final itemWidth = (width - (cardGap * (columns - 1))) / columns;
 
               return Wrap(
                 spacing: cardGap,
@@ -74,10 +71,7 @@ class ToolCategorySection extends StatelessWidget {
                   for (final tool in tools)
                     SizedBox(
                       width: itemWidth,
-                      child: ToolCard(
-                        tool: tool,
-                        onTap: () => onToolTap(tool),
-                      ),
+                      child: ToolCard(tool: tool, onTap: () => onToolTap(tool)),
                     ),
                 ],
               );

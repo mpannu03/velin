@@ -24,12 +24,7 @@ class _ExtractPdfPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ExtractPdfCubit, ExtractPdfState>(
       builder: (context, state) {
-        return ExtractPdfView(
-          viewModel: _buildViewModel(
-            context,
-            state,
-          ),
-        );
+        return ExtractPdfView(viewModel: _buildViewModel(context, state));
       },
     );
   }

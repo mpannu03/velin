@@ -100,8 +100,8 @@ class _SearchPanelState extends State<SearchPanel> {
                   hintText: context.l10n.panelSearchInDocument,
                   suffixIcon: hasText
                       ? IconButton(
-                          onPressed: _handleSubmit, 
-                          icon: const Icon(Symbols.search)
+                          onPressed: _handleSubmit,
+                          icon: const Icon(Symbols.search),
                         )
                       : null,
                   border: OutlineInputBorder(
@@ -131,8 +131,8 @@ class _SearchPanelState extends State<SearchPanel> {
             VelinToolButton(
               icon: Symbols.clear_all,
               toolTip: context.l10n.panelSearchClear,
-              onPressed: _handleClear
-            )
+              onPressed: _handleClear,
+            ),
           ],
         ),
         if (widget.isLoading)
@@ -145,10 +145,10 @@ class _SearchPanelState extends State<SearchPanel> {
           child: widget.isLoading
               ? CircularProgressIndicator()
               : widget.results.isEmpty
-                  ? _buildEmptyState(theme, context)
-                  : ListView.builder(
-                      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
-                      itemCount: widget.results.length,
+              ? _buildEmptyState(theme, context)
+              : ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                  itemCount: widget.results.length,
                   itemBuilder: (context, i) {
                     final result = widget.results[i];
                     final isSelected = widget.currentIndex == result.index;
@@ -198,21 +198,19 @@ class SearchResultItem extends StatelessWidget {
     final fgColor = isSelected
         ? theme.colorScheme.onPrimaryContainer
         : theme.colorScheme.onSurface;
-    
+
     final borderRadius = BorderRadius.circular(AppRadius.md);
 
     return Material(
       color: bgColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: borderRadius,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: borderRadius),
       child: InkWell(
         onTap: onTap,
         borderRadius: borderRadius,
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md, 
-            vertical: AppSpacing.sm
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.sm,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

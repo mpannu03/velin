@@ -2,10 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
 class ReaderEmptyState extends StatelessWidget {
-  const ReaderEmptyState({
-    required this.onOpenDocument,
-    super.key,
-  });
+  const ReaderEmptyState({required this.onOpenDocument, super.key});
 
   final VoidCallback onOpenDocument;
 
@@ -49,9 +46,7 @@ class ReaderEmptyState extends StatelessWidget {
 
             Text(
               context.l10n.readerNoDocumentOpenDescription,
-              style: text.bodyMedium?.copyWith(
-                color: colors.onSurfaceVariant,
-              ),
+              style: text.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),

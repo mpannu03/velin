@@ -8,41 +8,33 @@ import 'desktop_navigation.dart';
 import 'mobile_navigation.dart';
 
 class AppNavigationShell extends StatelessWidget {
-  const AppNavigationShell({
-    required this.navigationShell,
-    super.key,
-  });
+  const AppNavigationShell({required this.navigationShell, super.key});
 
   final StatefulNavigationShell navigationShell;
 
   @override
   Widget build(BuildContext context) {
-    final selectedItem =
-        AppNavigationItem.values[navigationShell.currentIndex];
+    final selectedItem = AppNavigationItem.values[navigationShell.currentIndex];
 
     return switch (appPlatform) {
       AppPlatform.desktop => Column(
-          children: [
-            DesktopNavigation(
-              selectedItem: selectedItem,
-              onItemSelected: _onItemSelected,
-            ),
-            Expanded(
-              child: navigationShell,
-            ),
-          ],
-        ),
+        children: [
+          DesktopNavigation(
+            selectedItem: selectedItem,
+            onItemSelected: _onItemSelected,
+          ),
+          Expanded(child: navigationShell),
+        ],
+      ),
       AppPlatform.mobile => Column(
-          children: [
-            Expanded(
-              child: navigationShell,
-            ),
-            MobileNavigation(
-              selectedItem: selectedItem,
-              onItemSelected: _onItemSelected,
-            ),
-          ],
-        ),
+        children: [
+          Expanded(child: navigationShell),
+          MobileNavigation(
+            selectedItem: selectedItem,
+            onItemSelected: _onItemSelected,
+          ),
+        ],
+      ),
     };
   }
 

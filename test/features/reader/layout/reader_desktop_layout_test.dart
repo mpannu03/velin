@@ -13,7 +13,8 @@ import 'package:velin/features/reader/widgets/widgets.dart';
 
 import '../../../helpers/helpers.dart';
 
-class MockDocumentWorkspaceBloc extends MockBloc<DocumentWorkspaceEvent, DocumentWorkspaceState>
+class MockDocumentWorkspaceBloc
+    extends MockBloc<DocumentWorkspaceEvent, DocumentWorkspaceState>
     implements DocumentWorkspaceBloc {}
 
 class MockDocumentEngineFactory extends Mock implements DocumentEngineFactory {}
@@ -41,18 +42,14 @@ void main() {
       engineFactory = MockDocumentEngineFactory();
       engine = MockDocumentEngine();
 
-      when(() => bloc.state)
-          .thenReturn(const DocumentWorkspaceInitial());
-      
-      when(() => engineFactory.create(any()))
-          .thenReturn(engine);
-      
+      when(() => bloc.state).thenReturn(const DocumentWorkspaceInitial());
+
+      when(() => engineFactory.create(any())).thenReturn(engine);
+
       when(() => engine.buildViewer(config: any(named: 'config')))
           .thenReturn(Text('Sample Content'));
 
-      getIt.registerLazySingleton<DocumentEngineFactory>(
-        () => engineFactory,
-      );
+      getIt.registerLazySingleton<DocumentEngineFactory>(() => engineFactory);
 
       getIt.registerFactoryParam<DocumentWorkspaceBloc, DocumentEngine, void>(
         (engine, _) => bloc,
@@ -77,26 +74,17 @@ void main() {
       tester,
     ) async {
       final viewModel = ReaderViewModel(
-        documents: [
-          firstDocument,
-          secondDocument,
-        ],
+        documents: [firstDocument, secondDocument],
         selectedDocument: firstDocument,
         onDocumentSelected: (_) {},
         onDocumentClosed: (_) {},
         onOpenDocument: () {},
       );
 
-      await pumpApp(
-        tester,
-        ReaderDesktopLayout(viewModel: viewModel),
-      );
+      await pumpApp(tester, ReaderDesktopLayout(viewModel: viewModel));
 
       expect(find.byType(ReaderDocumentTabs), findsOneWidget);
-      expect(
-        find.byType(DocumentWorkspacePage),
-        findsOneWidget,
-      );
+      expect(find.byType(DocumentWorkspacePage), findsOneWidget);
     });
 
     testWidgets('shows empty state when no document is selected', (
@@ -110,36 +98,24 @@ void main() {
         onOpenDocument: () {},
       );
 
-      await pumpApp(
-        tester,
-        ReaderDesktopLayout(viewModel: viewModel),
-      );
+      await pumpApp(tester, ReaderDesktopLayout(viewModel: viewModel));
 
       expect(find.byType(ReaderEmptyState), findsOneWidget);
-      expect(
-        find.byType(DocumentWorkspacePage),
-        findsNothing,
-      );
+      expect(find.byType(DocumentWorkspacePage), findsNothing);
     });
 
     testWidgets('passes documents and selected document to tabs', (
       tester,
     ) async {
       final viewModel = ReaderViewModel(
-        documents: [
-          firstDocument,
-          secondDocument,
-        ],
+        documents: [firstDocument, secondDocument],
         selectedDocument: secondDocument,
         onDocumentSelected: (_) {},
         onDocumentClosed: (_) {},
         onOpenDocument: () {},
       );
 
-      await pumpApp(
-        tester,
-        ReaderDesktopLayout(viewModel: viewModel),
-      );
+      await pumpApp(tester, ReaderDesktopLayout(viewModel: viewModel));
 
       final tabs = tester.widget<ReaderDocumentTabs>(
         find.byType(ReaderDocumentTabs),

@@ -24,12 +24,7 @@ class _PdfToImagePageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PdfToImageCubit, PdfToImageState>(
       builder: (context, state) {
-        return PdfToImageView(
-          viewModel: _buildViewModel(
-            context,
-            state,
-          ),
-        );
+        return PdfToImageView(viewModel: _buildViewModel(context, state));
       },
     );
   }

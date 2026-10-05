@@ -7,12 +7,7 @@ import '../../../helpers/helpers.dart';
 void main() {
   group('ReaderEmptyState', () {
     testWidgets('shows empty state content', (tester) async {
-      await pumpApp(
-        tester,
-        ReaderEmptyState(
-          onOpenDocument: () {},
-        ),
-      );
+      await pumpApp(tester, ReaderEmptyState(onOpenDocument: () {}));
 
       expect(find.byIcon(Icons.description_outlined), findsOneWidget);
       expect(find.text('No document open'), findsOneWidget);

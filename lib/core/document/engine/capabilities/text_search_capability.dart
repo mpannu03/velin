@@ -1,14 +1,9 @@
 abstract interface class TextSearchCapability {
-  Stream<List<TextSearchResult>> search(
-    String text,
-    bool caseInsensitive,
-  );
+  Stream<List<TextSearchResult>> search(String text, bool caseInsensitive);
 
   Future<void> clear();
 
-  Future<void> selectResult(
-    TextSearchResult result,
-  );
+  Future<void> selectResult(TextSearchResult result);
 }
 
 class TextSearchResult {

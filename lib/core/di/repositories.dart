@@ -6,6 +6,6 @@ import 'injection.dart';
 void registerRepositoryDependencies() {
   getIt.registerLazySingleton<DocumentRepository>(
     () => DocumentRepositoryImpl(),
-    dispose: (repository) => (repository as DocumentRepositoryImpl).dispose()
+    dispose: (repository) => (repository as DocumentRepositoryImpl).dispose(),
   );
 }

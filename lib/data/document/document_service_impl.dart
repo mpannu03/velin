@@ -29,9 +29,7 @@ class DocumentServiceImpl implements DocumentService {
     final type = DocumentType.fromPath(path);
 
     if (type == null) {
-      return const Failure(
-        DocumentServiceError('Unsupported document type.'),
-      );
+      return const Failure(DocumentServiceError('Unsupported document type.'));
     }
 
     return _documentRepository.open(path, type);

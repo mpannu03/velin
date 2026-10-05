@@ -70,7 +70,7 @@ class ReaderBloc extends Bloc<ReaderEvent, ReaderState> with ErrorMessageMixin {
 
     if (result case Failure<Document>(:final error)) {
       _appEffectController.notifyUser(
-        message: errorMessage(error), 
+        message: errorMessage(error),
         type: NotificationType.error,
       );
     }
@@ -90,11 +90,7 @@ class ReaderBloc extends Bloc<ReaderEvent, ReaderState> with ErrorMessageMixin {
       return;
     }
 
-    emit(
-      currentState.copyWith(
-        selectedDocument: event.document,
-      ),
-    );
+    emit(currentState.copyWith(selectedDocument: event.document));
   }
 
   void _onDocumentClosed(
@@ -105,7 +101,7 @@ class ReaderBloc extends Bloc<ReaderEvent, ReaderState> with ErrorMessageMixin {
 
     if (result case Failure<void>(:final error)) {
       _appEffectController.notifyUser(
-        message: errorMessage(error), 
+        message: errorMessage(error),
         type: NotificationType.error,
       );
     }

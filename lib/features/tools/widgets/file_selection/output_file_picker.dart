@@ -82,7 +82,7 @@ class _OutputFilePickerState extends State<OutputFilePicker> {
     }
 
     return ToolSectionCard(
-      title: l10n.toolsOutputSectionTitle, 
+      title: l10n.toolsOutputSectionTitle,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -111,8 +111,9 @@ class _OutputFilePickerState extends State<OutputFilePicker> {
                     controller: _fileNameController,
                     onSubmitted: (value) =>
                         widget.onFileNameChanged?.call(value),
-                    onTapOutside: (_) => 
-                        widget.onFileNameChanged?.call(_fileNameController.text),
+                    onTapOutside: (_) => widget.onFileNameChanged?.call(
+                      _fileNameController.text,
+                    ),
                     decoration: InputDecoration(
                       labelText: l10n.toolsOutputFileNameLabel,
                       isDense: true,

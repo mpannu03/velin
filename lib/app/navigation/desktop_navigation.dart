@@ -29,7 +29,8 @@ class DesktopNavigation extends StatelessWidget {
         maxLines: 1,
       )..layout();
       // icon + gap + text + horizontal padding
-      final w = _iconSize + AppSpacing.xs + tp.width + _horizontalItemPadding * 2;
+      final w =
+          _iconSize + AppSpacing.xs + tp.width + _horizontalItemPadding * 2;
       if (w > widest) widest = w;
     }
     return widest;

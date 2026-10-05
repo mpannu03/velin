@@ -9,10 +9,7 @@ void main() {
     testWidgets('renders title and child', (tester) async {
       await pumpApp(
         tester,
-        PanelShell(
-          title: 'Bookmarks',
-          child: const Text('Panel content'),
-        ),
+        PanelShell(title: 'Bookmarks', child: const Text('Panel content')),
       );
 
       expect(find.text('Bookmarks'), findsOneWidget);
@@ -37,10 +34,7 @@ void main() {
     ) async {
       await pumpApp(
         tester,
-        PanelShell(
-          title: 'Bookmarks',
-          child: const SizedBox(),
-        ),
+        PanelShell(title: 'Bookmarks', child: const SizedBox()),
       );
 
       expect(find.byIcon(Icons.close), findsNothing);

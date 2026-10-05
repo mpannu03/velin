@@ -2,9 +2,9 @@ enum DocumentType {
   pdf;
 
   List<String> get fileExtensions => switch (this) {
-        DocumentType.pdf => ['pdf'],
-      };
-  
+    DocumentType.pdf => ['pdf'],
+  };
+
   static DocumentType? fromPath(String path) {
     final extension = path.split('.').last.toLowerCase();
 

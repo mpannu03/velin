@@ -4,19 +4,15 @@ import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
 class ExtractPdfDesktopLayout extends StatelessWidget {
-  const ExtractPdfDesktopLayout({
-    super.key,
-    required this.viewModel,
-  });
+  const ExtractPdfDesktopLayout({super.key, required this.viewModel});
 
   final ExtractPdfViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final hasInputFile = 
-        viewModel.inputFilePath != null && 
-        viewModel.inputFilePath!.isNotEmpty;
+    final hasInputFile =
+        viewModel.inputFilePath != null && viewModel.inputFilePath!.isNotEmpty;
 
     return ToolScaffold(
       title: l10n.toolsExtractPdf,
@@ -62,7 +58,7 @@ class ExtractPdfDesktopLayout extends StatelessWidget {
               hintText: l10n.toolsExtractButtonDisabledHint,
               onAction: viewModel.onExtract,
             ),
-          ]
+          ],
         ],
       ),
     );

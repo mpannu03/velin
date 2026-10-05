@@ -40,8 +40,8 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
     WorkspaceTool? selectedTool,
     Object? selectedPanel = _unset,
     SearchState? searchState,
-    List<Bookmark>? bookmarks ,
-    List<Annotation>? annotations ,
+    List<Bookmark>? bookmarks,
+    List<Annotation>? annotations,
   }) {
     return DocumentWorkspaceLoaded(
       currentPage: identical(currentPage, _unset)
@@ -88,12 +88,12 @@ class SearchState {
     Object? currentIndex = _unset,
   }) {
     return SearchState(
-      query: identical(query, _unset) 
-          ? this.query : query as String?,
+      query: identical(query, _unset) ? this.query : query as String?,
       results: results ?? this.results,
       isLoading: isLoading ?? this.isLoading,
-      currentIndex: identical(currentIndex, _unset) 
-          ? this.currentIndex : currentIndex as int?,
+      currentIndex: identical(currentIndex, _unset)
+          ? this.currentIndex
+          : currentIndex as int?,
     );
   }
 
@@ -108,10 +108,6 @@ class SearchState {
           currentIndex == other.currentIndex;
 
   @override
-  int get hashCode => Object.hash(
-        query,
-        Object.hashAll(results),
-        isLoading,
-        currentIndex,
-      );
+  int get hashCode =>
+      Object.hash(query, Object.hashAll(results), isLoading, currentIndex);
 }

@@ -44,8 +44,7 @@ class _PasswordFieldState extends State<PasswordField> {
   void didUpdateWidget(PasswordField oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.value != oldWidget.value &&
-        widget.value != _controller.text) {
+    if (widget.value != oldWidget.value && widget.value != _controller.text) {
       _controller.text = widget.value;
     }
   }

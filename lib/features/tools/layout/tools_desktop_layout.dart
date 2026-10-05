@@ -4,10 +4,7 @@ import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/tools.dart';
 
 class ToolsDesktopLayout extends StatefulWidget {
-  const ToolsDesktopLayout({
-    required this.onToolTap,
-    super.key,
-  });
+  const ToolsDesktopLayout({required this.onToolTap, super.key});
 
   final ValueChanged<ToolDefinition> onToolTap;
 
@@ -27,8 +24,8 @@ class _ToolsDesktopLayoutState extends State<ToolsDesktopLayout> {
 
     final visibleCategories = _filter == null
         ? ToolCategory.values
-            .where((category) => tools.any((t) => t.category == category))
-            .toList()
+              .where((category) => tools.any((t) => t.category == category))
+              .toList()
         : [_filter!];
 
     return SingleChildScrollView(
@@ -41,8 +38,7 @@ class _ToolsDesktopLayoutState extends State<ToolsDesktopLayout> {
             children: [
               Header(
                 filter: _filter,
-                onFilterChanged: (value) =>
-                    setState(() => _filter = value),
+                onFilterChanged: (value) => setState(() => _filter = value),
               ),
               const SizedBox(height: AppSpacing.xxl),
               for (final category in visibleCategories)

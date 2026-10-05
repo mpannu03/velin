@@ -16,15 +16,10 @@ void main() {
   setUp(() {
     engine = MockDocumentEngine();
     textSearch = MockTextSearchCapability();
-    result = const TextSearchResult(
-      index: 0,
-      pageNumber: 1,
-      text: 'needle',
-    );
+    result = const TextSearchResult(index: 0, pageNumber: 1, text: 'needle');
 
-    when(() => engine.capabilities).thenReturn(
-      const DocumentEngineCapabilities(textSelection: true),
-    );
+    when(() => engine.capabilities)
+        .thenReturn(const DocumentEngineCapabilities(textSelection: true));
     when(() => engine.textSearch).thenReturn(textSearch);
   });
 
@@ -49,9 +44,7 @@ void main() {
       currentPage: 1,
       currentZoom: 1,
     ),
-    act: (bloc) => bloc.add(
-      const DocumentWorkspacePageChanged(5),
-    ),
+    act: (bloc) => bloc.add(const DocumentWorkspacePageChanged(5)),
     expect: () => [
       isA<DocumentWorkspaceLoaded>().having(
         (state) => state.currentPage,
@@ -69,9 +62,7 @@ void main() {
       currentPage: 5,
       currentZoom: 1,
     ),
-    act: (bloc) => bloc.add(
-      const DocumentWorkspacePageChanged(null),
-    ),
+    act: (bloc) => bloc.add(const DocumentWorkspacePageChanged(null)),
     expect: () => [
       isA<DocumentWorkspaceLoaded>().having(
         (state) => state.currentPage,
@@ -84,13 +75,8 @@ void main() {
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'updates current zoom',
     build: () => DocumentWorkspaceBloc(engine: engine),
-    seed: () => const DocumentWorkspaceLoaded(
-      pageCount: 10,
-      currentZoom: 1,
-    ),
-    act: (bloc) => bloc.add(
-      const DocumentWorkspaceZoomChanged(1.5),
-    ),
+    seed: () => const DocumentWorkspaceLoaded(pageCount: 10, currentZoom: 1),
+    act: (bloc) => bloc.add(const DocumentWorkspaceZoomChanged(1.5)),
     expect: () => [
       isA<DocumentWorkspaceLoaded>().having(
         (state) => state.currentZoom,
@@ -103,15 +89,9 @@ void main() {
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'selects a tool',
     build: () => DocumentWorkspaceBloc(engine: engine),
-    seed: () => const DocumentWorkspaceLoaded(
-      pageCount: 1,
-      currentZoom: 1,
-    ),
-    act: (bloc) => bloc.add(
-      const DocumentWorkspaceToolSelected(
-        WorkspaceTool.dictionary,
-      ),
-    ),
+    seed: () => const DocumentWorkspaceLoaded(pageCount: 1, currentZoom: 1),
+    act: (bloc) =>
+        bloc.add(const DocumentWorkspaceToolSelected(WorkspaceTool.dictionary)),
     expect: () => [
       isA<DocumentWorkspaceLoaded>().having(
         (state) => state.selectedTool,
@@ -124,15 +104,9 @@ void main() {
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'selects a panel',
     build: () => DocumentWorkspaceBloc(engine: engine),
-    seed: () => const DocumentWorkspaceLoaded(
-      pageCount: 1,
-      currentZoom: 1,
-    ),
-    act: (bloc) => bloc.add(
-      const DocumentWorkspacePanelSelected(
-        WorkspacePanel.search,
-      ),
-    ),
+    seed: () => const DocumentWorkspaceLoaded(pageCount: 1, currentZoom: 1),
+    act: (bloc) =>
+        bloc.add(const DocumentWorkspacePanelSelected(WorkspacePanel.search)),
     expect: () => [
       isA<DocumentWorkspaceLoaded>().having(
         (state) => state.selectedPanel,
@@ -150,11 +124,8 @@ void main() {
       currentZoom: 1,
       selectedPanel: WorkspacePanel.search,
     ),
-    act: (bloc) => bloc.add(
-      const DocumentWorkspacePanelSelected(
-        WorkspacePanel.search,
-      ),
-    ),
+    act: (bloc) =>
+        bloc.add(const DocumentWorkspacePanelSelected(WorkspacePanel.search)),
     expect: () => [
       isA<DocumentWorkspaceLoaded>().having(
         (state) => state.selectedPanel,
@@ -172,9 +143,7 @@ void main() {
       currentZoom: 1,
       selectedPanel: WorkspacePanel.bookmarks,
     ),
-    act: (bloc) => bloc.add(
-      const DocumentWorkspacePanelClosed(),
-    ),
+    act: (bloc) => bloc.add(const DocumentWorkspacePanelClosed()),
     expect: () => [
       isA<DocumentWorkspaceLoaded>().having(
         (state) => state.selectedPanel,
@@ -187,9 +156,8 @@ void main() {
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'searches once and stores the returned results',
     setUp: () {
-      when(() => textSearch.search('needle', false)).thenAnswer(
-        (_) => Stream.value([result]),
-      );
+      when(() => textSearch.search('needle', false))
+          .thenAnswer((_) => Stream.value([result]));
     },
     build: () => DocumentWorkspaceBloc(engine: engine),
     seed: () => const DocumentWorkspaceLoaded(pageCount: 1, currentZoom: 1),
@@ -227,9 +195,7 @@ void main() {
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'clears search',
     setUp: () {
-      when(() => textSearch.clear()).thenAnswer(
-        (_) async {},
-      );
+      when(() => textSearch.clear()).thenAnswer((_) async {});
     },
     build: () => DocumentWorkspaceBloc(engine: engine),
     seed: () => DocumentWorkspaceLoaded(
@@ -241,9 +207,7 @@ void main() {
         currentIndex: 0,
       ),
     ),
-    act: (bloc) => bloc.add(
-      const DocumentWorkspaceClearSearch(),
-    ),
+    act: (bloc) => bloc.add(const DocumentWorkspaceClearSearch()),
     expect: () => [
       isA<DocumentWorkspaceLoaded>().having(
         (state) => state.searchState,

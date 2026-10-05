@@ -24,9 +24,7 @@ class _RotatePdfPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RotatePdfCubit, RotatePdfState>(
       builder: (context, state) {
-        return RotatePdfView(
-          viewModel: _buildViewModel(context, state),
-        );
+        return RotatePdfView(viewModel: _buildViewModel(context, state));
       },
     );
   }

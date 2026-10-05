@@ -10,9 +10,8 @@ part 'document_workspace_state.dart';
 
 class DocumentWorkspaceBloc
     extends Bloc<DocumentWorkspaceEvent, DocumentWorkspaceState> {
-  DocumentWorkspaceBloc({
-    required this._engine,
-  }) : super(const DocumentWorkspaceInitial()) {
+  DocumentWorkspaceBloc({required this._engine})
+    : super(const DocumentWorkspaceInitial()) {
     on<DocumentWorkspaceStarted>(_onStarted);
     on<DocumentWorkspacePageChanged>(_onPageChanged);
     on<DocumentWorkspaceZoomChanged>(_onZoomChanged);
@@ -38,11 +37,7 @@ class DocumentWorkspaceBloc
     emit(const DocumentWorkspaceLoading());
 
     emit(
-      DocumentWorkspaceLoaded(
-        currentPage: 0,
-        pageCount: 0,
-        currentZoom: 1.0,
-      ),
+      DocumentWorkspaceLoaded(currentPage: 0, pageCount: 0, currentZoom: 1.0),
     );
   }
 
@@ -76,11 +71,7 @@ class DocumentWorkspaceBloc
         return;
       }
 
-      emit(
-        currentState.copyWith(
-          annotations: annotations,
-        ),
-      );
+      emit(currentState.copyWith(annotations: annotations));
     }
   }
 
@@ -94,11 +85,7 @@ class DocumentWorkspaceBloc
       return;
     }
 
-    emit(
-      currentState.copyWith(
-        currentPage: event.page,
-      ),
-    );
+    emit(currentState.copyWith(currentPage: event.page));
   }
 
   void _onZoomChanged(
@@ -111,11 +98,7 @@ class DocumentWorkspaceBloc
       return;
     }
 
-    emit(
-      currentState.copyWith(
-        currentZoom: event.zoom,
-      ),
-    );
+    emit(currentState.copyWith(currentZoom: event.zoom));
   }
 
   void _onToolSelected(
@@ -128,11 +111,7 @@ class DocumentWorkspaceBloc
       return;
     }
 
-    emit(
-      currentState.copyWith(
-        selectedTool: event.tool,
-      ),
-    );
+    emit(currentState.copyWith(selectedTool: event.tool));
   }
 
   void _onPanelSelected(
@@ -150,11 +129,7 @@ class DocumentWorkspaceBloc
       return;
     }
 
-    emit(
-      currentState.copyWith(
-        selectedPanel: event.panel,
-      ),
-    );
+    emit(currentState.copyWith(selectedPanel: event.panel));
   }
 
   void _onPanelClosed(
@@ -167,11 +142,7 @@ class DocumentWorkspaceBloc
       return;
     }
 
-    emit(
-      currentState.copyWith(
-        selectedPanel: null,
-      ),
-    );
+    emit(currentState.copyWith(selectedPanel: null));
   }
 
   void _onSearch(
@@ -180,9 +151,8 @@ class DocumentWorkspaceBloc
   ) async {
     final currentState = state;
 
-    if (currentState is! DocumentWorkspaceLoaded 
-          || !_engine.capabilities.textSelection
-    ) {
+    if (currentState is! DocumentWorkspaceLoaded ||
+        !_engine.capabilities.textSelection) {
       return;
     }
 
@@ -194,7 +164,7 @@ class DocumentWorkspaceBloc
     );
 
     await emit.onEach(
-      _engine.textSearch!.search(event.text, event.caseInsensitive), 
+      _engine.textSearch!.search(event.text, event.caseInsensitive),
       onData: (textSearchResults) {
         emit(
           currentState.copyWith(
@@ -204,15 +174,14 @@ class DocumentWorkspaceBloc
             ),
           ),
         );
-      }
+      },
     );
-
   }
 
   void _onClearSearch(
     DocumentWorkspaceClearSearch event,
     Emitter<DocumentWorkspaceState> emit,
-  ) async{
+  ) async {
     final currentState = state;
 
     if (currentState is! DocumentWorkspaceLoaded) {
@@ -221,11 +190,7 @@ class DocumentWorkspaceBloc
 
     await _engine.textSearch?.clear();
 
-    emit(
-      currentState.copyWith(
-        searchState: SearchState(),
-      ),
-    );
+    emit(currentState.copyWith(searchState: SearchState()));
   }
 
   void _onSelectSearch(
@@ -234,9 +199,8 @@ class DocumentWorkspaceBloc
   ) async {
     final currentState = state;
 
-    if (currentState is! DocumentWorkspaceLoaded 
-          || !_engine.capabilities.textSelection
-    ) {
+    if (currentState is! DocumentWorkspaceLoaded ||
+        !_engine.capabilities.textSelection) {
       return;
     }
 
@@ -245,7 +209,7 @@ class DocumentWorkspaceBloc
     emit(
       currentState.copyWith(
         searchState: currentState.searchState.copyWith(
-          currentIndex: event.textSearchResult.index
+          currentIndex: event.textSearchResult.index,
         ),
       ),
     );
@@ -257,9 +221,8 @@ class DocumentWorkspaceBloc
   ) async {
     final currentState = state;
 
-    if (currentState is! DocumentWorkspaceLoaded
-        || !_engine.capabilities.bookmarks
-    ) {
+    if (currentState is! DocumentWorkspaceLoaded ||
+        !_engine.capabilities.bookmarks) {
       return;
     }
 
@@ -268,13 +231,12 @@ class DocumentWorkspaceBloc
 
   void _onSelectAnnotation(
     DocumentWorkspaceSelectAnnotation event,
-    Emitter<DocumentWorkspaceState> emit
+    Emitter<DocumentWorkspaceState> emit,
   ) async {
     final currentState = state;
 
-    if (currentState is! DocumentWorkspaceLoaded
-        || !_engine.capabilities.comments
-    ) {
+    if (currentState is! DocumentWorkspaceLoaded ||
+        !_engine.capabilities.comments) {
       return;
     }
 

@@ -10,7 +10,6 @@ import 'package:velin/l10n/app_localizations.dart';
 class MockReaderBloc extends Mock implements ReaderBloc {}
 
 void main() {
-
   late MockReaderBloc mockBloc;
 
   setUp(() {

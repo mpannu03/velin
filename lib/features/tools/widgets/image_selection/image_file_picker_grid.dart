@@ -150,11 +150,7 @@ class _ImageGridTile extends StatelessWidget {
 }
 
 class _ImageGridTileBody extends StatelessWidget {
-  const _ImageGridTileBody({
-    required this.filePath,
-    this.index,
-    this.onRemove,
-  });
+  const _ImageGridTileBody({required this.filePath, this.index, this.onRemove});
 
   final String filePath;
   final int? index;

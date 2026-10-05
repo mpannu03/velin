@@ -29,9 +29,7 @@ class PdfToImageCubit extends Cubit<PdfToImageState> {
   final AppEffectController _appEffectController;
 
   Future<void> pickFile() async {
-    final result = await _filePicker.pickFile(
-      allowedExtensions: ['pdf'],
-    );
+    final result = await _filePicker.pickFile(allowedExtensions: ['pdf']);
 
     switch (result) {
       case Success(data: final filePath):

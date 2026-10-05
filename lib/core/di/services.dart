@@ -9,6 +9,6 @@ void registerServiceDependencies() {
     () => DocumentServiceImpl(
       filePicker: getIt<DocumentFilePicker>(),
       documentRepository: getIt<DocumentRepository>(),
-    )
+    ),
   );
 }

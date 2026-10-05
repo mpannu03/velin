@@ -8,10 +8,7 @@ import 'package:window_manager/window_manager.dart';
 import 'widgets/widgets.dart';
 
 class DesktopShell extends StatelessWidget {
-  const DesktopShell({
-    required this.child,
-    super.key,
-  });
+  const DesktopShell({required this.child, super.key});
 
   final Widget child;
 
@@ -38,23 +35,12 @@ class _WindowRibbon extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
             child: Text(
               context.l10n.appName,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
-          VelinMenuButton(
-            label: context.l10n.menuFile,
-            onPressed: () {},
-          ),
-          VelinMenuButton(
-            label: context.l10n.menuEdit,
-            onPressed: () {},
-          ),
-          VelinMenuButton(
-            label: context.l10n.menuView,
-            onPressed: () {},
-          ),
+          VelinMenuButton(label: context.l10n.menuFile, onPressed: () {}),
+          VelinMenuButton(label: context.l10n.menuEdit, onPressed: () {}),
+          VelinMenuButton(label: context.l10n.menuView, onPressed: () {}),
           const Expanded(
             child: DragToMoveArea(
               child: SizedBox(height: AppDimensions.desktopRibbonHeight),

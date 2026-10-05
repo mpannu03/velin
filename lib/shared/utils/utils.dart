@@ -18,15 +18,16 @@ bool listEquals<T>(List<T>? a, List<T>? b) {
 }
 
 String normalizePdfFileName(String name) {
-    final trimmed = name.trim();
-    if (trimmed.isEmpty) return '';
-    return trimmed.toLowerCase().endsWith('.pdf') ? trimmed : '$trimmed.pdf';
+  final trimmed = name.trim();
+  if (trimmed.isEmpty) return '';
+  return trimmed.toLowerCase().endsWith('.pdf') ? trimmed : '$trimmed.pdf';
 }
 
 String directoryWithTrailingSeparator(String filePath) {
   if (filePath.isEmpty) return '';
 
-  final isWindows = filePath.contains(r'\') &&
+  final isWindows =
+      filePath.contains(r'\') &&
       !filePath.startsWith('/') &&
       !filePath.startsWith('\\');
   final sep = isWindows ? r'\' : '/';
@@ -41,7 +42,8 @@ String directoryWithTrailingSeparator(String filePath) {
 String fileNameFromPath(String filePath) {
   if (filePath.isEmpty) return '';
 
-  final isWindows = filePath.contains(r'\') &&
+  final isWindows =
+      filePath.contains(r'\') &&
       !filePath.startsWith('/') &&
       !filePath.startsWith('\\');
   final sep = isWindows ? r'\' : '/';

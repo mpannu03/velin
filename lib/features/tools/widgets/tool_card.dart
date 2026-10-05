@@ -4,11 +4,7 @@ import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/tools.dart';
 
 class ToolCard extends StatefulWidget {
-  const ToolCard({
-    required this.tool,
-    required this.onTap,
-    super.key,
-  });
+  const ToolCard({required this.tool, required this.onTap, super.key});
 
   final ToolDefinition tool;
   final VoidCallback onTap;
@@ -32,8 +28,8 @@ class _ToolCardState extends State<ToolCard> {
     final borderColor = _focused
         ? colorScheme.primary
         : _hovered
-            ? colorScheme.outlineVariant
-            : colorScheme.outlineVariant.withValues(alpha: 0.6);
+        ? colorScheme.outlineVariant
+        : colorScheme.outlineVariant.withValues(alpha: 0.6);
 
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
@@ -58,10 +54,7 @@ class _ToolCardState extends State<ToolCard> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _IconChip(
-                        icon: widget.tool.icon,
-                        hovered: _hovered,
-                      ),
+                      _IconChip(icon: widget.tool.icon, hovered: _hovered),
                       const Spacer(),
                       AnimatedOpacity(
                         duration: const Duration(milliseconds: 160),
@@ -104,10 +97,7 @@ class _ToolCardState extends State<ToolCard> {
 }
 
 class _IconChip extends StatelessWidget {
-  const _IconChip({
-    required this.icon,
-    required this.hovered,
-  });
+  const _IconChip({required this.icon, required this.hovered});
 
   final IconData icon;
   final bool hovered;
@@ -116,10 +106,12 @@ class _IconChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    final background =
-        hovered ? colorScheme.primary : colorScheme.primaryContainer;
-    final foreground =
-        hovered ? colorScheme.onPrimary : colorScheme.onPrimaryContainer;
+    final background = hovered
+        ? colorScheme.primary
+        : colorScheme.primaryContainer;
+    final foreground = hovered
+        ? colorScheme.onPrimary
+        : colorScheme.onPrimaryContainer;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 160),

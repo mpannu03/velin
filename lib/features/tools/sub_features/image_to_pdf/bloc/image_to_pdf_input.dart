@@ -4,18 +4,12 @@ import 'package:velin/engine/engine.dart';
 
 /// User-facing model for a single image added to the Image to PDF tool.
 class ImageToPdfToolInput {
-  const ImageToPdfToolInput({
-    required this.filePath,
-  });
+  const ImageToPdfToolInput({required this.filePath});
 
   final String filePath;
 
-  ImageToPdfToolInput copyWith({
-    String? filePath,
-  }) {
-    return ImageToPdfToolInput(
-      filePath: filePath ?? this.filePath,
-    );
+  ImageToPdfToolInput copyWith({String? filePath}) {
+    return ImageToPdfToolInput(filePath: filePath ?? this.filePath);
   }
 }
 
@@ -33,9 +27,7 @@ extension ImageToPdfToolInputMapper on List<ImageToPdfToolInput> {
     int dpi = 150,
   }) {
     return ImageToPdfInput(
-      images: [
-        for (final input in this) input.file,
-      ],
+      images: [for (final input in this) input.file],
       pageSize: pageSize,
       orientation: orientation,
       fit: fit,

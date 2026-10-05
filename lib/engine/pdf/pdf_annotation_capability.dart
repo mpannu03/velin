@@ -55,7 +55,7 @@ class PdfAnnotationCapability implements AnnotationCapability {
         annotations.add(annotation);
       }
     }
-    
+
     return annotations;
   }
 }

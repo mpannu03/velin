@@ -8,21 +8,15 @@ abstract final class AppTheme {
       seedColor: AppColors.velinSeedColor,
       primary: AppColors.velinSeedColor,
     );
-    return ThemeData(
-      brightness: Brightness.light,
-      colorScheme: colorScheme,
-    );
+    return ThemeData(brightness: Brightness.light, colorScheme: colorScheme);
   }
 
   static ThemeData dark() {
     final colorScheme = ColorScheme.fromSeed(
       seedColor: AppColors.velinSeedColor,
       primary: AppColors.velinSeedColor,
-      brightness: Brightness.dark
-    );
-    return ThemeData(
       brightness: Brightness.dark,
-      colorScheme: colorScheme
     );
+    return ThemeData(brightness: Brightness.dark, colorScheme: colorScheme);
   }
 }

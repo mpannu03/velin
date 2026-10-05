@@ -29,16 +29,15 @@ class RotatePdfCubit extends Cubit<RotatePdfState> {
   final AppEffectController _appEffectController;
 
   Future<void> pickFile() async {
-    final result = await _filePicker.pickFile(
-      allowedExtensions: ['pdf'],
-    );
+    final result = await _filePicker.pickFile(allowedExtensions: ['pdf']);
 
     switch (result) {
       case Success(data: final filePath):
         emit(
           state.copyWith(
             inputFilePath: filePath,
-            outputDirectory: state.outputDirectory ??
+            outputDirectory:
+                state.outputDirectory ??
                 directoryWithTrailingSeparator(filePath),
             outputFileName: '${fileNameFromPath(filePath)}_rotated.pdf',
           ),

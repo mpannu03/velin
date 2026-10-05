@@ -23,20 +23,12 @@ class _SplitPdfPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SplitPdfCubit, SplitPdfState>(
       builder: (context, state) {
-        return SplitPdfView(
-          viewModel: _buildViewModel(
-            context,
-            state,
-          ),
-        );
+        return SplitPdfView(viewModel: _buildViewModel(context, state));
       },
     );
   }
 
-  SplitPdfViewModel _buildViewModel(
-    BuildContext context,
-    SplitPdfState state,
-  ) {
+  SplitPdfViewModel _buildViewModel(BuildContext context, SplitPdfState state) {
     final cubit = context.read<SplitPdfCubit>();
 
     return SplitPdfViewModel(

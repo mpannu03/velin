@@ -45,8 +45,7 @@ class PageSizeSelector extends StatelessWidget {
             ),
           ],
           selected: {pageSize},
-          onSelectionChanged: (selection) =>
-              onPageSizeChanged(selection.first),
+          onSelectionChanged: (selection) => onPageSizeChanged(selection.first),
         ),
         const SizedBox(height: AppSpacing.sm),
         HelperText(l10n.toolsImageToPdfPageSizeHelper),

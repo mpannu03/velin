@@ -21,61 +21,44 @@ class PageSelection {
   }
 
   List<List<int>> resolveGroups(int totalPages) {
-    return [
-      for (final item in items) _resolveItem(item, totalPages),
-    ];
+    return [for (final item in items) _resolveItem(item, totalPages)];
   }
 
-  List<int> _resolveItem(
-    PageSelectionItem item,
-    int totalPages,
-  ) {
+  List<int> _resolveItem(PageSelectionItem item, int totalPages) {
     return switch (item) {
-      PageSelectionPage(:final page) => [
-          _validatePage(page, totalPages),
-        ],
+      PageSelectionPage(:final page) => [_validatePage(page, totalPages)],
 
       PageSelectionRange(:final start, :final end) => _resolveRange(
-          start,
-          end,
-          totalPages,
-        ),
+        start,
+        end,
+        totalPages,
+      ),
 
-      PageSelectionOpenStart(:final end) => _resolveRange(
-          1,
-          end,
-          totalPages,
-        ),
+      PageSelectionOpenStart(:final end) => _resolveRange(1, end, totalPages),
 
       PageSelectionOpenEnd(:final start) => _resolveRange(
-          start,
-          totalPages,
-          totalPages,
-        ),
+        start,
+        totalPages,
+        totalPages,
+      ),
 
-      PageSelectionLast() => [
-          _validatePage(totalPages, totalPages),
-        ],
+      PageSelectionLast() => [_validatePage(totalPages, totalPages)],
 
       PageSelectionLastMinus(:final amount) => [
-          _resolveLastMinus(amount, totalPages),
-        ],
+        _resolveLastMinus(amount, totalPages),
+      ],
 
       PageSelectionOdd() => [
-          for (var page = 1; page <= totalPages; page += 2) page,
-        ],
+        for (var page = 1; page <= totalPages; page += 2) page,
+      ],
 
       PageSelectionEven() => [
-          for (var page = 2; page <= totalPages; page += 2) page,
-        ],
+        for (var page = 2; page <= totalPages; page += 2) page,
+      ],
     };
   }
 
-  List<int> _resolveRange(
-    int start,
-    int end,
-    int totalPages,
-  ) {
+  List<int> _resolveRange(int start, int end, int totalPages) {
     final result = <int>[];
 
     if (start <= end) {
@@ -95,10 +78,7 @@ class PageSelection {
     final page = totalPages - amount;
 
     if (page < 1) {
-      throw PageSelectionOutOfBoundsError(
-        page: page,
-        totalPages: totalPages,
-      );
+      throw PageSelectionOutOfBoundsError(page: page, totalPages: totalPages);
     }
 
     return page;
@@ -106,10 +86,7 @@ class PageSelection {
 
   int _validatePage(int page, int totalPages) {
     if (page < 1 || page > totalPages) {
-      throw PageSelectionOutOfBoundsError(
-        page: page,
-        totalPages: totalPages,
-      );
+      throw PageSelectionOutOfBoundsError(page: page, totalPages: totalPages);
     }
 
     return page;

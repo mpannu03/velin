@@ -20,7 +20,8 @@ class MergePdfState {
 
   bool get hasValidOutputFileName => outputFileName.trim().isNotEmpty;
 
-  bool get canMerge => hasInputFiles &&
+  bool get canMerge =>
+      hasInputFiles &&
       hasValidOutputFileName &&
       hasValidOutputDirectory &&
       !isSubmitting;

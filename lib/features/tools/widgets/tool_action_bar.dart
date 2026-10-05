@@ -2,13 +2,13 @@ import 'package:material_ui/material_ui.dart';
 
 class ToolActionBar extends StatelessWidget {
   const ToolActionBar({
-    super.key, 
-    required this.isSubmitting, 
+    super.key,
+    required this.isSubmitting,
     required this.submittingText,
-    required this.canAction, 
-    required this.icon, 
-    required this.label, 
-    required this.hintText, 
+    required this.canAction,
+    required this.icon,
+    required this.label,
+    required this.hintText,
     required this.onAction,
   });
 
@@ -23,7 +23,6 @@ class ToolActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     if (isSubmitting) {
       return Align(
         alignment: Alignment.centerRight,
@@ -53,10 +52,7 @@ class ToolActionBar extends StatelessWidget {
 
     return Align(
       alignment: Alignment.centerRight,
-      child: Tooltip(
-        message: canAction ? '' : hintText,
-        child: button,
-      ),
+      child: Tooltip(message: canAction ? '' : hintText, child: button),
     );
   }
 }

@@ -18,7 +18,7 @@ class VelinToolButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Tooltip(
       message: toolTip,
       child: IconButton(
@@ -31,7 +31,8 @@ class VelinToolButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppRadius.md),
           ),
           backgroundColor: isSelected ?? false
-              ? colorScheme.surfaceDim : Colors.transparent,
+              ? colorScheme.surfaceDim
+              : Colors.transparent,
         ),
       ),
     );

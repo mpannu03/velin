@@ -24,9 +24,7 @@ class _AddWatermarkPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddWatermarkCubit, AddWatermarkState>(
       builder: (context, state) {
-        return AddWatermarkView(
-          viewModel: _buildViewModel(context, state),
-        );
+        return AddWatermarkView(viewModel: _buildViewModel(context, state));
       },
     );
   }

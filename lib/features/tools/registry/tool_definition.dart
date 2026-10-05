@@ -28,12 +28,7 @@ enum ToolId {
   watermark,
 }
 
-enum ToolCategory {
-  edit,
-  convert,
-  optimize,
-  security,
-}
+enum ToolCategory { edit, convert, optimize, security }
 
 extension ToolDefinitionX on ToolDefinition {
   String title(BuildContext context) {

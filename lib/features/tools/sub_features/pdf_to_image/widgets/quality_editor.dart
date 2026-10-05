@@ -71,8 +71,7 @@ class ImageQualityEditor extends StatelessWidget {
                 max: 100,
                 divisions: 99,
                 label: '$quality',
-                onChanged: (value) =>
-                    onQualityChanged(value.round()),
+                onChanged: (value) => onQualityChanged(value.round()),
               ),
             ),
             SizedBox(

@@ -7,17 +7,15 @@ import 'package:velin/shared/extensions/extensions.dart';
 import '../widgets/widgets.dart';
 
 class AddWatermarkDesktopLayout extends StatelessWidget {
-  const AddWatermarkDesktopLayout({
-    super.key,
-    required this.viewModel,
-  });
+  const AddWatermarkDesktopLayout({super.key, required this.viewModel});
 
   final AddWatermarkViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final hasInputFile = viewModel.inputFilePath != null &&
+    final hasInputFile =
+        viewModel.inputFilePath != null &&
         viewModel.inputFilePath!.trim().isNotEmpty;
 
     return ToolScaffold(
@@ -89,8 +87,9 @@ class AddWatermarkDesktopLayout extends StatelessWidget {
                 selectedPagesLabel: l10n.toolsWatermarkScopeSelected,
                 onScopeChanged: viewModel.onScopeChanged,
                 selection: viewModel.selection,
-                selectionFieldKey:
-                    const ValueKey('add-watermark-page-selection'),
+                selectionFieldKey: const ValueKey(
+                  'add-watermark-page-selection',
+                ),
                 selectionHintText: l10n.toolsWatermarkSelectionHint,
                 selectionHelperText: l10n.toolsWatermarkSelectionHelper,
                 onSelectionChanged: viewModel.onSelectionChanged,

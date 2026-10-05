@@ -29,10 +29,7 @@ void main() {
       () => taskManager.currentTasks.single.status == TaskStatus.completed,
     );
 
-    expect(
-      states.last.single.status,
-      TaskStatus.completed,
-    );
+    expect(states.last.single.status, TaskStatus.completed);
 
     await subscription.cancel();
   });
@@ -82,27 +79,20 @@ void main() {
       },
     );
 
-    await _waitUntil(
-      () => events.contains('task-1-started'),
-    );
+    await _waitUntil(() => events.contains('task-1-started'));
 
     expect(events, ['task-1-started']);
 
     firstCompleter.complete();
 
-    await _waitUntil(
-      () => events.contains('task-2-finished'),
-    );
+    await _waitUntil(() => events.contains('task-2-finished'));
 
-    expect(
-      events,
-      [
-        'task-1-started',
-        'task-1-finished',
-        'task-2-started',
-        'task-2-finished',
-      ],
-    );
+    expect(events, [
+      'task-1-started',
+      'task-1-finished',
+      'task-2-started',
+      'task-2-finished',
+    ]);
   });
 
   test('continues with the next task after a failure', () async {
@@ -129,32 +119,26 @@ void main() {
     await completedFuture;
 
     await _waitUntil(
-      () => taskManager.currentTasks
-          .every((task) => task.status == TaskStatus.failed ||
-              task.status == TaskStatus.completed),
+      () => taskManager.currentTasks.every(
+        (task) =>
+            task.status == TaskStatus.failed ||
+            task.status == TaskStatus.completed,
+      ),
     );
 
     expect(events, ['task-1', 'task-2']);
 
-    expect(
-      taskManager.currentTasks[0].status,
-      TaskStatus.failed,
-    );
+    expect(taskManager.currentTasks[0].status, TaskStatus.failed);
 
-    expect(
-      taskManager.currentTasks[1].status,
-      TaskStatus.completed,
-    );
+    expect(taskManager.currentTasks[1].status, TaskStatus.completed);
   });
 
   test('emits task state changes', () async {
     final states = <TaskStatus>[];
 
-    final subscription = taskManager.tasks.listen(
-      (tasks) {
-        states.add(tasks.single.status);
-      },
-    );
+    final subscription = taskManager.tasks.listen((tasks) {
+      states.add(tasks.single.status);
+    });
 
     taskManager.submit(
       id: 'task-1',
@@ -162,18 +146,13 @@ void main() {
       operation: () async {},
     );
 
-    await _waitUntil(
-      () => states.contains(TaskStatus.completed),
-    );
+    await _waitUntil(() => states.contains(TaskStatus.completed));
 
-    expect(
-      states,
-      [
-        TaskStatus.queued,
-        TaskStatus.running,
-        TaskStatus.completed,
-      ],
-    );
+    expect(states, [
+      TaskStatus.queued,
+      TaskStatus.running,
+      TaskStatus.completed,
+    ]);
 
     await subscription.cancel();
   });
@@ -190,8 +169,6 @@ Future<void> _waitUntil(
       throw TimeoutException('Condition was not met');
     }
 
-    await Future<void>.delayed(
-      const Duration(milliseconds: 10),
-    );
+    await Future<void>.delayed(const Duration(milliseconds: 10));
   }
 }

@@ -22,9 +22,8 @@ void main() {
       await actions.goToPage(0);
 
       verifyNever(
-        () => controller.calcMatrixForPage(
-          pageNumber: any(named: 'pageNumber'),
-        ),
+        () =>
+            controller.calcMatrixForPage(pageNumber: any(named: 'pageNumber')),
       );
       verifyNever(() => controller.goTo(any()));
     });
@@ -35,9 +34,8 @@ void main() {
       await actions.goToPage(11);
 
       verifyNever(
-        () => controller.calcMatrixForPage(
-          pageNumber: any(named: 'pageNumber'),
-        ),
+        () =>
+            controller.calcMatrixForPage(pageNumber: any(named: 'pageNumber')),
       );
       verifyNever(() => controller.goTo(any()));
     });
@@ -46,16 +44,13 @@ void main() {
       final matrix = Matrix4.identity();
 
       when(() => controller.pageCount).thenReturn(10);
-      when(
-        () => controller.calcMatrixForPage(pageNumber: 5),
-      ).thenReturn(matrix);
+      when(() => controller.calcMatrixForPage(pageNumber: 5))
+          .thenReturn(matrix);
       when(() => controller.goTo(matrix)).thenAnswer((_) async {});
 
       await actions.goToPage(5);
 
-      verify(
-        () => controller.calcMatrixForPage(pageNumber: 5),
-      ).called(1);
+      verify(() => controller.calcMatrixForPage(pageNumber: 5)).called(1);
       verify(() => controller.goTo(matrix)).called(1);
     });
   });
@@ -69,15 +64,12 @@ void main() {
       when(() => controller.maxScale).thenReturn(3.0);
       when(() => controller.visibleRect).thenReturn(visibleRect);
 
-      when(
-        () => controller.setZoom(visibleRect.center, 1.2),
-      ).thenAnswer((_) async {});
+      when(() => controller.setZoom(visibleRect.center, 1.2))
+          .thenAnswer((_) async {});
 
       await actions.zoomIn();
 
-      verify(
-        () => controller.setZoom(visibleRect.center, 1.2),
-      ).called(1);
+      verify(() => controller.setZoom(visibleRect.center, 1.2)).called(1);
     });
 
     test('zooms out by 0.2', () async {
@@ -88,15 +80,12 @@ void main() {
       when(() => controller.maxScale).thenReturn(3.0);
       when(() => controller.visibleRect).thenReturn(visibleRect);
 
-      when(
-        () => controller.setZoom(visibleRect.center, 0.8),
-      ).thenAnswer((_) async {});
+      when(() => controller.setZoom(visibleRect.center, 0.8))
+          .thenAnswer((_) async {});
 
       await actions.zoomOut();
 
-      verify(
-        () => controller.setZoom(visibleRect.center, 0.8),
-      ).called(1);
+      verify(() => controller.setZoom(visibleRect.center, 0.8)).called(1);
     });
 
     test('clamps zoom in to maximum scale', () async {
@@ -107,15 +96,12 @@ void main() {
       when(() => controller.maxScale).thenReturn(3.0);
       when(() => controller.visibleRect).thenReturn(visibleRect);
 
-      when(
-        () => controller.setZoom(visibleRect.center, 3.0),
-      ).thenAnswer((_) async {});
+      when(() => controller.setZoom(visibleRect.center, 3.0))
+          .thenAnswer((_) async {});
 
       await actions.zoomIn();
 
-      verify(
-        () => controller.setZoom(visibleRect.center, 3.0),
-      ).called(1);
+      verify(() => controller.setZoom(visibleRect.center, 3.0)).called(1);
     });
 
     test('clamps zoom out to minimum scale', () async {
@@ -126,15 +112,12 @@ void main() {
       when(() => controller.maxScale).thenReturn(3.0);
       when(() => controller.visibleRect).thenReturn(visibleRect);
 
-      when(
-        () => controller.setZoom(visibleRect.center, 0.5),
-      ).thenAnswer((_) async {});
+      when(() => controller.setZoom(visibleRect.center, 0.5))
+          .thenAnswer((_) async {});
 
       await actions.zoomOut();
 
-      verify(
-        () => controller.setZoom(visibleRect.center, 0.5),
-      ).called(1);
+      verify(() => controller.setZoom(visibleRect.center, 0.5)).called(1);
     });
   });
 
@@ -142,37 +125,32 @@ void main() {
     test('fits the current page to width', () async {
       when(() => controller.pageNumber).thenReturn(3);
 
-      when(
-        () => controller.calcMatrixFitWidthForPage(pageNumber: 3),
-      ).thenReturn(null);
+      when(() => controller.calcMatrixFitWidthForPage(pageNumber: 3))
+          .thenReturn(null);
 
       await actions.fitWidth();
 
-      verify(
-        () => controller.calcMatrixFitWidthForPage(pageNumber: 3),
-      ).called(1);
+      verify(() => controller.calcMatrixFitWidthForPage(pageNumber: 3))
+          .called(1);
     });
 
     test('uses page 1 when there is no current page', () async {
       when(() => controller.pageNumber).thenReturn(null);
 
-      when(
-        () => controller.calcMatrixFitWidthForPage(pageNumber: 1),
-      ).thenReturn(null);
+      when(() => controller.calcMatrixFitWidthForPage(pageNumber: 1))
+          .thenReturn(null);
 
       await actions.fitWidth();
 
-      verify(
-        () => controller.calcMatrixFitWidthForPage(pageNumber: 1),
-      ).called(1);
+      verify(() => controller.calcMatrixFitWidthForPage(pageNumber: 1))
+          .called(1);
     });
 
     test('does not navigate when matrix is null', () async {
       when(() => controller.pageNumber).thenReturn(3);
 
-      when(
-        () => controller.calcMatrixFitWidthForPage(pageNumber: 3),
-      ).thenReturn(null);
+      when(() => controller.calcMatrixFitWidthForPage(pageNumber: 3))
+          .thenReturn(null);
 
       await actions.fitWidth();
 
@@ -184,37 +162,27 @@ void main() {
     test('fits the current page', () async {
       when(() => controller.pageNumber).thenReturn(3);
 
-      when(
-        () => controller.calcMatrixForFit(pageNumber: 3),
-      ).thenReturn(null);
+      when(() => controller.calcMatrixForFit(pageNumber: 3)).thenReturn(null);
 
       await actions.fitPage();
 
-      verify(
-        () => controller.calcMatrixForFit(pageNumber: 3),
-      ).called(1);
+      verify(() => controller.calcMatrixForFit(pageNumber: 3)).called(1);
     });
 
     test('uses page 1 when there is no current page', () async {
       when(() => controller.pageNumber).thenReturn(null);
 
-      when(
-        () => controller.calcMatrixForFit(pageNumber: 1),
-      ).thenReturn(null);
+      when(() => controller.calcMatrixForFit(pageNumber: 1)).thenReturn(null);
 
       await actions.fitPage();
 
-      verify(
-        () => controller.calcMatrixForFit(pageNumber: 1),
-      ).called(1);
+      verify(() => controller.calcMatrixForFit(pageNumber: 1)).called(1);
     });
 
     test('does not navigate when matrix is null', () async {
       when(() => controller.pageNumber).thenReturn(3);
 
-      when(
-        () => controller.calcMatrixForFit(pageNumber: 3),
-      ).thenReturn(null);
+      when(() => controller.calcMatrixForFit(pageNumber: 3)).thenReturn(null);
 
       await actions.fitPage();
 
@@ -227,17 +195,14 @@ void main() {
       when(() => controller.pageNumber).thenReturn(3);
       when(() => controller.pageCount).thenReturn(10);
 
-      when(
-        () => controller.calcMatrixForPage(pageNumber: 4),
-      ).thenReturn(Matrix4.identity());
+      when(() => controller.calcMatrixForPage(pageNumber: 4))
+          .thenReturn(Matrix4.identity());
 
       when(() => controller.goTo(any())).thenAnswer((_) => Future.value());
 
       await actions.nextPage();
 
-      verify(
-        () => controller.calcMatrixForPage(pageNumber: 4),
-      ).called(1);
+      verify(() => controller.calcMatrixForPage(pageNumber: 4)).called(1);
     });
 
     test('does nothing when there is no current page', () async {
@@ -247,9 +212,8 @@ void main() {
       await actions.nextPage();
 
       verifyNever(
-        () => controller.calcMatrixForPage(
-          pageNumber: any(named: 'pageNumber'),
-        ),
+        () =>
+            controller.calcMatrixForPage(pageNumber: any(named: 'pageNumber')),
       );
     });
 
@@ -260,9 +224,8 @@ void main() {
       await actions.nextPage();
 
       verifyNever(
-        () => controller.calcMatrixForPage(
-          pageNumber: any(named: 'pageNumber'),
-        ),
+        () =>
+            controller.calcMatrixForPage(pageNumber: any(named: 'pageNumber')),
       );
     });
   });
@@ -272,17 +235,14 @@ void main() {
       when(() => controller.pageNumber).thenReturn(3);
       when(() => controller.pageCount).thenReturn(10);
 
-      when(
-        () => controller.calcMatrixForPage(pageNumber: 2),
-      ).thenReturn(Matrix4.identity());
+      when(() => controller.calcMatrixForPage(pageNumber: 2))
+          .thenReturn(Matrix4.identity());
 
       when(() => controller.goTo(any())).thenAnswer((_) => Future.value());
 
       await actions.previousPage();
 
-      verify(
-        () => controller.calcMatrixForPage(pageNumber: 2),
-      ).called(1);
+      verify(() => controller.calcMatrixForPage(pageNumber: 2)).called(1);
     });
 
     test('does nothing when there is no current page', () async {
@@ -292,9 +252,8 @@ void main() {
       await actions.previousPage();
 
       verifyNever(
-        () => controller.calcMatrixForPage(
-          pageNumber: any(named: 'pageNumber'),
-        ),
+        () =>
+            controller.calcMatrixForPage(pageNumber: any(named: 'pageNumber')),
       );
     });
 
@@ -305,9 +264,8 @@ void main() {
       await actions.previousPage();
 
       verifyNever(
-        () => controller.calcMatrixForPage(
-          pageNumber: any(named: 'pageNumber'),
-        ),
+        () =>
+            controller.calcMatrixForPage(pageNumber: any(named: 'pageNumber')),
       );
     });
   });

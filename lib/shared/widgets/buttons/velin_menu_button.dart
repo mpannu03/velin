@@ -17,7 +17,7 @@ class VelinMenuButton extends StatelessWidget {
       onPressed: onPressed,
       style: TextButton.styleFrom(
         padding: const EdgeInsets.all(AppSpacing.md),
-        minimumSize: Size.zero, 
+        minimumSize: Size.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.sm),
         ),

@@ -4,7 +4,6 @@ import 'package:velin/core/di/injection.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
-
 class MergePdfPage extends StatelessWidget {
   const MergePdfPage({super.key});
 
@@ -24,20 +23,12 @@ class _MergePdfPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MergePdfCubit, MergePdfState>(
       builder: (context, state) {
-        return MergePdfView(
-          viewModel: _buildViewModel(
-            context,
-            state,
-          ),
-        );
+        return MergePdfView(viewModel: _buildViewModel(context, state));
       },
     );
   }
 
-  MergePdfViewModel _buildViewModel(
-    BuildContext context,
-    MergePdfState state,
-  ) {
+  MergePdfViewModel _buildViewModel(BuildContext context, MergePdfState state) {
     final cubit = context.read<MergePdfCubit>();
 
     return MergePdfViewModel(

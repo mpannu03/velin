@@ -1,4 +1,5 @@
 import 'package:material_symbols_icons/symbols.dart';
+
 import 'tool_definition.dart';
 
 abstract final class ToolRegistry {

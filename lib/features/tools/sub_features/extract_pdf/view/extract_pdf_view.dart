@@ -3,10 +3,7 @@ import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/widgets/widgets.dart';
 
 class ExtractPdfView extends StatelessWidget {
-  const ExtractPdfView({
-    super.key,
-    required this.viewModel,
-  });
+  const ExtractPdfView({super.key, required this.viewModel});
 
   final ExtractPdfViewModel viewModel;
 

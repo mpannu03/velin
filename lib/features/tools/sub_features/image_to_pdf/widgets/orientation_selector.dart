@@ -32,18 +32,12 @@ class OrientationSelector extends StatelessWidget {
             ),
             ButtonSegment(
               value: ImageToPdfOrientation.portrait,
-              icon: const Icon(
-                Icons.stay_current_portrait_outlined,
-                size: 18,
-              ),
+              icon: const Icon(Icons.stay_current_portrait_outlined, size: 18),
               label: Text(l10n.toolsImageToPdfOrientationPortrait),
             ),
             ButtonSegment(
               value: ImageToPdfOrientation.landscape,
-              icon: const Icon(
-                Icons.stay_current_landscape_outlined,
-                size: 18,
-              ),
+              icon: const Icon(Icons.stay_current_landscape_outlined, size: 18),
               label: Text(l10n.toolsImageToPdfOrientationLandscape),
             ),
           ],

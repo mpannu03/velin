@@ -8,18 +8,12 @@ import 'injection.dart';
 
 void registerCoreDependencies() {
   getIt.registerLazySingleton<DocumentFilePicker>(
-    () => DocumentFilePickerImpl()
+    () => DocumentFilePickerImpl(),
   );
 
-  getIt.registerLazySingleton<AppEffectController>(
-    () => AppEffectController()
-  );
+  getIt.registerLazySingleton<AppEffectController>(() => AppEffectController());
 
-  getIt.registerLazySingleton<TaskManager>(
-    () => TaskManager()
-  );
+  getIt.registerLazySingleton<TaskManager>(() => TaskManager());
 
-  getIt.registerLazySingleton<Pdf>(
-    () => Pdf()
-  );
+  getIt.registerLazySingleton<Pdf>(() => Pdf());
 }

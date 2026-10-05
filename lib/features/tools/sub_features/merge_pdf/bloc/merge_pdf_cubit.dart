@@ -30,9 +30,7 @@ class MergePdfCubit extends Cubit<MergePdfState> {
   final AppEffectController _appEffectController;
 
   Future<void> pickFiles() async {
-    final result = await _filePicker.pickFiles(
-      allowedExtensions: ['pdf'],
-    );
+    final result = await _filePicker.pickFiles(allowedExtensions: ['pdf']);
 
     switch (result) {
       case Success(data: final filePaths):
@@ -64,9 +62,7 @@ class MergePdfCubit extends Cubit<MergePdfState> {
   void removeFile(int index) {
     final inputs = [...state.inputs]..removeAt(index);
 
-    emit(
-      state.copyWith(inputs: inputs),
-    );
+    emit(state.copyWith(inputs: inputs));
   }
 
   void reorderFiles(int oldIndex, int newIndex) {
@@ -75,9 +71,7 @@ class MergePdfCubit extends Cubit<MergePdfState> {
     final input = inputs.removeAt(oldIndex);
     inputs.insert(newIndex, input);
 
-    emit(
-      state.copyWith(inputs: inputs),
-    );
+    emit(state.copyWith(inputs: inputs));
   }
 
   void updatePageSelection(int index, String value) {
@@ -85,16 +79,12 @@ class MergePdfCubit extends Cubit<MergePdfState> {
 
     inputs[index] = inputs[index].copyWith(pageSelection: value);
 
-    emit(
-      state.copyWith(inputs: inputs),
-    );
+    emit(state.copyWith(inputs: inputs));
   }
 
   void updateOutputFileName(String value) {
     final fileName = normalizePdfFileName(value);
-    emit(
-      state.copyWith(outputFileName: fileName),
-    );
+    emit(state.copyWith(outputFileName: fileName));
   }
 
   Future<void> pickOutputDirectory() async {
@@ -102,9 +92,7 @@ class MergePdfCubit extends Cubit<MergePdfState> {
 
     switch (result) {
       case Success(data: final directoryPath):
-        emit(
-          state.copyWith(outputDirectory: directoryPath),
-        );
+        emit(state.copyWith(outputDirectory: directoryPath));
 
       case Failure(error: final error):
         if (error is DocumentFilePickerError) {
@@ -141,9 +129,7 @@ class MergePdfCubit extends Cubit<MergePdfState> {
         title: _l10n.toolsMergeButton,
         operation: () async {
           await _mergePdfEngine.merge(
-            inputs: [
-              for (final input in state.inputs) input.toPdfInput(),
-            ],
+            inputs: [for (final input in state.inputs) input.toPdfInput()],
             outputFile: outputFile,
           );
         },

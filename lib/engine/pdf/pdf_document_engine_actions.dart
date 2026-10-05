@@ -14,17 +14,15 @@ class PdfDocumentEngineActions implements DocumentEngineActions {
       return;
     }
 
-    final matrix = _controller.calcMatrixForPage(
-      pageNumber: page,
-    );
+    final matrix = _controller.calcMatrixForPage(pageNumber: page);
 
     await _controller.goTo(matrix);
   }
 
   @override
-Future<void> zoomIn() async {
-  return _zoomByStep(_zoomStep);
-}
+  Future<void> zoomIn() async {
+    return _zoomByStep(_zoomStep);
+  }
 
   @override
   Future<void> zoomOut() {
@@ -48,9 +46,7 @@ Future<void> zoomIn() async {
   Future<void> fitPage() async {
     final pageNumber = _controller.pageNumber ?? 1;
 
-    final matrix = _controller.calcMatrixForFit(
-      pageNumber: pageNumber,
-    );
+    final matrix = _controller.calcMatrixForFit(pageNumber: pageNumber);
 
     if (matrix != null) {
       await _controller.goTo(matrix);
@@ -80,15 +76,15 @@ Future<void> zoomIn() async {
   }
 
   Future<void> _zoomByStep(double step) async {
-  final currentZoom = _controller.currentZoom;
-  final newZoom = (currentZoom + step).clamp(
-    _controller.minScale,
-    _controller.maxScale,
-  );
+    final currentZoom = _controller.currentZoom;
+    final newZoom = (currentZoom + step).clamp(
+      _controller.minScale,
+      _controller.maxScale,
+    );
 
-  final visibleRect = _controller.visibleRect;
-  final centerInDocument = visibleRect.center;
+    final visibleRect = _controller.visibleRect;
+    final centerInDocument = visibleRect.center;
 
-  await _controller.setZoom(centerInDocument, newZoom);
-}
+    await _controller.setZoom(centerInDocument, newZoom);
+  }
 }

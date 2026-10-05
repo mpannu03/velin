@@ -44,10 +44,7 @@ void main() {
         initialState: const ReaderLoading(),
       );
 
-      await pumpApp(
-        tester,
-        const ReaderPage(),
-      );
+      await pumpApp(tester, const ReaderPage());
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       expect(find.byType(ReaderView), findsNothing);
@@ -57,15 +54,10 @@ void main() {
       whenListen(
         bloc,
         const Stream<ReaderState>.empty(),
-        initialState: ReaderLoaded(
-          documents: [],
-        ),
+        initialState: ReaderLoaded(documents: []),
       );
 
-      await pumpApp(
-        tester,
-        const ReaderPage(),
-      );
+      await pumpApp(tester, const ReaderPage());
 
       expect(find.byType(ReaderView), findsOneWidget);
       expect(find.byType(CircularProgressIndicator), findsNothing);
@@ -78,10 +70,7 @@ void main() {
         initialState: const ReaderError('Failed to load documents'),
       );
 
-      await pumpApp(
-        tester,
-        const ReaderPage(),
-      );
+      await pumpApp(tester, const ReaderPage());
 
       expect(find.text('Failed to load documents'), findsOneWidget);
     });
@@ -90,15 +79,10 @@ void main() {
       whenListen(
         bloc,
         const Stream<ReaderState>.empty(),
-        initialState: ReaderLoaded(
-          documents: [],
-        ),
+        initialState: ReaderLoaded(documents: []),
       );
 
-      await pumpApp(
-        tester,
-        const ReaderPage(),
-      );
+      await pumpApp(tester, const ReaderPage());
 
       verify(() => bloc.add(const ReaderStarted())).called(1);
     });
@@ -115,20 +99,14 @@ void main() {
         ),
       );
 
-      await pumpApp(
-        tester,
-        const ReaderPage(),
-      );
+      await pumpApp(tester, const ReaderPage());
 
-      final view = tester.widget<ReaderView>(
-        find.byType(ReaderView),
-      );
+      final view = tester.widget<ReaderView>(find.byType(ReaderView));
 
       view.viewModel.onDocumentSelected(document);
 
-      verify(
-        () => bloc.add(any(that: isA<ReaderDocumentSelected>())),
-      ).called(1);
+      verify(() => bloc.add(any(that: isA<ReaderDocumentSelected>())))
+          .called(1);
     });
 
     testWidgets('adds document closed event from view model callback', (
@@ -143,20 +121,13 @@ void main() {
         ),
       );
 
-      await pumpApp(
-        tester,
-        const ReaderPage(),
-      );
+      await pumpApp(tester, const ReaderPage());
 
-      final view = tester.widget<ReaderView>(
-        find.byType(ReaderView),
-      );
+      final view = tester.widget<ReaderView>(find.byType(ReaderView));
 
       view.viewModel.onDocumentClosed(document);
 
-      verify(
-        () => bloc.add(any(that: isA<ReaderDocumentClosed>())),
-      ).called(1);
+      verify(() => bloc.add(any(that: isA<ReaderDocumentClosed>()))).called(1);
     });
 
     testWidgets('adds open document event from view model callback', (
@@ -171,20 +142,13 @@ void main() {
         ),
       );
 
-      await pumpApp(
-        tester,
-        const ReaderPage(),
-      );
+      await pumpApp(tester, const ReaderPage());
 
-      final view = tester.widget<ReaderView>(
-        find.byType(ReaderView),
-      );
+      final view = tester.widget<ReaderView>(find.byType(ReaderView));
 
       view.viewModel.onOpenDocument();
 
-      verify(
-        () => bloc.add(const ReaderDocumentOpened()),
-      ).called(1);
+      verify(() => bloc.add(const ReaderDocumentOpened())).called(1);
     });
   });
 }

@@ -36,43 +36,27 @@ class _AppEffectListenerState extends State<AppEffectListener> {
     }
 
     switch (effect) {
-      case NotificationEffect(
-        :final message,
-        :final type,
-      ):
-        _showNotification(
-          message,
-          type: type,
-        );
+      case NotificationEffect(:final message, :final type):
+        _showNotification(message, type: type);
     }
   }
 
-  void _showNotification(
-    String message, {
-    required NotificationType type,
-  }) {
-
-    switch(appPlatform) {
+  void _showNotification(String message, {required NotificationType type}) {
+    switch (appPlatform) {
       case AppPlatform.mobile:
         _showSnackBar(message, type: type);
       case AppPlatform.desktop:
-       _showDesktopNotification(message, type: type);
+        _showDesktopNotification(message, type: type);
     }
   }
 
-  void _showSnackBar(
-    String message, {
-    required NotificationType type,
-  }) {
+  void _showSnackBar(String message, {required NotificationType type}) {
     final messenger = ScaffoldMessenger.of(context);
 
     messenger
       ..hideCurrentSnackBar()
       ..showSnackBar(
-        SnackBar(
-          content: Text(message),
-          behavior: SnackBarBehavior.floating,
-        ),
+        SnackBar(content: Text(message), behavior: SnackBarBehavior.floating),
       );
   }
 

@@ -24,9 +24,7 @@ class _CompressPdfPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CompressPdfCubit, CompressPdfState>(
       builder: (context, state) {
-        return CompressPdfView(
-          viewModel: _buildViewModel(context, state),
-        );
+        return CompressPdfView(viewModel: _buildViewModel(context, state));
       },
     );
   }

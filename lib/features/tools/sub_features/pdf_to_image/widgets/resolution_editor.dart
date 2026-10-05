@@ -44,10 +44,7 @@ class ResolutionEditor extends StatelessWidget {
               },
               items: [
                 for (final dpi in PdfToImageToolInput.supportedDpi)
-                  DropdownMenuItem(
-                    value: dpi,
-                    child: Text('$dpi DPI'),
-                  ),
+                  DropdownMenuItem(value: dpi, child: Text('$dpi DPI')),
               ],
             ),
           ],

@@ -3,10 +3,7 @@ import 'package:velin/app/theme/app_dimensions.dart';
 import 'package:window_manager/window_manager.dart';
 
 class VelinWindowControls extends StatelessWidget {
-  const VelinWindowControls({
-    super.key,
-    this.windowManager
-  });
+  const VelinWindowControls({super.key, this.windowManager});
 
   final WindowManager? windowManager;
 
@@ -17,24 +14,16 @@ class VelinWindowControls extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _MinimiseButton(
-          windowManager: _windowManager,
-        ),
-        _ResizeButton(
-          windowManager: _windowManager,
-        ),
-        _CloseButton(
-          windowManager: _windowManager,
-        ),
+        _MinimiseButton(windowManager: _windowManager),
+        _ResizeButton(windowManager: _windowManager),
+        _CloseButton(windowManager: _windowManager),
       ],
     );
   }
 }
 
 class _MinimiseButton extends StatelessWidget {
-  const _MinimiseButton({
-    required this.windowManager
-  });
+  const _MinimiseButton({required this.windowManager});
 
   final WindowManager windowManager;
 
@@ -92,7 +81,6 @@ class _ResizeButtonState extends State<_ResizeButton> with WindowListener {
     _load();
   }
 
-
   Future<void> _load() async {
     final maximized = await widget.windowManager.isMaximized();
     if (!mounted) return;
@@ -113,7 +101,9 @@ class _ResizeButtonState extends State<_ResizeButton> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    final icon = (_isMaximized ?? false) ? Icons.filter_none : Icons.crop_square;
+    final icon = (_isMaximized ?? false)
+        ? Icons.filter_none
+        : Icons.crop_square;
 
     return _WindowButtonShell(
       icon: icon,
@@ -124,9 +114,7 @@ class _ResizeButtonState extends State<_ResizeButton> with WindowListener {
 }
 
 class _CloseButton extends StatelessWidget {
-  const _CloseButton({
-    required this.windowManager,
-  });
+  const _CloseButton({required this.windowManager});
 
   final WindowManager windowManager;
 
@@ -138,7 +126,6 @@ class _CloseButton extends StatelessWidget {
       hoverColor: Colors.red,
     );
   }
-  
 }
 
 class _WindowButtonShell extends StatefulWidget {

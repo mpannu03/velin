@@ -12,31 +12,19 @@ void main() {
     });
 
     test('is equal when data is equal', () {
-      expect(
-        const Success<int>(42),
-        equals(const Success<int>(42)),
-      );
+      expect(const Success<int>(42), equals(const Success<int>(42)));
     });
 
     test('is not equal when data differs', () {
-      expect(
-        const Success<int>(42),
-        isNot(equals(const Success<int>(43))),
-      );
+      expect(const Success<int>(42), isNot(equals(const Success<int>(43))));
     });
 
     test('has matching hashCode for equal results', () {
-      expect(
-        const Success<int>(42).hashCode,
-        const Success<int>(42).hashCode,
-      );
+      expect(const Success<int>(42).hashCode, const Success<int>(42).hashCode);
     });
 
     test('has expected string representation', () {
-      expect(
-        const Success<int>(42).toString(),
-        'Success(42)',
-      );
+      expect(const Success<int>(42).toString(), 'Success(42)');
     });
   });
 

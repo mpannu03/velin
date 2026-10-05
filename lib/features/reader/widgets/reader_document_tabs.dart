@@ -3,6 +3,7 @@ import 'package:velin/app/theme/theme.dart';
 
 import 'package:velin/core/document/document.dart';
 import 'package:velin/shared/widgets/widgets.dart';
+
 import 'reader_document_tab.dart';
 
 class ReaderDocumentTabs extends StatelessWidget {
@@ -40,18 +41,14 @@ class ReaderDocumentTabs extends StatelessWidget {
                     onSelected: onDocumentSelected,
                     onClosed: onDocumentClosed,
                   ),
-                  Container(
-                    color: colorScheme.outline,
-                    width: 1,
-                    height: 16,
-                  ),
+                  Container(color: colorScheme.outline, width: 1, height: 16),
                 ],
                 SizedBox(width: AppSpacing.xs),
                 if (documents.isNotEmpty)
                   VelinToolButton(
-                    icon: Icons.add, 
-                    toolTip: 'Open Document', 
-                    onPressed: onOpenDocument
+                    icon: Icons.add,
+                    toolTip: 'Open Document',
+                    onPressed: onOpenDocument,
                   ),
               ],
             ),

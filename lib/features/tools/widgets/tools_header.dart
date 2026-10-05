@@ -35,10 +35,7 @@ class Header extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppSpacing.xl),
-        ToolCategoryFilter(
-          selected: filter,
-          onChanged: onFilterChanged,
-        ),
+        ToolCategoryFilter(selected: filter, onChanged: onFilterChanged),
       ],
     );
   }

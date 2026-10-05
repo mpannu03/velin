@@ -7,11 +7,11 @@ abstract interface class AnnotationCapability {
 class Annotation {
   const Annotation({
     required this.id,
-    this.title, 
+    this.title,
     this.subject,
-    this.content, 
-    this.creationDate, 
-    required this.pageNumber
+    this.content,
+    this.creationDate,
+    required this.pageNumber,
   });
 
   final String id;

@@ -23,16 +23,19 @@ class VelinIconButton extends StatelessWidget {
       message: tooltip,
       child: IconButton(
         onPressed: onPressed,
-        icon: Icon(icon,
+        icon: Icon(
+          icon,
           size: AppDimensions.iconButtonSize,
-          color: isSelected ?? false 
-              ? colorScheme.onPrimary : colorScheme.primary,
+          color: isSelected ?? false
+              ? colorScheme.onPrimary
+              : colorScheme.primary,
         ),
         padding: EdgeInsets.all(AppSpacing.sm),
         style: IconButton.styleFrom(
           minimumSize: Size.zero,
-          backgroundColor: isSelected ?? false 
-              ? colorScheme.primary : colorScheme.primaryContainer,
+          backgroundColor: isSelected ?? false
+              ? colorScheme.primary
+              : colorScheme.primaryContainer,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppRadius.md),
           ),

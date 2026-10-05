@@ -10,16 +10,8 @@ class AppEffectController {
 
   Stream<AppEffect> get effects => _controller.stream;
 
-  void notifyUser({
-    required String message,
-    required NotificationType type,
-  }) {
-    _controller.add(
-      NotificationEffect(
-        message: message,
-        type: type,
-      ),
-    );
+  void notifyUser({required String message, required NotificationType type}) {
+    _controller.add(NotificationEffect(message: message, type: type));
   }
 
   Future<void> dispose() async {

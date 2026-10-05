@@ -4,10 +4,7 @@ import '../view/view.dart';
 import '../widgets/widgets.dart';
 
 class DocumentWorkspaceDesktopLayout extends StatelessWidget {
-  const DocumentWorkspaceDesktopLayout({
-    required this.viewModel,
-    super.key,
-  });
+  const DocumentWorkspaceDesktopLayout({required this.viewModel, super.key});
 
   final DocumentWorkspaceViewModel viewModel;
 
@@ -43,7 +40,8 @@ class DocumentWorkspaceDesktopLayout extends StatelessWidget {
                   panel: viewModel.selectedPanel!,
                   onTextSearch: viewModel.onTextSearch,
                   onClearSearch: viewModel.onClearSearch,
-                  onTextSearchResultSelected: viewModel.onTextSearchResultSelected,
+                  onTextSearchResultSelected:
+                      viewModel.onTextSearchResultSelected,
                   searchState: viewModel.searchState,
                   bookmarks: viewModel.bookmarks,
                   onBookmarkSelected: viewModel.onBookmarkSelected,

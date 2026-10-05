@@ -2,11 +2,7 @@ import 'dart:io';
 
 import 'package:velin/core/page_selection/page_selection.dart';
 
-enum SplitPdfMode {
-  bySelection,
-  byPageCount,
-  extractAllPages,
-}
+enum SplitPdfMode { bySelection, byPageCount, extractAllPages }
 
 class SplitPdfInput {
   const SplitPdfInput({

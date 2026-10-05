@@ -21,9 +21,8 @@ Future<T?> showResultDialog<T>({
             child: Text(cancelText ?? context.l10n.commonCancel),
           ),
           TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(
-              onSubmit(dialogContext),
-            ),
+            onPressed: () =>
+                Navigator.of(dialogContext).pop(onSubmit(dialogContext)),
             child: Text(submitText ?? context.l10n.commonSubmit),
           ),
         ],

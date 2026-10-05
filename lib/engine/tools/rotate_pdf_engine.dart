@@ -17,10 +17,10 @@ class RotatePdfEngine {
       180 => PdfPageRotation.clockwise180,
       270 => PdfPageRotation.clockwise270,
       _ => throw ArgumentError.value(
-          degrees,
-          'degrees',
-          'Must be 90, 180, or 270.',
-        ),
+        degrees,
+        'degrees',
+        'Must be 90, 180, or 270.',
+      ),
     };
 
     PdfDocument? sourceDocument;
@@ -43,14 +43,11 @@ class RotatePdfEngine {
         }
       }
 
-      outputDocument = await PdfDocument.createNew(
-        sourceName: outputFile.path,
-      );
+      outputDocument = await PdfDocument.createNew(sourceName: outputFile.path);
 
       outputDocument.pages = [
         for (var index = 0; index < totalPages; index++)
-          if (selectedPages == null ||
-              selectedPages.contains(index + 1))
+          if (selectedPages == null || selectedPages.contains(index + 1))
             sourceDocument.pages[index].rotatedBy(rotation)
           else
             sourceDocument.pages[index],

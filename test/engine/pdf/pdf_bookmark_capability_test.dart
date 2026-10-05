@@ -4,8 +4,7 @@ import 'package:pdfrx/pdfrx.dart';
 import 'package:velin/core/document/engine/engine.dart';
 import 'package:velin/engine/engine.dart';
 
-class MockPdfViewerController extends Mock
-    implements PdfViewerController {}
+class MockPdfViewerController extends Mock implements PdfViewerController {}
 
 class MockPdfDocument extends Mock implements PdfDocument {}
 
@@ -19,9 +18,8 @@ void main() {
     document = MockPdfDocument();
 
     when(() => controller.document).thenReturn(document);
-    when(() => controller.goToPage(pageNumber: any(named: 'pageNumber'))).thenAnswer(
-      (invocation) => Future.value(),
-    );
+    when(() => controller.goToPage(pageNumber: any(named: 'pageNumber')))
+        .thenAnswer((invocation) => Future.value());
 
     capability = PdfBookmarkCapability(controller);
   });
@@ -29,11 +27,7 @@ void main() {
   test('loads bookmarks from the PDF outline', () async {
     when(() => document.loadOutline()).thenAnswer(
       (_) async => [
-        PdfOutlineNode(
-          title: 'Chapter 1',
-          dest: null,
-          children: const [],
-        ),
+        PdfOutlineNode(title: 'Chapter 1', dest: null, children: const []),
       ],
     );
 
@@ -52,16 +46,8 @@ void main() {
           title: 'Chapter 1',
           dest: null,
           children: [
-            PdfOutlineNode(
-              title: 'Section 1',
-              dest: null,
-              children: const [],
-            ),
-            PdfOutlineNode(
-              title: 'Section 2',
-              dest: null,
-              children: const [],
-            ),
+            PdfOutlineNode(title: 'Section 1', dest: null, children: const []),
+            PdfOutlineNode(title: 'Section 2', dest: null, children: const []),
           ],
         ),
       ],
@@ -81,11 +67,7 @@ void main() {
   test('caches bookmarks after the first load', () async {
     when(() => document.loadOutline()).thenAnswer(
       (_) async => [
-        PdfOutlineNode(
-          title: 'Chapter 1',
-          dest: null,
-          children: const [],
-        ),
+        PdfOutlineNode(title: 'Chapter 1', dest: null, children: const []),
       ],
     );
 
@@ -94,9 +76,7 @@ void main() {
 
     expect(second, same(first));
 
-    verify(
-      () => document.loadOutline(),
-    ).called(1);
+    verify(() => document.loadOutline()).called(1);
   });
 
   test('goes to the bookmark page', () {
@@ -109,8 +89,6 @@ void main() {
 
     capability.goto(bookmark);
 
-    verify(
-      () => controller.goToPage(pageNumber: 5),
-    ).called(1);
+    verify(() => controller.goToPage(pageNumber: 5)).called(1);
   });
 }

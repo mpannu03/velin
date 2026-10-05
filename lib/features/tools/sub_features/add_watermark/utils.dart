@@ -9,10 +9,7 @@ Color colorFromHex(String hex) {
     return Colors.transparent;
   }
 
-  final rgb = int.tryParse(
-    hex.trim().replaceFirst('#', ''),
-    radix: 16,
-  );
+  final rgb = int.tryParse(hex.trim().replaceFirst('#', ''), radix: 16);
 
   if (rgb == null) {
     return Colors.transparent;

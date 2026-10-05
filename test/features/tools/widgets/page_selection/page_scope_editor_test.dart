@@ -4,78 +4,73 @@ import 'package:velin/features/tools/widgets/widgets.dart';
 
 import '../../../../helpers/helpers.dart';
 
-enum _TestPageScope {
-all,
-selected,
-}
+enum _TestPageScope { all, selected }
 
 void main() {
   group('PageScopeEditor', () {
     testWidgets('renders both page scope options', (tester) async {
-    await pumpApp(
+      await pumpApp(
+        tester,
+        const PageScopeEditor<_TestPageScope>(
+          allPagesScope: _TestPageScope.all,
+          selectedPagesScope: _TestPageScope.selected,
+          scope: _TestPageScope.all,
+          requiresSelection: false,
+          allPagesLabel: 'All pages',
+          selectedPagesLabel: 'Selected pages',
+          selection: '',
+          onScopeChanged: _noopScopeChanged,
+          onSelectionChanged: _noopSelectionChanged,
+        ),
+      );
+
+      expect(find.text('All pages'), findsOneWidget);
+      expect(find.text('Selected pages'), findsOneWidget);
+      expect(find.byType(SegmentedButton<_TestPageScope>), findsOneWidget);
+    });
+
+    testWidgets('does not show page selection when selection is not required', (
       tester,
-      const PageScopeEditor<_TestPageScope>(
-        allPagesScope: _TestPageScope.all,
-        selectedPagesScope: _TestPageScope.selected,
-        scope: _TestPageScope.all,
-        requiresSelection: false,
-        allPagesLabel: 'All pages',
-        selectedPagesLabel: 'Selected pages',
-        selection: '',
-        onScopeChanged: _noopScopeChanged,
-        onSelectionChanged: _noopSelectionChanged,
-      ),
-    );
+    ) async {
+      await pumpApp(
+        tester,
+        const PageScopeEditor<_TestPageScope>(
+          allPagesScope: _TestPageScope.all,
+          selectedPagesScope: _TestPageScope.selected,
+          scope: _TestPageScope.all,
+          requiresSelection: false,
+          allPagesLabel: 'All pages',
+          selectedPagesLabel: 'Selected pages',
+          selection: '1-5',
+          onScopeChanged: _noopScopeChanged,
+          onSelectionChanged: _noopSelectionChanged,
+        ),
+      );
 
-    expect(find.text('All pages'), findsOneWidget);
-    expect(find.text('Selected pages'), findsOneWidget);
-    expect(find.byType(SegmentedButton<_TestPageScope>), findsOneWidget);
-  });
+      expect(find.byType(PageSelectionField), findsNothing);
+      expect(find.byType(HelperText), findsNothing);
+    });
 
-    testWidgets(
-      'does not show page selection when selection is not required',
-      (tester) async {
-        await pumpApp(
-          tester,
-          const PageScopeEditor<_TestPageScope>(
-            allPagesScope: _TestPageScope.all,
-            selectedPagesScope: _TestPageScope.selected,
-            scope: _TestPageScope.all,
-            requiresSelection: false,
-            allPagesLabel: 'All pages',
-            selectedPagesLabel: 'Selected pages',
-            selection: '1-5',
-            onScopeChanged: _noopScopeChanged,
-            onSelectionChanged: _noopSelectionChanged,
-          ),
-        );
+    testWidgets('shows page selection when selection is required', (
+      tester,
+    ) async {
+      await pumpApp(
+        tester,
+        const PageScopeEditor<_TestPageScope>(
+          allPagesScope: _TestPageScope.all,
+          selectedPagesScope: _TestPageScope.selected,
+          scope: _TestPageScope.selected,
+          requiresSelection: true,
+          allPagesLabel: 'All pages',
+          selectedPagesLabel: 'Selected pages',
+          selection: '1-5, last',
+          onScopeChanged: _noopScopeChanged,
+          onSelectionChanged: _noopSelectionChanged,
+        ),
+      );
 
-        expect(find.byType(PageSelectionField), findsNothing);
-        expect(find.byType(HelperText), findsNothing);
-      },
-    );
-
-    testWidgets(
-      'shows page selection when selection is required',
-      (tester) async {
-        await pumpApp(
-          tester,
-          const PageScopeEditor<_TestPageScope>(
-            allPagesScope: _TestPageScope.all,
-            selectedPagesScope: _TestPageScope.selected,
-            scope: _TestPageScope.selected,
-            requiresSelection: true,
-            allPagesLabel: 'All pages',
-            selectedPagesLabel: 'Selected pages',
-            selection: '1-5, last',
-            onScopeChanged: _noopScopeChanged,
-            onSelectionChanged: _noopSelectionChanged,
-          ),
-        );
-
-        expect(find.byType(PageSelectionField), findsOneWidget);
-      },
-    );
+      expect(find.byType(PageSelectionField), findsOneWidget);
+    });
 
     testWidgets('shows supplied selection value', (tester) async {
       await pumpApp(
@@ -157,14 +152,11 @@ void main() {
         ),
       );
 
-      final segmentedButton = tester.widget<
-          SegmentedButton<_TestPageScope>>(
+      final segmentedButton = tester.widget<SegmentedButton<_TestPageScope>>(
         find.byType(SegmentedButton<_TestPageScope>),
       );
 
-      segmentedButton.onSelectionChanged?.call({
-        _TestPageScope.selected,
-      });
+      segmentedButton.onSelectionChanged?.call({_TestPageScope.selected});
 
       expect(selectedScope, _TestPageScope.selected);
     });

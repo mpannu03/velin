@@ -15,30 +15,21 @@ class TaskManager {
 
   Stream<List<AppTask>> get tasks => _controller.stream;
 
-  List<AppTask> get currentTasks =>
-      List.unmodifiable(_tasks.values);
+  List<AppTask> get currentTasks => List.unmodifiable(_tasks.values);
 
   Future<void> submit({
     required String id,
     required String title,
     required Future<void> Function() operation,
   }) {
-    final task = AppTask(
-      id: id,
-      title: title,
-      status: TaskStatus.queued,
-    );
+    final task = AppTask(id: id, title: title, status: TaskStatus.queued);
 
     _tasks[id] = task;
 
     final completer = Completer<void>();
 
     _queue.add(
-      _TaskEntry(
-        task: task,
-        operation: operation,
-        completer: completer,
-      ),
+      _TaskEntry(task: task, operation: operation, completer: completer),
     );
 
     _emit();
@@ -59,29 +50,16 @@ class TaskManager {
       while (_queue.isNotEmpty) {
         final entry = _queue.removeAt(0);
 
-        _update(
-          entry.task.copyWith(
-            status: TaskStatus.running,
-          ),
-        );
+        _update(entry.task.copyWith(status: TaskStatus.running));
 
         try {
           await entry.operation();
 
-          _update(
-            entry.task.copyWith(
-              status: TaskStatus.completed,
-            ),
-          );
+          _update(entry.task.copyWith(status: TaskStatus.completed));
 
           entry.completer.complete();
         } catch (error) {
-          _update(
-            entry.task.copyWith(
-              status: TaskStatus.failed,
-              error: error,
-            ),
-          );
+          _update(entry.task.copyWith(status: TaskStatus.failed, error: error));
 
           entry.completer.completeError(error);
         }

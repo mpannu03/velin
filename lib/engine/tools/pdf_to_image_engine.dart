@@ -106,21 +106,15 @@ class PdfToImageEngine {
     }
   }
 
-  List<int> _encodeImage(
-    img.Image image,
-    PdfToImageInput input,
-  ) {
+  List<int> _encodeImage(img.Image image, PdfToImageInput input) {
     return switch (input.format) {
       PdfImageFormat.png => img.encodePng(image),
-      PdfImageFormat.jpeg => img.encodeJpg(
-          image,
-          quality: input.quality,
-        ),
+      PdfImageFormat.jpeg => img.encodeJpg(image, quality: input.quality),
       PdfImageFormat.webp => img.encodeWebP(
-          image,
-          lossless: false,
-          quality: input.quality,
-        ),
+        image,
+        lossless: false,
+        quality: input.quality,
+      ),
     };
   }
 
@@ -128,8 +122,6 @@ class PdfToImageEngine {
     final name = file.uri.pathSegments.last;
     final extensionIndex = name.lastIndexOf('.');
 
-    return extensionIndex > 0
-        ? name.substring(0, extensionIndex)
-        : name;
+    return extensionIndex > 0 ? name.substring(0, extensionIndex) : name;
   }
 }

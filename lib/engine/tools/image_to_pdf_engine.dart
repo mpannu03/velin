@@ -46,9 +46,7 @@ class ImageToPdfEngine {
     final sourceDocuments = <PdfDocument>[];
 
     try {
-      outputDocument = await PdfDocument.createNew(
-        sourceName: outputFile.path,
-      );
+      outputDocument = await PdfDocument.createNew(sourceName: outputFile.path);
 
       final pages = <PdfPage>[];
 
@@ -58,22 +56,14 @@ class ImageToPdfEngine {
         final decoded = img.decodeImage(bytes);
 
         if (decoded == null) {
-          throw StateError(
-            'Unable to decode image: ${imageFile.path}',
-          );
+          throw StateError('Unable to decode image: ${imageFile.path}');
         }
 
         final image = _prepareImage(decoded);
 
-        final pageSize = _resolvePageSize(
-          image,
-          input,
-        );
+        final pageSize = _resolvePageSize(image, input);
 
-        final jpegData = img.encodeJpg(
-          image,
-          quality: 95,
-        );
+        final jpegData = img.encodeJpg(image, quality: 95);
 
         final imageDocument = await PdfDocument.createFromJpegData(
           jpegData,
@@ -109,28 +99,16 @@ class ImageToPdfEngine {
       return image;
     }
 
-    final background = img.Image(
-      width: image.width,
-      height: image.height,
-    );
+    final background = img.Image(width: image.width, height: image.height);
 
-    img.fill(
-      background,
-      color: img.ColorRgb8(255, 255, 255),
-    );
+    img.fill(background, color: img.ColorRgb8(255, 255, 255));
 
-    img.compositeImage(
-      background,
-      image,
-    );
+    img.compositeImage(background, image);
 
     return background;
   }
 
-  _PageSize _resolvePageSize(
-    img.Image image,
-    ImageToPdfInput input,
-  ) {
+  _PageSize _resolvePageSize(img.Image image, ImageToPdfInput input) {
     if (input.pageSize == ImageToPdfPageSize.auto) {
       return _PageSize(
         width: _pixelsToPoints(image.width, input.dpi),
@@ -139,17 +117,9 @@ class ImageToPdfEngine {
     }
 
     final (widthMm, heightMm) = switch (input.pageSize) {
-      ImageToPdfPageSize.a4 => (
-          _a4Width,
-          _a4Height,
-        ),
-      ImageToPdfPageSize.letter => (
-          _letterWidth,
-          _letterHeight,
-        ),
-      ImageToPdfPageSize.auto => throw StateError(
-          'Unexpected page size.',
-        ),
+      ImageToPdfPageSize.a4 => (_a4Width, _a4Height),
+      ImageToPdfPageSize.letter => (_letterWidth, _letterHeight),
+      ImageToPdfPageSize.auto => throw StateError('Unexpected page size.'),
     };
 
     final isPortrait = switch (input.orientation) {
@@ -169,27 +139,17 @@ class ImageToPdfEngine {
           );
   }
 
-  double _pixelsToPoints(
-    int pixels,
-    int dpi,
-  ) {
+  double _pixelsToPoints(int pixels, int dpi) {
     return pixels / dpi * _pointsPerInch;
   }
 
-  double _millimetresToPoints(
-    double millimetres,
-  ) {
-    return millimetres /
-        _millimetresPerInch *
-        _pointsPerInch;
+  double _millimetresToPoints(double millimetres) {
+    return millimetres / _millimetresPerInch * _pointsPerInch;
   }
 }
 
 class _PageSize {
-  const _PageSize({
-    required this.width,
-    required this.height,
-  });
+  const _PageSize({required this.width, required this.height});
 
   final double width;
   final double height;

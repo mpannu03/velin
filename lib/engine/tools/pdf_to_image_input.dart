@@ -8,16 +8,13 @@ enum PdfImageFormat {
   webp;
 
   String get extension => switch (this) {
-        png => 'png',
-        jpeg => 'jpg',
-        webp => 'webp',
-      };
+    png => 'png',
+    jpeg => 'jpg',
+    webp => 'webp',
+  };
 }
 
-enum PdfImageColorMode {
-  color,
-  grayscale,
-}
+enum PdfImageColorMode { color, grayscale }
 
 class PdfToImageInput {
   const PdfToImageInput({

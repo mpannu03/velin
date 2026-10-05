@@ -24,10 +24,7 @@ void main() {
     ) async {
       await pumpApp(
         tester,
-        SelectedFileItem(
-          filePath: 'report.pdf',
-          onRemove: () {},
-        ),
+        SelectedFileItem(filePath: 'report.pdf', onRemove: () {}),
       );
 
       expect(find.text('report.pdf'), findsOneWidget);
@@ -63,10 +60,7 @@ void main() {
     testWidgets('does not show index when not provided', (tester) async {
       await pumpApp(
         tester,
-        SelectedFileItem(
-          filePath: '/documents/report.pdf',
-          onRemove: () {},
-        ),
+        SelectedFileItem(filePath: '/documents/report.pdf', onRemove: () {}),
       );
 
       expect(find.text('1'), findsNothing);
@@ -89,10 +83,7 @@ void main() {
     testWidgets('does not show drag handle when not provided', (tester) async {
       await pumpApp(
         tester,
-        SelectedFileItem(
-          filePath: '/documents/report.pdf',
-          onRemove: () {},
-        ),
+        SelectedFileItem(filePath: '/documents/report.pdf', onRemove: () {}),
       );
 
       expect(find.byIcon(Icons.drag_indicator), findsNothing);
@@ -101,10 +92,7 @@ void main() {
     testWidgets('hides page selection by default', (tester) async {
       await pumpApp(
         tester,
-        SelectedFileItem(
-          filePath: '/documents/report.pdf',
-          onRemove: () {},
-        ),
+        SelectedFileItem(filePath: '/documents/report.pdf', onRemove: () {}),
       );
 
       expect(find.byType(TextFormField), findsNothing);
@@ -127,9 +115,7 @@ void main() {
       expect(find.text('Page Selection'), findsOneWidget);
     });
 
-    testWidgets('uses empty value when page selection is null', (
-      tester,
-    ) async {
+    testWidgets('uses empty value when page selection is null', (tester) async {
       await pumpApp(
         tester,
         SelectedFileItem(
@@ -139,9 +125,7 @@ void main() {
         ),
       );
 
-      final field = tester.widget<TextFormField>(
-        find.byType(TextFormField),
-      );
+      final field = tester.widget<TextFormField>(find.byType(TextFormField));
 
       expect(field.initialValue, '');
     });
@@ -159,16 +143,12 @@ void main() {
         ),
       );
 
-      final field = tester.widget<TextFormField>(
-        find.byType(TextFormField),
-      );
+      final field = tester.widget<TextFormField>(find.byType(TextFormField));
 
       expect(field.initialValue, '1,3,5');
     });
 
-    testWidgets('calls onPageSelectionChanged when submitted', (
-      tester,
-    ) async {
+    testWidgets('calls onPageSelectionChanged when submitted', (tester) async {
       String? submittedValue;
 
       await pumpApp(
@@ -192,9 +172,7 @@ void main() {
       expect(submittedValue, '2-6');
     });
 
-    testWidgets('calls onRemove when remove button is tapped', (
-      tester,
-    ) async {
+    testWidgets('calls onRemove when remove button is tapped', (tester) async {
       var removed = false;
 
       await pumpApp(

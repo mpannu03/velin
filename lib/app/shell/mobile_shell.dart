@@ -1,10 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
 class MobileShell extends StatelessWidget {
-  const MobileShell({
-    required this.child,
-    super.key,
-  });
+  const MobileShell({required this.child, super.key});
 
   final Widget child;
 

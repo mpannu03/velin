@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:velin/core/document/document.dart';
 import 'package:velin/engine/engine.dart';
 
-
 void main() {
   const factory = DocumentEngineFactory();
 
@@ -24,9 +23,6 @@ void main() {
       type: DocumentType.pdf,
     );
 
-    expect(
-      () => factory.create(document),
-      throwsA(isA<UnsupportedError>()),
-    );
+    expect(() => factory.create(document), throwsA(isA<UnsupportedError>()));
   });
 }

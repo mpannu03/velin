@@ -5,10 +5,7 @@ import '../view/reader_view_model.dart';
 import '../widgets/widgets.dart';
 
 class ReaderDesktopLayout extends StatelessWidget {
-  const ReaderDesktopLayout({
-    super.key,
-    required this.viewModel,
-  });
+  const ReaderDesktopLayout({super.key, required this.viewModel});
 
   final ReaderViewModel viewModel;
 
@@ -27,9 +24,7 @@ class ReaderDesktopLayout extends StatelessWidget {
         ),
         Expanded(
           child: selectedDocument == null
-              ? ReaderEmptyState(
-                  onOpenDocument: viewModel.onOpenDocument,
-                )
+              ? ReaderEmptyState(onOpenDocument: viewModel.onOpenDocument)
               : IndexedStack(
                   index: viewModel.documents.indexOf(selectedDocument),
                   children: [

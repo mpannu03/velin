@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/effects/effects.dart';
@@ -20,10 +19,7 @@ void main() {
     testWidgets('shows notification when effect is emitted', (tester) async {
       await pumpApp(
         tester,
-        AppEffectListener(
-          controller: controller,
-          child: const SizedBox(),
-        ),
+        AppEffectListener(controller: controller, child: const SizedBox()),
       );
 
       controller.notifyUser(
@@ -41,10 +37,7 @@ void main() {
     ) async {
       await pumpApp(
         tester,
-        AppEffectListener(
-          controller: controller,
-          child: const SizedBox(),
-        ),
+        AppEffectListener(controller: controller, child: const SizedBox()),
       );
 
       expect(find.byType(SnackBar), findsNothing);

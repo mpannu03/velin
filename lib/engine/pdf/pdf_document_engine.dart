@@ -6,10 +6,8 @@ import 'package:velin/core/document/engine/engine.dart';
 import 'pdf.dart';
 
 class PdfDocumentEngine implements DocumentEngine {
-  PdfDocumentEngine({
-    required this.document,
-    PdfViewerController? controller,
-  }) : _controller = controller ?? PdfViewerController() {
+  PdfDocumentEngine({required this.document, PdfViewerController? controller})
+    : _controller = controller ?? PdfViewerController() {
     _actions = PdfDocumentEngineActions(_controller);
     _controller.addListener(_onControllerChanged);
   }
@@ -72,9 +70,7 @@ class PdfDocumentEngine implements DocumentEngine {
   }
 
   @override
-  Widget buildViewer({
-    required DocumentEngineConfig config,
-  }) {
+  Widget buildViewer({required DocumentEngineConfig config}) {
     return PdfViewer.file(
       document.path,
       controller: _controller,
@@ -84,15 +80,15 @@ class PdfDocumentEngine implements DocumentEngine {
         onPageChanged: _onPageChanged,
         onViewerReady: (_, _) => _onViewerReady(),
         sizeDelegateProvider: PdfViewerSizeDelegateProviderLegacy(
-        calculateInitialZoom: (_, _, _, _) {
-          return config.initialZoom ?? 1.0;
-        },
-      ),
+          calculateInitialZoom: (_, _, _, _) {
+            return config.initialZoom ?? 1.0;
+          },
+        ),
         pagePaintCallbacks: [
-           (canvas, pageRect, page) {
+          (canvas, pageRect, page) {
             _textSearch?.pageTextMatchPaintCallback(canvas, pageRect, page);
           },
-        ]
+        ],
       ),
     );
   }

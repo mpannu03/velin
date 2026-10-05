@@ -156,10 +156,7 @@ class _ViewModeToggle extends StatelessWidget {
 }
 
 class _EmptyState extends StatelessWidget {
-  const _EmptyState({
-    required this.description,
-    required this.onAddFiles,
-  });
+  const _EmptyState({required this.description, required this.onAddFiles});
 
   final String description;
   final VoidCallback onAddFiles;
@@ -256,10 +253,7 @@ class _ImageList extends StatelessWidget {
             onRemove: () => onRemoveFile(index),
             dragHandle: ReorderableDragStartListener(
               index: index,
-              child: Icon(
-                Icons.drag_indicator,
-                color: colors.onSurfaceVariant,
-              ),
+              child: Icon(Icons.drag_indicator, color: colors.onSurfaceVariant),
             ),
           ),
         );

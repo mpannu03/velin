@@ -77,13 +77,11 @@ class _BookmarkNodeState extends State<_BookmarkNode> {
           title: Text(bookmark.title),
           onTap: () => widget.onSelected(bookmark),
           shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppRadius.md),
-              ),
+            borderRadius: BorderRadius.circular(AppRadius.md),
+          ),
           trailing: hasChildren
               ? IconButton(
-                  icon: Icon(
-                    _expanded ? Icons.expand_less : Icons.expand_more,
-                  ),
+                  icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
                   onPressed: () => setState(() => _expanded = !_expanded),
                 )
               : null,

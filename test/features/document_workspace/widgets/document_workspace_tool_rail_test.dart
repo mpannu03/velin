@@ -16,32 +16,23 @@ void main() {
         ),
       );
 
-      expect(
-        find.byTooltip('Select'),
-        findsOneWidget,
-      );
+      expect(find.byTooltip('Select'), findsOneWidget);
     });
 
-    testWidgets(
-      'renders dictionary tool when text selection is supported',
-      (tester) async {
-        await pumpApp(
-          tester,
-          DocumentWorkspaceToolRail(
-            selectedTool: WorkspaceTool.dictionary,
-            capabilities: const DocumentEngineCapabilities(
-              textSelection: true,
-            ),
-            onToolSelected: (_) {},
-          ),
-        );
+    testWidgets('renders dictionary tool when text selection is supported', (
+      tester,
+    ) async {
+      await pumpApp(
+        tester,
+        DocumentWorkspaceToolRail(
+          selectedTool: WorkspaceTool.dictionary,
+          capabilities: const DocumentEngineCapabilities(textSelection: true),
+          onToolSelected: (_) {},
+        ),
+      );
 
-        expect(
-          find.byTooltip('Dictionary'),
-          findsOneWidget,
-        );
-      },
-    );
+      expect(find.byTooltip('Dictionary'), findsOneWidget);
+    });
 
     testWidgets(
       'does not render dictionary tool when text selection is unsupported',
@@ -55,16 +46,11 @@ void main() {
           ),
         );
 
-        expect(
-          find.byTooltip('Dictionary'),
-          findsNothing,
-        );
+        expect(find.byTooltip('Dictionary'), findsNothing);
       },
     );
 
-    testWidgets('selects tool when select button is tapped', (
-      tester,
-    ) async {
+    testWidgets('selects tool when select button is tapped', (tester) async {
       WorkspaceTool? selectedTool;
 
       await pumpApp(
@@ -90,9 +76,7 @@ void main() {
         tester,
         DocumentWorkspaceToolRail(
           selectedTool: WorkspaceTool.select,
-          capabilities: const DocumentEngineCapabilities(
-            textSelection: true,
-          ),
+          capabilities: const DocumentEngineCapabilities(textSelection: true),
           onToolSelected: (tool) => selectedTool = tool,
         ),
       );

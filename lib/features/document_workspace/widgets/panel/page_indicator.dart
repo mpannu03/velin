@@ -25,10 +25,7 @@ class PageIndicator extends StatelessWidget {
     }
 
     return Tooltip(
-      message: context.l10n.toolPageOf(
-        currentPage!,
-        pageCount,
-      ),
+      message: context.l10n.toolPageOf(currentPage!, pageCount),
       child: Column(
         children: [
           _PageInputField(
@@ -78,8 +75,7 @@ class _PageInputFieldState extends State<_PageInputField> {
   @override
   void didUpdateWidget(covariant _PageInputField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!_focusNode.hasFocus &&
-        widget.currentPage != oldWidget.currentPage) {
+    if (!_focusNode.hasFocus && widget.currentPage != oldWidget.currentPage) {
       _controller.text = '${widget.currentPage}';
     }
   }
@@ -125,10 +121,7 @@ class _PageInputFieldState extends State<_PageInputField> {
           width: 32,
           height: 32,
           decoration: BoxDecoration(
-            border: Border.all(
-              color: borderColor,
-              width: borderWidth,
-            ),
+            border: Border.all(color: borderColor, width: borderWidth),
             borderRadius: BorderRadius.circular(AppRadius.md),
           ),
           alignment: Alignment.center,
@@ -148,9 +141,7 @@ class _PageInputFieldState extends State<_PageInputField> {
             onSubmitted: (_) => _submitAndUnfocus(),
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(
-                '${widget.pageCount}'.length,
-              ),
+              LengthLimitingTextInputFormatter('${widget.pageCount}'.length),
             ],
           ),
         );

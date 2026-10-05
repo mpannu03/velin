@@ -5,17 +5,15 @@ import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
 class RotatePdfDesktopLayout extends StatelessWidget {
-  const RotatePdfDesktopLayout({
-    super.key,
-    required this.viewModel,
-  });
+  const RotatePdfDesktopLayout({super.key, required this.viewModel});
 
   final RotatePdfViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final hasInputFile = viewModel.inputFilePath != null &&
+    final hasInputFile =
+        viewModel.inputFilePath != null &&
         viewModel.inputFilePath!.trim().isNotEmpty;
 
     return ToolScaffold(

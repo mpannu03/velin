@@ -16,10 +16,7 @@ class AppTask {
   final TaskStatus status;
   final Object? error;
 
-  AppTask copyWith({
-    TaskStatus? status,
-    Object? error,
-  }) {
+  AppTask copyWith({TaskStatus? status, Object? error}) {
     return AppTask(
       id: id,
       title: title,

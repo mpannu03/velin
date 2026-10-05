@@ -4,10 +4,7 @@ import 'package:pdfrx_engine/pdfrx_engine.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
 
 class MergePdfInput {
-  const MergePdfInput({
-    required this.file,
-    this.selection,
-  });
+  const MergePdfInput({required this.file, this.selection});
 
   final File file;
   final PageSelection? selection;
@@ -25,21 +22,14 @@ class MergePdfEngine {
 
     try {
       for (final input in inputs) {
-        documents.add(
-          await PdfDocument.openFile(input.file.path),
-        );
+        documents.add(await PdfDocument.openFile(input.file.path));
       }
 
-      outputDocument = await PdfDocument.createNew(
-        sourceName: outputFile.path,
-      );
+      outputDocument = await PdfDocument.createNew(sourceName: outputFile.path);
 
       outputDocument.pages = [
         for (var index = 0; index < inputs.length; index++)
-          ..._resolvePages(
-            documents[index],
-            inputs[index].selection,
-          ),
+          ..._resolvePages(documents[index], inputs[index].selection),
       ];
 
       final data = await outputDocument.encodePdf();
@@ -56,18 +46,13 @@ class MergePdfEngine {
     }
   }
 
-  List<PdfPage> _resolvePages(
-    PdfDocument document,
-    PageSelection? selection,
-  ) {
+  List<PdfPage> _resolvePages(PdfDocument document, PageSelection? selection) {
     if (selection == null) {
       return document.pages;
     }
 
     final pages = selection.resolve(document.pages.length);
 
-    return [
-      for (final page in pages) document.pages[page - 1],
-    ];
+    return [for (final page in pages) document.pages[page - 1]];
   }
 }

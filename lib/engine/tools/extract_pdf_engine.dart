@@ -19,23 +19,16 @@ class ExtractPdfEngine {
     try {
       sourceDocument = await PdfDocument.openFile(inputFile.path);
 
-      final pages = selection.resolve(
-        sourceDocument.pages.length,
-      );
+      final pages = selection.resolve(sourceDocument.pages.length);
 
       if (pages.isEmpty) {
-        throw ArgumentError(
-          'At least one page must be selected.',
-        );
+        throw ArgumentError('At least one page must be selected.');
       }
 
-      outputDocument = await PdfDocument.createNew(
-        sourceName: outputFile.path,
-      );
+      outputDocument = await PdfDocument.createNew(sourceName: outputFile.path);
 
       outputDocument.pages = [
-        for (final page in pages)
-          sourceDocument.pages[page - 1],
+        for (final page in pages) sourceDocument.pages[page - 1],
       ];
 
       final data = await outputDocument.encodePdf();

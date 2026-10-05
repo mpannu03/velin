@@ -77,26 +77,19 @@ class SplitPdfEngine {
     switch (input.mode) {
       case SplitPdfMode.bySelection:
         if (input.selections.isEmpty) {
-          throw ArgumentError(
-            'At least one page selection is required.',
-          );
+          throw ArgumentError('At least one page selection is required.');
         }
 
         return [
           for (final selection in input.selections)
-            _resolveSelection(
-              selection.resolve(totalPages),
-              totalPages,
-            ),
+            _resolveSelection(selection.resolve(totalPages), totalPages),
         ];
 
       case SplitPdfMode.byPageCount:
         final count = input.pageCount;
 
         if (count == null || count <= 0) {
-          throw ArgumentError(
-            'Page count must be greater than zero.',
-          );
+          throw ArgumentError('Page count must be greater than zero.');
         }
 
         return [
@@ -113,16 +106,12 @@ class SplitPdfEngine {
 
       case SplitPdfMode.extractAllPages:
         return [
-          for (var page = 1; page <= totalPages; page++)
-            [page],
+          for (var page = 1; page <= totalPages; page++) [page],
         ];
     }
   }
 
-  List<int> _resolveSelection(
-    List<int> pages,
-    int totalPages,
-  ) {
+  List<int> _resolveSelection(List<int> pages, int totalPages) {
     if (pages.isEmpty) {
       throw ArgumentError('A page selection cannot be empty.');
     }
@@ -138,11 +127,7 @@ class SplitPdfEngine {
     return pages;
   }
 
-  String _buildFileName(
-    SplitPdfInput input,
-    List<int> pages,
-    int index,
-  ) {
+  String _buildFileName(SplitPdfInput input, List<int> pages, int index) {
     final fileName = input.file.uri.pathSegments.last;
     final extensionIndex = fileName.lastIndexOf('.');
 

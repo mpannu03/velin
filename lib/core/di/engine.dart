@@ -4,52 +4,32 @@ import 'package:velin/engine/engine.dart';
 
 void registerEngineDependencies() {
   getIt.registerLazySingleton<DocumentEngineFactory>(
-    () => DocumentEngineFactory()
+    () => DocumentEngineFactory(),
   );
 
-  getIt.registerLazySingleton<MergePdfEngine>(
-    () => MergePdfEngine()
-  );
+  getIt.registerLazySingleton<MergePdfEngine>(() => MergePdfEngine());
 
-  getIt.registerLazySingleton<SplitPdfEngine>(
-    () => SplitPdfEngine()
-  );
+  getIt.registerLazySingleton<SplitPdfEngine>(() => SplitPdfEngine());
 
-  getIt.registerLazySingleton<ExtractPdfEngine>(
-    () => ExtractPdfEngine()
-  );
+  getIt.registerLazySingleton<ExtractPdfEngine>(() => ExtractPdfEngine());
 
-  getIt.registerLazySingleton<RotatePdfEngine>(
-    () => RotatePdfEngine()
-  );
+  getIt.registerLazySingleton<RotatePdfEngine>(() => RotatePdfEngine());
 
-  getIt.registerLazySingleton<PdfToImageEngine>(
-    () => PdfToImageEngine()
-  );
+  getIt.registerLazySingleton<PdfToImageEngine>(() => PdfToImageEngine());
 
-  getIt.registerLazySingleton<ImageToPdfEngine>(
-    () => ImageToPdfEngine()
-  );
+  getIt.registerLazySingleton<ImageToPdfEngine>(() => ImageToPdfEngine());
 
   getIt.registerLazySingleton<EncryptPdfEngine>(
-    () => EncryptPdfEngine(
-      pdf: getIt<Pdf>()
-    )
+    () => EncryptPdfEngine(pdf: getIt<Pdf>()),
   );
 
   getIt.registerLazySingleton<DecryptPdfEngine>(
-    () => DecryptPdfEngine(
-      pdf: getIt<Pdf>()
-    )
+    () => DecryptPdfEngine(pdf: getIt<Pdf>()),
   );
 
-  getIt.registerLazySingleton<CompressPdfEngine>(
-    () => CompressPdfEngine()
-  );
+  getIt.registerLazySingleton<CompressPdfEngine>(() => CompressPdfEngine());
 
   getIt.registerLazySingleton<AddWatermarkEngine>(
-    () => AddWatermarkEngine(
-      pdf: getIt<Pdf>()
-    )
+    () => AddWatermarkEngine(pdf: getIt<Pdf>()),
   );
 }

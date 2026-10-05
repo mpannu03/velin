@@ -5,11 +5,7 @@ import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
 class FitSelector extends StatelessWidget {
-  const FitSelector({
-    super.key,
-    required this.fit, 
-    required this.onFitChanged
-  });
+  const FitSelector({super.key, required this.fit, required this.onFitChanged});
 
   final ImageToPdfFit fit;
   final ValueChanged<ImageToPdfFit> onFitChanged;
@@ -42,8 +38,7 @@ class FitSelector extends StatelessWidget {
             ),
           ],
           selected: {fit},
-          onSelectionChanged: (selection) =>
-              onFitChanged(selection.first),
+          onSelectionChanged: (selection) => onFitChanged(selection.first),
         ),
         const SizedBox(height: AppSpacing.sm),
         HelperText(l10n.toolsImageToPdfFitHelper),

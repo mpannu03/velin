@@ -18,13 +18,10 @@ void main() async {
       windowButtonVisibility: false,
     );
 
-    await windowManager.waitUntilReadyToShow(
-      windowOptions,
-      () async {
-        await windowManager.show();
-        await windowManager.focus();
-      },
-    );
+    await windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
   }
 
   pdfrxFlutterInitialize();

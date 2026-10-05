@@ -29,38 +29,23 @@ void main() {
     }
 
     group('empty state', () {
-      testWidgets('shows empty state when there are no files', (
-        tester,
-      ) async {
+      testWidgets('shows empty state when there are no files', (tester) async {
         await pumpApp(
           tester,
-          buildPicker(
-            emptyStateDescription: 'Add PDF files to begin.',
-          ),
+          buildPicker(emptyStateDescription: 'Add PDF files to begin.'),
         );
 
         expect(find.text('Add files'), findsNWidgets(2));
         expect(find.text('No files added'), findsOneWidget);
-        expect(
-          find.text('Add PDF files to begin.'),
-          findsOneWidget,
-        );
+        expect(find.text('Add PDF files to begin.'), findsOneWidget);
       });
 
       testWidgets('shows add files button in the header', (tester) async {
         var callCount = 0;
 
-        await pumpApp(
-          tester,
-          buildPicker(
-            onAddFiles: () => callCount++,
-          ),
-        );
+        await pumpApp(tester, buildPicker(onAddFiles: () => callCount++));
 
-        final button = find.widgetWithText(
-          OutlinedButton,
-          'Add files',
-        );
+        final button = find.widgetWithText(OutlinedButton, 'Add files');
 
         expect(button, findsOneWidget);
 
@@ -70,17 +55,10 @@ void main() {
         expect(callCount, 1);
       });
 
-      testWidgets('shows add files button in the empty state', (
-        tester,
-      ) async {
+      testWidgets('shows add files button in the empty state', (tester) async {
         var callCount = 0;
 
-        await pumpApp(
-          tester,
-          buildPicker(
-            onAddFiles: () => callCount++,
-          ),
-        );
+        await pumpApp(tester, buildPicker(onAddFiles: () => callCount++));
 
         final buttons = find.text('Add files');
 
@@ -92,9 +70,7 @@ void main() {
         expect(callCount, 1);
       });
 
-      testWidgets('uses the supplied empty state description', (
-        tester,
-      ) async {
+      testWidgets('uses the supplied empty state description', (tester) async {
         await pumpApp(
           tester,
           buildPicker(
@@ -102,10 +78,7 @@ void main() {
           ),
         );
 
-        expect(
-          find.text('Select PDFs that should be merged.'),
-          findsOneWidget,
-        );
+        expect(find.text('Select PDFs that should be merged.'), findsOneWidget);
       });
     });
 
@@ -129,10 +102,7 @@ void main() {
         await pumpApp(
           tester,
           buildPicker(
-            filePaths: const [
-              '/documents/first.pdf',
-              '/documents/second.pdf',
-            ],
+            filePaths: const ['/documents/first.pdf', '/documents/second.pdf'],
           ),
         );
 
@@ -145,10 +115,7 @@ void main() {
         await pumpApp(
           tester,
           buildPicker(
-            filePaths: const [
-              '/documents/first.pdf',
-              '/documents/second.pdf',
-            ],
+            filePaths: const ['/documents/first.pdf', '/documents/second.pdf'],
           ),
         );
 
@@ -156,14 +123,10 @@ void main() {
         expect(find.text('2'), findsOneWidget);
       });
 
-      testWidgets('does not show empty state when files exist', (
-        tester,
-      ) async {
+      testWidgets('does not show empty state when files exist', (tester) async {
         await pumpApp(
           tester,
-          buildPicker(
-            filePaths: const ['/documents/first.pdf'],
-          ),
+          buildPicker(filePaths: const ['/documents/first.pdf']),
         );
 
         expect(find.text('No files added'), findsNothing);
@@ -252,10 +215,7 @@ void main() {
         await pumpApp(
           tester,
           buildPicker(
-            filePaths: const [
-              '/documents/first.pdf',
-              '/documents/second.pdf',
-            ],
+            filePaths: const ['/documents/first.pdf', '/documents/second.pdf'],
             onReorderItem: (_, _) => callCount++,
           ),
         );
@@ -274,9 +234,7 @@ void main() {
       testWidgets('hides page selection by default', (tester) async {
         await pumpApp(
           tester,
-          buildPicker(
-            filePaths: const ['/documents/first.pdf'],
-          ),
+          buildPicker(filePaths: const ['/documents/first.pdf']),
         );
 
         expect(find.byType(TextFormField), findsNothing);
@@ -288,10 +246,7 @@ void main() {
         await pumpApp(
           tester,
           buildPicker(
-            filePaths: const [
-              '/documents/first.pdf',
-              '/documents/second.pdf',
-            ],
+            filePaths: const ['/documents/first.pdf', '/documents/second.pdf'],
             pageSelections: const ['1-5', '2,4'],
             showPageSelection: true,
           ),
@@ -311,10 +266,7 @@ void main() {
         await pumpApp(
           tester,
           buildPicker(
-            filePaths: const [
-              '/documents/first.pdf',
-              '/documents/second.pdf',
-            ],
+            filePaths: const ['/documents/first.pdf', '/documents/second.pdf'],
             pageSelections: const ['', '1-5'],
             showPageSelection: true,
             onPageSelectionChanged: (index, value) {
@@ -333,35 +285,25 @@ void main() {
         expect(changedValue, '2-6');
       });
 
-      testWidgets(
-        'handles missing page selections for some files',
-        (tester) async {
-          await pumpApp(
-            tester,
-            buildPicker(
-              filePaths: const [
-                '/documents/first.pdf',
-                '/documents/second.pdf',
-              ],
-              pageSelections: const ['1-5'],
-              showPageSelection: true,
-            ),
-          );
+      testWidgets('handles missing page selections for some files', (
+        tester,
+      ) async {
+        await pumpApp(
+          tester,
+          buildPicker(
+            filePaths: const ['/documents/first.pdf', '/documents/second.pdf'],
+            pageSelections: const ['1-5'],
+            showPageSelection: true,
+          ),
+        );
 
-          final fields = find.byType(TextFormField);
+        final fields = find.byType(TextFormField);
 
-          expect(fields, findsNWidgets(2));
+        expect(fields, findsNWidgets(2));
 
-          expect(
-            tester.widget<TextFormField>(fields.at(0)).initialValue,
-            '1-5',
-          );
-          expect(
-            tester.widget<TextFormField>(fields.at(1)).initialValue,
-            '',
-          );
-        },
-      );
+        expect(tester.widget<TextFormField>(fields.at(0)).initialValue, '1-5');
+        expect(tester.widget<TextFormField>(fields.at(1)).initialValue, '');
+      });
     });
 
     group('drag handles', () {
@@ -369,17 +311,11 @@ void main() {
         await pumpApp(
           tester,
           buildPicker(
-            filePaths: const [
-              '/documents/first.pdf',
-              '/documents/second.pdf',
-            ],
+            filePaths: const ['/documents/first.pdf', '/documents/second.pdf'],
           ),
         );
 
-        expect(
-          find.byIcon(Icons.drag_indicator),
-          findsNWidgets(2),
-        );
+        expect(find.byIcon(Icons.drag_indicator), findsNWidgets(2));
       });
     });
   });

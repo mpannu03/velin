@@ -21,7 +21,5 @@ abstract interface class DocumentEngine {
 
   set listener(DocumentEngineListener? listener);
 
-  Widget buildViewer({
-    required DocumentEngineConfig config,
-  });
+  Widget buildViewer({required DocumentEngineConfig config});
 }

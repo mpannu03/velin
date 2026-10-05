@@ -10,40 +10,28 @@ void main() {
 
       expect(selection.items, hasLength(1));
       expect(selection.items.first, isA<PageSelectionPage>());
-      expect(
-        (selection.items.first as PageSelectionPage).page,
-        5,
-      );
+      expect((selection.items.first as PageSelectionPage).page, 5);
     });
 
     test('parses the first page', () {
       final selection = parser.parse('1');
 
       expect(selection.items, hasLength(1));
-      expect(
-        (selection.items.first as PageSelectionPage).page,
-        1,
-      );
+      expect((selection.items.first as PageSelectionPage).page, 1);
     });
 
     test('parses zero as a page', () {
       final selection = parser.parse('0');
 
       expect(selection.items, hasLength(1));
-      expect(
-        (selection.items.first as PageSelectionPage).page,
-        0,
-      );
+      expect((selection.items.first as PageSelectionPage).page, 0);
     });
 
     test('parses surrounding whitespace', () {
       final selection = parser.parse('  5  ');
 
       expect(selection.items, hasLength(1));
-      expect(
-        (selection.items.first as PageSelectionPage).page,
-        5,
-      );
+      expect((selection.items.first as PageSelectionPage).page, 5);
     });
   });
 
@@ -154,9 +142,7 @@ void main() {
       test('throws for a non-numeric end', () {
         expect(
           () => parser.parse('-abc'),
-          throwsA(
-            isA<InvalidPageSelectionNumberError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionNumberError>()),
         );
       });
     });
@@ -198,9 +184,7 @@ void main() {
       test('throws for a non-numeric start', () {
         expect(
           () => parser.parse('abc-'),
-          throwsA(
-            isA<InvalidPageSelectionNumberError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionNumberError>()),
         );
       });
     });
@@ -274,27 +258,21 @@ void main() {
     test('throws for a non-numeric amount', () {
       expect(
         () => parser.parse('last-abc'),
-        throwsA(
-          isA<InvalidPageSelectionNumberError>(),
-        ),
+        throwsA(isA<InvalidPageSelectionNumberError>()),
       );
     });
 
     test('throws for a negative amount', () {
       expect(
         () => parser.parse('last--1'),
-        throwsA(
-          isA<InvalidPageSelectionNumberError>(),
-        ),
+        throwsA(isA<InvalidPageSelectionNumberError>()),
       );
     });
 
     test('throws for an empty amount', () {
       expect(
         () => parser.parse('last-'),
-        throwsA(
-          isA<InvalidPageSelectionNumberError>(),
-        ),
+        throwsA(isA<InvalidPageSelectionNumberError>()),
       );
     });
   });
@@ -351,24 +329,12 @@ void main() {
 
       expect(selection.items, hasLength(3));
 
-      expect(
-        selection.items[0],
-        isA<PageSelectionPage>(),
-      );
-      expect(
-        (selection.items[0] as PageSelectionPage).page,
-        1,
-      );
+      expect(selection.items[0], isA<PageSelectionPage>());
+      expect((selection.items[0] as PageSelectionPage).page, 1);
 
-      expect(
-        (selection.items[1] as PageSelectionPage).page,
-        3,
-      );
+      expect((selection.items[1] as PageSelectionPage).page, 3);
 
-      expect(
-        (selection.items[2] as PageSelectionPage).page,
-        5,
-      );
+      expect((selection.items[2] as PageSelectionPage).page, 5);
     });
 
     test('parses multiple ranges', () {
@@ -387,9 +353,7 @@ void main() {
     });
 
     test('parses mixed selection types', () {
-      final selection = parser.parse(
-        '1,3-5,-8,10-,last,last-2,odd,even',
-      );
+      final selection = parser.parse('1,3-5,-8,10-,last,last-2,odd,even');
 
       expect(selection.items, hasLength(8));
 
@@ -415,16 +379,11 @@ void main() {
     });
 
     test('trims whitespace around tokens', () {
-      final selection = parser.parse(
-        ' 1 , 3-5 , last , odd ',
-      );
+      final selection = parser.parse(' 1 , 3-5 , last , odd ');
 
       expect(selection.items, hasLength(4));
 
-      expect(
-        (selection.items[0] as PageSelectionPage).page,
-        1,
-      );
+      expect((selection.items[0] as PageSelectionPage).page, 1);
 
       final range = selection.items[1] as PageSelectionRange;
       expect(range.start, 3);
@@ -444,10 +403,7 @@ void main() {
   group('invalid input', () {
     group('empty input', () {
       test('throws for an empty string', () {
-        expect(
-          () => parser.parse(''),
-          throwsA(isA<EmptyPageSelectionError>()),
-        );
+        expect(() => parser.parse(''), throwsA(isA<EmptyPageSelectionError>()));
       });
 
       test('throws for whitespace-only input', () {
@@ -462,36 +418,28 @@ void main() {
       test('throws for a trailing comma', () {
         expect(
           () => parser.parse('1,'),
-          throwsA(
-            isA<InvalidPageSelectionTokenError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionTokenError>()),
         );
       });
 
       test('throws for a leading comma', () {
         expect(
           () => parser.parse(',1'),
-          throwsA(
-            isA<InvalidPageSelectionTokenError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionTokenError>()),
         );
       });
 
       test('throws for an empty token between selections', () {
         expect(
           () => parser.parse('1,,3'),
-          throwsA(
-            isA<InvalidPageSelectionTokenError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionTokenError>()),
         );
       });
 
       test('throws when input contains only a comma', () {
         expect(
           () => parser.parse(','),
-          throwsA(
-            isA<InvalidPageSelectionTokenError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionTokenError>()),
         );
       });
     });
@@ -500,9 +448,7 @@ void main() {
       test('throws for an unknown token', () {
         expect(
           () => parser.parse('foo'),
-          throwsA(
-            isA<InvalidPageSelectionTokenError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionTokenError>()),
         );
       });
 
@@ -522,18 +468,14 @@ void main() {
       test('throws for decimal numbers', () {
         expect(
           () => parser.parse('1.5'),
-          throwsA(
-            isA<InvalidPageSelectionTokenError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionTokenError>()),
         );
       });
 
       test('throws for unsupported keywords', () {
         expect(
           () => parser.parse('first'),
-          throwsA(
-            isA<InvalidPageSelectionTokenError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionTokenError>()),
         );
       });
     });
@@ -542,45 +484,35 @@ void main() {
       test('throws for too many separators', () {
         expect(
           () => parser.parse('1-2-3'),
-          throwsA(
-            isA<InvalidPageSelectionRangeError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionRangeError>()),
         );
       });
 
       test('throws for multiple separators with empty parts', () {
         expect(
           () => parser.parse('1--2'),
-          throwsA(
-            isA<InvalidPageSelectionRangeError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionRangeError>()),
         );
       });
 
       test('throws for only separators', () {
         expect(
           () => parser.parse('--'),
-          throwsA(
-            isA<InvalidPageSelectionRangeError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionRangeError>()),
         );
       });
 
       test('throws for a non-numeric range start', () {
         expect(
           () => parser.parse('abc-5'),
-          throwsA(
-            isA<InvalidPageSelectionNumberError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionNumberError>()),
         );
       });
 
       test('throws for a non-numeric range end', () {
         expect(
           () => parser.parse('5-abc'),
-          throwsA(
-            isA<InvalidPageSelectionNumberError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionNumberError>()),
         );
       });
     });
@@ -589,27 +521,21 @@ void main() {
       test('throws for a missing amount', () {
         expect(
           () => parser.parse('last-'),
-          throwsA(
-            isA<InvalidPageSelectionNumberError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionNumberError>()),
         );
       });
 
       test('throws for a non-numeric amount', () {
         expect(
           () => parser.parse('last-foo'),
-          throwsA(
-            isA<InvalidPageSelectionNumberError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionNumberError>()),
         );
       });
 
       test('throws for a negative amount', () {
         expect(
           () => parser.parse('last--1'),
-          throwsA(
-            isA<InvalidPageSelectionNumberError>(),
-          ),
+          throwsA(isA<InvalidPageSelectionNumberError>()),
         );
       });
     });

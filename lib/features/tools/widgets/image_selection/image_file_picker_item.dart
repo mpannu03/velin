@@ -43,10 +43,7 @@ class ImageFileThumbnail extends StatelessWidget {
 
 /// Circular badge showing the 1-based page position of an image.
 class ImageOrderBadge extends StatelessWidget {
-  const ImageOrderBadge({
-    required this.index,
-    super.key,
-  });
+  const ImageOrderBadge({required this.index, super.key});
 
   final int index;
 
@@ -113,9 +110,7 @@ class ImageFilePickerItem extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerLow,
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outlineVariant,
-        ),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       child: Row(

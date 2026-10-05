@@ -6,9 +6,7 @@ import '../../../../helpers/helpers.dart';
 
 void main() {
   group('ImageFileThumbnail', () {
-    testWidgets('shows fallback when image cannot be decoded', (
-      tester,
-    ) async {
+    testWidgets('shows fallback when image cannot be decoded', (tester) async {
       await tester.runAsync(() async {
         await pumpApp(
           tester,
@@ -26,10 +24,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(
-        find.byIcon(Icons.broken_image_outlined),
-        findsOneWidget,
-      );
+      expect(find.byIcon(Icons.broken_image_outlined), findsOneWidget);
     });
 
     testWidgets('uses supplied border radius', (tester) async {
@@ -45,14 +40,9 @@ void main() {
         ),
       );
 
-      final clip = tester.widget<ClipRRect>(
-        find.byType(ClipRRect),
-      );
+      final clip = tester.widget<ClipRRect>(find.byType(ClipRRect));
 
-      expect(
-        clip.borderRadius,
-        BorderRadius.circular(20),
-      );
+      expect(clip.borderRadius, BorderRadius.circular(20));
     });
 
     testWidgets('uses default border radius', (tester) async {
@@ -67,41 +57,27 @@ void main() {
         ),
       );
 
-      final clip = tester.widget<ClipRRect>(
-        find.byType(ClipRRect),
-      );
+      final clip = tester.widget<ClipRRect>(find.byType(ClipRRect));
 
-      expect(
-        clip.borderRadius,
-        BorderRadius.circular(8),
-      );
+      expect(clip.borderRadius, BorderRadius.circular(8));
     });
   });
 
   group('ImageOrderBadge', () {
     testWidgets('shows the supplied index', (tester) async {
-      await pumpApp(
-        tester,
-        const ImageOrderBadge(index: 3),
-      );
+      await pumpApp(tester, const ImageOrderBadge(index: 3));
 
       expect(find.text('3'), findsOneWidget);
     });
 
     testWidgets('shows zero when supplied', (tester) async {
-      await pumpApp(
-        tester,
-        const ImageOrderBadge(index: 0),
-      );
+      await pumpApp(tester, const ImageOrderBadge(index: 0));
 
       expect(find.text('0'), findsOneWidget);
     });
 
     testWidgets('shows negative index when supplied', (tester) async {
-      await pumpApp(
-        tester,
-        const ImageOrderBadge(index: -1),
-      );
+      await pumpApp(tester, const ImageOrderBadge(index: -1));
 
       expect(find.text('-1'), findsOneWidget);
     });
@@ -134,15 +110,10 @@ void main() {
       expect(find.text(r'C:\Documents\Images'), findsOneWidget);
     });
 
-    testWidgets('does not show directory for a bare filename', (
-      tester,
-    ) async {
+    testWidgets('does not show directory for a bare filename', (tester) async {
       await pumpApp(
         tester,
-        ImageFilePickerItem(
-          filePath: 'photo.png',
-          onRemove: () {},
-        ),
+        ImageFilePickerItem(filePath: 'photo.png', onRemove: () {}),
       );
 
       expect(find.text('photo.png'), findsOneWidget);
@@ -166,10 +137,7 @@ void main() {
     testWidgets('hides index when not provided', (tester) async {
       await pumpApp(
         tester,
-        ImageFilePickerItem(
-          filePath: '/documents/photo.png',
-          onRemove: () {},
-        ),
+        ImageFilePickerItem(filePath: '/documents/photo.png', onRemove: () {}),
       );
 
       expect(find.byType(ImageOrderBadge), findsNothing);
@@ -185,45 +153,28 @@ void main() {
         ),
       );
 
-      expect(
-        find.byIcon(Icons.drag_indicator),
-        findsOneWidget,
-      );
+      expect(find.byIcon(Icons.drag_indicator), findsOneWidget);
     });
 
     testWidgets('hides drag handle when not provided', (tester) async {
       await pumpApp(
         tester,
-        ImageFilePickerItem(
-          filePath: '/documents/photo.png',
-          onRemove: () {},
-        ),
+        ImageFilePickerItem(filePath: '/documents/photo.png', onRemove: () {}),
       );
 
-      expect(
-        find.byIcon(Icons.drag_indicator),
-        findsNothing,
-      );
+      expect(find.byIcon(Icons.drag_indicator), findsNothing);
     });
 
     testWidgets('shows image thumbnail', (tester) async {
       await pumpApp(
         tester,
-        ImageFilePickerItem(
-          filePath: '/documents/photo.png',
-          onRemove: () {},
-        ),
+        ImageFilePickerItem(filePath: '/documents/photo.png', onRemove: () {}),
       );
 
-      expect(
-        find.byType(ImageFileThumbnail),
-        findsOneWidget,
-      );
+      expect(find.byType(ImageFileThumbnail), findsOneWidget);
     });
 
-    testWidgets('calls onRemove when remove button is tapped', (
-      tester,
-    ) async {
+    testWidgets('calls onRemove when remove button is tapped', (tester) async {
       var removed = false;
 
       await pumpApp(

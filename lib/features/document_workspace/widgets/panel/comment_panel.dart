@@ -68,20 +68,19 @@ class _PageGroup extends StatelessWidget {
             ),
           ),
         ),
-        ...annotations.map((a) => _AnnotationTile(
-              annotation: a,
-              onClick: () => onAnnotationSelected(a),
-            )),
+        ...annotations.map(
+          (a) => _AnnotationTile(
+            annotation: a,
+            onClick: () => onAnnotationSelected(a),
+          ),
+        ),
       ],
     );
   }
 }
 
 class _AnnotationTile extends StatelessWidget {
-  const _AnnotationTile({
-    required this.annotation,
-    required this.onClick,
-  });
+  const _AnnotationTile({required this.annotation, required this.onClick});
 
   final Annotation annotation;
   final VoidCallback onClick;
@@ -95,20 +94,14 @@ class _AnnotationTile extends StatelessWidget {
     final date = _formatDate(annotation.creationDate);
 
     // Highlights often have no content — fall back to subject or nothing.
-    final body = content?.trim().isNotEmpty == true
-        ? content!.trim()
-        : null;
+    final body = content?.trim().isNotEmpty == true ? content!.trim() : null;
 
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       onTap: onClick,
       leading: _TypeBadge(subject: subject),
       title: body != null
-          ? Text(
-              body,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-            )
+          ? Text(body, maxLines: 3, overflow: TextOverflow.ellipsis)
           : Text(
               subject ?? 'Annotation',
               style: theme.textTheme.bodyMedium?.copyWith(

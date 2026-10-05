@@ -29,9 +29,7 @@ class SingleFilePicker extends StatelessWidget {
     final path = filePath!;
     final separator = RegExp(r'[/\\]').allMatches(path).lastOrNull;
 
-    return separator == null
-        ? ''
-        : path.substring(0, separator.start);
+    return separator == null ? '' : path.substring(0, separator.start);
   }
 
   @override
@@ -119,10 +117,7 @@ class SingleFilePicker extends StatelessWidget {
   ) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 24,
-        vertical: 32,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       decoration: BoxDecoration(
         color: colors.surfaceContainer,
         borderRadius: BorderRadius.circular(12),

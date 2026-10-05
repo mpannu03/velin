@@ -5,7 +5,6 @@ import 'package:velin/features/document_workspace/document_workspace.dart';
 
 import '../../../../helpers/helpers.dart';
 
-
 void main() {
   group('BookmarkPanel', () {
     testWidgets('shows empty state when there are no bookmarks', (
@@ -13,10 +12,7 @@ void main() {
     ) async {
       await pumpApp(
         tester,
-        BookmarkPanel(
-          bookmarks: const [],
-          onBookmarkSelected: (_) {},
-        ),
+        BookmarkPanel(bookmarks: const [], onBookmarkSelected: (_) {}),
       );
 
       expect(find.text('No bookmarks'), findsOneWidget);
@@ -30,19 +26,14 @@ void main() {
 
       await pumpApp(
         tester,
-        BookmarkPanel(
-          bookmarks: bookmarks,
-          onBookmarkSelected: (_) {},
-        ),
+        BookmarkPanel(bookmarks: bookmarks, onBookmarkSelected: (_) {}),
       );
 
       expect(find.text('Introduction'), findsOneWidget);
       expect(find.text('Chapter 1'), findsOneWidget);
     });
 
-    testWidgets('calls callback when a bookmark is selected', (
-      tester,
-    ) async {
+    testWidgets('calls callback when a bookmark is selected', (tester) async {
       final bookmark = Bookmark(
         id: "3",
         title: 'Introduction',
@@ -72,17 +63,19 @@ void main() {
           title: 'Chapter 1',
           page: 2,
           children: [
-            Bookmark(id: '1.1', title: 'Section 1.1', page: 2, children: const []),
+            Bookmark(
+              id: '1.1',
+              title: 'Section 1.1',
+              page: 2,
+              children: const [],
+            ),
           ],
         ),
       ];
 
       await pumpApp(
         tester,
-        BookmarkPanel(
-          bookmarks: bookmarks,
-          onBookmarkSelected: (_) {},
-        ),
+        BookmarkPanel(bookmarks: bookmarks, onBookmarkSelected: (_) {}),
       );
 
       expect(find.text('Section 1.1').hitTestable(), findsNothing);
@@ -107,12 +100,7 @@ void main() {
       );
 
       final bookmarks = [
-        Bookmark(
-          id: '1',
-          title: 'Chapter 1',
-          page: 2,
-          children: [child],
-        ),
+        Bookmark(id: '1', title: 'Chapter 1', page: 2, children: [child]),
       ];
 
       Bookmark? selectedBookmark;

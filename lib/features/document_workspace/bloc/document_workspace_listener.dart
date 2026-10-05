@@ -3,9 +3,7 @@ import 'package:velin/core/document/engine/engine.dart';
 import 'document_workspace_bloc.dart';
 
 class DocumentWorkspaceListener implements DocumentEngineListener {
-  const DocumentWorkspaceListener({
-    required this._bloc,
-  });
+  const DocumentWorkspaceListener({required this._bloc});
 
   final DocumentWorkspaceBloc _bloc;
 

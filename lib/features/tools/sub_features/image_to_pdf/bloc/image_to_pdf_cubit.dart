@@ -129,9 +129,7 @@ class ImageToPdfCubit extends Cubit<ImageToPdfState> {
   }
 
   void updateOutputFileName(String value) {
-    emit(
-      state.copyWith(outputFileName: normalizePdfFileName(value)),
-    );
+    emit(state.copyWith(outputFileName: normalizePdfFileName(value)));
   }
 
   Future<void> pickOutputDirectory() async {
@@ -178,10 +176,7 @@ class ImageToPdfCubit extends Cubit<ImageToPdfState> {
         id: 'image-to-pdf-${DateTime.now().microsecondsSinceEpoch}',
         title: _l10n.toolsImageToPdfButton,
         operation: () async {
-          await _imageToPdfEngine.convert(
-            input: input,
-            outputFile: outputFile,
-          );
+          await _imageToPdfEngine.convert(input: input, outputFile: outputFile);
         },
       );
 

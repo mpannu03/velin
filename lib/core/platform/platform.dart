@@ -1,9 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-enum AppPlatform {
-  mobile,
-  desktop,
-}
+enum AppPlatform { mobile, desktop }
 
 AppPlatform get appPlatform {
   switch (defaultTargetPlatform) {

@@ -19,10 +19,7 @@ class SplitPdfToolInput {
   /// Number of pages per output PDF.
   final int? pageCount;
 
-  SplitPdfToolInput copyWith({
-    List<String>? selections,
-    int? pageCount,
-  }) {
+  SplitPdfToolInput copyWith({List<String>? selections, int? pageCount}) {
     return SplitPdfToolInput(
       filePath: filePath,
       selections: selections ?? this.selections,
@@ -43,8 +40,7 @@ extension SplitPdfMapper on SplitPdfToolInput {
           file: File(filePath),
           mode: mode,
           selections: [
-            for (final value in selections)
-              PageSelectionParser().parse(value),
+            for (final value in selections) PageSelectionParser().parse(value),
           ],
         );
 
@@ -62,10 +58,7 @@ extension SplitPdfMapper on SplitPdfToolInput {
         );
 
       case SplitPdfMode.extractAllPages:
-        return SplitPdfInput(
-          file: File(filePath),
-          mode: mode,
-        );
+        return SplitPdfInput(file: File(filePath), mode: mode);
     }
   }
 }

@@ -33,19 +33,14 @@ void main() {
     test('returns failure when file picker fails', () async {
       const error = DocumentFilePickerError('Failed to pick file.');
 
-      when(
-        () => filePicker.pickFile(allowedExtensions: ['pdf']),
-      ).thenAnswer(
-        (_) async => const Failure<String>(error),
-      );
+      when(() => filePicker.pickFile(allowedExtensions: ['pdf']))
+          .thenAnswer((_) async => const Failure<String>(error));
 
       final result = await service.open();
 
       expect(result, const Failure<Document>(error));
 
-      verify(
-        () => filePicker.pickFile(allowedExtensions: ['pdf']),
-      ).called(1);
+      verify(() => filePicker.pickFile(allowedExtensions: ['pdf'])).called(1);
 
       verifyNever(() => repository.open(any(), any()));
     });
@@ -53,9 +48,7 @@ void main() {
     test('returns failure when document type is unsupported', () async {
       when(
         () => filePicker.pickFile(allowedExtensions: ['pdf']),
-      ).thenAnswer(
-        (_) async => const Success<String>('/documents/file.txt'),
-      );
+      ).thenAnswer((_) async => const Success<String>('/documents/file.txt'));
 
       final result = await service.open();
 
@@ -80,28 +73,19 @@ void main() {
 
       when(
         () => filePicker.pickFile(allowedExtensions: ['pdf']),
-      ).thenAnswer(
-        (_) async => const Success<String>('/documents/file.pdf'),
-      );
+      ).thenAnswer((_) async => const Success<String>('/documents/file.pdf'));
 
-      when(
-        () => repository.open('/documents/file.pdf', DocumentType.pdf),
-      ).thenReturn(Success(document));
+      when(() => repository.open('/documents/file.pdf', DocumentType.pdf))
+          .thenReturn(Success(document));
 
       final result = await service.open();
 
       expect(result, Success(document));
 
-      verify(
-        () => filePicker.pickFile(allowedExtensions: ['pdf']),
-      ).called(1);
+      verify(() => filePicker.pickFile(allowedExtensions: ['pdf'])).called(1);
 
-      verify(
-        () => repository.open(
-          '/documents/file.pdf',
-          DocumentType.pdf,
-        ),
-      ).called(1);
+      verify(() => repository.open('/documents/file.pdf', DocumentType.pdf))
+          .called(1);
     });
 
     test('returns repository failure', () async {
@@ -109,15 +93,10 @@ void main() {
 
       when(
         () => filePicker.pickFile(allowedExtensions: ['pdf']),
-      ).thenAnswer(
-        (_) async => const Success<String>('/documents/file.pdf'),
-      );
+      ).thenAnswer((_) async => const Success<String>('/documents/file.pdf'));
 
-      when(
-        () => repository.open('/documents/file.pdf', DocumentType.pdf),
-      ).thenReturn(
-        const Failure<Document>(error),
-      );
+      when(() => repository.open('/documents/file.pdf', DocumentType.pdf))
+          .thenReturn(const Failure<Document>(error));
 
       final result = await service.open();
 
@@ -132,17 +111,14 @@ void main() {
         type: DocumentType.pdf,
       );
 
-      when(
-        () => repository.close(document.id),
-      ).thenReturn(const Success<void>(null));
+      when(() => repository.close(document.id))
+          .thenReturn(const Success<void>(null));
 
       final result = service.close(document);
 
       expect(result, const Success<void>(null));
 
-      verify(
-        () => repository.close(document.id),
-      ).called(1);
+      verify(() => repository.close(document.id)).called(1);
     });
 
     test('returns repository failure', () {
@@ -153,19 +129,14 @@ void main() {
 
       const error = DocumentServiceError('Could not close document.');
 
-      when(
-        () => repository.close(document.id),
-      ).thenReturn(
-        const Failure<void>(error),
-      );
+      when(() => repository.close(document.id))
+          .thenReturn(const Failure<void>(error));
 
       final result = service.close(document);
 
       expect(result, const Failure<void>(error));
 
-      verify(
-        () => repository.close(document.id),
-      ).called(1);
+      verify(() => repository.close(document.id)).called(1);
     });
   });
 

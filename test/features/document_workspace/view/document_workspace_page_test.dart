@@ -10,16 +10,14 @@ import 'package:velin/features/document_workspace/document_workspace.dart';
 
 import '../../../helpers/helpers.dart';
 
-
-class MockDocumentEngineFactory extends Mock
-    implements DocumentEngineFactory {}
+class MockDocumentEngineFactory extends Mock implements DocumentEngineFactory {}
 
 class MockDocumentEngine extends Mock implements DocumentEngine {}
 
-class MockDocumentEngineActions extends Mock
-    implements DocumentEngineActions {}
+class MockDocumentEngineActions extends Mock implements DocumentEngineActions {}
 
-class MockDocumentWorkspaceBloc extends MockBloc<DocumentWorkspaceEvent, DocumentWorkspaceState>
+class MockDocumentWorkspaceBloc
+    extends MockBloc<DocumentWorkspaceEvent, DocumentWorkspaceState>
     implements DocumentWorkspaceBloc {}
 
 class FakeDocument extends Fake implements Document {}
@@ -46,112 +44,68 @@ void main() {
 
     getIt.reset();
 
-    getIt.registerSingleton<DocumentEngineFactory>(
-      engineFactory,
-    );
+    getIt.registerSingleton<DocumentEngineFactory>(engineFactory);
 
     getIt.registerFactoryParam<DocumentWorkspaceBloc, DocumentEngine, void>(
       (engine, _) => bloc,
     );
 
     when(() => engineFactory.create(document)).thenReturn(engine);
-    when(() => engine.capabilities).thenReturn(
-      const DocumentEngineCapabilities(),
-    );
+    when(() => engine.capabilities)
+        .thenReturn(const DocumentEngineCapabilities());
     when(() => engine.actions).thenReturn(actions);
-    when(() => engine.buildViewer(
-      config: any(named: 'config'))
-    ).thenReturn(const Text('Document Viewer'));
+    when(() => engine.buildViewer(config: any(named: 'config')))
+        .thenReturn(const Text('Document Viewer'));
   });
 
   tearDown(() async {
     await getIt.reset();
   });
 
-  testWidgets(
-    'shows loading indicator while workspace is loading',
-    (tester) async {
-      when(() => bloc.state).thenReturn(
-        const DocumentWorkspaceLoading(),
-      );
-      when(() => bloc.stream).thenAnswer(
-        (_) => const Stream.empty(),
-      );
+  testWidgets('shows loading indicator while workspace is loading', (
+    tester,
+  ) async {
+    when(() => bloc.state).thenReturn(const DocumentWorkspaceLoading());
+    when(() => bloc.stream).thenAnswer((_) => const Stream.empty());
 
-      await pumpApp(
-        tester,
-        DocumentWorkspacePage(document: document),
-      );
+    await pumpApp(tester, DocumentWorkspacePage(document: document));
 
-      expect(
-        find.byType(CircularProgressIndicator),
-        findsOneWidget,
-      );
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
-      verify(
-        () => bloc.add(any(that: isA<DocumentWorkspaceStarted>())),
-      ).called(1);
-    },
-  );
+    verify(() => bloc.add(any(that: isA<DocumentWorkspaceStarted>())))
+        .called(1);
+  });
 
-  testWidgets(
-    'shows error message when workspace fails',
-    (tester) async {
-      when(() => bloc.state).thenReturn(
-        const DocumentWorkspaceError('Something went wrong'),
-      );
-      when(() => bloc.stream).thenAnswer(
-        (_) => const Stream.empty(),
-      );
+  testWidgets('shows error message when workspace fails', (tester) async {
+    when(() => bloc.state)
+        .thenReturn(const DocumentWorkspaceError('Something went wrong'));
+    when(() => bloc.stream).thenAnswer((_) => const Stream.empty());
 
-      await pumpApp(
-        tester,
-        DocumentWorkspacePage(document: document),
-      );
+    await pumpApp(tester, DocumentWorkspacePage(document: document));
 
-      expect(
-        find.text('Something went wrong'),
-        findsOneWidget,
-      );
-    },
-  );
+    expect(find.text('Something went wrong'), findsOneWidget);
+  });
 
-  testWidgets(
-    'shows workspace view when loaded',
-    (tester) async {
-      when(() => bloc.state).thenReturn(
-        DocumentWorkspaceLoaded(
-          currentPage: 1,
-          pageCount: 10,
-          currentZoom: 1,
-          selectedTool: WorkspaceTool.select,
-          selectedPanel: null,
-          searchState: SearchState(),
-          bookmarks: const [],
-          annotations: const [],
-        ),
-      );
-      when(() => bloc.stream).thenAnswer(
-        (_) => const Stream.empty(),
-      );
+  testWidgets('shows workspace view when loaded', (tester) async {
+    when(() => bloc.state).thenReturn(
+      DocumentWorkspaceLoaded(
+        currentPage: 1,
+        pageCount: 10,
+        currentZoom: 1,
+        selectedTool: WorkspaceTool.select,
+        selectedPanel: null,
+        searchState: SearchState(),
+        bookmarks: const [],
+        annotations: const [],
+      ),
+    );
+    when(() => bloc.stream).thenAnswer((_) => const Stream.empty());
 
-      when(
-        () => engine.buildViewer(
-          config: any(named: 'config'),
-        ),
-      ).thenReturn(
-        const Text('Document Viewer'),
-      );
+    when(() => engine.buildViewer(config: any(named: 'config')))
+        .thenReturn(const Text('Document Viewer'));
 
-      await pumpApp(
-        tester,
-        DocumentWorkspacePage(document: document),
-      );
+    await pumpApp(tester, DocumentWorkspacePage(document: document));
 
-      expect(
-        find.byType(DocumentWorkspaceView),
-        findsOneWidget,
-      );
-    },
-  );
+    expect(find.byType(DocumentWorkspaceView), findsOneWidget);
+  });
 }

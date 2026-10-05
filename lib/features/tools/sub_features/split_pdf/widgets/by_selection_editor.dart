@@ -43,9 +43,9 @@ class BySelectionEditor extends StatelessWidget {
                     child: Text(
                       '${index + 1}',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: colors.onSecondaryContainer,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        color: colors.onSecondaryContainer,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   const SizedBox(width: AppSpacing.sm),
@@ -53,10 +53,7 @@ class BySelectionEditor extends StatelessWidget {
                     child: PageSelectionField(
                       value: selections[index],
                       fieldKey: ValueKey('selection-field-$index'),
-                      onChanged: (value) => onSelectionChanged(
-                        index,
-                        value,
-                      ),
+                      onChanged: (value) => onSelectionChanged(index, value),
                     ),
                   ),
                   const SizedBox(width: AppSpacing.xs),
@@ -74,9 +71,8 @@ class BySelectionEditor extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: AppSpacing.sm),
             child: Text(
               l10n.toolsSplitSelectionHint,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: colors.onSurfaceVariant,
-                  ),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: colors.onSurfaceVariant),
             ),
           ),
         Align(

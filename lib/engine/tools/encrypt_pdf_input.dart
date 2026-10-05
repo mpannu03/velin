@@ -20,11 +20,7 @@ class EncryptPdfInput {
   final PdfEncryptionLevel level;
 }
 
-enum PdfEncryptionLevel {
-  aes256,
-  aes128,
-  rc4,
-}
+enum PdfEncryptionLevel { aes256, aes128, rc4 }
 
 class PdfPermissions {
   const PdfPermissions({
@@ -39,34 +35,34 @@ class PdfPermissions {
   });
 
   const PdfPermissions.all()
-      : print = true,
-        printHq = true,
-        modify = true,
-        copy = true,
-        annotate = true,
-        fillForms = true,
-        accessibility = true,
-        assemble = true;
+    : print = true,
+      printHq = true,
+      modify = true,
+      copy = true,
+      annotate = true,
+      fillForms = true,
+      accessibility = true,
+      assemble = true;
 
   const PdfPermissions.readOnly()
-      : print = true,
-        printHq = true,
-        modify = false,
-        copy = false,
-        annotate = false,
-        fillForms = false,
-        accessibility = true,
-        assemble = false;
-  
+    : print = true,
+      printHq = true,
+      modify = false,
+      copy = false,
+      annotate = false,
+      fillForms = false,
+      accessibility = true,
+      assemble = false;
+
   const PdfPermissions.none()
-      : print = false,
-        printHq = false,
-        modify = false,
-        copy = false,
-        annotate = false,
-        fillForms = false,
-        accessibility = false,
-        assemble = false;
+    : print = false,
+      printHq = false,
+      modify = false,
+      copy = false,
+      annotate = false,
+      fillForms = false,
+      accessibility = false,
+      assemble = false;
 
   final bool print;
   final bool printHq;

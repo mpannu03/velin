@@ -13,20 +13,19 @@ class ExtractPdfState {
   final String? outputFileName;
   final bool isSubmitting;
 
-  bool get hasValidInputFilePath => 
-      filePath != null && filePath!.isNotEmpty;
-  
+  bool get hasValidInputFilePath => filePath != null && filePath!.isNotEmpty;
+
   bool get hasValidOutputDirectory =>
       outputDirectory != null && outputDirectory!.isNotEmpty;
 
-  bool get hasValidOutputFileName => 
+  bool get hasValidOutputFileName =>
       outputFileName != null && outputFileName!.trim().isNotEmpty;
-  
+
   bool get canExtract =>
       hasValidInputFilePath &&
       hasValidOutputDirectory &&
       hasValidOutputFileName;
-  
+
   ExtractPdfState copyWith({
     Object? filePath = _unset,
     Object? pageSelection = _unset,
@@ -35,14 +34,18 @@ class ExtractPdfState {
     bool? isSubmitting,
   }) {
     return ExtractPdfState(
-      filePath: identical(filePath, _unset) 
-          ? this.filePath : filePath as String?,
+      filePath: identical(filePath, _unset)
+          ? this.filePath
+          : filePath as String?,
       pageSelection: identical(pageSelection, _unset)
-          ? this.pageSelection : pageSelection as String?,
+          ? this.pageSelection
+          : pageSelection as String?,
       outputDirectory: identical(outputDirectory, _unset)
-          ? this.outputDirectory : outputDirectory as String?,
+          ? this.outputDirectory
+          : outputDirectory as String?,
       outputFileName: identical(outputFileName, _unset)
-          ? this.outputFileName : outputFileName as String?,
+          ? this.outputFileName
+          : outputFileName as String?,
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
   }

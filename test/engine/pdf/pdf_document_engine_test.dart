@@ -23,10 +23,7 @@ void main() {
 
     when(() => document.path).thenReturn('test.pdf');
 
-    engine = PdfDocumentEngine(
-      document: document,
-      controller: controller,
-    );
+    engine = PdfDocumentEngine(document: document, controller: controller);
   });
 
   group('capabilities', () {

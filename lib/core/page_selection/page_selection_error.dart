@@ -48,6 +48,5 @@ final class PageSelectionOutOfBoundsError extends PageSelectionError {
   final int totalPages;
 
   @override
-  String get message =>
-      'Page $page exceeds document length $totalPages';
+  String get message => 'Page $page exceeds document length $totalPages';
 }

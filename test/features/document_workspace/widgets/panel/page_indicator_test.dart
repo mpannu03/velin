@@ -6,31 +6,19 @@ import '../../../../helpers/helpers.dart';
 
 void main() {
   group('PageIndicator', () {
-    testWidgets('renders nothing when current page is unknown', (
-      tester,
-    ) async {
+    testWidgets('renders nothing when current page is unknown', (tester) async {
       await pumpApp(
         tester,
-        PageIndicator(
-          currentPage: null,
-          pageCount: 10,
-          onGotoPage: (_) {},
-        ),
+        PageIndicator(currentPage: null, pageCount: 10, onGotoPage: (_) {}),
       );
 
       expect(find.byType(EditableText), findsNothing);
     });
 
-    testWidgets('renders nothing when page count is zero', (
-      tester,
-    ) async {
+    testWidgets('renders nothing when page count is zero', (tester) async {
       await pumpApp(
         tester,
-        PageIndicator(
-          currentPage: 1,
-          pageCount: 0,
-          onGotoPage: (_) {},
-        ),
+        PageIndicator(currentPage: 1, pageCount: 0, onGotoPage: (_) {}),
       );
 
       expect(find.byType(EditableText), findsNothing);
@@ -39,11 +27,7 @@ void main() {
     testWidgets('shows current page and page count', (tester) async {
       await pumpApp(
         tester,
-        PageIndicator(
-          currentPage: 3,
-          pageCount: 10,
-          onGotoPage: (_) {},
-        ),
+        PageIndicator(currentPage: 3, pageCount: 10, onGotoPage: (_) {}),
       );
 
       expect(find.text('3'), findsOneWidget);
@@ -92,10 +76,7 @@ void main() {
       await tester.testTextInput.receiveAction(TextInputAction.done);
 
       expect(selectedPage, isNull);
-      expect(
-        tester.widget<EditableText>(input).controller.text,
-        '3',
-      );
+      expect(tester.widget<EditableText>(input).controller.text, '3');
     });
 
     testWidgets('rejects page below one', (tester) async {
@@ -117,10 +98,7 @@ void main() {
       await tester.testTextInput.receiveAction(TextInputAction.done);
 
       expect(selectedPage, isNull);
-      expect(
-        tester.widget<EditableText>(input).controller.text,
-        '3',
-      );
+      expect(tester.widget<EditableText>(input).controller.text, '3');
     });
   });
 }

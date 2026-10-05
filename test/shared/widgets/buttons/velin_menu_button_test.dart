@@ -6,13 +6,7 @@ import '../../../helpers/helpers.dart';
 void main() {
   group('VelinMenuButton', () {
     testWidgets('shows label', (tester) async {
-      await pumpApp(
-        tester,
-        VelinMenuButton(
-          label: 'Open',
-          onPressed: () {},
-        ),
-      );
+      await pumpApp(tester, VelinMenuButton(label: 'Open', onPressed: () {}));
 
       expect(find.text('Open'), findsOneWidget);
     });
@@ -22,10 +16,7 @@ void main() {
 
       await pumpApp(
         tester,
-        VelinMenuButton(
-          label: 'Open',
-          onPressed: () => pressed = true,
-        ),
+        VelinMenuButton(label: 'Open', onPressed: () => pressed = true),
       );
 
       await tester.tap(find.text('Open'));

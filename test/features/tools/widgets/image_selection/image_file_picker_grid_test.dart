@@ -16,19 +16,15 @@ void main() {
         ),
       );
 
-        expect(find.byType(ImageFilePickerGrid), findsOneWidget);
-        expect(find.byType(ImageOrderBadge), findsNothing);
+      expect(find.byType(ImageFilePickerGrid), findsOneWidget);
+      expect(find.byType(ImageOrderBadge), findsNothing);
     });
 
     testWidgets('renders one tile for each file', (tester) async {
       await pumpApp(
         tester,
         const ImageFilePickerGrid(
-          filePaths: [
-            'images/one.png',
-            'images/two.png',
-            'images/three.png',
-          ],
+          filePaths: ['images/one.png', 'images/two.png', 'images/three.png'],
           onRemoveFile: _noopRemove,
           onReorderItem: _noopReorder,
         ),
@@ -45,11 +41,7 @@ void main() {
       await pumpApp(
         tester,
         const ImageFilePickerGrid(
-          filePaths: [
-            'images/one.png',
-            'images/two.png',
-            'images/three.png',
-          ],
+          filePaths: ['images/one.png', 'images/two.png', 'images/three.png'],
           onRemoveFile: _noopRemove,
           onReorderItem: _noopReorder,
         ),
@@ -60,17 +52,15 @@ void main() {
       expect(find.text('3'), findsOneWidget);
     });
 
-    testWidgets('remove button invokes callback with correct index',
-        (tester) async {
+    testWidgets('remove button invokes callback with correct index', (
+      tester,
+    ) async {
       int? removedIndex;
 
       await pumpApp(
         tester,
         ImageFilePickerGrid(
-          filePaths: const [
-            'images/one.png',
-            'images/two.png',
-          ],
+          filePaths: const ['images/one.png', 'images/two.png'],
           onRemoveFile: (index) => removedIndex = index,
           onReorderItem: _noopReorder,
         ),
@@ -90,10 +80,7 @@ void main() {
         const SizedBox(
           width: 500,
           child: ImageFilePickerGrid(
-            filePaths: [
-              'one.png',
-              'two.png',
-            ],
+            filePaths: ['one.png', 'two.png'],
             maxCrossAxisExtent: 100,
             onRemoveFile: _noopRemove,
             onReorderItem: _noopReorder,
@@ -101,9 +88,7 @@ void main() {
         ),
       );
 
-      final firstTile = tester.getSize(
-        find.byType(ImageFileThumbnail).first,
-      );
+      final firstTile = tester.getSize(find.byType(ImageFileThumbnail).first);
 
       expect(firstTile.width, greaterThan(0));
       expect(firstTile.height, greaterThan(0));
@@ -113,9 +98,7 @@ void main() {
       await pumpApp(
         tester,
         const ImageFilePickerGrid(
-          filePaths: [
-            'photo.png',
-          ],
+          filePaths: ['photo.png'],
           onRemoveFile: _noopRemove,
           onReorderItem: _noopReorder,
         ),
@@ -128,9 +111,7 @@ void main() {
       await pumpApp(
         tester,
         const ImageFilePickerGrid(
-          filePaths: [
-            r'C:\Images\photo.png',
-          ],
+          filePaths: [r'C:\Images\photo.png'],
           onRemoveFile: _noopRemove,
           onReorderItem: _noopReorder,
         ),
@@ -139,17 +120,15 @@ void main() {
       expect(find.text('photo.png'), findsOneWidget);
     });
 
-    testWidgets('does not reorder when dropped onto the same tile',
-        (tester) async {
+    testWidgets('does not reorder when dropped onto the same tile', (
+      tester,
+    ) async {
       final reorderCalls = <List<int>>[];
 
       await pumpApp(
         tester,
         ImageFilePickerGrid(
-          filePaths: const [
-            'one.png',
-            'two.png',
-          ],
+          filePaths: const ['one.png', 'two.png'],
           onRemoveFile: _noopRemove,
           onReorderItem: (oldIndex, newIndex) {
             reorderCalls.add([oldIndex, newIndex]);
@@ -161,10 +140,7 @@ void main() {
 
       final dragTarget = tester.widget<DragTarget<int>>(target);
 
-      final details = DragTargetDetails<int>(
-        data: 0,
-        offset: Offset.zero,
-      );
+      final details = DragTargetDetails<int>(data: 0, offset: Offset.zero);
 
       dragTarget.onAcceptWithDetails?.call(details);
 
@@ -177,11 +153,7 @@ void main() {
       await pumpApp(
         tester,
         ImageFilePickerGrid(
-          filePaths: const [
-            'one.png',
-            'two.png',
-            'three.png',
-          ],
+          filePaths: const ['one.png', 'two.png', 'three.png'],
           onRemoveFile: _noopRemove,
           onReorderItem: (oldIndex, newIndex) {
             reorderCalls.add([oldIndex, newIndex]);
@@ -189,17 +161,12 @@ void main() {
         ),
       );
 
-      final target = find.byKey(
-        const ValueKey('image-grid-one.png'),
-      );
+      final target = find.byKey(const ValueKey('image-grid-one.png'));
 
       final dragTarget = tester.widget<DragTarget<int>>(target);
 
       dragTarget.onAcceptWithDetails?.call(
-        DragTargetDetails<int>(
-          data: 2,
-          offset: Offset.zero,
-        ),
+        DragTargetDetails<int>(data: 2, offset: Offset.zero),
       );
 
       expect(reorderCalls, [
@@ -207,18 +174,15 @@ void main() {
       ]);
     });
 
-    testWidgets('reorders downward with adjusted insertion index',
-        (tester) async {
+    testWidgets('reorders downward with adjusted insertion index', (
+      tester,
+    ) async {
       final reorderCalls = <List<int>>[];
 
       await pumpApp(
         tester,
         ImageFilePickerGrid(
-          filePaths: const [
-            'one.png',
-            'two.png',
-            'three.png',
-          ],
+          filePaths: const ['one.png', 'two.png', 'three.png'],
           onRemoveFile: _noopRemove,
           onReorderItem: (oldIndex, newIndex) {
             reorderCalls.add([oldIndex, newIndex]);
@@ -226,17 +190,12 @@ void main() {
         ),
       );
 
-      final target = find.byKey(
-        const ValueKey('image-grid-three.png'),
-      );
+      final target = find.byKey(const ValueKey('image-grid-three.png'));
 
       final dragTarget = tester.widget<DragTarget<int>>(target);
 
       dragTarget.onAcceptWithDetails?.call(
-        DragTargetDetails<int>(
-          data: 0,
-          offset: Offset.zero,
-        ),
+        DragTargetDetails<int>(data: 0, offset: Offset.zero),
       );
 
       expect(reorderCalls, [
@@ -248,37 +207,26 @@ void main() {
       await pumpApp(
         tester,
         const ImageFilePickerGrid(
-          filePaths: [
-            'one.png',
-            'two.png',
-          ],
+          filePaths: ['one.png', 'two.png'],
           onRemoveFile: _noopRemove,
           onReorderItem: _noopReorder,
         ),
       );
 
-      final target = find.byKey(
-        const ValueKey('image-grid-one.png'),
-      );
+      final target = find.byKey(const ValueKey('image-grid-one.png'));
 
       final dragTarget = tester.widget<DragTarget<int>>(target);
 
       expect(
         dragTarget.onWillAcceptWithDetails!(
-          DragTargetDetails<int>(
-            data: 0,
-            offset: Offset.zero,
-          ),
+          DragTargetDetails<int>(data: 0, offset: Offset.zero),
         ),
         isFalse,
       );
 
       expect(
         dragTarget.onWillAcceptWithDetails!(
-          DragTargetDetails<int>(
-            data: 1,
-            offset: Offset.zero,
-          ),
+          DragTargetDetails<int>(data: 1, offset: Offset.zero),
         ),
         isTrue,
       );

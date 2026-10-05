@@ -41,12 +41,14 @@ class PdfBookmarkCapability implements BookmarkCapability {
       final dest = node.dest;
       if (dest != null) _destById[id] = dest;
 
-      out.add(Bookmark(
-        id: id,
-        title: node.title,
-        page: dest == null ? 1 : dest.pageNumber,
-        children: _convert(node.children, id),
-      ));
+      out.add(
+        Bookmark(
+          id: id,
+          title: node.title,
+          page: dest == null ? 1 : dest.pageNumber,
+          children: _convert(node.children, id),
+        ),
+      );
     }
     return out;
   }

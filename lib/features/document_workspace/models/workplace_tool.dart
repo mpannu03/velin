@@ -1,4 +1,1 @@
-enum WorkspaceTool {
-  select,
-  dictionary,
-}
+enum WorkspaceTool { select, dictionary }

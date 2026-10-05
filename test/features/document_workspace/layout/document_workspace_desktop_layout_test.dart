@@ -38,58 +38,48 @@ void main() {
     );
   });
 
-  testWidgets(
-    'renders document viewer and tool rail without selected panel',
-    (tester) async {
-      await pumpApp(
-        tester,
-        DocumentWorkspaceDesktopLayout(viewModel: viewModel),
-      );
+  testWidgets('renders document viewer and tool rail without selected panel', (
+    tester,
+  ) async {
+    await pumpApp(tester, DocumentWorkspaceDesktopLayout(viewModel: viewModel));
 
-      expect(find.text('Document Viewer'), findsOneWidget);
-      expect(find.byType(DocumentWorkspaceToolRail), findsOneWidget);
-      expect(find.byType(DocumentWorkspacePanelRail), findsOneWidget);
-      expect(find.byType(DocumentWorkspacePanel), findsNothing);
-    },
-  );
+    expect(find.text('Document Viewer'), findsOneWidget);
+    expect(find.byType(DocumentWorkspaceToolRail), findsOneWidget);
+    expect(find.byType(DocumentWorkspacePanelRail), findsOneWidget);
+    expect(find.byType(DocumentWorkspacePanel), findsNothing);
+  });
 
-  testWidgets(
-    'renders selected panel',
-    (tester) async {
-      final updatedViewModel = DocumentWorkspaceViewModel(
-        currentPage: viewModel.currentPage,
-        pageCount: viewModel.pageCount,
-        currentZoom: viewModel.currentZoom,
-        documentViewer: viewModel.documentViewer,
-        selectedTool: viewModel.selectedTool,
-        selectedPanel: WorkspacePanel.bookmarks,
-        capabilities: viewModel.capabilities,
-        zoomIn: viewModel.zoomIn,
-        zoomOut: viewModel.zoomOut,
-        onToolSelected: viewModel.onToolSelected,
-        onPanelSelected: viewModel.onPanelSelected,
-        onGotoPage: viewModel.onGotoPage,
-        onPanelClosed: viewModel.onPanelClosed,
-        searchState: viewModel.searchState,
-        onTextSearch: viewModel.onTextSearch,
-        onClearSearch: viewModel.onClearSearch,
-        onTextSearchResultSelected:
-            viewModel.onTextSearchResultSelected,
-        bookmarks: viewModel.bookmarks,
-        onBookmarkSelected: viewModel.onBookmarkSelected,
-        annotations: viewModel.annotations,
-        onAnnotationSelected: viewModel.onAnnotationSelected,
-      );
+  testWidgets('renders selected panel', (tester) async {
+    final updatedViewModel = DocumentWorkspaceViewModel(
+      currentPage: viewModel.currentPage,
+      pageCount: viewModel.pageCount,
+      currentZoom: viewModel.currentZoom,
+      documentViewer: viewModel.documentViewer,
+      selectedTool: viewModel.selectedTool,
+      selectedPanel: WorkspacePanel.bookmarks,
+      capabilities: viewModel.capabilities,
+      zoomIn: viewModel.zoomIn,
+      zoomOut: viewModel.zoomOut,
+      onToolSelected: viewModel.onToolSelected,
+      onPanelSelected: viewModel.onPanelSelected,
+      onGotoPage: viewModel.onGotoPage,
+      onPanelClosed: viewModel.onPanelClosed,
+      searchState: viewModel.searchState,
+      onTextSearch: viewModel.onTextSearch,
+      onClearSearch: viewModel.onClearSearch,
+      onTextSearchResultSelected: viewModel.onTextSearchResultSelected,
+      bookmarks: viewModel.bookmarks,
+      onBookmarkSelected: viewModel.onBookmarkSelected,
+      annotations: viewModel.annotations,
+      onAnnotationSelected: viewModel.onAnnotationSelected,
+    );
 
-      await pumpApp(
-        tester,
-        DocumentWorkspaceDesktopLayout(
-          viewModel: updatedViewModel,
-        ),
-      );
+    await pumpApp(
+      tester,
+      DocumentWorkspaceDesktopLayout(viewModel: updatedViewModel),
+    );
 
-      expect(find.byType(DocumentWorkspacePanel), findsOneWidget);
-      expect(find.byType(BookmarkPanel), findsOneWidget);
-    },
-  );
+    expect(find.byType(DocumentWorkspacePanel), findsOneWidget);
+    expect(find.byType(BookmarkPanel), findsOneWidget);
+  });
 }

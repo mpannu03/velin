@@ -3,10 +3,7 @@ import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/widgets/widgets.dart';
 
 class PdfToImageView extends StatelessWidget {
-  const PdfToImageView({
-    super.key,
-    required this.viewModel,
-  });
+  const PdfToImageView({super.key, required this.viewModel});
 
   final PdfToImageViewModel viewModel;
 

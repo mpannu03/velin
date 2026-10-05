@@ -73,9 +73,7 @@ void main() {
         ),
       );
 
-      await tester.tap(
-        find.byTooltip('Toggle Case Sensitivity'),
-      );
+      await tester.tap(find.byTooltip('Toggle Case Sensitivity'));
 
       await tester.enterText(find.byType(TextField), 'Flutter');
       await tester.testTextInput.receiveAction(TextInputAction.search);
@@ -84,9 +82,7 @@ void main() {
       expect(caseInsensitive, isFalse);
     });
 
-    testWidgets('clears search when submitted text is empty', (
-      tester,
-    ) async {
+    testWidgets('clears search when submitted text is empty', (tester) async {
       var clearCalled = false;
       var searchCalled = false;
 
@@ -108,9 +104,7 @@ void main() {
       expect(searchCalled, isFalse);
     });
 
-    testWidgets('clears search when clear button is tapped', (
-      tester,
-    ) async {
+    testWidgets('clears search when clear button is tapped', (tester) async {
       var clearCalled = false;
 
       await pumpApp(
@@ -161,26 +155,15 @@ void main() {
 
       expect(find.byType(SearchResultItem), findsNWidgets(2));
       expect(find.text('Flutter is a UI toolkit.'), findsOneWidget);
-      expect(
-        find.text('Flutter supports multiple platforms.'),
-        findsOneWidget,
-      );
+      expect(find.text('Flutter supports multiple platforms.'), findsOneWidget);
       expect(find.text('Page 2'), findsOneWidget);
       expect(find.text('Page 5'), findsOneWidget);
     });
 
     testWidgets('displays result count', (tester) async {
       const results = [
-        TextSearchResult(
-          index: 0,
-          pageNumber: 2,
-          text: 'First result',
-        ),
-        TextSearchResult(
-          index: 1,
-          pageNumber: 5,
-          text: 'Second result',
-        ),
+        TextSearchResult(index: 0, pageNumber: 2, text: 'First result'),
+        TextSearchResult(index: 1, pageNumber: 5, text: 'Second result'),
       ];
 
       await pumpApp(
@@ -243,26 +226,27 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('shows no match state after a submitted search with no results', (
-      tester,
-    ) async {
-      await pumpApp(
-        tester,
-        SearchPanel(
-          onTextSearch: (_, _) {},
-          onClearSearch: () {},
-          onTextSearchResultSelected: (_) {},
-          results: const [],
-          currentIndex: null,
-          isLoading: false,
-        ),
-      );
+    testWidgets(
+      'shows no match state after a submitted search with no results',
+      (tester) async {
+        await pumpApp(
+          tester,
+          SearchPanel(
+            onTextSearch: (_, _) {},
+            onClearSearch: () {},
+            onTextSearchResultSelected: (_) {},
+            results: const [],
+            currentIndex: null,
+            isLoading: false,
+          ),
+        );
 
-      await tester.enterText(find.byType(TextField), 'flutter');
-      await tester.testTextInput.receiveAction(TextInputAction.search);
-      await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField), 'flutter');
+        await tester.testTextInput.receiveAction(TextInputAction.search);
+        await tester.pumpAndSettle();
 
-      expect(find.text('No match found'), findsOneWidget);
-    });
+        expect(find.text('No match found'), findsOneWidget);
+      },
+    );
   });
 }

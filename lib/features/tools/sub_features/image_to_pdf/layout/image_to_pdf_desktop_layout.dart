@@ -5,10 +5,7 @@ import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
 class ImageToPdfDesktopLayout extends StatelessWidget {
-  const ImageToPdfDesktopLayout({
-    required this.viewModel,
-    super.key,
-  });
+  const ImageToPdfDesktopLayout({required this.viewModel, super.key});
 
   final ImageToPdfViewModel viewModel;
 
@@ -25,9 +22,7 @@ class ImageToPdfDesktopLayout extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ImageFilePicker(
-            filePaths: [
-              for (final input in viewModel.inputs) input.filePath,
-            ],
+            filePaths: [for (final input in viewModel.inputs) input.filePath],
             viewMode: viewModel.viewMode,
             emptyStateDescription: l10n.toolsImageToPdfNoImagesDescription,
             onAddFiles: viewModel.onAddImages,
@@ -81,14 +76,11 @@ class _PageSetupEditor extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.lg),
         OrientationSelector(
-          orientation: viewModel.orientation, 
-          onOrientationChanged: viewModel.onOrientationChanged
+          orientation: viewModel.orientation,
+          onOrientationChanged: viewModel.onOrientationChanged,
         ),
         const SizedBox(height: AppSpacing.lg),
-        FitSelector(
-          fit: viewModel.fit, 
-          onFitChanged: viewModel.onFitChanged
-        ),
+        FitSelector(fit: viewModel.fit, onFitChanged: viewModel.onFitChanged),
       ],
     );
   }

@@ -7,16 +7,11 @@ class DocumentEngineFactory {
   const DocumentEngineFactory();
 
   DocumentEngine create(Document document) {
-    final extension = document.path
-        .split('.')
-        .last
-        .toLowerCase();
+    final extension = document.path.split('.').last.toLowerCase();
 
     return switch (extension) {
       'pdf' => PdfDocumentEngine(document: document),
-      _ => throw UnsupportedError(
-          'Unsupported document type: .$extension',
-        ),
+      _ => throw UnsupportedError('Unsupported document type: .$extension'),
     };
   }
 }

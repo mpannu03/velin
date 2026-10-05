@@ -22,21 +22,13 @@ void main() {
   });
 
   test('selects a search result', () async {
-    const result = TextSearchResult(
-      index: 2,
-      pageNumber: 3,
-      text: 'hello',
-    );
+    const result = TextSearchResult(index: 2, pageNumber: 3, text: 'hello');
 
-    when(
-      () => textSearcher.goToMatchOfIndex(2),
-    ).thenAnswer((_) async => 1);
+    when(() => textSearcher.goToMatchOfIndex(2)).thenAnswer((_) async => 1);
 
     await capability.selectResult(result);
 
-    verify(
-      () => textSearcher.goToMatchOfIndex(2),
-    ).called(1);
+    verify(() => textSearcher.goToMatchOfIndex(2)).called(1);
   });
 
   test('starts a text search with the provided query and case sensitivity', () {
@@ -54,43 +46,36 @@ void main() {
 
     expect(stream, isA<Stream<List<TextSearchResult>>>());
 
-    verify(
-      () => textSearcher.resetTextSearch(),
-    ).called(1);
+    verify(() => textSearcher.resetTextSearch()).called(1);
 
-    verify(
-      () => textSearcher.startTextSearch(
-        'hello',
-        caseInsensitive: true,
-      ),
-    ).called(1);
+    verify(() => textSearcher.startTextSearch('hello', caseInsensitive: true))
+        .called(1);
 
     listener();
   });
 
-  test('cancels the search when the stream subscription is cancelled',
-      () async {
-    late void Function() listener;
+  test(
+    'cancels the search when the stream subscription is cancelled',
+    () async {
+      late void Function() listener;
 
-    when(() => textSearcher.isSearching).thenReturn(true);
+      when(() => textSearcher.isSearching).thenReturn(true);
 
-    when(() => textSearcher.addListener(any())).thenAnswer((invocation) {
-      listener = invocation.positionalArguments.first as void Function();
-      return () {};
-    });
+      when(() => textSearcher.addListener(any())).thenAnswer((invocation) {
+        listener = invocation.positionalArguments.first as void Function();
+        return () {};
+      });
 
-    final stream = capability.search('hello', false);
+      final stream = capability.search('hello', false);
 
-    final subscription = stream.listen((_) {});
+      final subscription = stream.listen((_) {});
 
-    await subscription.cancel();
+      await subscription.cancel();
 
-    verify(
-      () => textSearcher.removeListener(listener),
-    ).called(1);
+      verify(() => textSearcher.removeListener(listener)).called(1);
 
-    verify(
-      () => textSearcher.resetTextSearch(),
-    ).called(greaterThanOrEqualTo(1));
-  });
+      verify(() => textSearcher.resetTextSearch())
+          .called(greaterThanOrEqualTo(1));
+    },
+  );
 }

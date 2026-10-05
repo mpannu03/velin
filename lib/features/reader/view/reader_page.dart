@@ -16,25 +16,19 @@ class ReaderPage extends StatelessWidget {
       child: BlocBuilder<ReaderBloc, ReaderState>(
         builder: (context, state) {
           return switch (state) {
-            ReaderInitial() || ReaderLoading() => const Center(
-                child: CircularProgressIndicator(),
-              ),
+            ReaderInitial() ||
+            ReaderLoading() => const Center(child: CircularProgressIndicator()),
             ReaderLoaded() => ReaderView(
-                viewModel: _createViewModel(context, state),
-              ),
-            ReaderError(:final message) => Center(
-                child: Text(message),
-              ),
+              viewModel: _createViewModel(context, state),
+            ),
+            ReaderError(:final message) => Center(child: Text(message)),
           };
         },
       ),
     );
   }
 
-  ReaderViewModel _createViewModel(
-    BuildContext context,
-    ReaderLoaded state,
-  ) {
+  ReaderViewModel _createViewModel(BuildContext context, ReaderLoaded state) {
     final bloc = context.read<ReaderBloc>();
 
     return ReaderViewModel(

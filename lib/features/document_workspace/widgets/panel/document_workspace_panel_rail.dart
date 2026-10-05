@@ -79,7 +79,7 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
             ),
             Spacer(),
             PageIndicator(
-              currentPage: currentPage, 
+              currentPage: currentPage,
               pageCount: pageCount,
               onGotoPage: onGotoPage,
             ),
@@ -89,14 +89,15 @@ class DocumentWorkspacePanelRail extends StatelessWidget {
               tooltip: context.l10n.toolZoomIn,
               onPressed: zoomIn,
             ),
-            Text(getPercentagefromDouble(currentZoom),
+            Text(
+              getPercentagefromDouble(currentZoom),
               style: textTheme.labelSmall,
             ),
             VelinIconButton(
               icon: Icons.zoom_out_outlined,
               tooltip: context.l10n.toolZoomOut,
               onPressed: zoomOut,
-            )
+            ),
           ],
         ),
       ),

@@ -3,10 +3,7 @@ import 'package:velin/app/theme/theme.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
 class ImageEmptyState extends StatelessWidget {
-  const ImageEmptyState({
-    super.key,
-    required this.onPickImage
-  });
+  const ImageEmptyState({super.key, required this.onPickImage});
 
   final VoidCallback onPickImage;
 

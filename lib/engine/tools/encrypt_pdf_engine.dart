@@ -6,18 +6,13 @@ import 'package:pdf_manipulator/pdf_manipulator.dart' as manipulator;
 import 'encrypt_pdf_input.dart';
 
 class EncryptPdfEngine {
-  const EncryptPdfEngine({
-    required this._pdf,
-  });
+  const EncryptPdfEngine({required this._pdf});
 
   final manipulator.Pdf _pdf;
 
   Future<File> encrypt(EncryptPdfInput input) async {
     if (!await input.inputFile.exists()) {
-      throw FileSystemException(
-        'Input file not found.',
-        input.inputFile.path,
-      );
+      throw FileSystemException('Input file not found.', input.inputFile.path);
     }
 
     await input.outputFile.parent.create(recursive: true);
@@ -52,16 +47,11 @@ class EncryptPdfEngine {
     }
   }
 
-  manipulator.PdfEncryptionAlgorithm _toAlgorithm(
-    PdfEncryptionLevel level,
-  ) {
+  manipulator.PdfEncryptionAlgorithm _toAlgorithm(PdfEncryptionLevel level) {
     return switch (level) {
-      PdfEncryptionLevel.aes256 =>
-        manipulator.PdfEncryptionAlgorithm.aes256,
-      PdfEncryptionLevel.aes128 =>
-        manipulator.PdfEncryptionAlgorithm.aes128,
-      PdfEncryptionLevel.rc4 =>
-        manipulator.PdfEncryptionAlgorithm.rc4_128,
+      PdfEncryptionLevel.aes256 => manipulator.PdfEncryptionAlgorithm.aes256,
+      PdfEncryptionLevel.aes128 => manipulator.PdfEncryptionAlgorithm.aes128,
+      PdfEncryptionLevel.rc4 => manipulator.PdfEncryptionAlgorithm.rc4_128,
     };
   }
 }

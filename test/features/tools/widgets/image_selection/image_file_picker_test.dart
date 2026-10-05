@@ -6,18 +6,17 @@ import '../../../../helpers/helpers.dart';
 
 void main() {
   group('ImageFilePicker', () {
-    testWidgets('renders empty state when there are no files',
-      (tester) async {
-        await pumpApp(
-          tester,
-          const ImageFilePicker(
-            filePaths: [],
-            viewMode: ImagePickerViewMode.list,
-            emptyStateDescription: 'Add images to create a PDF.',
-            onAddFiles: _noop,
-            onRemoveFile: _noopRemove,
-            onReorderItem: _noopReorder,
-            onViewModeChanged: _noopViewMode,
+    testWidgets('renders empty state when there are no files', (tester) async {
+      await pumpApp(
+        tester,
+        const ImageFilePicker(
+          filePaths: [],
+          viewMode: ImagePickerViewMode.list,
+          emptyStateDescription: 'Add images to create a PDF.',
+          onAddFiles: _noop,
+          onRemoveFile: _noopRemove,
+          onReorderItem: _noopReorder,
+          onViewModeChanged: _noopViewMode,
         ),
       );
 
@@ -27,15 +26,11 @@ void main() {
       expect(find.byType(ImageFilePickerItem), findsNothing);
     });
 
-    testWidgets('renders list view when list mode is selected',
-        (tester) async {
+    testWidgets('renders list view when list mode is selected', (tester) async {
       await pumpApp(
         tester,
         const ImageFilePicker(
-          filePaths: [
-            'images/one.png',
-            'images/two.png',
-          ],
+          filePaths: ['images/one.png', 'images/two.png'],
           viewMode: ImagePickerViewMode.list,
           emptyStateDescription: 'Add images.',
           onAddFiles: _noop,
@@ -51,15 +46,11 @@ void main() {
       expect(find.text('two.png'), findsOneWidget);
     });
 
-    testWidgets('renders grid view when grid mode is selected',
-        (tester) async {
+    testWidgets('renders grid view when grid mode is selected', (tester) async {
       await pumpApp(
         tester,
         const ImageFilePicker(
-          filePaths: [
-            'images/one.png',
-            'images/two.png',
-          ],
+          filePaths: ['images/one.png', 'images/two.png'],
           viewMode: ImagePickerViewMode.grid,
           emptyStateDescription: 'Add images.',
           onAddFiles: _noop,
@@ -79,9 +70,7 @@ void main() {
       await pumpApp(
         tester,
         ImageFilePicker(
-          filePaths: const [
-            'images/one.png',
-          ],
+          filePaths: const ['images/one.png'],
           viewMode: ImagePickerViewMode.list,
           emptyStateDescription: 'Add images.',
           onAddFiles: () => addFilesCalled++,
@@ -91,10 +80,7 @@ void main() {
         ),
       );
 
-      final addButton = find.widgetWithText(
-        OutlinedButton,
-        'Add files',
-      );
+      final addButton = find.widgetWithText(OutlinedButton, 'Add files');
 
       expect(addButton, findsOneWidget);
 
@@ -119,10 +105,7 @@ void main() {
         ),
       );
 
-      final addButtons = find.widgetWithText(
-        FilledButton,
-        'Add files',
-      );
+      final addButtons = find.widgetWithText(FilledButton, 'Add files');
 
       expect(addButtons, findsOneWidget);
 
@@ -137,9 +120,7 @@ void main() {
       await pumpApp(
         tester,
         ImageFilePicker(
-          filePaths: const [
-            'images/one.png',
-          ],
+          filePaths: const ['images/one.png'],
           viewMode: ImagePickerViewMode.grid,
           emptyStateDescription: 'Add images.',
           onAddFiles: _noop,
@@ -149,18 +130,14 @@ void main() {
         ),
       );
 
-      final toggle = find.byKey(
-        const ValueKey('image-file-picker-view-mode'),
-      );
+      final toggle = find.byKey(const ValueKey('image-file-picker-view-mode'));
 
       expect(toggle, findsOneWidget);
 
-      final segmentedButton =
-          tester.widget<SegmentedButton<ImagePickerViewMode>>(toggle);
+      final segmentedButton = tester
+          .widget<SegmentedButton<ImagePickerViewMode>>(toggle);
 
-      segmentedButton.onSelectionChanged?.call({
-        ImagePickerViewMode.list,
-      });
+      segmentedButton.onSelectionChanged?.call({ImagePickerViewMode.list});
 
       expect(selectedMode, ImagePickerViewMode.list);
     });
@@ -171,9 +148,7 @@ void main() {
       await pumpApp(
         tester,
         ImageFilePicker(
-          filePaths: const [
-            'images/one.png',
-          ],
+          filePaths: const ['images/one.png'],
           viewMode: ImagePickerViewMode.list,
           emptyStateDescription: 'Add images.',
           onAddFiles: _noop,
@@ -183,16 +158,12 @@ void main() {
         ),
       );
 
-      final toggle = find.byKey(
-        const ValueKey('image-file-picker-view-mode'),
-      );
+      final toggle = find.byKey(const ValueKey('image-file-picker-view-mode'));
 
-      final segmentedButton =
-          tester.widget<SegmentedButton<ImagePickerViewMode>>(toggle);
+      final segmentedButton = tester
+          .widget<SegmentedButton<ImagePickerViewMode>>(toggle);
 
-      segmentedButton.onSelectionChanged?.call({
-        ImagePickerViewMode.grid,
-      });
+      segmentedButton.onSelectionChanged?.call({ImagePickerViewMode.grid});
 
       expect(selectedMode, ImagePickerViewMode.grid);
     });
@@ -203,10 +174,7 @@ void main() {
       await pumpApp(
         tester,
         ImageFilePicker(
-          filePaths: const [
-            'images/one.png',
-            'images/two.png',
-          ],
+          filePaths: const ['images/one.png', 'images/two.png'],
           viewMode: ImagePickerViewMode.list,
           emptyStateDescription: 'Add images.',
           onAddFiles: _noop,
@@ -231,10 +199,7 @@ void main() {
       await pumpApp(
         tester,
         ImageFilePicker(
-          filePaths: const [
-            'images/one.png',
-            'images/two.png',
-          ],
+          filePaths: const ['images/one.png', 'images/two.png'],
           viewMode: ImagePickerViewMode.grid,
           emptyStateDescription: 'Add images.',
           onAddFiles: _noop,
@@ -267,14 +232,10 @@ void main() {
         ),
       );
 
-      expect(
-        find.text('Choose photos for your document.'),
-        findsOneWidget,
-      );
+      expect(find.text('Choose photos for your document.'), findsOneWidget);
     });
 
-    testWidgets('view mode toggle is present even when empty',
-        (tester) async {
+    testWidgets('view mode toggle is present even when empty', (tester) async {
       await pumpApp(
         tester,
         const ImageFilePicker(
@@ -289,9 +250,7 @@ void main() {
       );
 
       expect(
-        find.byKey(
-          const ValueKey('image-file-picker-view-mode'),
-        ),
+        find.byKey(const ValueKey('image-file-picker-view-mode')),
         findsOneWidget,
       );
     });

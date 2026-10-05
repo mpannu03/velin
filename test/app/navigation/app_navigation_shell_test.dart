@@ -15,9 +15,7 @@ void main() {
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
             return Scaffold(
-              body: AppNavigationShell(
-                navigationShell: navigationShell,
-              ),
+              body: AppNavigationShell(navigationShell: navigationShell),
             );
           },
           branches: [

@@ -13,12 +13,12 @@ void main() {
     setUp(() {
       firstDocument = Document(
         path: r'C:\Documents\first.pdf',
-        type: DocumentType.pdf
+        type: DocumentType.pdf,
       );
 
       secondDocument = Document(
         path: r'C:\Documents\second.pdf',
-        type: DocumentType.pdf
+        type: DocumentType.pdf,
       );
     });
 
@@ -26,10 +26,7 @@ void main() {
       await pumpApp(
         tester,
         ReaderDocumentTabs(
-          documents: [
-            firstDocument,
-            secondDocument,
-          ],
+          documents: [firstDocument, secondDocument],
           selectedDocument: firstDocument,
           onDocumentSelected: (_) {},
           onDocumentClosed: (_) {},
@@ -48,10 +45,7 @@ void main() {
       await pumpApp(
         tester,
         ReaderDocumentTabs(
-          documents: [
-            firstDocument,
-            secondDocument,
-          ],
+          documents: [firstDocument, secondDocument],
           selectedDocument: firstDocument,
           onDocumentSelected: (document) {
             selectedDocument = document;
@@ -72,10 +66,7 @@ void main() {
       await pumpApp(
         tester,
         ReaderDocumentTabs(
-          documents: [
-            firstDocument,
-            secondDocument,
-          ],
+          documents: [firstDocument, secondDocument],
           selectedDocument: firstDocument,
           onDocumentSelected: (_) {},
           onDocumentClosed: (document) {

@@ -67,7 +67,7 @@ class ToolScaffold extends StatelessWidget {
             child: Center(
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: _maxContentWidth),
-                child: child
+                child: child,
               ),
             ),
           ),

@@ -15,10 +15,7 @@ class PdfTextSearchCapability implements TextSearchCapability {
   }
 
   @override
-  Stream<List<TextSearchResult>> search(
-    String text,
-    bool caseInsensitive,
-  ) {
+  Stream<List<TextSearchResult>> search(String text, bool caseInsensitive) {
     _textSearcher.resetTextSearch();
 
     final controller = StreamController<List<TextSearchResult>>();

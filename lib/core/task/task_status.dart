@@ -1,7 +1,1 @@
-enum TaskStatus {
-  queued,
-  running,
-  completed,
-  failed,
-  cancelled,
-}
+enum TaskStatus { queued, running, completed, failed, cancelled }

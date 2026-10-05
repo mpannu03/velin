@@ -151,8 +151,8 @@ class MultiFilePicker extends StatelessWidget {
                     filePath: filePaths[index],
                     onRemove: () => onRemoveFile(index),
                     showPageSelection: showPageSelection,
-                    pageSelection: pageSelections != null &&
-                            index < pageSelections!.length
+                    pageSelection:
+                        pageSelections != null && index < pageSelections!.length
                         ? pageSelections![index]
                         : null,
                     onPageSelectionChanged: onPageSelectionChanged == null

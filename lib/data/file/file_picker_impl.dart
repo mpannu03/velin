@@ -17,9 +17,7 @@ class DocumentFilePickerImpl implements DocumentFilePicker {
       final path = result?.path;
 
       if (path == null) {
-        return const Failure(
-          DocumentFilePickerError('No file was selected.'),
-        );
+        return const Failure(DocumentFilePickerError('No file was selected.'));
       }
 
       return Success(path);
@@ -30,7 +28,7 @@ class DocumentFilePickerImpl implements DocumentFilePicker {
 
   @override
   Future<Result<List<String>>> pickFiles({
-    required List<String> allowedExtensions
+    required List<String> allowedExtensions,
   }) async {
     try {
       final result = await FilePicker.pickFiles(
@@ -45,9 +43,7 @@ class DocumentFilePickerImpl implements DocumentFilePicker {
       }
 
       return Success(
-        result.map(
-          (file) => file.path
-        ).whereType<String>().toList()
+        result.map((file) => file.path).whereType<String>().toList(),
       );
     } catch (error, stackTrace) {
       return Failure(error, stackTrace);

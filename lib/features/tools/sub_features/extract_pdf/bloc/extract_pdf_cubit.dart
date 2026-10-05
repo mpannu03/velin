@@ -28,18 +28,17 @@ class ExtractPdfCubit extends Cubit<ExtractPdfState> {
   final AppEffectController _appEffectController;
 
   Future<void> pickFile() async {
-    final result = await _filePicker.pickFile(
-      allowedExtensions: ['pdf'],
-    );
+    final result = await _filePicker.pickFile(allowedExtensions: ['pdf']);
 
     switch (result) {
       case Success(data: final filePath):
-        final outputFileName ='${fileNameFromPath(filePath)}_extracted.pdf';
+        final outputFileName = '${fileNameFromPath(filePath)}_extracted.pdf';
 
         emit(
           state.copyWith(
             filePath: filePath,
-            outputDirectory: state.outputDirectory ??
+            outputDirectory:
+                state.outputDirectory ??
                 directoryWithTrailingSeparator(filePath),
             outputFileName: outputFileName,
           ),
@@ -67,9 +66,7 @@ class ExtractPdfCubit extends Cubit<ExtractPdfState> {
 
     switch (result) {
       case Success(data: final directoryPath):
-        emit(
-          state.copyWith(outputDirectory: directoryPath),
-        );
+        emit(state.copyWith(outputDirectory: directoryPath));
 
       case Failure(error: final error):
         if (error is DocumentFilePickerError) {

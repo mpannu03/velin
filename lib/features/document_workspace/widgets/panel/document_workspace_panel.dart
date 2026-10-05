@@ -34,29 +34,26 @@ class DocumentWorkspacePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PanelShell(
-      title: panel.label(context),
-      child: panelBody,
-    );
+    return PanelShell(title: panel.label(context), child: panelBody);
   }
 
   Widget get panelBody => switch (panel) {
-        WorkspacePanel.comments => CommentPanel(
-          annotations: annotations, 
-          onAnnotationSelected: onAnnotationSelected,
-        ),
-        WorkspacePanel.bookmarks => BookmarkPanel(
-          bookmarks: bookmarks,
-          onBookmarkSelected: onBookmarkSelected,
-        ),
-        WorkspacePanel.search => SearchPanel(
-          onTextSearch: onTextSearch,
-          onClearSearch: onClearSearch,
-          onTextSearchResultSelected: onTextSearchResultSelected,
-          results: searchState.results,
-          currentIndex: searchState.currentIndex,
-          isLoading: searchState.isLoading,
-        ),
-      WorkspacePanel.dictionary => Text('Dictionary'),
-      };
+    WorkspacePanel.comments => CommentPanel(
+      annotations: annotations,
+      onAnnotationSelected: onAnnotationSelected,
+    ),
+    WorkspacePanel.bookmarks => BookmarkPanel(
+      bookmarks: bookmarks,
+      onBookmarkSelected: onBookmarkSelected,
+    ),
+    WorkspacePanel.search => SearchPanel(
+      onTextSearch: onTextSearch,
+      onClearSearch: onClearSearch,
+      onTextSearchResultSelected: onTextSearchResultSelected,
+      results: searchState.results,
+      currentIndex: searchState.currentIndex,
+      isLoading: searchState.isLoading,
+    ),
+    WorkspacePanel.dictionary => Text('Dictionary'),
+  };
 }

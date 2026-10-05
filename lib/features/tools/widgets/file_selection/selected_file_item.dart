@@ -123,7 +123,8 @@ class SelectedFileItem extends StatelessWidget {
                     key: ValueKey('pages-$filePath'),
                     initialValue: pageSelection ?? '',
                     onFieldSubmitted: onPageSelectionChanged,
-                    onTapOutside: (_) => onPageSelectionChanged?.call(pageSelection ?? ''),
+                    onTapOutside: (_) =>
+                        onPageSelectionChanged?.call(pageSelection ?? ''),
                     decoration: InputDecoration(
                       labelText: l10n.toolsPagesLabel,
                       hintText: l10n.toolsPagesHint,

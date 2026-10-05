@@ -21,7 +21,11 @@ class CompressPdfToolInput {
   /// The engine maps it onto a deflate level.
   final int quality;
 
-  CompressPdfToolInput copyWith({String? filePath, String? outputFilePath, int? quality}) {
+  CompressPdfToolInput copyWith({
+    String? filePath,
+    String? outputFilePath,
+    int? quality,
+  }) {
     return CompressPdfToolInput(
       filePath: filePath ?? this.filePath,
       outputFilePath: outputFilePath ?? this.outputFilePath,
