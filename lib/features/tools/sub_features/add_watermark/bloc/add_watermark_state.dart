@@ -180,6 +180,54 @@ class AddWatermarkState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is AddWatermarkState &&
+        other.inputFilePath == inputFilePath &&
+        other.outputDirectory == outputDirectory &&
+        other.outputFileName == outputFileName &&
+        other.type == type &&
+        other.text == text &&
+        other.imageFilePath == imageFilePath &&
+        other.fontName == fontName &&
+        other.fontSize == fontSize &&
+        other.colorHex == colorHex &&
+        other.opacity == opacity &&
+        other.rotation == rotation &&
+        other.position == position &&
+        other.xOffset == xOffset &&
+        other.yOffset == yOffset &&
+        other.imageWidthPercent == imageWidthPercent &&
+        other.layer == layer &&
+        other.scope == scope &&
+        other.selection == selection &&
+        other.isSubmitting == isSubmitting;
+  }
+
+  @override
+  int get hashCode => Object.hashAll([
+    inputFilePath,
+    outputDirectory,
+    outputFileName,
+    type,
+    text,
+    imageFilePath,
+    fontName,
+    fontSize,
+    colorHex,
+    opacity,
+    rotation,
+    position,
+    xOffset,
+    yOffset,
+    imageWidthPercent,
+    layer,
+    scope,
+    selection,
+    isSubmitting,
+  ]);
 }
 
 const _unset = Object();
