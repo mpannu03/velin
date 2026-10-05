@@ -38,7 +38,9 @@ void registerEngineDependencies() {
   );
 
   getIt.registerLazySingleton<DecryptPdfEngine>(
-    () => DecryptPdfEngine()
+    () => DecryptPdfEngine(
+      pdf: getIt<Pdf>()
+    )
   );
 
   getIt.registerLazySingleton<CompressPdfEngine>(
