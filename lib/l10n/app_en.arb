@@ -41,9 +41,24 @@
     "description": "Generic action to cancel an operation."
   },
 
+  "commonSubmit": "Submit",
+  "@commonSubmit": {
+    "description": "Generic action to submit a form or request."
+  },
+
   "commonSave": "Save",
   "@commonSave": {
     "description": "Generic action to save changes."
+  },
+  
+  "commonPassword": "Password",
+  "@commonPassword": {
+    "description": "Label for the password field."
+  },
+
+  "dialogEnterPassword": "Enter Password",
+  "@dialogEnterPassword": {
+    "description": "Label for the password entry field in the password dialog."
   },
 
   "readerNoDocumentOpen": "No document open",

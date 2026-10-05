@@ -142,11 +142,29 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get commonCancel;
 
+  /// Generic action to submit a form or request.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get commonSubmit;
+
   /// Generic action to save changes.
   ///
   /// In en, this message translates to:
   /// **'Save'**
   String get commonSave;
+
+  /// Label for the password field.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get commonPassword;
+
+  /// Label for the password entry field in the password dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Password'**
+  String get dialogEnterPassword;
 
   /// Message displayed in the Reader when no document is currently open.
   ///

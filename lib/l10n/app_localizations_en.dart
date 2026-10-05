@@ -34,7 +34,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonCancel => 'Cancel';
 
   @override
+  String get commonSubmit => 'Submit';
+
+  @override
   String get commonSave => 'Save';
+
+  @override
+  String get commonPassword => 'Password';
+
+  @override
+  String get dialogEnterPassword => 'Enter Password';
 
   @override
   String get readerNoDocumentOpen => 'No document open';
