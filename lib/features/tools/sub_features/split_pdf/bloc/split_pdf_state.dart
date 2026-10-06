@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:velin/engine/engine.dart';
 
 class SplitPdfState {
@@ -70,6 +72,28 @@ class SplitPdfState {
           : outputDirectory as String?,
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
+  }
+
+  @override
+  bool operator ==(covariant SplitPdfState other) {
+    if (identical(this, other)) return true;
+
+    return other.inputFilePath == inputFilePath &&
+        other.mode == mode &&
+        listEquals(other.selections, selections) &&
+        other.pageCount == pageCount &&
+        other.outputDirectory == outputDirectory &&
+        other.isSubmitting == isSubmitting;
+  }
+
+  @override
+  int get hashCode {
+    return inputFilePath.hashCode ^
+        mode.hashCode ^
+        selections.hashCode ^
+        pageCount.hashCode ^
+        outputDirectory.hashCode ^
+        isSubmitting.hashCode;
   }
 }
 

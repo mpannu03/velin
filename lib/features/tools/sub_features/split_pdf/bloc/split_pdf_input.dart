@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:velin/core/page_selection/page_selection.dart';
 import 'package:velin/engine/engine.dart';
 
@@ -26,6 +28,19 @@ class SplitPdfToolInput {
       pageCount: pageCount ?? this.pageCount,
     );
   }
+
+  @override
+  bool operator ==(covariant SplitPdfToolInput other) {
+    if (identical(this, other)) return true;
+
+    return other.filePath == filePath &&
+        listEquals(other.selections, selections) &&
+        other.pageCount == pageCount;
+  }
+
+  @override
+  int get hashCode =>
+      filePath.hashCode ^ selections.hashCode ^ pageCount.hashCode;
 }
 
 extension SplitPdfMapper on SplitPdfToolInput {
