@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'merge_pdf_input.dart';
 
 class MergePdfState {
@@ -40,6 +42,24 @@ class MergePdfState {
           : outputDirectory as String?,
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
+  }
+
+  @override
+  bool operator ==(covariant MergePdfState other) {
+    if (identical(this, other)) return true;
+
+    return listEquals(other.inputs, inputs) &&
+        other.outputFileName == outputFileName &&
+        other.outputDirectory == outputDirectory &&
+        other.isSubmitting == isSubmitting;
+  }
+
+  @override
+  int get hashCode {
+    return inputs.hashCode ^
+        outputFileName.hashCode ^
+        outputDirectory.hashCode ^
+        isSubmitting.hashCode;
   }
 }
 

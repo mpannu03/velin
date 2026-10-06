@@ -34,6 +34,10 @@ class MergePdfCubit extends Cubit<MergePdfState> {
 
     switch (result) {
       case Success(data: final filePaths):
+        if (filePaths.isEmpty) {
+          return;
+        }
+
         final dirName = directoryWithTrailingSeparator(filePaths.first);
         emit(
           state.copyWith(

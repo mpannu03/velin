@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
 import 'package:velin/core/page_selection/page_selection.dart';
@@ -15,6 +16,16 @@ class MergePdfToolInput {
       pageSelection: pageSelection ?? this.pageSelection,
     );
   }
+
+  @override
+  bool operator ==(covariant MergePdfToolInput other) {
+    if (identical(this, other)) return true;
+
+    return other.filePath == filePath && other.pageSelection == pageSelection;
+  }
+
+  @override
+  int get hashCode => filePath.hashCode ^ pageSelection.hashCode;
 }
 
 extension MergePdfMapper on MergePdfToolInput {
