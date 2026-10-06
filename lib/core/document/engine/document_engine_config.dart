@@ -6,6 +6,7 @@ class DocumentEngineConfig {
     this.initialZoom,
     this.zoomStep,
     this.passwordProvider,
+    this.initialPageNumber,
   });
 
   final Color? backgroundColor;
@@ -13,4 +14,5 @@ class DocumentEngineConfig {
   final double? initialZoom;
   final double? zoomStep;
   final Future<String?> Function()? passwordProvider;
+  final int? initialPageNumber;
 }

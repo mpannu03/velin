@@ -75,6 +75,7 @@ class PdfDocumentEngine implements DocumentEngine {
       document.path,
       controller: _controller,
       passwordProvider: config.passwordProvider,
+      initialPageNumber: config.initialPageNumber ?? 1,
       params: PdfViewerParams(
         backgroundColor: config.backgroundColor ?? Colors.grey,
         onPageChanged: _onPageChanged,

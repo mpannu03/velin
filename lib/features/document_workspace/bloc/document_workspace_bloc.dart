@@ -34,14 +34,10 @@ class DocumentWorkspaceBloc
     DocumentWorkspaceStarted event,
     Emitter<DocumentWorkspaceState> emit,
   ) {
-    emit(const DocumentWorkspaceLoading());
-
-    emit(
-      DocumentWorkspaceLoaded(currentPage: 0, pageCount: 0, currentZoom: 1.0),
-    );
+    emit(const DocumentWorkspaceOpening());
   }
 
-  void _onReady(
+  Future<void> _onReady(
     DocumentWorkspaceReady event,
     Emitter<DocumentWorkspaceState> emit,
   ) async {
@@ -51,9 +47,13 @@ class DocumentWorkspaceBloc
       bookmarks = await _engine.bookmark!.bookmarks;
     }
 
+    if (emit.isDone) {
+      return;
+    }
+
     emit(
       DocumentWorkspaceLoaded(
-        currentPage: _engine.snapshot.currentPage,
+        currentPage: _engine.snapshot.currentPage!,
         pageCount: _engine.snapshot.pageCount,
         currentZoom: _engine.snapshot.zoom,
         bookmarks: bookmarks,
@@ -63,7 +63,9 @@ class DocumentWorkspaceBloc
     if (_engine.capabilities.comments) {
       final annotations = await _engine.annotation!.annotations;
 
-      if (emit.isDone) return;
+      if (emit.isDone) {
+        return;
+      }
 
       final currentState = state;
 
@@ -145,7 +147,7 @@ class DocumentWorkspaceBloc
     emit(currentState.copyWith(selectedPanel: null));
   }
 
-  void _onSearch(
+  Future<void> _onSearch(
     DocumentWorkspaceSearch event,
     Emitter<DocumentWorkspaceState> emit,
   ) async {
@@ -156,16 +158,24 @@ class DocumentWorkspaceBloc
       return;
     }
 
-    currentState.copyWith(
-      searchState: currentState.searchState.copyWith(
-        results: const [],
-        isLoading: true,
+    emit(
+      currentState.copyWith(
+        searchState: currentState.searchState.copyWith(
+          results: const [],
+          isLoading: true,
+        ),
       ),
     );
 
     await emit.onEach(
       _engine.textSearch!.search(event.text, event.caseInsensitive),
       onData: (textSearchResults) {
+        final currentState = state;
+
+        if (currentState is! DocumentWorkspaceLoaded) {
+          return;
+        }
+
         emit(
           currentState.copyWith(
             searchState: currentState.searchState.copyWith(
@@ -178,7 +188,7 @@ class DocumentWorkspaceBloc
     );
   }
 
-  void _onClearSearch(
+  Future<void> _onClearSearch(
     DocumentWorkspaceClearSearch event,
     Emitter<DocumentWorkspaceState> emit,
   ) async {
@@ -190,10 +200,14 @@ class DocumentWorkspaceBloc
 
     await _engine.textSearch?.clear();
 
-    emit(currentState.copyWith(searchState: SearchState()));
+    if (emit.isDone) {
+      return;
+    }
+
+    emit(currentState.copyWith(searchState: const SearchState()));
   }
 
-  void _onSelectSearch(
+  Future<void> _onSelectSearch(
     DocumentWorkspaceSelectSearch event,
     Emitter<DocumentWorkspaceState> emit,
   ) async {
@@ -206,6 +220,10 @@ class DocumentWorkspaceBloc
 
     await _engine.textSearch?.selectResult(event.textSearchResult);
 
+    if (emit.isDone) {
+      return;
+    }
+
     emit(
       currentState.copyWith(
         searchState: currentState.searchState.copyWith(
@@ -215,7 +233,7 @@ class DocumentWorkspaceBloc
     );
   }
 
-  void _onSelectBookmark(
+  Future<void> _onSelectBookmark(
     DocumentWorkspaceSelectBookmark event,
     Emitter<DocumentWorkspaceState> emit,
   ) async {
@@ -229,7 +247,7 @@ class DocumentWorkspaceBloc
     _engine.bookmark?.goto(event.bookmark);
   }
 
-  void _onSelectAnnotation(
+  Future<void> _onSelectAnnotation(
     DocumentWorkspaceSelectAnnotation event,
     Emitter<DocumentWorkspaceState> emit,
   ) async {

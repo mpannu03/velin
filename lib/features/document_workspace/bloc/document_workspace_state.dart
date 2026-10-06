@@ -8,23 +8,23 @@ final class DocumentWorkspaceInitial extends DocumentWorkspaceState {
   const DocumentWorkspaceInitial();
 }
 
-final class DocumentWorkspaceLoading extends DocumentWorkspaceState {
-  const DocumentWorkspaceLoading();
+final class DocumentWorkspaceOpening extends DocumentWorkspaceState {
+  const DocumentWorkspaceOpening();
 }
 
 final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
   const DocumentWorkspaceLoaded({
+    required this.currentPage,
     required this.pageCount,
-    this.currentPage,
+    required this.currentZoom,
     this.selectedTool = WorkspaceTool.select,
     this.selectedPanel,
-    required this.currentZoom,
     this.searchState = const SearchState(),
     this.bookmarks = const [],
     this.annotations = const [],
   });
 
-  final int? currentPage;
+  final int currentPage;
   final int pageCount;
   final double currentZoom;
   final WorkspaceTool selectedTool;
@@ -34,7 +34,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
   final List<Annotation> annotations;
 
   DocumentWorkspaceLoaded copyWith({
-    Object? currentPage = _unset,
+    int? currentPage,
     int? pageCount,
     double? currentZoom,
     WorkspaceTool? selectedTool,
@@ -44,9 +44,7 @@ final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {
     List<Annotation>? annotations,
   }) {
     return DocumentWorkspaceLoaded(
-      currentPage: identical(currentPage, _unset)
-          ? this.currentPage
-          : currentPage as int?,
+      currentPage: currentPage ?? this.currentPage,
       pageCount: pageCount ?? this.pageCount,
       currentZoom: currentZoom ?? this.currentZoom,
       selectedTool: selectedTool ?? this.selectedTool,
@@ -69,17 +67,17 @@ final class DocumentWorkspaceError extends DocumentWorkspaceState {
 const _unset = Object();
 
 class SearchState {
-  final String? query;
-  final List<TextSearchResult> results;
-  final bool isLoading;
-  final int? currentIndex;
-
   const SearchState({
     this.query,
     this.results = const [],
     this.isLoading = false,
     this.currentIndex,
   });
+
+  final String? query;
+  final List<TextSearchResult> results;
+  final bool isLoading;
+  final int? currentIndex;
 
   SearchState copyWith({
     Object? query = _unset,

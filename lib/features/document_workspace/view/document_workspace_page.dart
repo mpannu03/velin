@@ -29,12 +29,22 @@ class DocumentWorkspacePage extends StatelessWidget {
     return BlocProvider(
       create: (_) =>
           getIt<DocumentWorkspaceBloc>(param1: _engine)
-            ..add(DocumentWorkspaceStarted()),
+            ..add(const DocumentWorkspaceStarted()),
       child: BlocBuilder<DocumentWorkspaceBloc, DocumentWorkspaceState>(
         builder: (context, state) {
           return switch (state) {
-            DocumentWorkspaceInitial() || DocumentWorkspaceLoading() =>
-              const Center(child: CircularProgressIndicator()),
+            DocumentWorkspaceInitial() => const Center(
+              child: CircularProgressIndicator(),
+            ),
+
+            DocumentWorkspaceOpening() => Stack(
+              fit: StackFit.expand,
+              children: [
+                documentViewer,
+                const Center(child: CircularProgressIndicator()),
+              ],
+            ),
+
             DocumentWorkspaceLoaded() => DocumentWorkspaceView(
               viewModel: DocumentWorkspaceViewModel(
                 currentPage: state.currentPage,
@@ -92,6 +102,7 @@ class DocumentWorkspacePage extends StatelessWidget {
                 },
               ),
             ),
+
             DocumentWorkspaceError(:final message) => Center(
               child: Text(message),
             ),
