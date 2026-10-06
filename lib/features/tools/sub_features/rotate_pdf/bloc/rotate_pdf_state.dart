@@ -68,6 +68,30 @@ class RotatePdfState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
   }
+
+  @override
+  bool operator ==(covariant RotatePdfState other) {
+    if (identical(this, other)) return true;
+
+    return other.inputFilePath == inputFilePath &&
+        other.direction == direction &&
+        other.scope == scope &&
+        other.selection == selection &&
+        other.outputDirectory == outputDirectory &&
+        other.outputFileName == outputFileName &&
+        other.isSubmitting == isSubmitting;
+  }
+
+  @override
+  int get hashCode {
+    return inputFilePath.hashCode ^
+        direction.hashCode ^
+        scope.hashCode ^
+        selection.hashCode ^
+        outputDirectory.hashCode ^
+        outputFileName.hashCode ^
+        isSubmitting.hashCode;
+  }
 }
 
 const _unset = Object();

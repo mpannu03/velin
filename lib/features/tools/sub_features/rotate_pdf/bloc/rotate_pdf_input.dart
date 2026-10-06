@@ -69,4 +69,22 @@ class RotatePdfToolInput {
       selection: selection ?? this.selection,
     );
   }
+
+  @override
+  bool operator ==(covariant RotatePdfToolInput other) {
+    if (identical(this, other)) return true;
+
+    return other.filePath == filePath &&
+        other.direction == direction &&
+        other.scope == scope &&
+        other.selection == selection;
+  }
+
+  @override
+  int get hashCode {
+    return filePath.hashCode ^
+        direction.hashCode ^
+        scope.hashCode ^
+        selection.hashCode;
+  }
 }
