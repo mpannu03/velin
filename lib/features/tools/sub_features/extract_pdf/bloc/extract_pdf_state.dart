@@ -49,6 +49,26 @@ class ExtractPdfState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
   }
+
+  @override
+  bool operator ==(covariant ExtractPdfState other) {
+    if (identical(this, other)) return true;
+
+    return other.filePath == filePath &&
+        other.pageSelection == pageSelection &&
+        other.outputDirectory == outputDirectory &&
+        other.outputFileName == outputFileName &&
+        other.isSubmitting == isSubmitting;
+  }
+
+  @override
+  int get hashCode {
+    return filePath.hashCode ^
+        pageSelection.hashCode ^
+        outputDirectory.hashCode ^
+        outputFileName.hashCode ^
+        isSubmitting.hashCode;
+  }
 }
 
 const _unset = Object();
