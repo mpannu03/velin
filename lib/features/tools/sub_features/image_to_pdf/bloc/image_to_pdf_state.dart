@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:velin/engine/engine.dart';
 import 'package:velin/features/tools/widgets/widgets.dart';
 
@@ -63,6 +65,32 @@ class ImageToPdfState {
           : outputDirectory as String?,
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
+  }
+
+  @override
+  bool operator ==(covariant ImageToPdfState other) {
+    if (identical(this, other)) return true;
+
+    return listEquals(other.inputs, inputs) &&
+        other.viewMode == viewMode &&
+        other.pageSize == pageSize &&
+        other.orientation == orientation &&
+        other.fit == fit &&
+        other.outputFileName == outputFileName &&
+        other.outputDirectory == outputDirectory &&
+        other.isSubmitting == isSubmitting;
+  }
+
+  @override
+  int get hashCode {
+    return inputs.hashCode ^
+        viewMode.hashCode ^
+        pageSize.hashCode ^
+        orientation.hashCode ^
+        fit.hashCode ^
+        outputFileName.hashCode ^
+        outputDirectory.hashCode ^
+        isSubmitting.hashCode;
   }
 }
 

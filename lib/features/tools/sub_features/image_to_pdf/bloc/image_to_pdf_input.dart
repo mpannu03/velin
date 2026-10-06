@@ -11,6 +11,16 @@ class ImageToPdfToolInput {
   ImageToPdfToolInput copyWith({String? filePath}) {
     return ImageToPdfToolInput(filePath: filePath ?? this.filePath);
   }
+
+  @override
+  bool operator ==(covariant ImageToPdfToolInput other) {
+    if (identical(this, other)) return true;
+
+    return other.filePath == filePath;
+  }
+
+  @override
+  int get hashCode => filePath.hashCode;
 }
 
 extension ImageToPdfMapper on ImageToPdfToolInput {
