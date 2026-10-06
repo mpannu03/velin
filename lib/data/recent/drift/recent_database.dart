@@ -1,0 +1,14 @@
+import 'package:drift/drift.dart';
+import 'package:drift_flutter/drift_flutter.dart';
+
+import 'recent_documents_table.dart';
+
+part 'recent_database.g.dart';
+
+@DriftDatabase(tables: [RecentDocumentsTable])
+class RecentDatabase extends _$RecentDatabase {
+  RecentDatabase() : super(driftDatabase(name: 'velin'));
+
+  @override
+  int get schemaVersion => 1;
+}

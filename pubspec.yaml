@@ -29,6 +29,10 @@ dependencies:
   pdf_cos: ^6.0.0
   crypto: ^3.0.7
   pdf_manipulator: ^5.0.1
+  drift: ^2.35.1
+  drift_flutter: ^0.3.1
+  path_provider: ^2.1.6
+  path: ^1.9.1
 
 dev_dependencies:
   flutter_test:
@@ -38,6 +42,7 @@ dev_dependencies:
   bloc_test: ^10.0.0
   build_runner: ^2.16.1
   mocktail: ^1.0.5
+  drift_dev: ^2.35.1
 
 flutter:
   uses-material-design: true
