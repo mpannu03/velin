@@ -32,4 +32,6 @@ void registerEngineDependencies() {
   getIt.registerLazySingleton<AddWatermarkEngine>(
     () => AddWatermarkEngine(pdf: getIt<Pdf>()),
   );
+
+  getIt.registerLazySingleton<PdfPageRenderer>(() => PdfPageRenderer());
 }

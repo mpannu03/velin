@@ -3,6 +3,7 @@ import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/data/file/file_picker_impl.dart';
+import 'package:velin/data/recent/recent.dart';
 
 import 'injection.dart';
 
@@ -16,4 +17,6 @@ void registerCoreDependencies() {
   getIt.registerLazySingleton<TaskManager>(() => TaskManager());
 
   getIt.registerLazySingleton<Pdf>(() => Pdf());
+
+  getIt.registerLazySingleton<RecentDatabase>(() => RecentDatabase());
 }

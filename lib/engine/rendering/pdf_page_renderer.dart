@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:pdfrx_engine/pdfrx_engine.dart';
 
-class PdferPageRenderer {
+class PdfPageRenderer {
   Future<File> render({
     required File document,
     required int page,
