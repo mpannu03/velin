@@ -84,6 +84,28 @@ class EncryptPdfToolInput {
       permissions: permissions ?? this.permissions,
     );
   }
+
+  @override
+  bool operator ==(covariant EncryptPdfToolInput other) {
+    if (identical(this, other)) return true;
+
+    return other.filePath == filePath &&
+        other.outputFilePath == outputFilePath &&
+        other.userPassword == userPassword &&
+        other.ownerPassword == ownerPassword &&
+        other.level == level &&
+        other.permissions == permissions;
+  }
+
+  @override
+  int get hashCode {
+    return filePath.hashCode ^
+        outputFilePath.hashCode ^
+        userPassword.hashCode ^
+        ownerPassword.hashCode ^
+        level.hashCode ^
+        permissions.hashCode;
+  }
 }
 
 extension EncryptPdfMapper on EncryptPdfToolInput {

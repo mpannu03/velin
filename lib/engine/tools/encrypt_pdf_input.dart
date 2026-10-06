@@ -18,6 +18,28 @@ class EncryptPdfInput {
 
   final PdfPermissions permissions;
   final PdfEncryptionLevel level;
+
+  @override
+  bool operator ==(covariant EncryptPdfInput other) {
+    if (identical(this, other)) return true;
+
+    return other.inputFile == inputFile &&
+        other.outputFile == outputFile &&
+        other.ownerPassword == ownerPassword &&
+        other.userPassword == userPassword &&
+        other.permissions == permissions &&
+        other.level == level;
+  }
+
+  @override
+  int get hashCode {
+    return inputFile.hashCode ^
+        outputFile.hashCode ^
+        ownerPassword.hashCode ^
+        userPassword.hashCode ^
+        permissions.hashCode ^
+        level.hashCode;
+  }
 }
 
 enum PdfEncryptionLevel { aes256, aes128, rc4 }
@@ -72,4 +94,30 @@ class PdfPermissions {
   final bool fillForms;
   final bool accessibility;
   final bool assemble;
+
+  @override
+  bool operator ==(covariant PdfPermissions other) {
+    if (identical(this, other)) return true;
+
+    return other.print == print &&
+        other.printHq == printHq &&
+        other.modify == modify &&
+        other.copy == copy &&
+        other.annotate == annotate &&
+        other.fillForms == fillForms &&
+        other.accessibility == accessibility &&
+        other.assemble == assemble;
+  }
+
+  @override
+  int get hashCode {
+    return print.hashCode ^
+        printHq.hashCode ^
+        modify.hashCode ^
+        copy.hashCode ^
+        annotate.hashCode ^
+        fillForms.hashCode ^
+        accessibility.hashCode ^
+        assemble.hashCode;
+  }
 }

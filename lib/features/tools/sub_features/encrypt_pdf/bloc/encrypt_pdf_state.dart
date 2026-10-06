@@ -109,6 +109,32 @@ class EncryptPdfState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
   }
+
+  @override
+  bool operator ==(covariant EncryptPdfState other) {
+    if (identical(this, other)) return true;
+
+    return other.inputFilePath == inputFilePath &&
+        other.outputDirectory == outputDirectory &&
+        other.outputFileName == outputFileName &&
+        other.userPassword == userPassword &&
+        other.ownerPassword == ownerPassword &&
+        other.level == level &&
+        other.permissions == permissions &&
+        other.isSubmitting == isSubmitting;
+  }
+
+  @override
+  int get hashCode {
+    return inputFilePath.hashCode ^
+        outputDirectory.hashCode ^
+        outputFileName.hashCode ^
+        userPassword.hashCode ^
+        ownerPassword.hashCode ^
+        level.hashCode ^
+        permissions.hashCode ^
+        isSubmitting.hashCode;
+  }
 }
 
 const _unset = Object();

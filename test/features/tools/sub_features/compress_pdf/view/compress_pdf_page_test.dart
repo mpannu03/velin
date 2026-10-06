@@ -23,9 +23,7 @@ void main() {
   });
 
   tearDown(() async {
-    if (getIt.isRegistered<CompressPdfCubit>()) {
-      await getIt.unregister<CompressPdfCubit>();
-    }
+    getIt.reset();
   });
 
   group('CompressPdfPage', () {
