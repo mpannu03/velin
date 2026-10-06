@@ -78,6 +78,34 @@ class PdfToImageState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
   }
+
+  @override
+  bool operator ==(covariant PdfToImageState other) {
+    if (identical(this, other)) return true;
+
+    return other.inputFilePath == inputFilePath &&
+        other.scope == scope &&
+        other.selection == selection &&
+        other.format == format &&
+        other.colorMode == colorMode &&
+        other.dpi == dpi &&
+        other.quality == quality &&
+        other.outputDirectory == outputDirectory &&
+        other.isSubmitting == isSubmitting;
+  }
+
+  @override
+  int get hashCode {
+    return inputFilePath.hashCode ^
+        scope.hashCode ^
+        selection.hashCode ^
+        format.hashCode ^
+        colorMode.hashCode ^
+        dpi.hashCode ^
+        quality.hashCode ^
+        outputDirectory.hashCode ^
+        isSubmitting.hashCode;
+  }
 }
 
 const _unset = Object();

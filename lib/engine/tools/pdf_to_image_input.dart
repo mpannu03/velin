@@ -34,4 +34,26 @@ class PdfToImageInput {
 
   /// Applies to JPEG and WebP. PNG ignores this setting.
   final int quality;
+
+  @override
+  bool operator ==(covariant PdfToImageInput other) {
+    if (identical(this, other)) return true;
+
+    return other.file == file &&
+        other.selection == selection &&
+        other.format == format &&
+        other.colorMode == colorMode &&
+        other.dpi == dpi &&
+        other.quality == quality;
+  }
+
+  @override
+  int get hashCode {
+    return file.hashCode ^
+        selection.hashCode ^
+        format.hashCode ^
+        colorMode.hashCode ^
+        dpi.hashCode ^
+        quality.hashCode;
+  }
 }

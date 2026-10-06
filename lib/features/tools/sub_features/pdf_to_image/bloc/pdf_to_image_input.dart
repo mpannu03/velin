@@ -77,6 +77,30 @@ class PdfToImageToolInput {
       quality: quality ?? this.quality,
     );
   }
+
+  @override
+  bool operator ==(covariant PdfToImageToolInput other) {
+    if (identical(this, other)) return true;
+
+    return other.filePath == filePath &&
+        other.scope == scope &&
+        other.selection == selection &&
+        other.format == format &&
+        other.colorMode == colorMode &&
+        other.dpi == dpi &&
+        other.quality == quality;
+  }
+
+  @override
+  int get hashCode {
+    return filePath.hashCode ^
+        scope.hashCode ^
+        selection.hashCode ^
+        format.hashCode ^
+        colorMode.hashCode ^
+        dpi.hashCode ^
+        quality.hashCode;
+  }
 }
 
 extension PdfToImageMapper on PdfToImageToolInput {
