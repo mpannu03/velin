@@ -29,6 +29,7 @@ class DocumentWorkspaceBloc
     on<DocumentWorkspaceSelectSearch>(_onSelectSearch);
     on<DocumentWorkspaceSelectBookmark>(_onSelectBookmark);
     on<DocumentWorkspaceSelectAnnotation>(_onSelectAnnotation);
+    on<DocumentWorkspaceTextSelected>(_onTextSelected);
 
     _engine.listener = DocumentWorkspaceListener(bloc: this);
   }
@@ -302,6 +303,22 @@ class DocumentWorkspaceBloc
     }
 
     _engine.annotation?.goto(event.annotation);
+  }
+
+  void _onTextSelected(
+    DocumentWorkspaceTextSelected event,
+    Emitter<DocumentWorkspaceState> emit,
+  ) {
+    final currentState = state;
+
+    if (currentState is! DocumentWorkspaceLoaded ||
+        !_engine.capabilities.textSelection) {
+      return;
+    }
+
+    if (currentState.selectedTool == WorkspaceTool.dictionary) {
+      emit(currentState.copyWith(selectedPanel: WorkspacePanel.dictionary));
+    }
   }
 
   @override

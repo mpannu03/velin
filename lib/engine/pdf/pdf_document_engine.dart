@@ -90,6 +90,12 @@ class PdfDocumentEngine implements DocumentEngine {
             _textSearch?.pageTextMatchPaintCallback(canvas, pageRect, page);
           },
         ],
+        textSelectionParams: PdfTextSelectionParams(
+          onTextSelectionChange: (selection) async {
+            final text = await selection.getSelectedText();
+            _listener?.onTextSelected(text);
+          },
+        ),
       ),
     );
   }

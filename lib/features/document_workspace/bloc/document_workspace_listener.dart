@@ -21,4 +21,9 @@ class DocumentWorkspaceListener implements DocumentEngineListener {
   void onZoomChanged(double zoom) {
     _bloc.add(DocumentWorkspaceZoomChanged(zoom));
   }
+
+  @override
+  void onTextSelected(String text) {
+    _bloc.add(DocumentWorkspaceTextSelected(text));
+  }
 }

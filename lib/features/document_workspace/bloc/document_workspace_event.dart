@@ -68,3 +68,9 @@ final class DocumentWorkspaceSelectAnnotation extends DocumentWorkspaceEvent {
 
   final Annotation annotation;
 }
+
+final class DocumentWorkspaceTextSelected extends DocumentWorkspaceEvent {
+  const DocumentWorkspaceTextSelected(this.text);
+
+  final String text;
+}

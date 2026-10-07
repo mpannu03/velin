@@ -4,4 +4,6 @@ abstract interface class DocumentEngineListener {
   void onPageChanged(int? page);
 
   void onZoomChanged(double zoom);
+
+  void onTextSelected(String text);
 }
