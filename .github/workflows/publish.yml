@@ -117,7 +117,7 @@ jobs:
 
   macos-x64:
     name: macOS Intel
-    runs-on: macos-13
+    runs-on: macos-15-intel
 
     steps:
       - name: Checkout
