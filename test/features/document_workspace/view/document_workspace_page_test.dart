@@ -56,16 +56,21 @@ void main() {
     when(() => engine.actions).thenReturn(actions);
     when(() => engine.buildViewer(config: any(named: 'config')))
         .thenReturn(const Text('Document Viewer'));
+
+    when(() => engine.document).thenReturn(document);
+    when(() => engine.snapshot).thenReturn(
+      const DocumentEngineSnapshot(currentPage: 0, pageCount: 0, zoom: 1.0),
+    );
   });
 
   tearDown(() async {
     await getIt.reset();
   });
 
-  testWidgets('shows loading indicator while workspace is loading', (
+  testWidgets('shows loading indicator while workspace is initial', (
     tester,
   ) async {
-    when(() => bloc.state).thenReturn(const DocumentWorkspaceLoading());
+    when(() => bloc.state).thenReturn(const DocumentWorkspaceInitial());
     when(() => bloc.stream).thenAnswer((_) => const Stream.empty());
 
     await pumpApp(tester, DocumentWorkspacePage(document: document));
@@ -74,6 +79,19 @@ void main() {
 
     verify(() => bloc.add(any(that: isA<DocumentWorkspaceStarted>())))
         .called(1);
+  });
+
+  testWidgets('shows viewer with loading indicator while opening', (
+    tester,
+  ) async {
+    when(() => bloc.state)
+        .thenReturn(const DocumentWorkspaceOpening(initialPageNumber: 1));
+    when(() => bloc.stream).thenAnswer((_) => const Stream.empty());
+
+    await pumpApp(tester, DocumentWorkspacePage(document: document));
+
+    expect(find.text('Document Viewer'), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 
   testWidgets('shows error message when workspace fails', (tester) async {
@@ -88,21 +106,18 @@ void main() {
 
   testWidgets('shows workspace view when loaded', (tester) async {
     when(() => bloc.state).thenReturn(
-      DocumentWorkspaceLoaded(
+      const DocumentWorkspaceLoaded(
         currentPage: 1,
         pageCount: 10,
         currentZoom: 1,
         selectedTool: WorkspaceTool.select,
         selectedPanel: null,
         searchState: SearchState(),
-        bookmarks: const [],
-        annotations: const [],
+        bookmarks: [],
+        annotations: [],
       ),
     );
     when(() => bloc.stream).thenAnswer((_) => const Stream.empty());
-
-    when(() => engine.buildViewer(config: any(named: 'config')))
-        .thenReturn(const Text('Document Viewer'));
 
     await pumpApp(tester, DocumentWorkspacePage(document: document));
 
