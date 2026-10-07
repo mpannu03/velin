@@ -1,38 +1,48 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:image/image.dart' as img;
 import 'package:pdfrx_engine/pdfrx_engine.dart';
+import 'package:velin/core/result/result.dart';
 
 class PdfPageRenderer {
-  Future<File> render({
+  Future<Result<File>> render({
     required File document,
     required int page,
     required File output,
     required int width,
   }) async {
-    final pdf = await PdfDocument.openFile(document.path);
-
     try {
-      final pdfPage = pdf.pages[page - 1];
+      final pdf = await PdfDocument.openFile(document.path);
 
-      final scale = width / pdfPage.width;
-      final height = (pdfPage.height * scale).round();
+      try {
+        final pdfPage = pdf.pages[page - 1];
 
-      final image = await pdfPage.render(width: width, height: height);
+        final scale = width / pdfPage.width;
+        final height = (pdfPage.height * scale).round();
 
-      if (image == null) {
-        throw StateError('Failed to render page $page of ${document.path}.');
+        final image = await pdfPage.render(width: width, height: height);
+
+        if (image == null) {
+          return Failure(
+            StateError('Failed to render page $page of ${document.path}.'),
+          );
+        }
+
+        final bytes = _encodePng(
+          width: image.width,
+          height: image.height,
+          pixels: image.pixels,
+        );
+
+        await output.writeAsBytes(bytes);
+
+        return Success(output);
+      } finally {
+        await pdf.dispose();
       }
-
-      final bytes = image.pixels;
-
-      await output.writeAsBytes(
-        _encodePng(width: image.width, height: image.height, pixels: bytes),
-      );
-
-      return output;
-    } finally {
-      await pdf.dispose();
+    } catch (error, stackTrace) {
+      return Failure(error, stackTrace);
     }
   }
 
@@ -41,7 +51,14 @@ class PdfPageRenderer {
     required int height,
     required Uint8List pixels,
   }) {
-    // We'll use the existing image package here.
-    throw UnimplementedError();
+    final image = img.Image.fromBytes(
+      width: width,
+      height: height,
+      bytes: pixels.buffer,
+      numChannels: 4,
+      order: img.ChannelOrder.rgba,
+    );
+
+    return Uint8List.fromList(img.encodePng(image));
   }
 }

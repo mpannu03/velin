@@ -1,5 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velin/core/document/engine/engine.dart';
+import 'package:velin/core/recent/recent.dart';
+import 'package:velin/core/recent/recent_document_service.dart';
+import 'package:velin/core/result/result.dart';
 import 'package:velin/shared/utils/utils.dart';
 
 import '../models/models.dart';
@@ -10,8 +13,10 @@ part 'document_workspace_state.dart';
 
 class DocumentWorkspaceBloc
     extends Bloc<DocumentWorkspaceEvent, DocumentWorkspaceState> {
-  DocumentWorkspaceBloc({required this._engine})
-    : super(const DocumentWorkspaceInitial()) {
+  DocumentWorkspaceBloc({
+    required this._engine,
+    required this._recentDocumentService,
+  }) : super(const DocumentWorkspaceInitial()) {
     on<DocumentWorkspaceStarted>(_onStarted);
     on<DocumentWorkspacePageChanged>(_onPageChanged);
     on<DocumentWorkspaceZoomChanged>(_onZoomChanged);
@@ -29,18 +34,44 @@ class DocumentWorkspaceBloc
   }
 
   final DocumentEngine _engine;
+  final RecentDocumentService _recentDocumentService;
 
-  void _onStarted(
+  Future<void> _onStarted(
     DocumentWorkspaceStarted event,
     Emitter<DocumentWorkspaceState> emit,
-  ) {
-    emit(const DocumentWorkspaceOpening());
+  ) async {
+    final recentDocument = await _recentDocumentService.get(
+      _engine.document.path,
+    );
+
+    if (emit.isDone) return;
+
+    switch (recentDocument) {
+      case Failure():
+        emit(DocumentWorkspaceOpening(initialPageNumber: 1));
+      case Success(:final data):
+        emit(DocumentWorkspaceOpening(initialPageNumber: data.currentPage));
+    }
   }
 
   Future<void> _onReady(
     DocumentWorkspaceReady event,
     Emitter<DocumentWorkspaceState> emit,
   ) async {
+    final currentPage = _engine.snapshot.currentPage;
+    final pageCount = _engine.snapshot.pageCount;
+    final currentZoom = _engine.snapshot.zoom;
+
+    await _recentDocumentService.open(
+      path: _engine.document.path,
+      pageCount: pageCount,
+      currentPage: currentPage!,
+    );
+
+    if (emit.isDone) {
+      return;
+    }
+
     List<Bookmark> bookmarks = const [];
 
     if (_engine.capabilities.bookmarks) {
@@ -53,9 +84,9 @@ class DocumentWorkspaceBloc
 
     emit(
       DocumentWorkspaceLoaded(
-        currentPage: _engine.snapshot.currentPage!,
-        pageCount: _engine.snapshot.pageCount,
-        currentZoom: _engine.snapshot.zoom,
+        currentPage: currentPage,
+        pageCount: pageCount,
+        currentZoom: currentZoom,
         bookmarks: bookmarks,
       ),
     );
@@ -81,13 +112,24 @@ class DocumentWorkspaceBloc
     DocumentWorkspacePageChanged event,
     Emitter<DocumentWorkspaceState> emit,
   ) {
+    final page = event.page;
+
+    if (page == null) {
+      return;
+    }
+
+    _recentDocumentService.pageChanged(
+      path: _engine.document.path,
+      currentPage: page,
+    );
+
     final currentState = state;
 
     if (currentState is! DocumentWorkspaceLoaded) {
       return;
     }
 
-    emit(currentState.copyWith(currentPage: event.page));
+    emit(currentState.copyWith(currentPage: page));
   }
 
   void _onZoomChanged(
@@ -259,5 +301,11 @@ class DocumentWorkspaceBloc
     }
 
     _engine.annotation?.goto(event.annotation);
+  }
+
+  @override
+  Future<void> close() async {
+    await _recentDocumentService.flush(_engine.document.path);
+    return super.close();
   }
 }

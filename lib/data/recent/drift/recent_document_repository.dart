@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:velin/core/recent/recent_document.dart';
 import 'package:velin/core/recent/recent_document_repository.dart';
+import 'package:velin/core/result/result.dart';
 
 import 'recent_database.dart';
 
@@ -10,34 +11,38 @@ class DriftRecentDocumentRepository implements RecentDocumentRepository {
   final RecentDatabase _database;
 
   @override
-  Stream<List<RecentDocument>> watchRecent({int limit = 10}) {
+  Stream<Result<List<RecentDocument>>> watchRecent({int limit = 10}) {
     final query = _database.select(_database.recentDocumentsTable)
       ..orderBy([(table) => OrderingTerm.desc(table.lastOpenedAt)])
       ..limit(limit);
 
     return query.watch().map(
-      (rows) => rows.map(_mapToRecentDocument).toList(growable: false),
+      (rows) => Success(rows.map(_mapToRecentDocument).toList(growable: false)),
     );
   }
 
   @override
-  Stream<RecentDocument?> watch(String path) {
+  Stream<Result<RecentDocument>> watch(String path) {
     final query = _database.select(_database.recentDocumentsTable)
       ..where((table) => table.path.equals(path));
 
     return query.watchSingleOrNull().map(
-      (row) => row == null ? null : _mapToRecentDocument(row),
+      (row) => row == null
+          ? Failure(StateError('Recent document for $path not found.'))
+          : Success(_mapToRecentDocument(row)),
     );
   }
 
   @override
-  Future<RecentDocument?> get(String path) async {
+  Future<Result<RecentDocument>> get(String path) async {
     final query = _database.select(_database.recentDocumentsTable)
       ..where((table) => table.path.equals(path));
 
     final row = await query.getSingleOrNull();
 
-    return row == null ? null : _mapToRecentDocument(row);
+    return row == null
+        ? Failure(StateError('Recent document for $path not found.'))
+        : Success(_mapToRecentDocument(row));
   }
 
   @override

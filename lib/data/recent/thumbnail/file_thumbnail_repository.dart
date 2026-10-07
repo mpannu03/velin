@@ -6,6 +6,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'package:velin/core/recent/thumbnail_repository.dart';
+import 'package:velin/core/result/result.dart';
 
 class FileThumbnailRepository implements ThumbnailRepository {
   Directory? _directory;
@@ -17,10 +18,12 @@ class FileThumbnailRepository implements ThumbnailRepository {
   }
 
   @override
-  Future<File?> get(String path) async {
+  Future<Result<File>> get(String path) async {
     final file = await _fileFor(path);
 
-    return await file.exists() ? file : null;
+    return await file.exists()
+        ? Success(file)
+        : Failure(StateError('Thumbnail for $path not found.'));
   }
 
   @override

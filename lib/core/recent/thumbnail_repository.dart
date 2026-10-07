@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:velin/core/result/result.dart';
+
 abstract interface class ThumbnailRepository {
-  Future<File?> get(String path);
+  Future<Result<File>> get(String path);
 
   Future<void> save(String path, File thumbnail);
 

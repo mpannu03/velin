@@ -9,7 +9,9 @@ final class DocumentWorkspaceInitial extends DocumentWorkspaceState {
 }
 
 final class DocumentWorkspaceOpening extends DocumentWorkspaceState {
-  const DocumentWorkspaceOpening();
+  const DocumentWorkspaceOpening({this.initialPageNumber});
+
+  final int? initialPageNumber;
 }
 
 final class DocumentWorkspaceLoaded extends DocumentWorkspaceState {

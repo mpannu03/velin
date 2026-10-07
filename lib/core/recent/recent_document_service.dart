@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:velin/core/result/result.dart';
 import 'package:velin/engine/rendering/rendering.dart';
 
 import 'recent_document.dart';
@@ -24,15 +25,15 @@ class RecentDocumentService {
   final Map<String, Timer> _pageTimers = {};
   final Map<String, int> _pendingPages = {};
 
-  Stream<List<RecentDocument>> watchRecent({int limit = 10}) {
+  Stream<Result<List<RecentDocument>>> watchRecent({int limit = 10}) {
     return _repository.watchRecent(limit: limit);
   }
 
-  Stream<RecentDocument?> watch(String path) {
+  Stream<Result<RecentDocument>> watch(String path) {
     return _repository.watch(path);
   }
 
-  Future<RecentDocument?> get(String path) {
+  Future<Result<RecentDocument>> get(String path) {
     return _repository.get(path);
   }
 
@@ -103,22 +104,19 @@ class RecentDocumentService {
     await _repository.updateCurrentPage(path, page);
   }
 
-  Future<File?> _ensureThumbnail(String path) async {
+  Future<Result<File?>> _ensureThumbnail(String path) async {
     final cached = await _thumbnailRepository.get(path);
-
-    if (cached != null) {
-      return cached;
-    }
+    if (cached is Success) return cached;
 
     final temporaryDirectory = await Directory.systemTemp.createTemp(
       'velin-thumbnail-',
     );
 
-    final output = File(
-      '${temporaryDirectory.path}${Platform.pathSeparator}thumbnail.png',
-    );
-
     try {
+      final output = File(
+        '${temporaryDirectory.path}${Platform.pathSeparator}thumbnail.png',
+      );
+
       final thumbnail = await _pageRenderer.render(
         document: File(path),
         page: 1,
@@ -126,7 +124,10 @@ class RecentDocumentService {
         width: _thumbnailWidth,
       );
 
-      await _thumbnailRepository.save(path, thumbnail);
+      if (thumbnail is Failure) return thumbnail;
+
+      final data = (thumbnail as Success<File>).data;
+      await _thumbnailRepository.save(path, data);
 
       return await _thumbnailRepository.get(path);
     } finally {

@@ -3,6 +3,7 @@ import 'package:velin/core/di/injection.dart';
 import 'package:velin/core/document/document.dart';
 import 'package:velin/core/document/engine/engine.dart';
 import 'package:velin/core/file/file_picker.dart';
+import 'package:velin/core/recent/recent.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
 import 'package:velin/features/document_workspace/bloc/document_workspace_bloc.dart';
@@ -19,7 +20,10 @@ void registerBlocDependencies() {
   );
 
   getIt.registerFactoryParam<DocumentWorkspaceBloc, DocumentEngine, void>(
-    (engine, _) => DocumentWorkspaceBloc(engine: engine),
+    (engine, _) => DocumentWorkspaceBloc(
+      engine: engine,
+      recentDocumentService: getIt<RecentDocumentService>(),
+    ),
   );
 
   getIt.registerFactoryParam<MergePdfCubit, AppLocalizations, void>(
