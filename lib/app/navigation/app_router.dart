@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/navigation/navigation.dart';
 import 'package:velin/app/shell/app_shell.dart';
 import 'package:velin/core/platform/platform.dart';
+import 'package:velin/features/home/home.dart';
 import 'package:velin/features/reader/reader.dart';
 import 'package:velin/features/tools/tools.dart';
 
@@ -21,11 +22,7 @@ class AppRouter {
         branches: [
           StatefulShellBranch(
             routes: [
-              GoRoute(
-                path: '/',
-                builder: (context, state) =>
-                    const _PlaceholderPage(title: 'Home'),
-              ),
+              GoRoute(path: '/', builder: (context, state) => const HomePage()),
             ],
           ),
           StatefulShellBranch(

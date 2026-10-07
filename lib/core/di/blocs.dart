@@ -7,6 +7,7 @@ import 'package:velin/core/recent/recent.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
 import 'package:velin/features/document_workspace/bloc/document_workspace_bloc.dart';
+import 'package:velin/features/home/home.dart';
 import 'package:velin/features/reader/reader.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/l10n/app_localizations.dart';
@@ -123,6 +124,13 @@ void registerBlocDependencies() {
       addWatermarkEngine: getIt<AddWatermarkEngine>(),
       taskManager: getIt<TaskManager>(),
       appEffectController: getIt<AppEffectController>(),
+    ),
+  );
+
+  getIt.registerFactory<HomeBloc>(
+    () => HomeBloc(
+      recentDocumentService: getIt<RecentDocumentService>(),
+      documentService: getIt<DocumentService>(),
     ),
   );
 }

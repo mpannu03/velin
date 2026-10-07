@@ -14,14 +14,16 @@ class PdfPageRenderer {
   }) async {
     try {
       final pdf = await PdfDocument.openFile(document.path);
-
       try {
         final pdfPage = pdf.pages[page - 1];
 
         final scale = width / pdfPage.width;
-        final height = (pdfPage.height * scale).round();
+        final outHeight = (pdfPage.height * scale).round();
 
-        final image = await pdfPage.render(width: width, height: height);
+        final image = await pdfPage.render(
+          fullWidth: width.toDouble(),
+          fullHeight: outHeight.toDouble(),
+        );
 
         if (image == null) {
           return Failure(
@@ -36,7 +38,6 @@ class PdfPageRenderer {
         );
 
         await output.writeAsBytes(bytes);
-
         return Success(output);
       } finally {
         await pdf.dispose();

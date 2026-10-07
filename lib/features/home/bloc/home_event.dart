@@ -13,3 +13,7 @@ final class HomeRecentDocumentSelected extends HomeEvent {
 
   final RecentDocument recentDocument;
 }
+
+final class HomeOpenRequested extends HomeEvent {
+  const HomeOpenRequested();
+}
