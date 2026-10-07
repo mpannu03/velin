@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/document/engine/engine.dart';
 import 'package:velin/core/recent/recent.dart';
 import 'package:velin/core/recent/recent_document_service.dart';
 import 'package:velin/core/result/result.dart';
+import 'package:velin/services/dictionary/dictionary.dart';
 import 'package:velin/shared/utils/utils.dart';
 
 import '../models/models.dart';
@@ -10,12 +12,16 @@ import 'document_workspace_listener.dart';
 
 part 'document_workspace_event.dart';
 part 'document_workspace_state.dart';
+part 'search_state.dart';
+part 'dictionary_state.dart';
 
 class DocumentWorkspaceBloc
     extends Bloc<DocumentWorkspaceEvent, DocumentWorkspaceState> {
   DocumentWorkspaceBloc({
     required this._engine,
     required this._recentDocumentService,
+    required this._dictionaryService,
+    required this._appEffectController,
   }) : super(const DocumentWorkspaceInitial()) {
     on<DocumentWorkspaceStarted>(_onStarted);
     on<DocumentWorkspacePageChanged>(_onPageChanged);
@@ -30,12 +36,16 @@ class DocumentWorkspaceBloc
     on<DocumentWorkspaceSelectBookmark>(_onSelectBookmark);
     on<DocumentWorkspaceSelectAnnotation>(_onSelectAnnotation);
     on<DocumentWorkspaceTextSelected>(_onTextSelected);
+    on<DocumentWorkspaceDictionaryLookup>(_onDictionaryLookup);
+    on<DocumentWorkspaceClearDictionary>(_onClearDictionary);
 
     _engine.listener = DocumentWorkspaceListener(bloc: this);
   }
 
   final DocumentEngine _engine;
   final RecentDocumentService _recentDocumentService;
+  final DictionaryService _dictionaryService;
+  final AppEffectController _appEffectController;
 
   Future<void> _onStarted(
     DocumentWorkspaceStarted event,
@@ -312,13 +322,85 @@ class DocumentWorkspaceBloc
     final currentState = state;
 
     if (currentState is! DocumentWorkspaceLoaded ||
-        !_engine.capabilities.textSelection) {
+        !_engine.capabilities.textSelection ||
+        event.text.trim().isEmpty) {
       return;
     }
 
     if (currentState.selectedTool == WorkspaceTool.dictionary) {
       emit(currentState.copyWith(selectedPanel: WorkspacePanel.dictionary));
     }
+  }
+
+  Future<void> _onDictionaryLookup(
+    DocumentWorkspaceDictionaryLookup event,
+    Emitter<DocumentWorkspaceState> emit,
+  ) async {
+    final currentState = state;
+
+    if (currentState is! DocumentWorkspaceLoaded || event.text.trim().isEmpty) {
+      return;
+    }
+
+    emit(
+      currentState.copyWith(
+        dictionaryState: DictionaryState(
+          query: event.text,
+          result: null,
+          isLoading: true,
+        ),
+      ),
+    );
+
+    final result = await _dictionaryService.lookup(event.text.trim());
+
+    switch (result) {
+      case Success<DictionaryEntry>(:final data):
+        emit(
+          currentState.copyWith(
+            dictionaryState: DictionaryState(
+              query: event.text,
+              result: data,
+              isLoading: false,
+            ),
+          ),
+        );
+      case Failure<DictionaryEntry>():
+        emit(
+          currentState.copyWith(
+            dictionaryState: DictionaryState(
+              query: event.text,
+              result: null,
+              isLoading: false,
+            ),
+          ),
+        );
+        _appEffectController.notifyUser(
+          message: "Failed to lookup dictionary entry.",
+          type: NotificationType.error,
+        );
+    }
+  }
+
+  void _onClearDictionary(
+    DocumentWorkspaceClearDictionary event,
+    Emitter<DocumentWorkspaceState> emit,
+  ) {
+    final currentState = state;
+
+    if (currentState is! DocumentWorkspaceLoaded) {
+      return;
+    }
+
+    emit(
+      currentState.copyWith(
+        dictionaryState: DictionaryState(
+          query: "",
+          result: null,
+          isLoading: false,
+        ),
+      ),
+    );
   }
 
   @override

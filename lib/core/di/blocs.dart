@@ -11,6 +11,7 @@ import 'package:velin/features/home/home.dart';
 import 'package:velin/features/reader/reader.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/l10n/app_localizations.dart';
+import 'package:velin/services/dictionary/dictionary.dart';
 
 void registerBlocDependencies() {
   getIt.registerFactory<ReaderBloc>(
@@ -24,6 +25,8 @@ void registerBlocDependencies() {
     (engine, _) => DocumentWorkspaceBloc(
       engine: engine,
       recentDocumentService: getIt<RecentDocumentService>(),
+      dictionaryService: getIt<DictionaryService>(),
+      appEffectController: getIt<AppEffectController>(),
     ),
   );
 

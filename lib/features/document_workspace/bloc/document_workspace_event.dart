@@ -74,3 +74,13 @@ final class DocumentWorkspaceTextSelected extends DocumentWorkspaceEvent {
 
   final String text;
 }
+
+final class DocumentWorkspaceDictionaryLookup extends DocumentWorkspaceEvent {
+  const DocumentWorkspaceDictionaryLookup(this.text);
+
+  final String text;
+}
+
+final class DocumentWorkspaceClearDictionary extends DocumentWorkspaceEvent {
+  const DocumentWorkspaceClearDictionary();
+}
