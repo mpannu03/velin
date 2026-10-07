@@ -18,6 +18,9 @@ void main() {
           onBookmarkSelected: (_) {},
           annotations: const [],
           onAnnotationSelected: (_) {},
+          dictionaryState: DictionaryState(),
+          onDictionaryLookup: (_) {},
+          onClearDictionary: () {},
         ),
       );
 
@@ -37,6 +40,9 @@ void main() {
           onBookmarkSelected: (_) {},
           annotations: const [],
           onAnnotationSelected: (_) {},
+          dictionaryState: DictionaryState(),
+          onDictionaryLookup: (_) {},
+          onClearDictionary: () {},
         ),
       );
 
@@ -56,6 +62,9 @@ void main() {
           onBookmarkSelected: (_) {},
           annotations: const [],
           onAnnotationSelected: (_) {},
+          dictionaryState: DictionaryState(),
+          onDictionaryLookup: (_) {},
+          onClearDictionary: () {},
         ),
       );
 
@@ -75,10 +84,13 @@ void main() {
           onBookmarkSelected: (_) {},
           annotations: const [],
           onAnnotationSelected: (_) {},
+          dictionaryState: DictionaryState(),
+          onDictionaryLookup: (_) {},
+          onClearDictionary: () {},
         ),
       );
 
-      expect(find.text('Dictionary'), findsNWidgets(2));
+      expect(find.byType(DictionaryPanel), findsOneWidget);
     });
   });
 }

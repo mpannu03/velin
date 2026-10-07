@@ -35,6 +35,9 @@ void main() {
       onBookmarkSelected: (_) {},
       annotations: const [],
       onAnnotationSelected: (_) {},
+      dictionaryState: DictionaryState(),
+      onDictionaryLookup: (_) {},
+      onClearDictionary: () {},
     );
   });
 
@@ -72,6 +75,9 @@ void main() {
       onBookmarkSelected: viewModel.onBookmarkSelected,
       annotations: viewModel.annotations,
       onAnnotationSelected: viewModel.onAnnotationSelected,
+      dictionaryState: viewModel.dictionaryState,
+      onDictionaryLookup: viewModel.onDictionaryLookup,
+      onClearDictionary: viewModel.onClearDictionary,
     );
 
     await pumpApp(
