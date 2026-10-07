@@ -1,5 +1,6 @@
 import 'package:velin/core/document/document.dart';
 import 'package:velin/core/file/file_picker.dart';
+import 'package:velin/core/recent/recent.dart';
 import 'package:velin/core/result/result.dart';
 
 class DocumentServiceImpl implements DocumentService {
@@ -33,6 +34,14 @@ class DocumentServiceImpl implements DocumentService {
     }
 
     return _documentRepository.open(path, type);
+  }
+
+  @override
+  Future<Result<Document>> openRecent(RecentDocument recentDocument) async {
+    return _documentRepository.open(
+      recentDocument.path,
+      recentDocument.documentType,
+    );
   }
 
   @override

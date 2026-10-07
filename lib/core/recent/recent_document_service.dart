@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:velin/core/document/document.dart';
 import 'package:velin/core/result/result.dart';
 import 'package:velin/engine/rendering/rendering.dart';
 
@@ -41,6 +42,7 @@ class RecentDocumentService {
     required String path,
     required int pageCount,
     required int currentPage,
+    required DocumentType documentType,
   }) async {
     await _repository.save(
       RecentDocument(
@@ -48,6 +50,7 @@ class RecentDocumentService {
         pageCount: pageCount,
         currentPage: currentPage,
         lastOpenedAt: DateTime.now(),
+        documentType: documentType,
       ),
     );
 

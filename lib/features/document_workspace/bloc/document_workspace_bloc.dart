@@ -66,6 +66,7 @@ class DocumentWorkspaceBloc
       path: _engine.document.path,
       pageCount: pageCount,
       currentPage: currentPage!,
+      documentType: _engine.document.type,
     );
 
     if (emit.isDone) {

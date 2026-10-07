@@ -55,6 +55,7 @@ class DriftRecentDocumentRepository implements RecentDocumentRepository {
             pageCount: document.pageCount,
             currentPage: document.currentPage,
             lastOpenedAt: document.lastOpenedAt,
+            documentType: document.documentType,
           ),
         );
   }
@@ -84,6 +85,7 @@ class DriftRecentDocumentRepository implements RecentDocumentRepository {
       pageCount: row.pageCount,
       currentPage: row.currentPage,
       lastOpenedAt: row.lastOpenedAt,
+      documentType: row.documentType,
     );
   }
 }

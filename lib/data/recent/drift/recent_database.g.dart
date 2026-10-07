@@ -52,11 +52,23 @@ class $RecentDocumentsTableTable extends RecentDocumentsTable
     requiredDuringInsert: true,
   );
   @override
+  late final GeneratedColumnWithTypeConverter<DocumentType, int> documentType =
+      GeneratedColumn<int>(
+        'document_type',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<DocumentType>(
+        $RecentDocumentsTableTable.$converterdocumentType,
+      );
+  @override
   List<GeneratedColumn> get $columns => [
     path,
     pageCount,
     currentPage,
     lastOpenedAt,
+    documentType,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -136,6 +148,12 @@ class $RecentDocumentsTableTable extends RecentDocumentsTable
         DriftSqlType.dateTime,
         data['${effectivePrefix}last_opened_at'],
       )!,
+      documentType: $RecentDocumentsTableTable.$converterdocumentType.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}document_type'],
+        )!,
+      ),
     );
   }
 
@@ -143,6 +161,9 @@ class $RecentDocumentsTableTable extends RecentDocumentsTable
   $RecentDocumentsTableTable createAlias(String alias) {
     return $RecentDocumentsTableTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<DocumentType, int, int> $converterdocumentType =
+      const EnumIndexConverter<DocumentType>(DocumentType.values);
 }
 
 class RecentDocumentsTableData extends DataClass
@@ -151,11 +172,13 @@ class RecentDocumentsTableData extends DataClass
   final int pageCount;
   final int currentPage;
   final DateTime lastOpenedAt;
+  final DocumentType documentType;
   const RecentDocumentsTableData({
     required this.path,
     required this.pageCount,
     required this.currentPage,
     required this.lastOpenedAt,
+    required this.documentType,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -164,6 +187,11 @@ class RecentDocumentsTableData extends DataClass
     map['page_count'] = Variable<int>(pageCount);
     map['current_page'] = Variable<int>(currentPage);
     map['last_opened_at'] = Variable<DateTime>(lastOpenedAt);
+    {
+      map['document_type'] = Variable<int>(
+        $RecentDocumentsTableTable.$converterdocumentType.toSql(documentType),
+      );
+    }
     return map;
   }
 
@@ -173,6 +201,7 @@ class RecentDocumentsTableData extends DataClass
       pageCount: Value(pageCount),
       currentPage: Value(currentPage),
       lastOpenedAt: Value(lastOpenedAt),
+      documentType: Value(documentType),
     );
   }
 
@@ -186,6 +215,9 @@ class RecentDocumentsTableData extends DataClass
       pageCount: serializer.fromJson<int>(json['pageCount']),
       currentPage: serializer.fromJson<int>(json['currentPage']),
       lastOpenedAt: serializer.fromJson<DateTime>(json['lastOpenedAt']),
+      documentType: $RecentDocumentsTableTable.$converterdocumentType.fromJson(
+        serializer.fromJson<int>(json['documentType']),
+      ),
     );
   }
   @override
@@ -196,6 +228,9 @@ class RecentDocumentsTableData extends DataClass
       'pageCount': serializer.toJson<int>(pageCount),
       'currentPage': serializer.toJson<int>(currentPage),
       'lastOpenedAt': serializer.toJson<DateTime>(lastOpenedAt),
+      'documentType': serializer.toJson<int>(
+        $RecentDocumentsTableTable.$converterdocumentType.toJson(documentType),
+      ),
     };
   }
 
@@ -204,11 +239,13 @@ class RecentDocumentsTableData extends DataClass
     int? pageCount,
     int? currentPage,
     DateTime? lastOpenedAt,
+    DocumentType? documentType,
   }) => RecentDocumentsTableData(
     path: path ?? this.path,
     pageCount: pageCount ?? this.pageCount,
     currentPage: currentPage ?? this.currentPage,
     lastOpenedAt: lastOpenedAt ?? this.lastOpenedAt,
+    documentType: documentType ?? this.documentType,
   );
   RecentDocumentsTableData copyWithCompanion(
     RecentDocumentsTableCompanion data,
@@ -222,6 +259,9 @@ class RecentDocumentsTableData extends DataClass
       lastOpenedAt: data.lastOpenedAt.present
           ? data.lastOpenedAt.value
           : this.lastOpenedAt,
+      documentType: data.documentType.present
+          ? data.documentType.value
+          : this.documentType,
     );
   }
 
@@ -231,13 +271,15 @@ class RecentDocumentsTableData extends DataClass
           ..write('path: $path, ')
           ..write('pageCount: $pageCount, ')
           ..write('currentPage: $currentPage, ')
-          ..write('lastOpenedAt: $lastOpenedAt')
+          ..write('lastOpenedAt: $lastOpenedAt, ')
+          ..write('documentType: $documentType')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(path, pageCount, currentPage, lastOpenedAt);
+  int get hashCode =>
+      Object.hash(path, pageCount, currentPage, lastOpenedAt, documentType);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -245,7 +287,8 @@ class RecentDocumentsTableData extends DataClass
           other.path == this.path &&
           other.pageCount == this.pageCount &&
           other.currentPage == this.currentPage &&
-          other.lastOpenedAt == this.lastOpenedAt);
+          other.lastOpenedAt == this.lastOpenedAt &&
+          other.documentType == this.documentType);
 }
 
 class RecentDocumentsTableCompanion
@@ -254,12 +297,14 @@ class RecentDocumentsTableCompanion
   final Value<int> pageCount;
   final Value<int> currentPage;
   final Value<DateTime> lastOpenedAt;
+  final Value<DocumentType> documentType;
   final Value<int> rowid;
   const RecentDocumentsTableCompanion({
     this.path = const Value.absent(),
     this.pageCount = const Value.absent(),
     this.currentPage = const Value.absent(),
     this.lastOpenedAt = const Value.absent(),
+    this.documentType = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   RecentDocumentsTableCompanion.insert({
@@ -267,16 +312,19 @@ class RecentDocumentsTableCompanion
     required int pageCount,
     required int currentPage,
     required DateTime lastOpenedAt,
+    required DocumentType documentType,
     this.rowid = const Value.absent(),
   }) : path = Value(path),
        pageCount = Value(pageCount),
        currentPage = Value(currentPage),
-       lastOpenedAt = Value(lastOpenedAt);
+       lastOpenedAt = Value(lastOpenedAt),
+       documentType = Value(documentType);
   static Insertable<RecentDocumentsTableData> custom({
     Expression<String>? path,
     Expression<int>? pageCount,
     Expression<int>? currentPage,
     Expression<DateTime>? lastOpenedAt,
+    Expression<int>? documentType,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -284,6 +332,7 @@ class RecentDocumentsTableCompanion
       if (pageCount != null) 'page_count': pageCount,
       if (currentPage != null) 'current_page': currentPage,
       if (lastOpenedAt != null) 'last_opened_at': lastOpenedAt,
+      if (documentType != null) 'document_type': documentType,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -293,6 +342,7 @@ class RecentDocumentsTableCompanion
     Value<int>? pageCount,
     Value<int>? currentPage,
     Value<DateTime>? lastOpenedAt,
+    Value<DocumentType>? documentType,
     Value<int>? rowid,
   }) {
     return RecentDocumentsTableCompanion(
@@ -300,6 +350,7 @@ class RecentDocumentsTableCompanion
       pageCount: pageCount ?? this.pageCount,
       currentPage: currentPage ?? this.currentPage,
       lastOpenedAt: lastOpenedAt ?? this.lastOpenedAt,
+      documentType: documentType ?? this.documentType,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -319,6 +370,13 @@ class RecentDocumentsTableCompanion
     if (lastOpenedAt.present) {
       map['last_opened_at'] = Variable<DateTime>(lastOpenedAt.value);
     }
+    if (documentType.present) {
+      map['document_type'] = Variable<int>(
+        $RecentDocumentsTableTable.$converterdocumentType.toSql(
+          documentType.value,
+        ),
+      );
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -332,6 +390,7 @@ class RecentDocumentsTableCompanion
           ..write('pageCount: $pageCount, ')
           ..write('currentPage: $currentPage, ')
           ..write('lastOpenedAt: $lastOpenedAt, ')
+          ..write('documentType: $documentType, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -356,6 +415,7 @@ typedef $$RecentDocumentsTableTableCreateCompanionBuilder =
       required int pageCount,
       required int currentPage,
       required DateTime lastOpenedAt,
+      required DocumentType documentType,
       Value<int> rowid,
     });
 typedef $$RecentDocumentsTableTableUpdateCompanionBuilder =
@@ -364,6 +424,7 @@ typedef $$RecentDocumentsTableTableUpdateCompanionBuilder =
       Value<int> pageCount,
       Value<int> currentPage,
       Value<DateTime> lastOpenedAt,
+      Value<DocumentType> documentType,
       Value<int> rowid,
     });
 
@@ -395,6 +456,12 @@ class $$RecentDocumentsTableTableFilterComposer
     column: $table.lastOpenedAt,
     builder: (column) => ColumnFilters(column),
   );
+
+  ColumnWithTypeConverterFilters<DocumentType, DocumentType, int>
+  get documentType => $composableBuilder(
+    column: $table.documentType,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
 }
 
 class $$RecentDocumentsTableTableOrderingComposer
@@ -425,6 +492,11 @@ class $$RecentDocumentsTableTableOrderingComposer
     column: $table.lastOpenedAt,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<int> get documentType => $composableBuilder(
+    column: $table.documentType,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$RecentDocumentsTableTableAnnotationComposer
@@ -451,6 +523,12 @@ class $$RecentDocumentsTableTableAnnotationComposer
     column: $table.lastOpenedAt,
     builder: (column) => column,
   );
+
+  GeneratedColumnWithTypeConverter<DocumentType, int> get documentType =>
+      $composableBuilder(
+        column: $table.documentType,
+        builder: (column) => column,
+      );
 }
 
 class $$RecentDocumentsTableTableTableManager
@@ -500,12 +578,14 @@ class $$RecentDocumentsTableTableTableManager
                 Value<int> pageCount = const Value.absent(),
                 Value<int> currentPage = const Value.absent(),
                 Value<DateTime> lastOpenedAt = const Value.absent(),
+                Value<DocumentType> documentType = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => RecentDocumentsTableCompanion(
                 path: path,
                 pageCount: pageCount,
                 currentPage: currentPage,
                 lastOpenedAt: lastOpenedAt,
+                documentType: documentType,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -514,12 +594,14 @@ class $$RecentDocumentsTableTableTableManager
                 required int pageCount,
                 required int currentPage,
                 required DateTime lastOpenedAt,
+                required DocumentType documentType,
                 Value<int> rowid = const Value.absent(),
               }) => RecentDocumentsTableCompanion.insert(
                 path: path,
                 pageCount: pageCount,
                 currentPage: currentPage,
                 lastOpenedAt: lastOpenedAt,
+                documentType: documentType,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
