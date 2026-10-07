@@ -1,3 +1,4 @@
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 import 'package:velin/shared/extensions/extensions.dart';
@@ -27,15 +28,19 @@ class DesktopShell extends StatelessWidget {
 class _WindowRibbon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return ColoredBox(
-      color: Theme.of(context).colorScheme.primaryContainer,
+      color: colorScheme.primaryContainer,
       child: Row(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
-            child: Text(
-              context.l10n.appName,
-              style: TextStyle(fontWeight: FontWeight.w600),
+          SvgPicture.asset(
+            'assets/icons/icon_mono.svg',
+            height: AppDimensions.desktopRibbonHeight,
+            width: AppDimensions.desktopRibbonHeight,
+            colorFilter: ColorFilter.mode(
+              colorScheme.primary,
+              BlendMode.modulate,
             ),
           ),
           VelinMenuButton(label: context.l10n.menuFile, onPressed: () {}),
