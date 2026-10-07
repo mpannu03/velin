@@ -116,6 +116,26 @@
     "description": "Label for the Dictionary panel."
   },
 
+  "panelDictionaryHint": "Look up a word...",
+  "@panelDictionaryHint": {
+    "description": "Hint text for the dictionary lookup field."
+  },
+
+  "panelDictionaryClear": "Clear dictionary lookup",
+  "@panelDictionaryClear": {
+    "description": "Tooltip for the clear button in the Dictionary panel."
+  },
+
+  "panelDictionaryEmpty": "Enter a word to look up its meaning",
+  "@panelDictionaryEmpty": {
+    "description": "Message shown in the Dictionary panel before any lookup."
+  },
+
+  "panelDictionaryNotFound": "No definition found",
+  "@panelDictionaryNotFound": {
+    "description": "Message shown in the Dictionary panel when no definition was found."
+  },
+
   "toolZoomIn": "Zoom In",
   "@toolZoomIn": {
     "description": "Label for the Zoom In action."

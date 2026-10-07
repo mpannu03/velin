@@ -1,12 +1,14 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/document/document.dart';
 import 'package:velin/core/document/engine/engine.dart';
 import 'package:velin/core/recent/recent.dart';
 import 'package:velin/core/recent/recent_document_service.dart';
 import 'package:velin/core/result/result.dart';
 import 'package:velin/features/document_workspace/document_workspace.dart';
+import 'package:velin/services/dictionary/dictionary.dart';
 
 class MockDocumentEngine extends Mock implements DocumentEngine {}
 
@@ -14,11 +16,26 @@ class MockTextSearchCapability extends Mock implements TextSearchCapability {}
 
 class MockRecentDocumentService extends Mock implements RecentDocumentService {}
 
+class MockDictionaryService extends Mock implements DictionaryService {}
+
+class MockAppEffectController extends Mock implements AppEffectController {}
+
 void main() {
   late MockDocumentEngine engine;
   late MockTextSearchCapability textSearch;
   late MockRecentDocumentService recentDocumentService;
+  late MockAppEffectController appEffectController;
+  late MockDictionaryService dictionaryService;
   late TextSearchResult result;
+
+  DocumentWorkspaceBloc buildBloc() {
+    return DocumentWorkspaceBloc(
+      engine: engine,
+      recentDocumentService: recentDocumentService,
+      appEffectController: appEffectController,
+      dictionaryService: dictionaryService,
+    );
+  }
 
   setUpAll(() {
     registerFallbackValue(const Duration());
@@ -29,6 +46,9 @@ void main() {
     engine = MockDocumentEngine();
     textSearch = MockTextSearchCapability();
     recentDocumentService = MockRecentDocumentService();
+    appEffectController = MockAppEffectController();
+    dictionaryService = MockDictionaryService();
+
     result = const TextSearchResult(index: 0, pageNumber: 1, text: 'needle');
 
     when(() => engine.document)
@@ -67,20 +87,14 @@ void main() {
 
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'starts with an empty loaded workspace',
-    build: () => DocumentWorkspaceBloc(
-      engine: engine,
-      recentDocumentService: recentDocumentService,
-    ),
+    build: () => buildBloc(),
     act: (bloc) => bloc.add(const DocumentWorkspaceStarted()),
     expect: () => [isA<DocumentWorkspaceOpening>()],
   );
 
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'becomes loaded when ready',
-    build: () => DocumentWorkspaceBloc(
-      engine: engine,
-      recentDocumentService: recentDocumentService,
-    ),
+    build: buildBloc,
     seed: () => const DocumentWorkspaceOpening(initialPageNumber: 1),
     act: (bloc) => bloc.add(const DocumentWorkspaceReady()),
     expect: () => [
@@ -93,10 +107,7 @@ void main() {
 
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'updates current page',
-    build: () => DocumentWorkspaceBloc(
-      engine: engine,
-      recentDocumentService: recentDocumentService,
-    ),
+    build: buildBloc,
     seed: () => const DocumentWorkspaceLoaded(
       pageCount: 10,
       currentPage: 1,
@@ -114,10 +125,7 @@ void main() {
 
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'does not update current page when page changes to null',
-    build: () => DocumentWorkspaceBloc(
-      engine: engine,
-      recentDocumentService: recentDocumentService,
-    ),
+    build: buildBloc,
     seed: () => const DocumentWorkspaceLoaded(
       pageCount: 10,
       currentPage: 5,
@@ -129,10 +137,7 @@ void main() {
 
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'updates current zoom',
-    build: () => DocumentWorkspaceBloc(
-      engine: engine,
-      recentDocumentService: recentDocumentService,
-    ),
+    build: buildBloc,
     seed: () => const DocumentWorkspaceLoaded(
       pageCount: 10,
       currentZoom: 1,
@@ -150,10 +155,7 @@ void main() {
 
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'selects a tool',
-    build: () => DocumentWorkspaceBloc(
-      engine: engine,
-      recentDocumentService: recentDocumentService,
-    ),
+    build: buildBloc,
     seed: () => const DocumentWorkspaceLoaded(
       pageCount: 1,
       currentZoom: 1,
@@ -172,10 +174,7 @@ void main() {
 
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'selects a panel',
-    build: () => DocumentWorkspaceBloc(
-      engine: engine,
-      recentDocumentService: recentDocumentService,
-    ),
+    build: buildBloc,
     seed: () => const DocumentWorkspaceLoaded(
       pageCount: 1,
       currentZoom: 1,
@@ -194,10 +193,7 @@ void main() {
 
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'closes panel when selecting the already selected panel',
-    build: () => DocumentWorkspaceBloc(
-      engine: engine,
-      recentDocumentService: recentDocumentService,
-    ),
+    build: buildBloc,
     seed: () => const DocumentWorkspaceLoaded(
       pageCount: 1,
       currentZoom: 1,
@@ -217,10 +213,7 @@ void main() {
 
   blocTest<DocumentWorkspaceBloc, DocumentWorkspaceState>(
     'closes selected panel',
-    build: () => DocumentWorkspaceBloc(
-      engine: engine,
-      recentDocumentService: recentDocumentService,
-    ),
+    build: buildBloc,
     seed: () => const DocumentWorkspaceLoaded(
       pageCount: 1,
       currentZoom: 1,
@@ -243,10 +236,7 @@ void main() {
       when(() => textSearch.search('needle', false))
           .thenAnswer((_) => Stream.value([result]));
     },
-    build: () => DocumentWorkspaceBloc(
-      engine: engine,
-      recentDocumentService: recentDocumentService,
-    ),
+    build: buildBloc,
     seed: () => const DocumentWorkspaceLoaded(
       pageCount: 1,
       currentZoom: 1,
@@ -271,10 +261,7 @@ void main() {
     setUp: () {
       when(() => textSearch.selectResult(result)).thenAnswer((_) async {});
     },
-    build: () => DocumentWorkspaceBloc(
-      engine: engine,
-      recentDocumentService: recentDocumentService,
-    ),
+    build: buildBloc,
     seed: () => DocumentWorkspaceLoaded(
       pageCount: 1,
       currentZoom: 1,
@@ -297,10 +284,7 @@ void main() {
     setUp: () {
       when(() => textSearch.clear()).thenAnswer((_) async {});
     },
-    build: () => DocumentWorkspaceBloc(
-      engine: engine,
-      recentDocumentService: recentDocumentService,
-    ),
+    build: buildBloc,
     seed: () => DocumentWorkspaceLoaded(
       pageCount: 1,
       currentZoom: 1,

@@ -232,6 +232,30 @@ abstract class AppLocalizations {
   /// **'Dictionary'**
   String get panelDictionary;
 
+  /// Hint text for the dictionary lookup field.
+  ///
+  /// In en, this message translates to:
+  /// **'Look up a word...'**
+  String get panelDictionaryHint;
+
+  /// Tooltip for the clear button in the Dictionary panel.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear dictionary lookup'**
+  String get panelDictionaryClear;
+
+  /// Message shown in the Dictionary panel before any lookup.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a word to look up its meaning'**
+  String get panelDictionaryEmpty;
+
+  /// Message shown in the Dictionary panel when no definition was found.
+  ///
+  /// In en, this message translates to:
+  /// **'No definition found'**
+  String get panelDictionaryNotFound;
+
   /// Label for the Zoom In action.
   ///
   /// In en, this message translates to:

@@ -27,6 +27,9 @@ class DocumentWorkspaceViewModel {
     required this.onBookmarkSelected,
     required this.annotations,
     required this.onAnnotationSelected,
+    required this.dictionaryState,
+    required this.onDictionaryLookup,
+    required this.onClearDictionary,
   });
 
   final int? currentPage;
@@ -57,4 +60,8 @@ class DocumentWorkspaceViewModel {
 
   final List<Annotation> annotations;
   final ValueChanged<Annotation> onAnnotationSelected;
+
+  final DictionaryState dictionaryState;
+  final ValueChanged<String> onDictionaryLookup;
+  final VoidCallback onClearDictionary;
 }

@@ -79,6 +79,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get panelDictionary => 'Dictionary';
 
   @override
+  String get panelDictionaryHint => 'Look up a word...';
+
+  @override
+  String get panelDictionaryClear => 'Clear dictionary lookup';
+
+  @override
+  String get panelDictionaryEmpty => 'Enter a word to look up its meaning';
+
+  @override
+  String get panelDictionaryNotFound => 'No definition found';
+
+  @override
   String get toolZoomIn => 'Zoom In';
 
   @override

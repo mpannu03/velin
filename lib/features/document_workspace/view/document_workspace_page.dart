@@ -107,6 +107,7 @@ class _DocumentWorkspaceHostState extends State<_DocumentWorkspaceHost> {
               searchState: state.searchState,
               bookmarks: state.bookmarks,
               annotations: state.annotations,
+              dictionaryState: state.dictionaryState,
               onToolSelected: (tool) {
                 context.read<DocumentWorkspaceBloc>().add(
                   DocumentWorkspaceToolSelected(tool),
@@ -148,6 +149,16 @@ class _DocumentWorkspaceHostState extends State<_DocumentWorkspaceHost> {
               onAnnotationSelected: (annotation) {
                 context.read<DocumentWorkspaceBloc>().add(
                   DocumentWorkspaceSelectAnnotation(annotation),
+                );
+              },
+              onDictionaryLookup: (word) {
+                context.read<DocumentWorkspaceBloc>().add(
+                  DocumentWorkspaceDictionaryLookup(word),
+                );
+              },
+              onClearDictionary: () {
+                context.read<DocumentWorkspaceBloc>().add(
+                  const DocumentWorkspaceClearDictionary(),
                 );
               },
             ),

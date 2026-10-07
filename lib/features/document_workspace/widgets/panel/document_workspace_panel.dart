@@ -17,6 +17,9 @@ class DocumentWorkspacePanel extends StatelessWidget {
     required this.onBookmarkSelected,
     required this.annotations,
     required this.onAnnotationSelected,
+    required this.dictionaryState,
+    required this.onDictionaryLookup,
+    required this.onClearDictionary,
   });
 
   final WorkspacePanel panel;
@@ -31,6 +34,10 @@ class DocumentWorkspacePanel extends StatelessWidget {
 
   final List<Annotation> annotations;
   final ValueChanged<Annotation> onAnnotationSelected;
+
+  final DictionaryState dictionaryState;
+  final ValueChanged<String> onDictionaryLookup;
+  final VoidCallback onClearDictionary;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +61,10 @@ class DocumentWorkspacePanel extends StatelessWidget {
       currentIndex: searchState.currentIndex,
       isLoading: searchState.isLoading,
     ),
-    WorkspacePanel.dictionary => Text('Dictionary'),
+    WorkspacePanel.dictionary => DictionaryPanel(
+      dictionaryState: dictionaryState,
+      onLookup: onDictionaryLookup,
+      onClear: onClearDictionary,
+    ),
   };
 }
