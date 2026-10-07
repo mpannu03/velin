@@ -1,3 +1,4 @@
+import 'package:http/http.dart' as http;
 import 'package:pdf_manipulator/pdf_manipulator.dart';
 import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/file/file_picker.dart';
@@ -19,4 +20,6 @@ void registerCoreDependencies() {
   getIt.registerLazySingleton<Pdf>(() => Pdf());
 
   getIt.registerLazySingleton<RecentDatabase>(() => RecentDatabase());
+
+  getIt.registerLazySingleton<http.Client>(() => http.Client());
 }

@@ -143,7 +143,7 @@ class _SearchPanelState extends State<SearchPanel> {
         const SizedBox(height: AppSpacing.xs),
         Expanded(
           child: widget.isLoading
-              ? CircularProgressIndicator()
+              ? const Center(child: CircularProgressIndicator())
               : widget.results.isEmpty
               ? _buildEmptyState(theme, context)
               : ListView.builder(
