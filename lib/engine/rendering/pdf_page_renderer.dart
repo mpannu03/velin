@@ -57,7 +57,7 @@ class PdfPageRenderer {
       height: height,
       bytes: pixels.buffer,
       numChannels: 4,
-      order: img.ChannelOrder.rgba,
+      order: img.ChannelOrder.bgra,
     );
 
     return Uint8List.fromList(img.encodePng(image));
