@@ -1,26 +1,34 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
-
 import 'package:velin/app/navigation/app_router.dart';
+import 'package:velin/core/di/injection.dart';
+import 'package:velin/features/home/home.dart';
 import 'package:velin/features/reader/reader.dart';
 import 'package:velin/l10n/app_localizations.dart';
 
-class MockReaderBloc extends Mock implements ReaderBloc {}
+class MockHomeBloc extends MockBloc<HomeEvent, HomeState> implements HomeBloc {}
+
+class MockReaderBloc extends MockBloc<ReaderEvent, ReaderState>
+    implements ReaderBloc {}
 
 void main() {
-  late MockReaderBloc mockBloc;
+  late MockReaderBloc readerBloc;
+  late MockHomeBloc homeBloc;
 
   setUp(() {
-    mockBloc = MockReaderBloc();
-    when(() => mockBloc.state).thenReturn(ReaderLoaded.empty());
-    when(() => mockBloc.stream).thenAnswer((_) => const Stream.empty());
-    when(() => mockBloc.close()).thenAnswer((_) async {});
-    GetIt.instance.registerSingleton<ReaderBloc>(mockBloc);
+    readerBloc = MockReaderBloc();
+    homeBloc = MockHomeBloc();
+    when(() => readerBloc.state).thenReturn(ReaderLoaded.empty());
+    when(() => homeBloc.state).thenReturn(HomeState());
+    // when(() => readerBloc.stream).thenAnswer((_) => const Stream.empty());
+    // when(() => readerBloc.close()).thenAnswer((_) async {});
+    getIt.registerSingleton<ReaderBloc>(readerBloc);
+    getIt.registerSingleton<HomeBloc>(homeBloc);
   });
 
-  tearDown(() async => GetIt.instance.reset());
+  tearDown(() async => getIt.reset());
 
   group('AppRouter', () {
     testWidgets('opens Home at the initial location', (tester) async {
