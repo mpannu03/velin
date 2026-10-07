@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -21,11 +20,9 @@ class DictionaryEntry {
   factory DictionaryEntry.fromMap(Map<String, dynamic> map) {
     return DictionaryEntry(
       word: map['word'] as String,
-      languages: List<DictionaryLanguage>.from(
-        (map['languages'] as List<int>).map<DictionaryLanguage>(
-          (x) => DictionaryLanguage.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      languages: (map['languages'] as List)
+          .map((x) => DictionaryLanguage.fromMap(x as Map<String, dynamic>))
+          .toList(),
     );
   }
 

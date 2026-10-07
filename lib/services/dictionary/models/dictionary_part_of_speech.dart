@@ -23,11 +23,9 @@ class DictionaryPartOfSpeech {
   factory DictionaryPartOfSpeech.fromMap(Map<String, dynamic> map) {
     return DictionaryPartOfSpeech(
       name: map['name'] as String,
-      definitions: List<DictionaryDefinition>.from(
-        (map['definitions'] as List<int>).map<DictionaryDefinition>(
-          (x) => DictionaryDefinition.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      definitions: (map['definitions'] as List)
+          .map((x) => DictionaryDefinition.fromMap(x as Map<String, dynamic>))
+          .toList(),
     );
   }
 

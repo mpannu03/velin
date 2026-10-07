@@ -31,11 +31,9 @@ class DictionaryLanguage {
     return DictionaryLanguage(
       code: map['code'] as String,
       name: map['name'] as String,
-      partsOfSpeech: List<DictionaryPartOfSpeech>.from(
-        (map['partsOfSpeech'] as List<int>).map<DictionaryPartOfSpeech>(
-          (x) => DictionaryPartOfSpeech.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      partsOfSpeech: (map['partsOfSpeech'] as List)
+          .map((x) => DictionaryPartOfSpeech.fromMap(x as Map<String, dynamic>))
+          .toList(),
     );
   }
 

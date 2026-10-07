@@ -94,14 +94,7 @@ class WiktionaryService implements DictionaryService {
               .map(
                 (item) => DictionaryPartOfSpeech.fromMap({
                   'name': item['partOfSpeech'],
-                  'definitions': (item['definitions'] as List)
-                      .whereType<Map>()
-                      .map(
-                        (definition) => DictionaryDefinition.fromMap(
-                          Map<String, dynamic>.from(definition),
-                        ),
-                      )
-                      .toList(growable: false),
+                  'definitions': item['definitions'],
                 }),
               )
               .toList(growable: false);

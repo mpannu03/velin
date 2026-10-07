@@ -329,6 +329,7 @@ class DocumentWorkspaceBloc
 
     if (currentState.selectedTool == WorkspaceTool.dictionary) {
       emit(currentState.copyWith(selectedPanel: WorkspacePanel.dictionary));
+      add(DocumentWorkspaceDictionaryLookup(event.text));
     }
   }
 
@@ -365,7 +366,7 @@ class DocumentWorkspaceBloc
             ),
           ),
         );
-      case Failure<DictionaryEntry>():
+      case Failure<DictionaryEntry>(:final error):
         emit(
           currentState.copyWith(
             dictionaryState: DictionaryState(
@@ -376,7 +377,7 @@ class DocumentWorkspaceBloc
           ),
         );
         _appEffectController.notifyUser(
-          message: "Failed to lookup dictionary entry.",
+          message: error.toString(),
           type: NotificationType.error,
         );
     }

@@ -1,3 +1,4 @@
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
@@ -150,14 +151,15 @@ class _DictionaryPanelState extends State<DictionaryPanel> {
         message: context.l10n.panelDictionaryNotFound,
       );
     }
-    return _DictionaryResultView(entry: entry);
+    return _DictionaryResultView(entry: entry, onLookup: widget.onLookup);
   }
 }
 
 class _DictionaryResultView extends StatelessWidget {
-  const _DictionaryResultView({required this.entry});
+  const _DictionaryResultView({required this.entry, required this.onLookup});
 
   final DictionaryEntry entry;
+  final ValueChanged<String> onLookup;
 
   @override
   Widget build(BuildContext context) {
@@ -173,16 +175,17 @@ class _DictionaryResultView extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.xs),
         for (final language in entry.languages)
-          _LanguageSection(language: language),
+          _LanguageSection(language: language, onLookup: onLookup),
       ],
     );
   }
 }
 
 class _LanguageSection extends StatelessWidget {
-  const _LanguageSection({required this.language});
+  const _LanguageSection({required this.language, required this.onLookup});
 
   final DictionaryLanguage language;
+  final ValueChanged<String> onLookup;
 
   @override
   Widget build(BuildContext context) {
@@ -206,16 +209,20 @@ class _LanguageSection extends StatelessWidget {
           ),
         ),
         for (final pos in language.partsOfSpeech)
-          _PartOfSpeechSection(partOfSpeech: pos),
+          _PartOfSpeechSection(partOfSpeech: pos, onLookup: onLookup),
       ],
     );
   }
 }
 
 class _PartOfSpeechSection extends StatelessWidget {
-  const _PartOfSpeechSection({required this.partOfSpeech});
+  const _PartOfSpeechSection({
+    required this.partOfSpeech,
+    required this.onLookup,
+  });
 
   final DictionaryPartOfSpeech partOfSpeech;
+  final ValueChanged<String> onLookup;
 
   @override
   Widget build(BuildContext context) {
@@ -247,6 +254,7 @@ class _PartOfSpeechSection extends StatelessWidget {
             _DefinitionTile(
               index: i + 1,
               definition: partOfSpeech.definitions[i],
+              onLookup: onLookup,
             ),
         ],
       ),
@@ -255,10 +263,15 @@ class _PartOfSpeechSection extends StatelessWidget {
 }
 
 class _DefinitionTile extends StatelessWidget {
-  const _DefinitionTile({required this.index, required this.definition});
+  const _DefinitionTile({
+    required this.index,
+    required this.definition,
+    required this.onLookup,
+  });
 
   final int index;
   final DictionaryDefinition definition;
+  final ValueChanged<String> onLookup;
 
   @override
   Widget build(BuildContext context) {
@@ -271,7 +284,17 @@ class _DefinitionTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('$index. ${definition.definition}'),
+          // Text('$index. ${definition.definition}'),
+          HtmlWidget(
+            '$index. ${definition.definition}',
+            onTapUrl: (url) {
+              final word = extractWiktionaryWord(url);
+              if (word != null) {
+                onLookup(word);
+              }
+              return true;
+            },
+          ),
           for (final example in definition.examples)
             Padding(
               padding: const EdgeInsets.only(
@@ -288,9 +311,16 @@ class _DefinitionTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: Text(
+                child: HtmlWidget(
                   '"$example"',
-                  style: theme.textTheme.bodySmall?.copyWith(
+                  onTapUrl: (url) {
+                    final word = extractWiktionaryWord(url);
+                    if (word != null) {
+                      onLookup(word);
+                    }
+                    return true;
+                  },
+                  textStyle: theme.textTheme.bodySmall?.copyWith(
                     fontStyle: FontStyle.italic,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -301,4 +331,19 @@ class _DefinitionTile extends StatelessWidget {
       ),
     );
   }
+}
+
+String? extractWiktionaryWord(String href) {
+  if (!href.startsWith('/wiki/')) {
+    return null;
+  }
+
+  final path = href.substring('/wiki/'.length);
+  final title = path.split('#').first;
+
+  if (title.isEmpty) {
+    return null;
+  }
+
+  return Uri.decodeComponent(title.replaceAll('_', ' '));
 }

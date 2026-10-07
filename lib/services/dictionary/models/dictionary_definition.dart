@@ -29,7 +29,11 @@ class DictionaryDefinition {
   factory DictionaryDefinition.fromMap(Map<String, dynamic> map) {
     return DictionaryDefinition(
       definition: map['definition'] as String,
-      examples: List<String>.from((map['examples'] as List<String>)),
+      examples:
+          (map['examples'] as List?)?.whereType<String>().toList(
+            growable: false,
+          ) ??
+          const [],
     );
   }
 
