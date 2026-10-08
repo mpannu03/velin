@@ -8,21 +8,72 @@ body:
     id: issue
     attributes:
       label: Build Problem
-      description: Describe the issue you encountered while building
+      description: Describe the issue you encountered while building or running Velin locally.
+      placeholder: Tell us what you were trying to do and what went wrong.
     validations:
       required: true
 
   - type: input
-    id: rust_version
+    id: velin_version
     attributes:
-      label: Rust Version
+      label: Velin Version
+      description: The Velin version or commit you are building.
+      placeholder: "e.g. 0.5.0 or main"
 
   - type: input
-    id: node_version
+    id: flutter_version
     attributes:
-      label: Node Version
+      label: Flutter Version
+      description: Run `flutter --version` to find this.
+      placeholder: "e.g. 3.35.0"
+
+  - type: input
+    id: dart_version
+    attributes:
+      label: Dart Version
+      description: Run `dart --version` to find this.
+      placeholder: "e.g. 3.9.0"
+
+  - type: dropdown
+    id: operating_system
+    attributes:
+      label: Operating System
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: os_version
+    attributes:
+      label: OS Version
+      description: Include the version of your operating system.
+      placeholder: "e.g. Windows 11 24H2"
+
+  - type: textarea
+    id: flutter_doctor
+    attributes:
+      label: Flutter Doctor
+      description: Paste the output of `flutter doctor -v`.
+      render: shell
 
   - type: textarea
     id: error_output
     attributes:
       label: Error Output
+      description: Paste the relevant build or runtime error output.
+      render: text
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: List the steps that reproduce the problem.
+      placeholder: |
+        1. Clone the repository
+        2. Run `flutter pub get`
+        3. Run `flutter run`
+        4. Error occurs

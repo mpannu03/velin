@@ -1,4 +1,4 @@
-.github/ISSUE_TEMPLATE/documentation_issue.ymlname: Documentation Issue
+name: Documentation Issue
 description: Report missing or incorrect documentation
 title: "[Docs]: "
 labels: ["documentation"]
@@ -9,6 +9,7 @@ body:
     attributes:
       label: Documentation Problem
       description: What part of the documentation is incorrect or missing?
+      placeholder: Describe what is incorrect, unclear, or missing.
     validations:
       required: true
 
@@ -16,3 +17,5 @@ body:
     id: suggestion
     attributes:
       label: Suggested Improvement
+      description: How could the documentation be improved?
+      placeholder: Describe your suggested improvement.
