@@ -91,6 +91,10 @@ class CompressPdfCubit extends Cubit<CompressPdfState>
     final engineInput = toolInput.toCompressPdfInput();
     final outputFile = File(toolInput.outputFilePath);
 
+    if (!await confirmOverwrite(outputFile) || isClosed) {
+      return;
+    }
+
     emit(state.copyWith(isSubmitting: true));
 
     await runToolTask(

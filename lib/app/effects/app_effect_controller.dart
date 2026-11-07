@@ -34,6 +34,28 @@ class AppEffectController {
     );
   }
 
+  /// Asks the user to confirm an action. Resolves to `false` when declined,
+  /// dismissed, or when no UI is listening (nothing to ask, so stay safe).
+  Future<bool> confirm({
+    required LocalizedMessage title,
+    required LocalizedMessage message,
+    required LocalizedMessage confirmLabel,
+    bool isDestructive = false,
+  }) {
+    if (!_controller.hasListener) return Future.value(false);
+
+    final effect = ConfirmationEffect(
+      title: title,
+      message: message,
+      confirmLabel: confirmLabel,
+      isDestructive: isDestructive,
+    );
+
+    _controller.add(effect);
+
+    return effect.completer.future;
+  }
+
   Future<void> dispose() async {
     await _controller.close();
   }

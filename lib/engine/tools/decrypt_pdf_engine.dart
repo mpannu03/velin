@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:pdf_manipulator/io.dart';
 import 'package:pdf_manipulator/pdf_manipulator.dart';
 import 'package:velin/core/error/error.dart';
+import 'package:velin/core/file/safe_file_writer.dart';
 
 import 'decrypt_pdf_input.dart';
 
@@ -16,21 +17,23 @@ class DecryptPdfEngine {
       throw FileSystemException('Input file not found.', input.inputFile.path);
     }
 
-    await input.outputFile.parent.create(recursive: true);
+    // FileSink.create truncates its target immediately, so writing over the
+    // input would destroy it before it is read.
+    ensureOutputDiffersFromInputs(input.outputFile, [input.inputFile]);
 
-    final source = FileSource(input.inputFile);
-    final output = await FileSink.create(input.outputFile);
+    return writeAtomically(input.outputFile, (temporary) async {
+      final source = FileSource(input.inputFile);
+      final output = await FileSink.create(temporary);
 
-    try {
-      await _pdf.decrypt(source, output, password: input.password);
-
-      return input.outputFile;
-    } on StateError catch (error, stackTrace) {
-      // Raised when the document has no /Encrypt entry: a wrong pick, not a
-      // crash.
-      throw DocumentNotEncryptedFailure(cause: error, stackTrace: stackTrace);
-    } finally {
-      await output.close();
-    }
+      try {
+        await _pdf.decrypt(source, output, password: input.password);
+      } on StateError catch (error, stackTrace) {
+        // Raised when the document has no /Encrypt entry: a wrong pick, not
+        // a crash.
+        throw DocumentNotEncryptedFailure(cause: error, stackTrace: stackTrace);
+      } finally {
+        await output.close();
+      }
+    });
   }
 }

@@ -1723,5 +1723,20 @@
   "errorUnexpected": "Something went wrong. Please try again.",
   "@errorUnexpected": {
     "description": "Generic message for unexpected errors."
+  },
+  "toolsOverwriteTitle": "Replace existing file?",
+  "@toolsOverwriteTitle": {
+    "description": "Title of the dialog shown when a tool's output file already exists."
+  },
+  "toolsOverwriteMessage": "\"{fileName}\" already exists in this folder. Replacing it will overwrite its contents.",
+  "@toolsOverwriteMessage": {
+    "description": "Body of the dialog shown when a tool's output file already exists.",
+    "placeholders": {
+      "fileName": { "type": "String" }
+    }
+  },
+  "toolsOverwriteConfirm": "Replace",
+  "@toolsOverwriteConfirm": {
+    "description": "Confirm button that replaces an existing output file."
   }
 }

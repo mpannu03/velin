@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:velin/l10n/app_localizations.dart';
 
 /// Text that is resolved against the current locale when it is shown.
@@ -18,3 +20,22 @@ final class NotificationEffect extends AppEffect {
 }
 
 enum NotificationType { info, success, warning, error }
+
+/// Asks the user a yes/no question; [completer] receives the answer.
+final class ConfirmationEffect extends AppEffect {
+  ConfirmationEffect({
+    required this.title,
+    required this.message,
+    required this.confirmLabel,
+    this.isDestructive = false,
+  });
+
+  final LocalizedMessage title;
+  final LocalizedMessage message;
+  final LocalizedMessage confirmLabel;
+
+  /// Styles the confirm button as a destructive action.
+  final bool isDestructive;
+
+  final Completer<bool> completer = Completer<bool>();
+}

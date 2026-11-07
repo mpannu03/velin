@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:pdf_manipulator/io.dart';
 import 'package:pdf_manipulator/pdf_manipulator.dart' as manipulator;
+import 'package:velin/core/file/safe_file_writer.dart';
 
 import 'encrypt_pdf_input.dart';
 
@@ -15,36 +16,38 @@ class EncryptPdfEngine {
       throw FileSystemException('Input file not found.', input.inputFile.path);
     }
 
-    await input.outputFile.parent.create(recursive: true);
+    // FileSink.create truncates its target immediately, so writing over the
+    // input would destroy it before it is read.
+    ensureOutputDiffersFromInputs(input.outputFile, [input.inputFile]);
 
-    final source = FileSource(input.inputFile);
-    final output = await FileSink.create(input.outputFile);
+    return writeAtomically(input.outputFile, (temporary) async {
+      final source = FileSource(input.inputFile);
+      final output = await FileSink.create(temporary);
 
-    try {
-      await _pdf.encrypt(
-        source,
-        output,
-        encryption: manipulator.PdfEncryptionConfig(
-          ownerPassword: input.ownerPassword,
-          userPassword: input.userPassword,
-          algorithm: _toAlgorithm(input.level),
-          permissions: manipulator.PdfPermissions(
-            print: input.permissions.print,
-            printHq: input.permissions.printHq,
-            modify: input.permissions.modify,
-            copy: input.permissions.copy,
-            annotate: input.permissions.annotate,
-            fillForms: input.permissions.fillForms,
-            accessibility: input.permissions.accessibility,
-            assemble: input.permissions.assemble,
+      try {
+        await _pdf.encrypt(
+          source,
+          output,
+          encryption: manipulator.PdfEncryptionConfig(
+            ownerPassword: input.ownerPassword,
+            userPassword: input.userPassword,
+            algorithm: _toAlgorithm(input.level),
+            permissions: manipulator.PdfPermissions(
+              print: input.permissions.print,
+              printHq: input.permissions.printHq,
+              modify: input.permissions.modify,
+              copy: input.permissions.copy,
+              annotate: input.permissions.annotate,
+              fillForms: input.permissions.fillForms,
+              accessibility: input.permissions.accessibility,
+              assemble: input.permissions.assemble,
+            ),
           ),
-        ),
-      );
-
-      return input.outputFile;
-    } finally {
-      await output.close();
-    }
+        );
+      } finally {
+        await output.close();
+      }
+    });
   }
 
   manipulator.PdfEncryptionAlgorithm _toAlgorithm(PdfEncryptionLevel level) {

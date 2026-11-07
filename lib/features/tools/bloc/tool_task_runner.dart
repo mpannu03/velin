@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart' as p;
 import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
@@ -62,6 +65,23 @@ mixin ToolTaskRunner<S> on Cubit<S> {
     if (failure.isCancellation) return;
 
     notifyError((l10n) => failure.userMessage(l10n, fallback: fallback));
+  }
+
+  /// Asks before replacing [output] when it already exists.
+  ///
+  /// Returns `true` when it is fine to write (the file does not exist, or
+  /// the user agreed to replace it).
+  Future<bool> confirmOverwrite(File output) async {
+    if (!await output.exists()) return true;
+
+    final fileName = p.basename(output.path);
+
+    return appEffectController.confirm(
+      title: (l10n) => l10n.toolsOverwriteTitle,
+      message: (l10n) => l10n.toolsOverwriteMessage(fileName),
+      confirmLabel: (l10n) => l10n.toolsOverwriteConfirm,
+      isDestructive: true,
+    );
   }
 
   /// Runs [operation] through the [TaskManager] and reports the outcome.

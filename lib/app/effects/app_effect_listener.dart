@@ -12,10 +12,15 @@ class AppEffectListener extends StatefulWidget {
     super.key,
     required this.controller,
     required this.child,
+    this.navigatorKey,
   });
 
   final AppEffectController controller;
   final Widget child;
+
+  /// The app's root navigator, used to show dialogs. Falls back to this
+  /// widget's own context (enough for tests that wrap it in a Navigator).
+  final GlobalKey<NavigatorState>? navigatorKey;
 
   @override
   State<AppEffectListener> createState() => _AppEffectListenerState();
@@ -44,7 +49,52 @@ class _AppEffectListenerState extends State<AppEffectListener> {
         if (l10n == null) return;
 
         _showNotification(message(l10n), type: type);
+
+      case ConfirmationEffect():
+        unawaited(_showConfirmation(effect));
     }
+  }
+
+  Future<void> _showConfirmation(ConfirmationEffect effect) async {
+    // This widget sits above the router's Navigator, so dialogs must be
+    // shown through the Navigator's own context.
+    final dialogContext = widget.navigatorKey?.currentContext ?? context;
+    final l10n = AppLocalizations.of(dialogContext);
+
+    if (l10n == null || Navigator.maybeOf(dialogContext) == null) {
+      effect.completer.complete(false);
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: dialogContext,
+      builder: (context) {
+        final colors = Theme.of(context).colorScheme;
+
+        return AlertDialog(
+          title: Text(effect.title(l10n)),
+          content: Text(effect.message(l10n)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(l10n.commonCancel),
+            ),
+            FilledButton(
+              style: effect.isDestructive
+                  ? FilledButton.styleFrom(
+                      backgroundColor: colors.error,
+                      foregroundColor: colors.onError,
+                    )
+                  : null,
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(effect.confirmLabel(l10n)),
+            ),
+          ],
+        );
+      },
+    );
+
+    effect.completer.complete(confirmed ?? false);
   }
 
   void _showNotification(String message, {required NotificationType type}) {

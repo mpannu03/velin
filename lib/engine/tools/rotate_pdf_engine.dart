@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:pdfrx_engine/pdfrx_engine.dart';
 import 'package:velin/core/error/error.dart';
+import 'package:velin/core/file/safe_file_writer.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
 
 class RotatePdfEngine {
@@ -23,6 +24,8 @@ class RotatePdfEngine {
         'Must be 90, 180, or 270.',
       ),
     };
+
+    ensureOutputDiffersFromInputs(outputFile, [inputFile]);
 
     PdfDocument? sourceDocument;
     PdfDocument? outputDocument;
@@ -56,10 +59,7 @@ class RotatePdfEngine {
 
       final data = await outputDocument.encodePdf();
 
-      await outputFile.parent.create(recursive: true);
-      await outputFile.writeAsBytes(data);
-
-      return outputFile;
+      return await writeBytesAtomically(outputFile, data);
     } finally {
       await sourceDocument?.dispose();
       await outputDocument?.dispose();

@@ -98,6 +98,10 @@ class EncryptPdfCubit extends Cubit<EncryptPdfState>
 
     final engineInput = state.toolInput.toEncryptPdfInput();
 
+    if (!await confirmOverwrite(engineInput.outputFile) || isClosed) {
+      return;
+    }
+
     emit(state.copyWith(isSubmitting: true));
 
     await runToolTask(

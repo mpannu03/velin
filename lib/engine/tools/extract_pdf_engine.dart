@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:pdfrx_engine/pdfrx_engine.dart';
+import 'package:velin/core/file/safe_file_writer.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
 
 class ExtractPdfInput {}
@@ -13,6 +14,8 @@ class ExtractPdfEngine {
     required PageSelection selection,
     required File outputFile,
   }) async {
+    ensureOutputDiffersFromInputs(outputFile, [inputFile]);
+
     PdfDocument? sourceDocument;
     PdfDocument? outputDocument;
 
@@ -33,10 +36,7 @@ class ExtractPdfEngine {
 
       final data = await outputDocument.encodePdf();
 
-      await outputFile.parent.create(recursive: true);
-      await outputFile.writeAsBytes(data);
-
-      return outputFile;
+      return await writeBytesAtomically(outputFile, data);
     } finally {
       await sourceDocument?.dispose();
       await outputDocument?.dispose();

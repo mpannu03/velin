@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 import 'package:pdfrx_engine/pdfrx_engine.dart';
 import 'package:velin/core/result/result.dart';
+import 'package:velin/engine/isolate/run_in_background.dart';
 
 class PdfPageRenderer {
   Future<Result<File>> render({
@@ -29,37 +30,45 @@ class PdfPageRenderer {
           throw StateError('Failed to render page $page of ${document.path}.');
         }
 
-        try {
-          final bytes = _encodePng(
-            width: image.width,
-            height: image.height,
-            pixels: image.pixels,
-          );
+        final Uint8List bytes;
 
-          await output.writeAsBytes(bytes);
-          return output;
+        try {
+          final pixels = image.pixels;
+          final imageWidth = image.width;
+          final imageHeight = image.height;
+
+          // PNG encoding is pure Dart; keep it off the UI isolate so opening
+          // a document never stutters while its thumbnail is generated.
+          bytes = await runInBackground(_encodeBgraAsPng, (
+            pixels,
+            imageWidth,
+            imageHeight,
+          ));
         } finally {
           image.dispose();
         }
+
+        await output.writeAsBytes(bytes);
+        return output;
       } finally {
         await pdf.dispose();
       }
     });
   }
+}
 
-  Uint8List _encodePng({
-    required int width,
-    required int height,
-    required Uint8List pixels,
-  }) {
-    final image = img.Image.fromBytes(
-      width: width,
-      height: height,
-      bytes: pixels.buffer,
-      numChannels: 4,
-      order: img.ChannelOrder.bgra,
-    );
+/// Runs on a background isolate: top-level so it captures nothing.
+Uint8List _encodeBgraAsPng((Uint8List, int, int) job) {
+  final (pixels, width, height) = job;
 
-    return Uint8List.fromList(img.encodePng(image));
-  }
+  final image = img.Image.fromBytes(
+    width: width,
+    height: height,
+    bytes: pixels.buffer,
+    bytesOffset: pixels.offsetInBytes,
+    numChannels: 4,
+    order: img.ChannelOrder.bgra,
+  );
+
+  return img.encodePng(image);
 }

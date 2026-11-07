@@ -244,6 +244,10 @@ class AddWatermarkCubit extends Cubit<AddWatermarkState>
       return;
     }
 
+    if (!await confirmOverwrite(engineInput.outputFile) || isClosed) {
+      return;
+    }
+
     emit(state.copyWith(isSubmitting: true));
 
     await runToolTask(

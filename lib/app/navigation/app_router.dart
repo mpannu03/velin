@@ -10,7 +10,12 @@ import 'package:velin/features/tools/tools.dart';
 class AppRouter {
   AppRouter._();
 
+  /// Lets app-level overlays (e.g. confirmation dialogs) find a Navigator
+  /// from above the router.
+  static final rootNavigatorKey = GlobalKey<NavigatorState>();
+
   static final router = GoRouter(
+    navigatorKey: rootNavigatorKey,
     initialLocation: '/',
     routes: [
       StatefulShellRoute.indexedStack(

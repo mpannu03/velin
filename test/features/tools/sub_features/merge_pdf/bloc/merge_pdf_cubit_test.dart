@@ -63,6 +63,91 @@ void main() {
     );
   }
 
+  group('overwrite confirmation', () {
+    late Directory tempDir;
+    late File existing;
+
+    setUp(() {
+      tempDir = Directory.systemTemp.createTempSync('velin_merge_cubit_');
+      existing = File('${tempDir.path}${Platform.pathSeparator}merged.pdf')
+        ..writeAsStringSync('keep me');
+    });
+
+    tearDown(() => tempDir.deleteSync(recursive: true));
+
+    MergePdfState stateWritingTo(File output) => MergePdfState(
+      inputs: const [MergePdfToolInput(filePath: '/docs/one.pdf')],
+      outputDirectory: output.parent.path,
+      outputFileName: 'merged.pdf',
+    );
+
+    blocTest<MergePdfCubit, MergePdfState>(
+      'does nothing when the user declines to replace an existing file',
+      build: () {
+        when(
+          () => effectController.confirm(
+            title: any(named: 'title'),
+            message: any(named: 'message'),
+            confirmLabel: any(named: 'confirmLabel'),
+            isDestructive: true,
+          ),
+        ).thenAnswer((_) async => false);
+
+        return buildCubit();
+      },
+      seed: () => stateWritingTo(existing),
+      act: (cubit) => cubit.merge(),
+      expect: () => [],
+      verify: (_) {
+        verifyNever(
+          () => taskManager.submit(
+            id: any(named: 'id'),
+            title: any(named: 'title'),
+            operation: any(named: 'operation'),
+          ),
+        );
+        expect(existing.readAsStringSync(), 'keep me');
+      },
+    );
+
+    blocTest<MergePdfCubit, MergePdfState>(
+      'merges after the user agrees to replace an existing file',
+      build: () {
+        when(
+          () => effectController.confirm(
+            title: any(named: 'title'),
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsOverwriteMessage('merged.pdf')),
+            ),
+            confirmLabel: any(named: 'confirmLabel'),
+            isDestructive: true,
+          ),
+        ).thenAnswer((_) async => true);
+        when(
+          () => taskManager.submit(
+            id: any(named: 'id'),
+            title: any(named: 'title'),
+            operation: any(named: 'operation'),
+          ),
+        ).thenAnswer((_) async {});
+
+        return buildCubit();
+      },
+      seed: () => stateWritingTo(existing),
+      act: (cubit) => cubit.merge(),
+      verify: (_) {
+        verify(
+          () => taskManager.submit(
+            id: any(named: 'id'),
+            title: any(named: 'title'),
+            operation: any(named: 'operation'),
+          ),
+        ).called(1);
+      },
+    );
+  });
+
   void stubSuccessfulTaskSubmission() {
     when(
       () => taskManager.submit(
