@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:logging/logging.dart';
 import 'package:velin/core/task/task.dart';
 
 void main() {
@@ -53,6 +54,31 @@ void main() {
 
     expect(task.status, TaskStatus.failed);
     expect(task.error, isA<Exception>());
+  });
+
+  test('logs a failed task with its stack trace', () async {
+    Logger.root.level = Level.ALL;
+    final records = <LogRecord>[];
+    final logSubscription = Logger.root.onRecord.listen(records.add);
+
+    final error = Exception('disk full');
+
+    final future = taskManager.submit(
+      id: 'task-1',
+      title: 'Merge PDF',
+      operation: () async => throw error,
+    );
+
+    await expectLater(future, throwsA(same(error)));
+
+    final record = records.singleWhere((r) => r.loggerName == 'velin.task');
+
+    expect(record.level, Level.SEVERE);
+    expect(record.message, contains('Merge PDF'));
+    expect(record.error, same(error));
+    expect(record.stackTrace, isNotNull);
+
+    await logSubscription.cancel();
   });
 
   test('runs tasks sequentially', () async {

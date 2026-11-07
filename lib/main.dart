@@ -1,14 +1,31 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:pdfrx/pdfrx.dart';
+import 'package:velin/core/bloc/bloc.dart';
 import 'package:velin/core/di/injection.dart' as di;
+import 'package:velin/core/error/global_error_handlers.dart';
+import 'package:velin/core/logging/logging.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'app/app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Logging and the error safety net come first so that anything failing
+  // during startup is recorded.
+  final logging = await AppLogging.initialize();
+  installGlobalErrorHandlers();
+  Bloc.observer = AppBlocObserver();
+
+  Logger('velin.main').info(
+    'Starting Velin (${kReleaseMode ? 'release' : 'debug'}) on '
+    '${Platform.operatingSystem} ${Platform.operatingSystemVersion}',
+  );
 
   if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
     await windowManager.ensureInitialized();
@@ -26,7 +43,7 @@ void main() async {
 
   pdfrxFlutterInitialize();
 
-  di.configureDependencies();
+  di.configureDependencies(logging: logging);
 
   runApp(const VelinApp());
 }

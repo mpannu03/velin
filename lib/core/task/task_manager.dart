@@ -1,6 +1,10 @@
 import 'dart:async';
 
+import 'package:logging/logging.dart';
+
 import 'task.dart';
+
+final _log = Logger('velin.task');
 
 class TaskManager {
   TaskManager();
@@ -58,10 +62,16 @@ class TaskManager {
           _update(entry.task.copyWith(status: TaskStatus.completed));
 
           entry.completer.complete();
-        } catch (error) {
+        } catch (error, stackTrace) {
+          _log.severe(
+            'Task "${entry.task.title}" (${entry.task.id}) failed',
+            error,
+            stackTrace,
+          );
+
           _update(entry.task.copyWith(status: TaskStatus.failed, error: error));
 
-          entry.completer.completeError(error);
+          entry.completer.completeError(error, stackTrace);
         }
       }
     } finally {
