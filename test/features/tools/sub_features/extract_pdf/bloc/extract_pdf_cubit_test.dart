@@ -5,6 +5,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:velin/app/effects/effects.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
 import 'package:velin/core/result/result.dart';
@@ -12,6 +13,8 @@ import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
 import 'package:velin/features/tools/sub_features/extract_pdf/extract_pdf.dart';
 import 'package:velin/l10n/app_localizations.dart';
+
+import '../../../../../helpers/helpers.dart';
 
 class MockDocumentFilePicker extends Mock implements DocumentFilePicker {}
 
@@ -30,6 +33,8 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(NotificationType.error);
+    registerFallbackValue(const UnexpectedFailure());
+    registerLocalizedMessageFallback();
     registerFallbackValue(File('input.pdf'));
     registerFallbackValue(PageSelection([]));
   });
@@ -44,7 +49,6 @@ void main() {
 
   ExtractPdfCubit buildCubit() {
     return ExtractPdfCubit(
-      l10n: l10n,
       filePicker: filePicker,
       extractPdfEngine: extractPdfEngine,
       taskManager: taskManager,
@@ -96,7 +100,6 @@ void main() {
             .thenAnswer((_) async => const Success('/documents/other.pdf'));
 
         return ExtractPdfCubit(
-          l10n: l10n,
           filePicker: filePicker,
           extractPdfEngine: extractPdfEngine,
           taskManager: taskManager,
@@ -116,9 +119,8 @@ void main() {
     blocTest<ExtractPdfCubit, ExtractPdfState>(
       'stays unchanged when picker is cancelled',
       build: () {
-        when(() => filePicker.pickFile(allowedExtensions: ['pdf'])).thenAnswer(
-          (_) async => Failure(DocumentFilePickerError('cancelled')),
-        );
+        when(() => filePicker.pickFile(allowedExtensions: ['pdf']))
+            .thenAnswer((_) async => const Success(null));
 
         return buildCubit();
       },
@@ -138,7 +140,7 @@ void main() {
       'notifies an error for an unexpected picker failure',
       build: () {
         when(() => filePicker.pickFile(allowedExtensions: ['pdf']))
-            .thenAnswer((_) async => Failure(Exception('picker failed')));
+            .thenAnswer((_) async => const Failure(UnexpectedFailure()));
 
         return buildCubit();
       },
@@ -147,7 +149,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsExtractFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorUnexpected),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -167,7 +172,6 @@ void main() {
       'allows page selection to be cleared',
       build: () {
         return ExtractPdfCubit(
-          l10n: l10n,
           filePicker: filePicker,
           extractPdfEngine: extractPdfEngine,
           taskManager: taskManager,
@@ -197,9 +201,8 @@ void main() {
     blocTest<ExtractPdfCubit, ExtractPdfState>(
       'stays unchanged when directory picker is cancelled',
       build: () {
-        when(() => filePicker.pickDirectory()).thenAnswer(
-          (_) async => Failure(DocumentFilePickerError('cancelled')),
-        );
+        when(() => filePicker.pickDirectory())
+            .thenAnswer((_) async => const Success(null));
 
         return buildCubit();
       },
@@ -218,9 +221,8 @@ void main() {
     blocTest<ExtractPdfCubit, ExtractPdfState>(
       'notifies an error for an unexpected directory picker failure',
       build: () {
-        when(() => filePicker.pickDirectory()).thenAnswer(
-          (_) async => Failure(Exception('directory picker failed')),
-        );
+        when(() => filePicker.pickDirectory())
+            .thenAnswer((_) async => const Failure(UnexpectedFailure()));
 
         return buildCubit();
       },
@@ -229,7 +231,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsExtractFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorUnexpected),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -262,7 +267,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsExtractWarningNoFile,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsExtractWarningNoFile),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -281,7 +289,6 @@ void main() {
       'warns when output directory is missing',
       build: () =>
           ExtractPdfCubit(
-            l10n: l10n,
             filePicker: filePicker,
             extractPdfEngine: extractPdfEngine,
             taskManager: taskManager,
@@ -297,7 +304,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsExtractWarningNoFolder,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsExtractWarningNoFolder),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -308,7 +318,6 @@ void main() {
       'warns when output file name is missing',
       build: () =>
           ExtractPdfCubit(
-            l10n: l10n,
             filePicker: filePicker,
             extractPdfEngine: extractPdfEngine,
             taskManager: taskManager,
@@ -324,7 +333,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsExtractWarningNoFileName,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsExtractWarningNoFileName),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -335,7 +347,6 @@ void main() {
       'warns when page selection is invalid',
       build: () =>
           ExtractPdfCubit(
-            l10n: l10n,
             filePicker: filePicker,
             extractPdfEngine: extractPdfEngine,
             taskManager: taskManager,
@@ -353,7 +364,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsExtractSelectionInvalid,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsExtractSelectionInvalid),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -384,7 +398,6 @@ void main() {
         stubSuccessfulTaskSubmission();
 
         return ExtractPdfCubit(
-          l10n: l10n,
           filePicker: filePicker,
           extractPdfEngine: extractPdfEngine,
           taskManager: taskManager,
@@ -430,7 +443,10 @@ void main() {
 
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsExtractSuccess,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsExtractSuccess),
+            ),
             type: NotificationType.success,
           ),
         ).called(1);
@@ -438,7 +454,7 @@ void main() {
         verify(
           () => taskManager.submit(
             id: any(named: 'id', that: startsWith('extract-pdf-')),
-            title: l10n.toolsExtractButton,
+            title: 'extract-pdf',
             operation: any(named: 'operation'),
           ),
         ).called(1);
@@ -463,7 +479,6 @@ void main() {
         final sep = Platform.pathSeparator;
 
         return ExtractPdfCubit(
-          l10n: l10n,
           filePicker: filePicker,
           extractPdfEngine: extractPdfEngine,
           taskManager: taskManager,
@@ -509,7 +524,6 @@ void main() {
         stubSuccessfulTaskSubmission();
 
         return ExtractPdfCubit(
-          l10n: l10n,
           filePicker: filePicker,
           extractPdfEngine: extractPdfEngine,
           taskManager: taskManager,
@@ -543,7 +557,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsExtractFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsExtractFailed),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -562,7 +579,6 @@ void main() {
         ).thenThrow(Exception('task submission failed'));
 
         return ExtractPdfCubit(
-          l10n: l10n,
           filePicker: filePicker,
           extractPdfEngine: extractPdfEngine,
           taskManager: taskManager,
@@ -596,7 +612,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsExtractFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsExtractFailed),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -607,7 +626,6 @@ void main() {
       'does nothing when already submitting',
       build: () =>
           ExtractPdfCubit(
-            l10n: l10n,
             filePicker: filePicker,
             extractPdfEngine: extractPdfEngine,
             taskManager: taskManager,

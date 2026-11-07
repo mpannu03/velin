@@ -2,54 +2,49 @@ import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velin/app/effects/effects.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
-import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
-import 'package:velin/l10n/app_localizations.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 import 'package:velin/shared/utils/utils.dart';
 
 import 'compress_pdf_input.dart';
 import 'compress_pdf_state.dart';
 
-class CompressPdfCubit extends Cubit<CompressPdfState> {
+class CompressPdfCubit extends Cubit<CompressPdfState>
+    with ToolTaskRunner<CompressPdfState> {
   CompressPdfCubit({
-    required this._l10n,
-    required this._filePicker,
+    required this.filePicker,
     required this._compressPdfEngine,
-    required this._taskManager,
-    required this._appEffectController,
+    required this.taskManager,
+    required this.appEffectController,
   }) : super(const CompressPdfState());
 
-  final AppLocalizations _l10n;
-  final DocumentFilePicker _filePicker;
+  @override
+  final DocumentFilePicker filePicker;
+  @override
+  final TaskManager taskManager;
+  @override
+  final AppEffectController appEffectController;
+
   final CompressPdfEngine _compressPdfEngine;
-  final TaskManager _taskManager;
-  final AppEffectController _appEffectController;
 
   Future<void> pickFile() async {
-    final result = await _filePicker.pickFile(allowedExtensions: ['pdf']);
+    final filePath = await pickSingleFile(const ['pdf']);
 
-    switch (result) {
-      case Success(data: final filePath):
-        emit(
-          state.copyWith(
-            inputFilePath: filePath,
-            outputDirectory:
-                state.outputDirectory ??
-                directoryWithTrailingSeparator(filePath),
-            outputFileName: '${fileNameFromPath(filePath)}_compressed.pdf',
-          ),
-        );
-
-      case Failure(error: final error):
-        // The user cancelled the picker: not an error, stay quiet.
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _notifyError(_l10n.toolsCompressFailed);
+    if (filePath == null || isClosed) {
+      return;
     }
+
+    emit(
+      state.copyWith(
+        inputFilePath: filePath,
+        outputDirectory:
+            state.outputDirectory ?? directoryWithTrailingSeparator(filePath),
+        outputFileName: '${fileNameFromPath(filePath)}_compressed.pdf',
+      ),
+    );
   }
 
   void changeQuality(int quality) {
@@ -74,19 +69,13 @@ class CompressPdfCubit extends Cubit<CompressPdfState> {
   }
 
   Future<void> pickOutputDirectory() async {
-    final result = await _filePicker.pickDirectory();
+    final directoryPath = await pickDirectory();
 
-    switch (result) {
-      case Success(data: final directoryPath):
-        emit(state.copyWith(outputDirectory: directoryPath));
-
-      case Failure(error: final error):
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _notifyError(_l10n.toolsCompressFailed);
+    if (directoryPath == null || isClosed) {
+      return;
     }
+
+    emit(state.copyWith(outputDirectory: directoryPath));
   }
 
   Future<void> compress() async {
@@ -104,66 +93,44 @@ class CompressPdfCubit extends Cubit<CompressPdfState> {
 
     emit(state.copyWith(isSubmitting: true));
 
-    try {
-      await _taskManager.submit(
-        id: 'compress-pdf-${DateTime.now().microsecondsSinceEpoch}',
-        title: _l10n.toolsCompressButton,
-        operation: () async {
-          await _compressPdfEngine.compress(
-            input: engineInput,
-            outputFile: outputFile,
-          );
-        },
-      );
+    await runToolTask(
+      taskName: 'compress-pdf',
+      operation: () => _compressPdfEngine.compress(
+        input: engineInput,
+        outputFile: outputFile,
+      ),
+      successMessage: () =>
+          (l10n) => l10n.toolsCompressSuccess,
+      failureMessage: (l10n) => l10n.toolsCompressFailed,
+      describeFailure: (failure) => switch (failure) {
+        // Compression works on unencrypted documents only: a wrong pick
+        // rather than a failure, so explain it.
+        PasswordRequiredFailure() => (l10n) => l10n.toolsCompressEncrypted,
+        _ => null,
+      },
+    );
 
-      _appEffectController.notifyUser(
-        message: _l10n.toolsCompressSuccess,
-        type: NotificationType.success,
-      );
-    } on UnsupportedError {
-      // The engine throws this when the document carries an /Encrypt entry.
-      // That is a wrong pick rather than a failure, so explain it.
-      _notifyWarning(_l10n.toolsCompressEncrypted);
-    } on ArgumentError {
-      // The output path matched the input path, so nothing was written.
-      _notifyWarning(_l10n.toolsCompressWarningNoFileName);
-    } catch (_) {
-      _notifyError(_l10n.toolsCompressFailed);
-    } finally {
+    if (!isClosed) {
       emit(state.copyWith(isSubmitting: false));
     }
   }
 
   bool _validateInputs() {
     if (!state.hasInputFile) {
-      _notifyWarning(_l10n.toolsCompressWarningNoFile);
+      notifyWarning((l10n) => l10n.toolsCompressWarningNoFile);
       return false;
     }
 
     if (!state.hasValidOutputDirectory) {
-      _notifyWarning(_l10n.toolsCompressWarningNoFolder);
+      notifyWarning((l10n) => l10n.toolsCompressWarningNoFolder);
       return false;
     }
 
     if (!state.hasValidOutputFileName) {
-      _notifyWarning(_l10n.toolsCompressWarningNoFileName);
+      notifyWarning((l10n) => l10n.toolsCompressWarningNoFileName);
       return false;
     }
 
     return true;
-  }
-
-  void _notifyWarning(String message) {
-    _appEffectController.notifyUser(
-      message: message,
-      type: NotificationType.warning,
-    );
-  }
-
-  void _notifyError(String message) {
-    _appEffectController.notifyUser(
-      message: message,
-      type: NotificationType.error,
-    );
   }
 }

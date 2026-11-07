@@ -4,7 +4,6 @@ import 'document_type.dart';
 
 export 'document_repository.dart';
 export 'document_service.dart';
-export 'document_service_error.dart';
 export 'document_type.dart';
 
 class Document {

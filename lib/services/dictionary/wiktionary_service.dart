@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/result/result.dart';
 
 import 'dictionary.dart';
@@ -10,6 +12,13 @@ class WiktionaryService implements DictionaryService {
 
   static const _baseUrl = 'https://en.wiktionary.org/api/rest_v1';
 
+  static const _timeout = Duration(seconds: 10);
+
+  /// Wikimedia asks API clients to identify themselves with a descriptive
+  /// User-Agent including a way to reach the maintainer:
+  /// https://meta.wikimedia.org/wiki/User-Agent_policy
+  static const _userAgent = 'Velin/1.0 (https://github.com/mpannu03/velin)';
+
   final http.Client _client;
 
   @override
@@ -17,51 +26,60 @@ class WiktionaryService implements DictionaryService {
     final normalizedWord = word.trim();
 
     if (normalizedWord.isEmpty) {
-      return Failure<DictionaryEntry>(
-        ArgumentError('Word cannot be empty.'),
-        StackTrace.current,
-      );
+      return Failure(DictionaryEntryNotFoundFailure(normalizedWord));
     }
 
     final encodedWord = Uri.encodeComponent(normalizedWord);
 
     final uri = Uri.parse('$_baseUrl/page/definition/$encodedWord');
 
+    final http.Response response;
+
     try {
-      final response = await _client.get(
-        uri,
-        headers: const {'Accept': 'application/json'},
-      );
+      response = await _client
+          .get(
+            uri,
+            headers: const {
+              'Accept': 'application/json',
+              'User-Agent': _userAgent,
+            },
+          )
+          .timeout(_timeout);
+    } catch (error, stackTrace) {
+      return Failure(mapError(error, stackTrace));
+    }
 
-      if (response.statusCode == 404) {
-        return Failure<DictionaryEntry>(
-          DictionaryNotFoundException(normalizedWord),
-          StackTrace.current,
-        );
-      }
+    if (response.statusCode == 404) {
+      return Failure(DictionaryEntryNotFoundFailure(normalizedWord));
+    }
 
-      if (response.statusCode < 200 || response.statusCode >= 300) {
-        return Failure<DictionaryEntry>(
-          DictionaryHttpException(
-            statusCode: response.statusCode,
-            word: normalizedWord,
-          ),
-          StackTrace.current,
-        );
-      }
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      return Failure(ServerFailure(statusCode: response.statusCode));
+    }
 
+    try {
       final json = jsonDecode(response.body);
 
       if (json is! Map<String, dynamic>) {
-        return Failure<DictionaryEntry>(
-          const DictionaryResponseException('Unexpected response format.'),
-          StackTrace.current,
+        return Failure(
+          ServerFailure(
+            statusCode: response.statusCode,
+            cause: const FormatException('Expected a JSON object.'),
+          ),
         );
       }
 
       return Success(_parseEntry(normalizedWord, json));
+    } on FormatException catch (error, stackTrace) {
+      return Failure(
+        ServerFailure(
+          statusCode: response.statusCode,
+          cause: error,
+          stackTrace: stackTrace,
+        ),
+      );
     } catch (error, stackTrace) {
-      return Failure<DictionaryEntry>(error, stackTrace);
+      return Failure(mapError(error, stackTrace));
     }
   }
 

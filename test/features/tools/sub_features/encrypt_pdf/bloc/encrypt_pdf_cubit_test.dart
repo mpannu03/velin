@@ -6,12 +6,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:pdf_manipulator/pdf_manipulator.dart' hide PdfPermissions;
 import 'package:velin/app/effects/effects.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
 import 'package:velin/features/tools/sub_features/encrypt_pdf/encrypt_pdf.dart';
 import 'package:velin/l10n/app_localizations.dart';
+
+import '../../../../../helpers/helpers.dart';
 
 class MockDocumentFilePicker extends Mock implements DocumentFilePicker {}
 
@@ -30,7 +33,6 @@ void main() {
 
   EncryptPdfCubit buildCubit() {
     return EncryptPdfCubit(
-      l10n: l10n,
       filePicker: filePicker,
       encryptPdfEngine: encryptPdfEngine,
       taskManager: taskManager,
@@ -47,6 +49,8 @@ void main() {
       ),
     );
     registerFallbackValue(NotificationType.error);
+    registerFallbackValue(const UnexpectedFailure());
+    registerLocalizedMessageFallback();
   });
 
   setUp(() {
@@ -112,9 +116,8 @@ void main() {
     blocTest<EncryptPdfCubit, EncryptPdfState>(
       'does not change state when picker is cancelled',
       build: () {
-        when(() => filePicker.pickFile(allowedExtensions: ['pdf'])).thenAnswer(
-          (_) async => Failure(DocumentFilePickerError('cancelled')),
-        );
+        when(() => filePicker.pickFile(allowedExtensions: ['pdf']))
+            .thenAnswer((_) async => const Success(null));
 
         return buildCubit();
       },
@@ -134,7 +137,7 @@ void main() {
       'notifies error when picker fails',
       build: () {
         when(() => filePicker.pickFile(allowedExtensions: ['pdf']))
-            .thenAnswer((_) async => Failure(Exception('picker failed')));
+            .thenAnswer((_) async => const Failure(UnexpectedFailure()));
 
         return buildCubit();
       },
@@ -143,7 +146,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsProtectFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorUnexpected),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -256,9 +262,8 @@ void main() {
     blocTest<EncryptPdfCubit, EncryptPdfState>(
       'does not change state when picker is cancelled',
       build: () {
-        when(() => filePicker.pickDirectory()).thenAnswer(
-          (_) async => Failure(DocumentFilePickerError('cancelled')),
-        );
+        when(() => filePicker.pickDirectory())
+            .thenAnswer((_) async => const Success(null));
 
         return buildCubit();
       },
@@ -278,7 +283,7 @@ void main() {
       'notifies error when directory picker fails',
       build: () {
         when(() => filePicker.pickDirectory())
-            .thenAnswer((_) async => Failure(Exception('picker failed')));
+            .thenAnswer((_) async => const Failure(UnexpectedFailure()));
 
         return buildCubit();
       },
@@ -287,7 +292,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsProtectFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorUnexpected),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -330,7 +338,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsProtectWarningNoFile,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsProtectWarningNoFile),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -358,7 +369,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsProtectWarningNoFolder,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsProtectWarningNoFolder),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -378,7 +392,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsProtectWarningNoFileName,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsProtectWarningNoFileName),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -398,7 +415,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsProtectWarningNoProtection,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsProtectWarningNoProtection),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -420,7 +440,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsProtectWarningPasswordsMatch,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsProtectWarningPasswordsMatch),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -459,7 +482,7 @@ void main() {
         verify(
           () => taskManager.submit(
             id: any(named: 'id', that: startsWith('encrypt-pdf-')),
-            title: l10n.toolsProtectButton,
+            title: 'encrypt-pdf',
             operation: any(named: 'operation'),
           ),
         ).called(1);
@@ -481,7 +504,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsProtectSuccess,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsProtectSuccess),
+            ),
             type: NotificationType.success,
           ),
         ).called(1);
@@ -518,7 +544,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsProtectAlreadyEncrypted,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsProtectAlreadyEncrypted),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -555,7 +584,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsProtectFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsProtectFailed),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -584,7 +616,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsProtectFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsProtectFailed),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);

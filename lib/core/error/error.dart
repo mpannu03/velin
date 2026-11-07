@@ -1,3 +1,2 @@
-abstract interface class VelinError {
-  String get message;
-}
+export 'app_failure.dart';
+export 'map_error.dart';

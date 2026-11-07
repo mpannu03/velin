@@ -1,26 +1,24 @@
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/file/file_picker.dart';
-import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 import 'package:velin/features/tools/widgets/widgets.dart';
-import 'package:velin/l10n/app_localizations.dart';
 import 'package:velin/shared/utils/utils.dart';
 
 import 'image_to_pdf_input.dart';
 import 'image_to_pdf_state.dart';
 
-class ImageToPdfCubit extends Cubit<ImageToPdfState> {
+class ImageToPdfCubit extends Cubit<ImageToPdfState>
+    with ToolTaskRunner<ImageToPdfState> {
   ImageToPdfCubit({
-    required this._l10n,
-    required this._filePicker,
+    required this.filePicker,
     required this._imageToPdfEngine,
-    required this._taskManager,
-    required this._appEffectController,
+    required this.taskManager,
+    required this.appEffectController,
   }) : super(const ImageToPdfState());
 
   /// Image formats `ImageToPdfEngine` can decode.
@@ -34,44 +32,34 @@ class ImageToPdfCubit extends Cubit<ImageToPdfState> {
     'tiff',
   ];
 
-  final AppLocalizations _l10n;
-  final DocumentFilePicker _filePicker;
+  @override
+  final DocumentFilePicker filePicker;
+  @override
+  final TaskManager taskManager;
+  @override
+  final AppEffectController appEffectController;
+
   final ImageToPdfEngine _imageToPdfEngine;
-  final TaskManager _taskManager;
-  final AppEffectController _appEffectController;
 
   Future<void> pickImages() async {
-    final result = await _filePicker.pickFiles(
-      allowedExtensions: supportedExtensions,
-    );
+    final filePaths = await pickMultipleFiles(supportedExtensions);
 
-    switch (result) {
-      case Success(data: final filePaths):
-        if (filePaths.isEmpty) {
-          return;
-        }
-
-        final directory = directoryWithTrailingSeparator(filePaths.first);
-
-        emit(
-          state.copyWith(
-            inputs: [
-              ...state.inputs,
-              for (final filePath in filePaths)
-                ImageToPdfToolInput(filePath: filePath),
-            ],
-            outputDirectory: state.outputDirectory ?? directory,
-          ),
-        );
-
-      case Failure(error: final error):
-        // The user cancelled the picker: not an error, stay quiet.
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _notifyError(_l10n.toolsImageToPdfFailed);
+    if (filePaths.isEmpty || isClosed) {
+      return;
     }
+
+    emit(
+      state.copyWith(
+        inputs: [
+          ...state.inputs,
+          for (final filePath in filePaths)
+            ImageToPdfToolInput(filePath: filePath),
+        ],
+        outputDirectory:
+            state.outputDirectory ??
+            directoryWithTrailingSeparator(filePaths.first),
+      ),
+    );
   }
 
   void removeImage(int index) {
@@ -133,19 +121,13 @@ class ImageToPdfCubit extends Cubit<ImageToPdfState> {
   }
 
   Future<void> pickOutputDirectory() async {
-    final result = await _filePicker.pickDirectory();
+    final directoryPath = await pickDirectory();
 
-    switch (result) {
-      case Success(data: final directoryPath):
-        emit(state.copyWith(outputDirectory: directoryPath));
-
-      case Failure(error: final error):
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _notifyError(_l10n.toolsImageToPdfFailed);
+    if (directoryPath == null || isClosed) {
+      return;
     }
+
+    emit(state.copyWith(outputDirectory: directoryPath));
   }
 
   Future<void> convert() async {
@@ -162,65 +144,44 @@ class ImageToPdfCubit extends Cubit<ImageToPdfState> {
       orientation: state.orientation,
       fit: state.fit,
     );
+    final imageCount = state.inputs.length;
 
     final outputFile = File(
-      '${state.outputDirectory}'
-      '${Platform.pathSeparator}'
-      '${state.outputFileName.trim()}',
+      joinOutputPath(state.outputDirectory!, state.outputFileName),
     );
 
     emit(state.copyWith(isSubmitting: true));
 
-    try {
-      await _taskManager.submit(
-        id: 'image-to-pdf-${DateTime.now().microsecondsSinceEpoch}',
-        title: _l10n.toolsImageToPdfButton,
-        operation: () async {
-          await _imageToPdfEngine.convert(input: input, outputFile: outputFile);
-        },
-      );
+    await runToolTask(
+      taskName: 'image-to-pdf',
+      operation: () =>
+          _imageToPdfEngine.convert(input: input, outputFile: outputFile),
+      successMessage: () =>
+          (l10n) => l10n.toolsImageToPdfSuccess(imageCount),
+      failureMessage: (l10n) => l10n.toolsImageToPdfFailed,
+    );
 
-      _appEffectController.notifyUser(
-        message: _l10n.toolsImageToPdfSuccess(state.inputs.length),
-        type: NotificationType.success,
-      );
-    } catch (_) {
-      _notifyError(_l10n.toolsImageToPdfFailed);
-    } finally {
+    if (!isClosed) {
       emit(state.copyWith(isSubmitting: false));
     }
   }
 
   bool _validateInputs() {
     if (!state.hasImages) {
-      _notifyWarning(_l10n.toolsImageToPdfWarningNoImages);
+      notifyWarning((l10n) => l10n.toolsImageToPdfWarningNoImages);
       return false;
     }
 
     if (!state.hasValidOutputDirectory) {
-      _notifyWarning(_l10n.toolsImageToPdfWarningNoFolder);
+      notifyWarning((l10n) => l10n.toolsImageToPdfWarningNoFolder);
       return false;
     }
 
     if (!state.hasValidOutputFileName) {
-      _notifyWarning(_l10n.toolsImageToPdfWarningNoFileName);
+      notifyWarning((l10n) => l10n.toolsImageToPdfWarningNoFileName);
       return false;
     }
 
     return true;
-  }
-
-  void _notifyWarning(String message) {
-    _appEffectController.notifyUser(
-      message: message,
-      type: NotificationType.warning,
-    );
-  }
-
-  void _notifyError(String message) {
-    _appEffectController.notifyUser(
-      message: message,
-      type: NotificationType.error,
-    );
   }
 }

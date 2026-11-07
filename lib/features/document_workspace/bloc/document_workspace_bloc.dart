@@ -1,8 +1,8 @@
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/document/engine/engine.dart';
 import 'package:velin/core/recent/recent.dart';
-import 'package:velin/core/recent/recent_document_service.dart';
 import 'package:velin/core/result/result.dart';
 import 'package:velin/services/dictionary/dictionary.dart';
 import 'package:velin/shared/utils/utils.dart';
@@ -30,13 +30,18 @@ class DocumentWorkspaceBloc
     on<DocumentWorkspacePanelSelected>(_onPanelSelected);
     on<DocumentWorkspacePanelClosed>(_onPanelClosed);
     on<DocumentWorkspaceReady>(_onReady);
-    on<DocumentWorkspaceSearch>(_onSearch);
+    // A new search or lookup cancels the one in flight, so a slow earlier
+    // result can never overwrite a newer one.
+    on<DocumentWorkspaceSearch>(_onSearch, transformer: restartable());
     on<DocumentWorkspaceClearSearch>(_onClearSearch);
     on<DocumentWorkspaceSelectSearch>(_onSelectSearch);
     on<DocumentWorkspaceSelectBookmark>(_onSelectBookmark);
     on<DocumentWorkspaceSelectAnnotation>(_onSelectAnnotation);
     on<DocumentWorkspaceTextSelected>(_onTextSelected);
-    on<DocumentWorkspaceDictionaryLookup>(_onDictionaryLookup);
+    on<DocumentWorkspaceDictionaryLookup>(
+      _onDictionaryLookup,
+      transformer: restartable(),
+    );
     on<DocumentWorkspaceClearDictionary>(_onClearDictionary);
 
     _engine.listener = DocumentWorkspaceListener(bloc: this);
@@ -57,26 +62,28 @@ class DocumentWorkspaceBloc
 
     if (emit.isDone) return;
 
-    switch (recentDocument) {
-      case Failure():
-        emit(DocumentWorkspaceOpening(initialPageNumber: 1));
-      case Success(:final data):
-        emit(DocumentWorkspaceOpening(initialPageNumber: data.currentPage));
-    }
+    // No saved position (or it could not be read): start at the first page.
+    final initialPage = switch (recentDocument) {
+      Success(data: RecentDocument(:final currentPage)) => currentPage,
+      _ => 1,
+    };
+
+    emit(DocumentWorkspaceOpening(initialPageNumber: initialPage));
   }
 
   Future<void> _onReady(
     DocumentWorkspaceReady event,
     Emitter<DocumentWorkspaceState> emit,
   ) async {
-    final currentPage = _engine.snapshot.currentPage;
+    final currentPage = _engine.snapshot.currentPage ?? 1;
     final pageCount = _engine.snapshot.pageCount;
     final currentZoom = _engine.snapshot.zoom;
 
+    // Never fails: problems with the recent list are logged, not shown.
     await _recentDocumentService.open(
       path: _engine.document.path,
       pageCount: pageCount,
-      currentPage: currentPage!,
+      currentPage: currentPage,
       documentType: _engine.document.type,
     );
 
@@ -254,11 +261,10 @@ class DocumentWorkspaceBloc
 
     await _engine.textSearch?.clear();
 
-    if (emit.isDone) {
-      return;
-    }
-
-    emit(currentState.copyWith(searchState: const SearchState()));
+    _emitLoaded(
+      emit,
+      (loaded) => loaded.copyWith(searchState: const SearchState()),
+    );
   }
 
   Future<void> _onSelectSearch(
@@ -274,13 +280,10 @@ class DocumentWorkspaceBloc
 
     await _engine.textSearch?.selectResult(event.textSearchResult);
 
-    if (emit.isDone) {
-      return;
-    }
-
-    emit(
-      currentState.copyWith(
-        searchState: currentState.searchState.copyWith(
+    _emitLoaded(
+      emit,
+      (loaded) => loaded.copyWith(
+        searchState: loaded.searchState.copyWith(
           currentIndex: event.textSearchResult.index,
         ),
       ),
@@ -355,32 +358,46 @@ class DocumentWorkspaceBloc
 
     final result = await _dictionaryService.lookup(event.text.trim());
 
-    switch (result) {
-      case Success<DictionaryEntry>(:final data):
-        emit(
-          currentState.copyWith(
-            dictionaryState: DictionaryState(
-              query: event.text,
-              result: data,
-              isLoading: false,
-            ),
-          ),
-        );
-      case Failure<DictionaryEntry>(:final error):
-        emit(
-          currentState.copyWith(
-            dictionaryState: DictionaryState(
-              query: event.text,
-              result: null,
-              isLoading: false,
-            ),
-          ),
-        );
-        _appEffectController.notifyUser(
-          message: error.toString(),
-          type: NotificationType.error,
-        );
+    // Superseded by a newer lookup (restartable) or the bloc closed.
+    if (emit.isDone) return;
+
+    final entry = switch (result) {
+      Success(:final data) => data,
+      Failure() => null,
+    };
+
+    _emitLoaded(
+      emit,
+      (loaded) => loaded.copyWith(
+        dictionaryState: DictionaryState(
+          query: event.text,
+          result: entry,
+          isLoading: false,
+        ),
+      ),
+    );
+
+    if (result case Failure(:final failure)) {
+      _appEffectController.notifyFailure(failure);
     }
+  }
+
+  /// Applies [update] to the *current* loaded state.
+  ///
+  /// Handlers that await must use this instead of a state captured before the
+  /// await; otherwise changes made meanwhile (page, zoom, panel, ...) would be
+  /// silently reverted.
+  void _emitLoaded(
+    Emitter<DocumentWorkspaceState> emit,
+    DocumentWorkspaceLoaded Function(DocumentWorkspaceLoaded loaded) update,
+  ) {
+    final current = state;
+
+    if (emit.isDone || current is! DocumentWorkspaceLoaded) {
+      return;
+    }
+
+    emit(update(current));
   }
 
   void _onClearDictionary(

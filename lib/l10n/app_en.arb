@@ -1619,5 +1619,109 @@
   "toolsWatermarkSubmitting": "Applying watermark\u2026",
   "@toolsWatermarkSubmitting": {
     "description": "Label shown on the watermark button while the operation is running."
+  },
+  "errorFileNotFound": "The file could not be found. It may have been moved or deleted.",
+  "@errorFileNotFound": {
+    "description": "Shown when a file no longer exists at its path."
+  },
+  "errorFileAccessDenied": "Velin doesn't have permission to use this file or folder.",
+  "@errorFileAccessDenied": {
+    "description": "Shown when the OS denies access to a file or folder."
+  },
+  "errorFileInUse": "The file is open in another program. Close it there and try again.",
+  "@errorFileInUse": {
+    "description": "Shown when another process has locked the file."
+  },
+  "errorDiskFull": "There isn't enough disk space to save the file.",
+  "@errorDiskFull": {
+    "description": "Shown when writing fails because the disk is full."
+  },
+  "errorFileSystem": "The file couldn't be read or saved.",
+  "@errorFileSystem": {
+    "description": "Shown for other file read/write errors."
+  },
+  "errorOutputSameAsInput": "Choose a different output name. Saving over the original file isn't allowed.",
+  "@errorOutputSameAsInput": {
+    "description": "Shown when the output path equals the input path."
+  },
+  "errorUnsupportedFileType": "This file type isn't supported.",
+  "@errorUnsupportedFileType": {
+    "description": "Shown when opening a file Velin cannot handle."
+  },
+  "errorPasswordRequired": "This PDF is password-protected. Unlock it first, then try again.",
+  "@errorPasswordRequired": {
+    "description": "Shown when an operation needs an unlocked document."
+  },
+  "errorWrongPassword": "That password doesn't open this document.",
+  "@errorWrongPassword": {
+    "description": "Shown when the supplied password is incorrect."
+  },
+  "errorCorruptDocument": "This file is damaged or isn't a valid PDF.",
+  "@errorCorruptDocument": {
+    "description": "Shown when a document cannot be parsed."
+  },
+  "errorUnsupportedDocumentFeature": "This PDF uses a feature Velin can't process yet.",
+  "@errorUnsupportedDocumentFeature": {
+    "description": "Shown when a document uses an unsupported feature such as an unusual encryption scheme."
+  },
+  "errorInvalidImage": "One of the images couldn't be read. It may be damaged or in an unsupported format.",
+  "@errorInvalidImage": {
+    "description": "Shown when an image cannot be decoded."
+  },
+  "errorPageSelectionEmpty": "Enter the pages to use.",
+  "@errorPageSelectionEmpty": {
+    "description": "Shown when a page selection is empty."
+  },
+  "errorPageSelectionToken": "\"{token}\" isn't a valid page or range.",
+  "@errorPageSelectionToken": {
+    "description": "Shown when part of a page selection cannot be understood.",
+    "placeholders": {
+      "token": { "type": "String" }
+    }
+  },
+  "errorPageSelectionRange": "\"{range}\" isn't a valid range.",
+  "@errorPageSelectionRange": {
+    "description": "Shown when a page range is malformed.",
+    "placeholders": {
+      "range": { "type": "String" }
+    }
+  },
+  "errorPageSelectionNumber": "\"{number}\" isn't a valid page number.",
+  "@errorPageSelectionNumber": {
+    "description": "Shown when a page number is malformed.",
+    "placeholders": {
+      "number": { "type": "String" }
+    }
+  },
+  "errorPageSelectionOutOfBounds": "Page {page} doesn't exist. The document has {totalPages} pages.",
+  "@errorPageSelectionOutOfBounds": {
+    "description": "Shown when a selected page is beyond the end of the document.",
+    "placeholders": {
+      "page": { "type": "int" },
+      "totalPages": { "type": "int" }
+    }
+  },
+  "errorNetwork": "Couldn't connect. Check your internet connection and try again.",
+  "@errorNetwork": {
+    "description": "Shown when a network request fails."
+  },
+  "errorNetworkTimeout": "The request took too long. Try again.",
+  "@errorNetworkTimeout": {
+    "description": "Shown when a network request times out."
+  },
+  "errorServer": "The service isn't responding correctly. Try again later.",
+  "@errorServer": {
+    "description": "Shown when a remote service returns an error."
+  },
+  "errorDictionaryNotFound": "No definition found for \"{word}\".",
+  "@errorDictionaryNotFound": {
+    "description": "Shown when the dictionary has no entry for the selected word.",
+    "placeholders": {
+      "word": { "type": "String" }
+    }
+  },
+  "errorUnexpected": "Something went wrong. Please try again.",
+  "@errorUnexpected": {
+    "description": "Generic message for unexpected errors."
   }
 }

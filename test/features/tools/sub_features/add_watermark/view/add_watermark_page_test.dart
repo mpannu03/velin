@@ -4,7 +4,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:velin/core/di/injection.dart';
 import 'package:velin/engine/engine.dart';
 import 'package:velin/features/tools/tools.dart';
-import 'package:velin/l10n/app_localizations.dart';
 
 import '../../../../../helpers/helpers.dart';
 
@@ -24,9 +23,7 @@ void main() {
   setUp(() {
     cubit = MockAddWatermarkCubit();
 
-    getIt.registerFactoryParam<AddWatermarkCubit, AppLocalizations, void>(
-      (l10n, _) => cubit,
-    );
+    getIt.registerFactory<AddWatermarkCubit>(() => cubit);
   });
 
   tearDown(() async {

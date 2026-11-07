@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:pdf_manipulator/io.dart';
 import 'package:pdf_manipulator/pdf_manipulator.dart';
+import 'package:velin/core/error/error.dart';
 
 import 'decrypt_pdf_input.dart';
 
@@ -24,6 +25,10 @@ class DecryptPdfEngine {
       await _pdf.decrypt(source, output, password: input.password);
 
       return input.outputFile;
+    } on StateError catch (error, stackTrace) {
+      // Raised when the document has no /Encrypt entry: a wrong pick, not a
+      // crash.
+      throw DocumentNotEncryptedFailure(cause: error, stackTrace: stackTrace);
     } finally {
       await output.close();
     }

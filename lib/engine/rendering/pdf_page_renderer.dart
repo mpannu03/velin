@@ -11,8 +11,8 @@ class PdfPageRenderer {
     required int page,
     required File output,
     required int width,
-  }) async {
-    try {
+  }) {
+    return Result.guard(() async {
       final pdf = await PdfDocument.openFile(document.path);
       try {
         final pdfPage = pdf.pages[page - 1];
@@ -26,25 +26,25 @@ class PdfPageRenderer {
         );
 
         if (image == null) {
-          return Failure(
-            StateError('Failed to render page $page of ${document.path}.'),
-          );
+          throw StateError('Failed to render page $page of ${document.path}.');
         }
 
-        final bytes = _encodePng(
-          width: image.width,
-          height: image.height,
-          pixels: image.pixels,
-        );
+        try {
+          final bytes = _encodePng(
+            width: image.width,
+            height: image.height,
+            pixels: image.pixels,
+          );
 
-        await output.writeAsBytes(bytes);
-        return Success(output);
+          await output.writeAsBytes(bytes);
+          return output;
+        } finally {
+          image.dispose();
+        }
       } finally {
         await pdf.dispose();
       }
-    } catch (error, stackTrace) {
-      return Failure(error, stackTrace);
-    }
+    });
   }
 
   Uint8List _encodePng({

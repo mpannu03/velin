@@ -5,7 +5,6 @@ class HomeState {
     this.recentDocuments = const [],
     this.isOpening = false,
     this.openToken = 0,
-    this.openFailure,
   });
 
   final List<RecentDocument> recentDocuments;
@@ -13,20 +12,16 @@ class HomeState {
 
   /// Bumped on every successful open so the page can navigate once.
   final int openToken;
-  final Object? openFailure;
 
   HomeState copyWith({
     List<RecentDocument>? recentDocuments,
     bool? isOpening,
     int? openToken,
-    Object? openFailure,
-    bool clearOpenFailure = false,
   }) {
     return HomeState(
       recentDocuments: recentDocuments ?? this.recentDocuments,
       isOpening: isOpening ?? this.isOpening,
       openToken: openToken ?? this.openToken,
-      openFailure: clearOpenFailure ? null : (openFailure ?? this.openFailure),
     );
   }
 
@@ -36,14 +31,10 @@ class HomeState {
 
     return listEquals(other.recentDocuments, recentDocuments) &&
         other.isOpening == isOpening &&
-        other.openToken == openToken &&
-        other.openFailure == openFailure;
+        other.openToken == openToken;
   }
 
   @override
   int get hashCode =>
-      recentDocuments.hashCode ^
-      isOpening.hashCode ^
-      openToken.hashCode ^
-      openFailure.hashCode;
+      recentDocuments.hashCode ^ isOpening.hashCode ^ openToken.hashCode;
 }

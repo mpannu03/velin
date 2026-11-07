@@ -10,7 +10,6 @@ import 'package:velin/features/document_workspace/bloc/document_workspace_bloc.d
 import 'package:velin/features/home/home.dart';
 import 'package:velin/features/reader/reader.dart';
 import 'package:velin/features/tools/tools.dart';
-import 'package:velin/l10n/app_localizations.dart';
 import 'package:velin/services/dictionary/dictionary.dart';
 
 void registerBlocDependencies() {
@@ -30,9 +29,8 @@ void registerBlocDependencies() {
     ),
   );
 
-  getIt.registerFactoryParam<MergePdfCubit, AppLocalizations, void>(
-    (l10n, _) => MergePdfCubit(
-      l10n: l10n,
+  getIt.registerFactory<MergePdfCubit>(
+    () => MergePdfCubit(
       filePicker: getIt<DocumentFilePicker>(),
       mergePdfEngine: getIt<MergePdfEngine>(),
       taskManager: getIt<TaskManager>(),
@@ -40,9 +38,8 @@ void registerBlocDependencies() {
     ),
   );
 
-  getIt.registerFactoryParam<SplitPdfCubit, AppLocalizations, void>(
-    (l10n, _) => SplitPdfCubit(
-      l10n: l10n,
+  getIt.registerFactory<SplitPdfCubit>(
+    () => SplitPdfCubit(
       filePicker: getIt<DocumentFilePicker>(),
       splitPdfEngine: getIt<SplitPdfEngine>(),
       taskManager: getIt<TaskManager>(),
@@ -50,9 +47,8 @@ void registerBlocDependencies() {
     ),
   );
 
-  getIt.registerFactoryParam<ExtractPdfCubit, AppLocalizations, void>(
-    (l10n, _) => ExtractPdfCubit(
-      l10n: l10n,
+  getIt.registerFactory<ExtractPdfCubit>(
+    () => ExtractPdfCubit(
       filePicker: getIt<DocumentFilePicker>(),
       extractPdfEngine: getIt<ExtractPdfEngine>(),
       taskManager: getIt<TaskManager>(),
@@ -60,9 +56,8 @@ void registerBlocDependencies() {
     ),
   );
 
-  getIt.registerFactoryParam<RotatePdfCubit, AppLocalizations, void>(
-    (l10n, _) => RotatePdfCubit(
-      l10n: l10n,
+  getIt.registerFactory<RotatePdfCubit>(
+    () => RotatePdfCubit(
       filePicker: getIt<DocumentFilePicker>(),
       rotatePdfEngine: getIt<RotatePdfEngine>(),
       taskManager: getIt<TaskManager>(),
@@ -70,9 +65,8 @@ void registerBlocDependencies() {
     ),
   );
 
-  getIt.registerFactoryParam<PdfToImageCubit, AppLocalizations, void>(
-    (l10n, _) => PdfToImageCubit(
-      l10n: l10n,
+  getIt.registerFactory<PdfToImageCubit>(
+    () => PdfToImageCubit(
       filePicker: getIt<DocumentFilePicker>(),
       pdfToImageEngine: getIt<PdfToImageEngine>(),
       taskManager: getIt<TaskManager>(),
@@ -80,9 +74,8 @@ void registerBlocDependencies() {
     ),
   );
 
-  getIt.registerFactoryParam<ImageToPdfCubit, AppLocalizations, void>(
-    (l10n, _) => ImageToPdfCubit(
-      l10n: l10n,
+  getIt.registerFactory<ImageToPdfCubit>(
+    () => ImageToPdfCubit(
       filePicker: getIt<DocumentFilePicker>(),
       imageToPdfEngine: getIt<ImageToPdfEngine>(),
       taskManager: getIt<TaskManager>(),
@@ -90,9 +83,8 @@ void registerBlocDependencies() {
     ),
   );
 
-  getIt.registerFactoryParam<EncryptPdfCubit, AppLocalizations, void>(
-    (l10n, _) => EncryptPdfCubit(
-      l10n: l10n,
+  getIt.registerFactory<EncryptPdfCubit>(
+    () => EncryptPdfCubit(
       filePicker: getIt<DocumentFilePicker>(),
       encryptPdfEngine: getIt<EncryptPdfEngine>(),
       taskManager: getIt<TaskManager>(),
@@ -100,9 +92,8 @@ void registerBlocDependencies() {
     ),
   );
 
-  getIt.registerFactoryParam<DecryptPdfCubit, AppLocalizations, void>(
-    (l10n, _) => DecryptPdfCubit(
-      l10n: l10n,
+  getIt.registerFactory<DecryptPdfCubit>(
+    () => DecryptPdfCubit(
       filePicker: getIt<DocumentFilePicker>(),
       decryptPdfEngine: getIt<DecryptPdfEngine>(),
       taskManager: getIt<TaskManager>(),
@@ -110,9 +101,8 @@ void registerBlocDependencies() {
     ),
   );
 
-  getIt.registerFactoryParam<CompressPdfCubit, AppLocalizations, void>(
-    (l10n, _) => CompressPdfCubit(
-      l10n: l10n,
+  getIt.registerFactory<CompressPdfCubit>(
+    () => CompressPdfCubit(
       filePicker: getIt<DocumentFilePicker>(),
       compressPdfEngine: getIt<CompressPdfEngine>(),
       taskManager: getIt<TaskManager>(),
@@ -120,9 +110,8 @@ void registerBlocDependencies() {
     ),
   );
 
-  getIt.registerFactoryParam<AddWatermarkCubit, AppLocalizations, void>(
-    (l10n, _) => AddWatermarkCubit(
-      l10n: l10n,
+  getIt.registerFactory<AddWatermarkCubit>(
+    () => AddWatermarkCubit(
       filePicker: getIt<DocumentFilePicker>(),
       addWatermarkEngine: getIt<AddWatermarkEngine>(),
       taskManager: getIt<TaskManager>(),
@@ -134,6 +123,7 @@ void registerBlocDependencies() {
     () => HomeBloc(
       recentDocumentService: getIt<RecentDocumentService>(),
       documentService: getIt<DocumentService>(),
+      appEffectController: getIt<AppEffectController>(),
     ),
   );
 }

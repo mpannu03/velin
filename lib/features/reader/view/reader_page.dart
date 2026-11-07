@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/core/di/injection.dart';
 import 'package:velin/features/reader/bloc/bloc.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 
 import 'reader_view.dart';
 import 'reader_view_model.dart';
@@ -21,7 +22,9 @@ class ReaderPage extends StatelessWidget {
             ReaderLoaded() => ReaderView(
               viewModel: _createViewModel(context, state),
             ),
-            ReaderError(:final message) => Center(child: Text(message)),
+            ReaderError(:final failure) => Center(
+              child: Text(failure.message(context.l10n)),
+            ),
           };
         },
       ),

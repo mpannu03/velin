@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:pdf_cos/pdf_cos.dart';
+import 'package:velin/core/error/error.dart';
 
 class CompressPdfInput {
   const CompressPdfInput({required this.file, this.compressionLevel = 75})
@@ -28,7 +29,7 @@ class CompressPdfEngine {
     }
 
     if (input.file.absolute.path == outputFile.absolute.path) {
-      throw ArgumentError('The output file must differ from the input file.');
+      throw const OutputSameAsInputFailure();
     }
 
     final sourceBytes = await input.file.readAsBytes();
@@ -36,7 +37,7 @@ class CompressPdfEngine {
     final document = CosDocument.open(sourceBytes);
 
     if (document.isEncrypted) {
-      throw UnsupportedError('Encrypted PDFs cannot currently be compressed.');
+      throw const PasswordRequiredFailure();
     }
 
     final deflateLevel = (level * 9 / 100).round();

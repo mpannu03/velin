@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:image/image.dart' as img;
 import 'package:pdf_manipulator/io.dart';
 import 'package:pdf_manipulator/pdf_manipulator.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
 
 import 'add_watermark_input.dart';
@@ -84,11 +85,7 @@ class AddWatermarkEngine {
     final decoded = img.decodeImage(originalBytes);
 
     if (decoded == null) {
-      throw ArgumentError.value(
-        imageFile,
-        'imageFile',
-        'The selected image could not be decoded.',
-      );
+      throw InvalidImageFailure(path: imageFile.path);
     }
 
     final rotated = _rotateImage(decoded, input.rotation);
@@ -295,7 +292,7 @@ class AddWatermarkEngine {
     }
 
     if (input.outputFile.absolute.path == input.file.absolute.path) {
-      throw ArgumentError('The output file must differ from the input file.');
+      throw const OutputSameAsInputFailure();
     }
 
     if (input.type == WatermarkType.text && input.text.trim().isEmpty) {

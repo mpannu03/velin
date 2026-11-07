@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/core/di/injection.dart';
 import 'package:velin/features/tools/tools.dart';
-import 'package:velin/shared/extensions/extensions.dart';
 
 class EncryptPdfPage extends StatelessWidget {
   const EncryptPdfPage({super.key});
@@ -11,7 +10,7 @@ class EncryptPdfPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<EncryptPdfCubit>(param1: context.l10n),
+      create: (_) => getIt<EncryptPdfCubit>(),
       child: const _EncryptPdfPageContent(),
     );
   }

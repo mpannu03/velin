@@ -4,7 +4,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:velin/core/di/injection.dart';
 
 import 'package:velin/features/tools/sub_features/extract_pdf/extract_pdf.dart';
-import 'package:velin/l10n/app_localizations.dart';
 
 import '../../../../../helpers/helpers.dart';
 
@@ -17,9 +16,7 @@ void main() {
   setUp(() {
     cubit = MockExtractPdfCubit();
 
-    getIt.registerFactoryParam<ExtractPdfCubit, AppLocalizations, void>(
-      (l10n, _) => cubit,
-    );
+    getIt.registerFactory<ExtractPdfCubit>(() => cubit);
   });
 
   tearDown(() {

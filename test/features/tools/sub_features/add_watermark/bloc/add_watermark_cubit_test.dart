@@ -5,12 +5,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:velin/app/effects/effects.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task_manager.dart';
 import 'package:velin/engine/engine.dart';
 import 'package:velin/features/tools/sub_features/sub_features.dart';
 import 'package:velin/l10n/app_localizations.dart';
+
+import '../../../../../helpers/helpers.dart';
 
 class MockDocumentFilePicker extends Mock implements DocumentFilePicker {}
 
@@ -32,6 +35,8 @@ void main() {
   setUpAll(() {
     registerFallbackValue(FakeAddWatermarkInput());
     registerFallbackValue(NotificationType.error);
+    registerFallbackValue(const UnexpectedFailure());
+    registerLocalizedMessageFallback();
   });
 
   setUp(() {
@@ -59,7 +64,6 @@ void main() {
     AddWatermarkState state = const AddWatermarkState(),
   }) {
     return AddWatermarkCubit(
-      l10n: l10n,
       filePicker: filePicker,
       addWatermarkEngine: engine,
       taskManager: taskManager,
@@ -70,7 +74,6 @@ void main() {
   group('initial state', () {
     test('uses default state', () {
       final cubit = AddWatermarkCubit(
-        l10n: l10n,
         filePicker: filePicker,
         addWatermarkEngine: engine,
         taskManager: taskManager,
@@ -119,10 +122,8 @@ void main() {
     blocTest<AddWatermarkCubit, AddWatermarkState>(
       'does nothing when picker is cancelled',
       build: () {
-        when(() => filePicker.pickFile(allowedExtensions: ['pdf'])).thenAnswer(
-          (_) async =>
-              Failure<String>(const DocumentFilePickerError('cancelled')),
-        );
+        when(() => filePicker.pickFile(allowedExtensions: ['pdf']))
+            .thenAnswer((_) async => const Success(null));
 
         return buildCubit();
       },
@@ -141,9 +142,8 @@ void main() {
     blocTest<AddWatermarkCubit, AddWatermarkState>(
       'shows an error when picker fails',
       build: () {
-        when(
-          () => filePicker.pickFile(allowedExtensions: ['pdf']),
-        ).thenAnswer((_) async => Failure<String>(Exception('picker failed')));
+        when(() => filePicker.pickFile(allowedExtensions: ['pdf']))
+            .thenAnswer((_) async => const Failure(UnexpectedFailure()));
 
         return buildCubit();
       },
@@ -152,7 +152,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorUnexpected),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -189,10 +192,7 @@ void main() {
           () => filePicker.pickFile(
             allowedExtensions: AddWatermarkToolInput.supportedImageExtensions,
           ),
-        ).thenAnswer(
-          (_) async =>
-              Failure<String>(const DocumentFilePickerError('cancelled')),
-        );
+        ).thenAnswer((_) async => const Success(null));
 
         return buildCubit();
       },
@@ -207,7 +207,7 @@ void main() {
           () => filePicker.pickFile(
             allowedExtensions: AddWatermarkToolInput.supportedImageExtensions,
           ),
-        ).thenAnswer((_) async => Failure<String>(Exception('picker failed')));
+        ).thenAnswer((_) async => const Failure(UnexpectedFailure()));
 
         return buildCubit();
       },
@@ -216,7 +216,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorUnexpected),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -449,7 +452,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkWarningInvalidColor,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsWatermarkWarningInvalidColor),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -487,10 +493,8 @@ void main() {
     blocTest<AddWatermarkCubit, AddWatermarkState>(
       'is silent when directory picker is cancelled',
       build: () {
-        when(() => filePicker.pickDirectory()).thenAnswer(
-          (_) async =>
-              Failure<String>(const DocumentFilePickerError('cancelled')),
-        );
+        when(() => filePicker.pickDirectory())
+            .thenAnswer((_) async => const Success(null));
 
         return buildCubit();
       },
@@ -501,9 +505,8 @@ void main() {
     blocTest<AddWatermarkCubit, AddWatermarkState>(
       'shows an error when directory picker fails',
       build: () {
-        when(
-          () => filePicker.pickDirectory(),
-        ).thenAnswer((_) async => Failure<String>(Exception('picker failed')));
+        when(() => filePicker.pickDirectory())
+            .thenAnswer((_) async => const Failure(UnexpectedFailure()));
 
         return buildCubit();
       },
@@ -512,7 +515,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorUnexpected),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -552,7 +558,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkWarningNoFile,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsWatermarkWarningNoFile),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -580,7 +589,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkWarningNoText,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsWatermarkWarningNoText),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -600,7 +612,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkWarningInvalidColor,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsWatermarkWarningInvalidColor),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -621,7 +636,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkWarningNoSelection,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsWatermarkWarningNoSelection),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -638,7 +656,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkWarningNoFolder,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsWatermarkWarningNoFolder),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -658,7 +679,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkWarningNoFileName,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsWatermarkWarningNoFileName),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -681,7 +705,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkSelectionInvalid,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsWatermarkSelectionInvalid),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -727,7 +754,7 @@ void main() {
         verify(
           () => taskManager.submit(
             id: any(named: 'id', that: startsWith('add-watermark-')),
-            title: l10n.toolsWatermarkButton,
+            title: 'add-watermark',
             operation: any(named: 'operation'),
           ),
         ).called(1);
@@ -736,7 +763,10 @@ void main() {
 
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkSuccess,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsWatermarkSuccess),
+            ),
             type: NotificationType.success,
           ),
         ).called(1);
@@ -791,10 +821,10 @@ void main() {
     );
 
     blocTest<AddWatermarkCubit, AddWatermarkState>(
-      'shows warning when engine throws ArgumentError',
+      'reports an unreadable watermark image',
       build: () {
         when(() => engine.addWatermark(input: any(named: 'input')))
-            .thenThrow(ArgumentError('invalid watermark'));
+            .thenThrow(const InvalidImageFailure(path: 'logo.png'));
 
         return buildCubit(
           state: const AddWatermarkState(
@@ -820,8 +850,11 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkFailed,
-            type: NotificationType.warning,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorInvalidImage),
+            ),
+            type: NotificationType.error,
           ),
         ).called(1);
       },
@@ -857,7 +890,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsWatermarkFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsWatermarkFailed),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);

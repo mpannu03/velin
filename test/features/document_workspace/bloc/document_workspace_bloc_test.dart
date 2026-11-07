@@ -5,7 +5,6 @@ import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/document/document.dart';
 import 'package:velin/core/document/engine/engine.dart';
 import 'package:velin/core/recent/recent.dart';
-import 'package:velin/core/recent/recent_document_service.dart';
 import 'package:velin/core/result/result.dart';
 import 'package:velin/features/document_workspace/document_workspace.dart';
 import 'package:velin/services/dictionary/dictionary.dart';
@@ -64,7 +63,7 @@ void main() {
     when(() => engine.textSearch).thenReturn(textSearch);
 
     when(() => recentDocumentService.get(any()))
-        .thenAnswer((_) async => const Failure('not found'));
+        .thenAnswer((_) async => const Success<RecentDocument?>(null));
 
     when(
       () => recentDocumentService.open(
@@ -73,7 +72,7 @@ void main() {
         currentPage: any(named: 'currentPage'),
         documentType: any(named: 'documentType'),
       ),
-    ).thenAnswer((_) async {});
+    ).thenAnswer((_) async => const Success<void>(null));
 
     when(
       () => recentDocumentService.pageChanged(

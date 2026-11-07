@@ -2019,6 +2019,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Applying watermark…'**
   String get toolsWatermarkSubmitting;
+
+  /// Shown when a file no longer exists at its path.
+  ///
+  /// In en, this message translates to:
+  /// **'The file could not be found. It may have been moved or deleted.'**
+  String get errorFileNotFound;
+
+  /// Shown when the OS denies access to a file or folder.
+  ///
+  /// In en, this message translates to:
+  /// **'Velin doesn\'t have permission to use this file or folder.'**
+  String get errorFileAccessDenied;
+
+  /// Shown when another process has locked the file.
+  ///
+  /// In en, this message translates to:
+  /// **'The file is open in another program. Close it there and try again.'**
+  String get errorFileInUse;
+
+  /// Shown when writing fails because the disk is full.
+  ///
+  /// In en, this message translates to:
+  /// **'There isn\'t enough disk space to save the file.'**
+  String get errorDiskFull;
+
+  /// Shown for other file read/write errors.
+  ///
+  /// In en, this message translates to:
+  /// **'The file couldn\'t be read or saved.'**
+  String get errorFileSystem;
+
+  /// Shown when the output path equals the input path.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a different output name. Saving over the original file isn\'t allowed.'**
+  String get errorOutputSameAsInput;
+
+  /// Shown when opening a file Velin cannot handle.
+  ///
+  /// In en, this message translates to:
+  /// **'This file type isn\'t supported.'**
+  String get errorUnsupportedFileType;
+
+  /// Shown when an operation needs an unlocked document.
+  ///
+  /// In en, this message translates to:
+  /// **'This PDF is password-protected. Unlock it first, then try again.'**
+  String get errorPasswordRequired;
+
+  /// Shown when the supplied password is incorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'That password doesn\'t open this document.'**
+  String get errorWrongPassword;
+
+  /// Shown when a document cannot be parsed.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is damaged or isn\'t a valid PDF.'**
+  String get errorCorruptDocument;
+
+  /// Shown when a document uses an unsupported feature such as an unusual encryption scheme.
+  ///
+  /// In en, this message translates to:
+  /// **'This PDF uses a feature Velin can\'t process yet.'**
+  String get errorUnsupportedDocumentFeature;
+
+  /// Shown when an image cannot be decoded.
+  ///
+  /// In en, this message translates to:
+  /// **'One of the images couldn\'t be read. It may be damaged or in an unsupported format.'**
+  String get errorInvalidImage;
+
+  /// Shown when a page selection is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the pages to use.'**
+  String get errorPageSelectionEmpty;
+
+  /// Shown when part of a page selection cannot be understood.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{token}\" isn\'t a valid page or range.'**
+  String errorPageSelectionToken(String token);
+
+  /// Shown when a page range is malformed.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{range}\" isn\'t a valid range.'**
+  String errorPageSelectionRange(String range);
+
+  /// Shown when a page number is malformed.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{number}\" isn\'t a valid page number.'**
+  String errorPageSelectionNumber(String number);
+
+  /// Shown when a selected page is beyond the end of the document.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page} doesn\'t exist. The document has {totalPages} pages.'**
+  String errorPageSelectionOutOfBounds(int page, int totalPages);
+
+  /// Shown when a network request fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t connect. Check your internet connection and try again.'**
+  String get errorNetwork;
+
+  /// Shown when a network request times out.
+  ///
+  /// In en, this message translates to:
+  /// **'The request took too long. Try again.'**
+  String get errorNetworkTimeout;
+
+  /// Shown when a remote service returns an error.
+  ///
+  /// In en, this message translates to:
+  /// **'The service isn\'t responding correctly. Try again later.'**
+  String get errorServer;
+
+  /// Shown when the dictionary has no entry for the selected word.
+  ///
+  /// In en, this message translates to:
+  /// **'No definition found for \"{word}\".'**
+  String errorDictionaryNotFound(String word);
+
+  /// Generic message for unexpected errors.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get errorUnexpected;
 }
 
 class _AppLocalizationsDelegate

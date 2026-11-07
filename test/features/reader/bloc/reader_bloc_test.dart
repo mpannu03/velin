@@ -5,8 +5,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/document/document.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/result/result.dart';
 import 'package:velin/features/reader/bloc/bloc.dart';
+
+import '../../../helpers/helpers.dart';
 
 class MockDocumentService extends Mock implements DocumentService {}
 
@@ -15,6 +18,8 @@ class MockAppEffectController extends Mock implements AppEffectController {}
 void main() {
   setUpAll(() {
     registerFallbackValue(NotificationType.error);
+    registerFallbackValue(const UnexpectedFailure());
+    registerLocalizedMessageFallback();
   });
 
   group('ReaderBloc', () {
@@ -101,9 +106,9 @@ void main() {
         expect: () => [
           isA<ReaderLoading>(),
           isA<ReaderError>().having(
-            (state) => state.message,
-            'message',
-            contains('Something went wrong. Please try again.'),
+            (state) => state.failure,
+            'failure',
+            isA<UnexpectedFailure>(),
           ),
         ],
       );
@@ -216,8 +221,7 @@ void main() {
         'shows error effect when opening document fails',
         setUp: () {
           when(() => documentService.open()).thenAnswer(
-            (_) async =>
-                Failure(DocumentServiceError('Could not open document')),
+            (_) async => const Failure(FileNotFoundFailure(path: '/gone.pdf')),
           );
         },
         build: buildBloc,
@@ -229,9 +233,8 @@ void main() {
           verify(() => documentService.open()).called(1);
 
           verify(
-            () => effectController.notifyUser(
-              message: 'Could not open document',
-              type: NotificationType.error,
+            () => effectController.notifyFailure(
+              any(that: isA<FileNotFoundFailure>()),
             ),
           ).called(1);
         },
@@ -265,11 +268,8 @@ void main() {
       blocTest<ReaderBloc, ReaderState>(
         'shows error effect when closing document fails',
         setUp: () {
-          when(() => documentService.close(firstDocument)).thenReturn(
-            const Failure<void>(
-              DocumentServiceError('Could not close document'),
-            ),
-          );
+          when(() => documentService.close(firstDocument))
+              .thenReturn(const Failure<void>(UnexpectedFailure()));
         },
         build: buildBloc,
         act: (bloc) {
@@ -280,9 +280,8 @@ void main() {
           verify(() => documentService.close(firstDocument)).called(1);
 
           verify(
-            () => effectController.notifyUser(
-              message: 'Could not close document',
-              type: NotificationType.error,
+            () => effectController.notifyFailure(
+              any(that: isA<UnexpectedFailure>()),
             ),
           ).called(1);
         },

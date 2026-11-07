@@ -1,54 +1,48 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pdf_manipulator/pdf_manipulator.dart';
 import 'package:velin/app/effects/effects.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
-import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
-import 'package:velin/l10n/app_localizations.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 import 'package:velin/shared/utils/utils.dart';
 
 import 'encrypt_pdf_input.dart';
 import 'encrypt_pdf_state.dart';
 
-class EncryptPdfCubit extends Cubit<EncryptPdfState> {
+class EncryptPdfCubit extends Cubit<EncryptPdfState>
+    with ToolTaskRunner<EncryptPdfState> {
   EncryptPdfCubit({
-    required this._l10n,
-    required this._filePicker,
+    required this.filePicker,
     required this._encryptPdfEngine,
-    required this._taskManager,
-    required this._appEffectController,
+    required this.taskManager,
+    required this.appEffectController,
   }) : super(const EncryptPdfState());
 
-  final AppLocalizations _l10n;
-  final DocumentFilePicker _filePicker;
+  @override
+  final DocumentFilePicker filePicker;
+  @override
+  final TaskManager taskManager;
+  @override
+  final AppEffectController appEffectController;
+
   final EncryptPdfEngine _encryptPdfEngine;
-  final TaskManager _taskManager;
-  final AppEffectController _appEffectController;
 
   Future<void> pickFile() async {
-    final result = await _filePicker.pickFile(allowedExtensions: ['pdf']);
+    final filePath = await pickSingleFile(const ['pdf']);
 
-    switch (result) {
-      case Success(data: final filePath):
-        emit(
-          state.copyWith(
-            inputFilePath: filePath,
-            outputDirectory:
-                state.outputDirectory ??
-                directoryWithTrailingSeparator(filePath),
-            outputFileName: '${fileNameFromPath(filePath)}_protected.pdf',
-          ),
-        );
-
-      case Failure(error: final error):
-        // The user cancelled the picker: not an error, stay quiet.
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _notifyError(_l10n.toolsProtectFailed);
+    if (filePath == null || isClosed) {
+      return;
     }
+
+    emit(
+      state.copyWith(
+        inputFilePath: filePath,
+        outputDirectory:
+            state.outputDirectory ?? directoryWithTrailingSeparator(filePath),
+        outputFileName: '${fileNameFromPath(filePath)}_protected.pdf',
+      ),
+    );
   }
 
   void updateUserPassword(String? password) {
@@ -84,19 +78,13 @@ class EncryptPdfCubit extends Cubit<EncryptPdfState> {
   }
 
   Future<void> pickOutputDirectory() async {
-    final result = await _filePicker.pickDirectory();
+    final directoryPath = await pickDirectory();
 
-    switch (result) {
-      case Success(data: final directoryPath):
-        emit(state.copyWith(outputDirectory: directoryPath));
-
-      case Failure(error: final error):
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _notifyError(_l10n.toolsProtectFailed);
+    if (directoryPath == null || isClosed) {
+      return;
     }
+
+    emit(state.copyWith(outputDirectory: directoryPath));
   }
 
   Future<void> protect() async {
@@ -112,71 +100,54 @@ class EncryptPdfCubit extends Cubit<EncryptPdfState> {
 
     emit(state.copyWith(isSubmitting: true));
 
-    try {
-      await _taskManager.submit(
-        id: 'encrypt-pdf-${DateTime.now().microsecondsSinceEpoch}',
-        title: _l10n.toolsProtectButton,
-        operation: () async {
-          await _encryptPdfEngine.encrypt(engineInput);
-        },
-      );
+    await runToolTask(
+      taskName: 'encrypt-pdf',
+      operation: () => _encryptPdfEngine.encrypt(engineInput),
+      successMessage: () =>
+          (l10n) => l10n.toolsProtectSuccess,
+      failureMessage: (l10n) => l10n.toolsProtectFailed,
+      describeFailure: (failure) => switch (failure) {
+        // The source is already protected: the engine opens it without a
+        // password, so this is how that surfaces. The fix is to unlock it
+        // first, which deserves its own message.
+        PasswordRequiredFailure() => (
+          l10n,
+        ) => l10n.toolsProtectAlreadyEncrypted,
+        _ => null,
+      },
+    );
 
-      _appEffectController.notifyUser(
-        message: _l10n.toolsProtectSuccess,
-        type: NotificationType.success,
-      );
-    } on PdfPasswordRequired {
-      // The source is already protected: the engine opens it without a
-      // password, so this is how that surfaces. Say so instead of a generic
-      // failure, because the fix is to unlock it first.
-      _notifyWarning(_l10n.toolsProtectAlreadyEncrypted);
-    } catch (_) {
-      _notifyError(_l10n.toolsProtectFailed);
-    } finally {
+    if (!isClosed) {
       emit(state.copyWith(isSubmitting: false));
     }
   }
 
   bool _validateInputs() {
     if (!state.hasInputFile) {
-      _notifyWarning(_l10n.toolsProtectWarningNoFile);
+      notifyWarning((l10n) => l10n.toolsProtectWarningNoFile);
       return false;
     }
 
     if (!state.hasValidOutputDirectory) {
-      _notifyWarning(_l10n.toolsProtectWarningNoFolder);
+      notifyWarning((l10n) => l10n.toolsProtectWarningNoFolder);
       return false;
     }
 
     if (!state.hasValidOutputFileName) {
-      _notifyWarning(_l10n.toolsProtectWarningNoFileName);
+      notifyWarning((l10n) => l10n.toolsProtectWarningNoFileName);
       return false;
     }
 
     if (!state.hasProtection) {
-      _notifyWarning(_l10n.toolsProtectWarningNoProtection);
+      notifyWarning((l10n) => l10n.toolsProtectWarningNoProtection);
       return false;
     }
 
     if (state.hasDuplicatePasswords) {
-      _notifyWarning(_l10n.toolsProtectWarningPasswordsMatch);
+      notifyWarning((l10n) => l10n.toolsProtectWarningPasswordsMatch);
       return false;
     }
 
     return true;
-  }
-
-  void _notifyWarning(String message) {
-    _appEffectController.notifyUser(
-      message: message,
-      type: NotificationType.warning,
-    );
-  }
-
-  void _notifyError(String message) {
-    _appEffectController.notifyUser(
-      message: message,
-      type: NotificationType.error,
-    );
   }
 }

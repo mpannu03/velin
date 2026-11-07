@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:velin/core/document/document.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/features/reader/reader.dart';
 
 import '../../../helpers/helpers.dart';
@@ -67,12 +68,12 @@ void main() {
       whenListen(
         bloc,
         const Stream<ReaderState>.empty(),
-        initialState: const ReaderError('Failed to load documents'),
+        initialState: const ReaderError(UnexpectedFailure()),
       );
 
       await pumpApp(tester, const ReaderPage());
 
-      expect(find.text('Failed to load documents'), findsOneWidget);
+      expect(find.text(testL10n.errorUnexpected), findsOneWidget);
     });
 
     testWidgets('starts reader when page is created', (tester) async {

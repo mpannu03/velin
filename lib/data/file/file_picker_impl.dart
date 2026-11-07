@@ -1,69 +1,36 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:velin/core/file/file_picker.dart';
-
 import 'package:velin/core/result/result.dart';
 
 class DocumentFilePickerImpl implements DocumentFilePicker {
   @override
-  Future<Result<String>> pickFile({
-    required List<String> allowedExtensions,
-  }) async {
-    try {
+  Future<Result<String?>> pickFile({required List<String> allowedExtensions}) {
+    return Result.guard(() async {
       final result = await FilePicker.pickFile(
         type: FileType.custom,
         allowedExtensions: allowedExtensions,
       );
 
-      final path = result?.path;
-
-      if (path == null) {
-        return const Failure(DocumentFilePickerError('No file was selected.'));
-      }
-
-      return Success(path);
-    } catch (error, stackTrace) {
-      return Failure(error, stackTrace);
-    }
+      return result?.path;
+    });
   }
 
   @override
   Future<Result<List<String>>> pickFiles({
     required List<String> allowedExtensions,
-  }) async {
-    try {
+  }) {
+    return Result.guard(() async {
       final result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: allowedExtensions,
       );
 
-      if (result.isEmpty) {
-        return const Failure(
-          DocumentFilePickerError('No files were selected.'),
-        );
-      }
-
-      return Success(
-        result.map((file) => file.path).whereType<String>().toList(),
-      );
-    } catch (error, stackTrace) {
-      return Failure(error, stackTrace);
-    }
+      return result.map((file) => file.path).whereType<String>().toList();
+    });
   }
 
   @override
-  Future<Result<String>> pickDirectory() async {
-    try {
-      final path = await FilePicker.getDirectoryPath();
-
-      if (path == null) {
-        return const Failure(
-          DocumentFilePickerError('No directory was selected.'),
-        );
-      }
-
-      return Success(path);
-    } catch (error, stackTrace) {
-      return Failure(error, stackTrace);
-    }
+  Future<Result<String?>> pickDirectory() {
+    return Result.guard(FilePicker.getDirectoryPath);
   }
 }
