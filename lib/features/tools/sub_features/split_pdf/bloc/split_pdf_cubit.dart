@@ -117,10 +117,12 @@ class SplitPdfCubit extends Cubit<SplitPdfState>
 
     await runToolTask(
       taskName: 'split-pdf',
-      operation: () async {
+      operation: (context) async {
         final files = await _splitPdfEngine.split(
           input: splitInput,
           outputDirectory: outputDirectory,
+          context: context,
+          confirmOverwrite: confirmOverwriteMany,
         );
 
         fileCount = files.length;

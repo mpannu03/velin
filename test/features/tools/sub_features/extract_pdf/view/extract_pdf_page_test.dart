@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:velin/core/di/injection.dart';
-
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 import 'package:velin/features/tools/sub_features/extract_pdf/extract_pdf.dart';
 
 import '../../../../../helpers/helpers.dart';
@@ -15,6 +15,7 @@ void main() {
 
   setUp(() {
     cubit = MockExtractPdfCubit();
+    when(() => cubit.task).thenReturn(ToolTaskHandle());
 
     getIt.registerFactory<ExtractPdfCubit>(() => cubit);
   });

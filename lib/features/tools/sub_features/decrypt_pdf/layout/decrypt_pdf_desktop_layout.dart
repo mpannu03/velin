@@ -54,6 +54,7 @@ class DecryptPdfDesktopLayout extends StatelessWidget {
             const SizedBox(height: AppSpacing.xl),
             ToolActionBar(
               isSubmitting: viewModel.isSubmitting,
+              task: viewModel.task,
               submittingText: l10n.toolsUnlockSubmitting,
               canAction: viewModel.canDecrypt,
               icon: Icons.lock_open_outlined,

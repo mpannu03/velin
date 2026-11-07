@@ -91,10 +91,11 @@ class ExtractPdfCubit extends Cubit<ExtractPdfState>
 
     await runToolTask(
       taskName: 'extract-pdf',
-      operation: () => _extractPdfEngine.extract(
+      operation: (context) => _extractPdfEngine.extract(
         inputFile: inputFile,
         selection: pageSelection,
         outputFile: outputFile,
+        context: context,
       ),
       successMessage: () =>
           (l10n) => l10n.toolsExtractSuccess,

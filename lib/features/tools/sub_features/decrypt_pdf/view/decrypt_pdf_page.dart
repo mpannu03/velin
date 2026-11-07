@@ -40,6 +40,7 @@ class _DecryptPdfPageContent extends StatelessWidget {
       outputDirectory: state.outputDirectory,
       password: state.password,
       isSubmitting: state.isSubmitting,
+      task: cubit.task,
       canDecrypt: state.canDecrypt,
       onPickFile: cubit.pickFile,
       onPasswordChanged: cubit.updatePassword,

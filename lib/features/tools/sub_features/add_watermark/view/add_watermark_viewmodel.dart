@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/engine/engine.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 import 'package:velin/features/tools/tools.dart';
 
 class AddWatermarkViewModel {
@@ -23,6 +24,7 @@ class AddWatermarkViewModel {
     required this.scope,
     required this.selection,
     required this.isSubmitting,
+    this.task,
     required this.canApplyWatermark,
     required this.onPickFile,
     required this.onPickWatermarkImage,
@@ -81,6 +83,10 @@ class AddWatermarkViewModel {
   final String selection;
 
   final bool isSubmitting;
+
+  /// Progress and cancellation of the running task.
+
+  final ToolTaskHandle? task;
   final bool canApplyWatermark;
 
   final VoidCallback onPickFile;

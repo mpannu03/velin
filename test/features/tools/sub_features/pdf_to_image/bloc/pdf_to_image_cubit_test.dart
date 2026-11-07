@@ -305,6 +305,8 @@ void main() {
           () => pdfToImageEngine.convert(
             input: any(named: 'input'),
             outputDirectory: any(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         );
       },
@@ -378,6 +380,8 @@ void main() {
           () => pdfToImageEngine.convert(
             input: any(named: 'input'),
             outputDirectory: any(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         );
       },
@@ -394,15 +398,17 @@ void main() {
           ),
         ).thenAnswer((invocation) async {
           final operation =
-              invocation.namedArguments[#operation] as Future<void> Function();
+              invocation.namedArguments[#operation] as TaskOperation;
 
-          await operation();
+          await operation(TaskContext.detached());
         });
 
         when(
           () => pdfToImageEngine.convert(
             input: any(named: 'input'),
             outputDirectory: any(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         ).thenAnswer(
           (_) async => [
@@ -454,6 +460,8 @@ void main() {
           () => pdfToImageEngine.convert(
             input: captureAny(named: 'input'),
             outputDirectory: captureAny(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         ).captured;
 
@@ -500,15 +508,17 @@ void main() {
           ),
         ).thenAnswer((invocation) async {
           final operation =
-              invocation.namedArguments[#operation] as Future<void> Function();
+              invocation.namedArguments[#operation] as TaskOperation;
 
-          await operation();
+          await operation(TaskContext.detached());
         });
 
         when(
           () => pdfToImageEngine.convert(
             input: any(named: 'input'),
             outputDirectory: any(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         ).thenThrow(Exception('conversion failed'));
       },
@@ -616,6 +626,8 @@ void main() {
           () => pdfToImageEngine.convert(
             input: any(named: 'input'),
             outputDirectory: any(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         );
       },

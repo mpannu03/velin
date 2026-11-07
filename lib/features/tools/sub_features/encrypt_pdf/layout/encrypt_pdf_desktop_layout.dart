@@ -63,6 +63,7 @@ class EncryptPdfDesktopLayout extends StatelessWidget {
             const SizedBox(height: AppSpacing.xl),
             ToolActionBar(
               isSubmitting: viewModel.isSubmitting,
+              task: viewModel.task,
               submittingText: l10n.toolsProtectSubmitting,
               canAction: viewModel.canProtect,
               icon: Icons.lock_outline,

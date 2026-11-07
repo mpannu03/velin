@@ -7,6 +7,7 @@ import 'package:pdfrx_engine/pdfrx_engine.dart';
 import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/safe_file_writer.dart';
 import 'package:velin/core/page_selection/page_selection_error.dart';
+import 'package:velin/core/task/task_context.dart';
 import 'package:velin/engine/isolate/run_in_background.dart';
 
 import 'pdf_to_image_input.dart';
@@ -19,6 +20,8 @@ class PdfToImageEngine {
   Future<List<File>> convert({
     required PdfToImageInput input,
     required Directory outputDirectory,
+    TaskContext? context,
+    OverwriteConfirmation? confirmOverwrite,
   }) async {
     if (!_supportedDpi.contains(input.dpi)) {
       throw ArgumentError.value(
@@ -61,62 +64,86 @@ class PdfToImageEngine {
 
       await outputDirectory.create(recursive: true);
 
+      final source = document;
       final outputFiles = <File>[];
       final baseName = _baseName(input.file);
 
-      for (final pageNumber in selectedPages) {
-        final page = document.pages[pageNumber - 1];
-
-        // PDF dimensions are measured in points (72 points per inch).
-        final width = (page.width * input.dpi / 72).round();
-        final height = (page.height * input.dpi / 72).round();
-
-        final rendered = await page.render(
-          width: width,
-          height: height,
-          fullWidth: width.toDouble(),
-          fullHeight: height.toDouble(),
-          backgroundColor: 0xFFFFFFFF,
-        );
-
-        if (rendered == null) {
-          throw StateError('Failed to render page $pageNumber.');
-        }
-
-        final Uint8List bytes;
-
-        try {
-          final job = _EncodeJob(
-            pixels: rendered.pixels,
-            width: rendered.width,
-            height: rendered.height,
-            format: input.format,
-            quality: input.quality,
-            grayscale: input.colorMode == PdfImageColorMode.grayscale,
-          );
-
-          // Encoding a 300–600 DPI page takes seconds; on the UI isolate it
-          // would freeze the window. Rendering stays here because pdfium
-          // handles cannot leave this isolate.
-          bytes = await runInBackground(_encodePage, job);
-        } finally {
-          rendered.dispose();
-        }
-
-        final outputFile = File(
-          p.join(
-            outputDirectory.path,
-            '${baseName}_page_$pageNumber.${input.format.extension}',
+      final planned = [
+        for (final pageNumber in selectedPages)
+          File(
+            p.join(
+              outputDirectory.path,
+              '${baseName}_page_$pageNumber.${input.format.extension}',
+            ),
           ),
-        );
+      ];
 
-        outputFiles.add(await writeBytesAtomically(outputFile, bytes));
-      }
+      await confirmOverwrites(planned, confirmOverwrite);
 
-      return outputFiles;
+      // Cancelling removes the images already written.
+      return await discardOnCancel(outputFiles, () async {
+        for (final (index, pageNumber) in selectedPages.indexed) {
+          context?.throwIfCancelled();
+          context?.reportProgress(index, selectedPages.length);
+
+          final bytes = await _renderPage(source, pageNumber, input);
+
+          outputFiles.add(await writeBytesAtomically(planned[index], bytes));
+        }
+
+        context?.reportProgress(selectedPages.length, selectedPages.length);
+
+        return outputFiles;
+      });
     } finally {
       await document?.dispose();
     }
+  }
+
+  Future<Uint8List> _renderPage(
+    PdfDocument document,
+    int pageNumber,
+    PdfToImageInput input,
+  ) async {
+    final page = document.pages[pageNumber - 1];
+
+    // PDF dimensions are measured in points (72 points per inch).
+    final width = (page.width * input.dpi / 72).round();
+    final height = (page.height * input.dpi / 72).round();
+
+    final rendered = await page.render(
+      width: width,
+      height: height,
+      fullWidth: width.toDouble(),
+      fullHeight: height.toDouble(),
+      backgroundColor: 0xFFFFFFFF,
+    );
+
+    if (rendered == null) {
+      throw StateError('Failed to render page $pageNumber.');
+    }
+
+    final Uint8List bytes;
+
+    try {
+      final job = _EncodeJob(
+        pixels: rendered.pixels,
+        width: rendered.width,
+        height: rendered.height,
+        format: input.format,
+        quality: input.quality,
+        grayscale: input.colorMode == PdfImageColorMode.grayscale,
+      );
+
+      // Encoding a 300–600 DPI page takes seconds; on the UI isolate it
+      // would freeze the window. Rendering stays here because pdfium
+      // handles cannot leave this isolate.
+      bytes = await runInBackground(_encodePage, job);
+    } finally {
+      rendered.dispose();
+    }
+
+    return bytes;
   }
 
   String _baseName(File file) {

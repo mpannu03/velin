@@ -56,6 +56,7 @@ class SplitPdfDesktopLayout extends StatelessWidget {
             const SizedBox(height: AppSpacing.xl),
             ToolActionBar(
               isSubmitting: viewModel.isSubmitting,
+              task: viewModel.task,
               submittingText: l10n.toolsSplitSubmitting,
               canAction: viewModel.canSplit,
               icon: Icons.call_split,

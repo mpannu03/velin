@@ -99,9 +99,10 @@ class CompressPdfCubit extends Cubit<CompressPdfState>
 
     await runToolTask(
       taskName: 'compress-pdf',
-      operation: () => _compressPdfEngine.compress(
+      operation: (context) => _compressPdfEngine.compress(
         input: engineInput,
         outputFile: outputFile,
+        context: context,
       ),
       successMessage: () =>
           (l10n) => l10n.toolsCompressSuccess,

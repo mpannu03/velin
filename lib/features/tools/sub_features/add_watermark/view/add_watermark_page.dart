@@ -54,6 +54,7 @@ class _AddWatermarkPageContent extends StatelessWidget {
       scope: state.scope,
       selection: state.selection,
       isSubmitting: state.isSubmitting,
+      task: cubit.task,
       canApplyWatermark: state.canApplyWatermark,
       onPickFile: cubit.pickFile,
       onPickWatermarkImage: cubit.pickWatermarkImage,

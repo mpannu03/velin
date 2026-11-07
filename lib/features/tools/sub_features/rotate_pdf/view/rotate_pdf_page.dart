@@ -42,6 +42,7 @@ class _RotatePdfPageContent extends StatelessWidget {
       outputFileName: state.outputFileName,
       outputDirectory: state.outputDirectory,
       isSubmitting: state.isSubmitting,
+      task: cubit.task,
       canRotate: state.canRotate,
       onPickFile: cubit.pickFile,
       onDirectionChanged: cubit.changeDirection,

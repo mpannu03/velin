@@ -265,12 +265,14 @@ void main() {
         ),
       ).thenAnswer((invocation) async {
         final operation =
-            invocation.namedArguments[#operation] as Future<void> Function();
+            invocation.namedArguments[#operation] as TaskOperation;
 
-        await operation();
+        await operation(TaskContext.detached());
       });
 
-      when(() => decryptPdfEngine.decrypt(any())).thenAnswer((_) async {
+      when(
+        () => decryptPdfEngine.decrypt(any(), context: any(named: 'context')),
+      ).thenAnswer((_) async {
         return File('/documents/unlocked.pdf');
       });
     }
@@ -375,7 +377,12 @@ void main() {
       ],
       verify: (_) {
         final input =
-            verify(() => decryptPdfEngine.decrypt(captureAny())).captured.single
+            verify(
+                  () => decryptPdfEngine.decrypt(
+                    captureAny(),
+                    context: any(named: 'context'),
+                  ),
+                ).captured.single
                 as DecryptPdfInput;
 
         expect(input.inputFile.path, '/documents/protected.pdf');
@@ -428,13 +435,14 @@ void main() {
           ),
         ).thenAnswer((invocation) async {
           final operation =
-              invocation.namedArguments[#operation] as Future<void> Function();
+              invocation.namedArguments[#operation] as TaskOperation;
 
-          await operation();
+          await operation(TaskContext.detached());
         });
 
-        when(() => decryptPdfEngine.decrypt(any()))
-            .thenThrow(CosPasswordException());
+        when(
+          () => decryptPdfEngine.decrypt(any(), context: any(named: 'context')),
+        ).thenThrow(CosPasswordException());
 
         return buildCubit();
       },
@@ -468,13 +476,14 @@ void main() {
           ),
         ).thenAnswer((invocation) async {
           final operation =
-              invocation.namedArguments[#operation] as Future<void> Function();
+              invocation.namedArguments[#operation] as TaskOperation;
 
-          await operation();
+          await operation(TaskContext.detached());
         });
 
-        when(() => decryptPdfEngine.decrypt(any()))
-            .thenThrow(const DocumentNotEncryptedFailure());
+        when(
+          () => decryptPdfEngine.decrypt(any(), context: any(named: 'context')),
+        ).thenThrow(const DocumentNotEncryptedFailure());
 
         return buildCubit();
       },
@@ -508,13 +517,14 @@ void main() {
           ),
         ).thenAnswer((invocation) async {
           final operation =
-              invocation.namedArguments[#operation] as Future<void> Function();
+              invocation.namedArguments[#operation] as TaskOperation;
 
-          await operation();
+          await operation(TaskContext.detached());
         });
 
-        when(() => decryptPdfEngine.decrypt(any()))
-            .thenThrow(Exception('decryption failed'));
+        when(
+          () => decryptPdfEngine.decrypt(any(), context: any(named: 'context')),
+        ).thenThrow(Exception('decryption failed'));
 
         return buildCubit();
       },

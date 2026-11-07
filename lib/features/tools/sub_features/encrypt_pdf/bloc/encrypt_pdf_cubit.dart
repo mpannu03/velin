@@ -106,7 +106,8 @@ class EncryptPdfCubit extends Cubit<EncryptPdfState>
 
     await runToolTask(
       taskName: 'encrypt-pdf',
-      operation: () => _encryptPdfEngine.encrypt(engineInput),
+      operation: (context) =>
+          _encryptPdfEngine.encrypt(engineInput, context: context),
       successMessage: () =>
           (l10n) => l10n.toolsProtectSuccess,
       failureMessage: (l10n) => l10n.toolsProtectFailed,

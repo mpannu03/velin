@@ -10,6 +10,7 @@ import 'package:pdf_manipulator/pdf_manipulator.dart' show Pdf;
 import 'package:pdfrx_engine/pdfrx_engine.dart' show pdfrxInitialize;
 import 'package:velin/core/error/error.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
+import 'package:velin/core/task/task_context.dart';
 import 'package:velin/engine/engine.dart';
 
 /// End-to-end checks of the tool engines against the real pdfium and
@@ -188,6 +189,81 @@ void main() {
           outputFile: samplePdf,
         ),
       );
+    });
+  });
+
+  group('cancellation', () {
+    test('a pre-cancelled task writes nothing', () async {
+      final context = TaskContext.detached()..token.cancel();
+
+      await expectLater(
+        const MergePdfEngine().merge(
+          inputs: [MergePdfInput(file: samplePdf)],
+          outputFile: file('merged.pdf'),
+          context: context,
+        ),
+        throwsA(isA<CancelledFailure>()),
+      );
+      expect(file('merged.pdf').existsSync(), isFalse);
+    });
+
+    test('cancelling split midway removes the files already written', () async {
+      final token = CancellationToken();
+      final context = TaskContext(
+        token: token,
+        // Cancel as soon as the first file has been written.
+        onProgress: (fraction) {
+          if (fraction > 0) token.cancel();
+        },
+      );
+      final outputDirectory = Directory(p.join(dir.path, 'split'));
+
+      await expectLater(
+        const SplitPdfEngine().split(
+          input: SplitPdfInput(
+            file: samplePdf,
+            mode: SplitPdfMode.extractAllPages,
+          ),
+          outputDirectory: outputDirectory,
+          context: context,
+        ),
+        throwsA(isA<CancelledFailure>()),
+      );
+
+      expect(outputDirectory.listSync(), isEmpty);
+    });
+
+    test('PDF to image reports progress up to completion', () async {
+      final progress = <double>[];
+
+      await const PdfToImageEngine().convert(
+        input: PdfToImageInput(file: samplePdf, dpi: 72),
+        outputDirectory: Directory(p.join(dir.path, 'images')),
+        context: TaskContext(onProgress: progress.add),
+      );
+
+      expect(progress.first, 0);
+      expect(progress.last, 1);
+      expect(progress, orderedEquals([...progress]..sort()));
+    });
+
+    test('declining to overwrite leaves existing images untouched', () async {
+      final outputDirectory = Directory(p.join(dir.path, 'images'))
+        ..createSync();
+      final existing = File(p.join(outputDirectory.path, 'sample_page_1.png'))
+        ..writeAsStringSync('keep me');
+
+      await expectLater(
+        const PdfToImageEngine().convert(
+          input: PdfToImageInput(file: samplePdf, dpi: 72),
+          outputDirectory: outputDirectory,
+          confirmOverwrite: (_) async => false,
+        ),
+        throwsA(isA<CancelledFailure>()),
+      );
+
+      expect(existing.readAsStringSync(), 'keep me');
+      expect(outputDirectory.listSync(), hasLength(1));
     });
   });
 

@@ -8,7 +8,7 @@ import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/result/result.dart';
-import 'package:velin/core/task/task_manager.dart';
+import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
 import 'package:velin/features/tools/sub_features/sub_features.dart';
 import 'package:velin/l10n/app_localizations.dart';
@@ -53,10 +53,9 @@ void main() {
         operation: any(named: 'operation'),
       ),
     ).thenAnswer((invocation) async {
-      final operation =
-          invocation.namedArguments[#operation] as Future<void> Function();
+      final operation = invocation.namedArguments[#operation] as TaskOperation;
 
-      await operation();
+      await operation(TaskContext.detached());
     });
   });
 
@@ -726,8 +725,12 @@ void main() {
     blocTest<AddWatermarkCubit, AddWatermarkState>(
       'submits task and shows success',
       build: () {
-        when(() => engine.addWatermark(input: any(named: 'input')))
-            .thenAnswer((_) async => File('/documents/output.pdf'));
+        when(
+          () => engine.addWatermark(
+            input: any(named: 'input'),
+            context: any(named: 'context'),
+          ),
+        ).thenAnswer((_) async => File('/documents/output.pdf'));
 
         return buildCubit(
           state: const AddWatermarkState(
@@ -759,7 +762,12 @@ void main() {
           ),
         ).called(1);
 
-        verify(() => engine.addWatermark(input: any(named: 'input'))).called(1);
+        verify(
+          () => engine.addWatermark(
+            input: any(named: 'input'),
+            context: any(named: 'context'),
+          ),
+        ).called(1);
 
         verify(
           () => effectController.notifyUser(
@@ -776,8 +784,12 @@ void main() {
     blocTest<AddWatermarkCubit, AddWatermarkState>(
       'passes selected page scope to the engine',
       build: () {
-        when(() => engine.addWatermark(input: any(named: 'input')))
-            .thenAnswer((_) async => File('/documents/output.pdf'));
+        when(
+          () => engine.addWatermark(
+            input: any(named: 'input'),
+            context: any(named: 'context'),
+          ),
+        ).thenAnswer((_) async => File('/documents/output.pdf'));
 
         return buildCubit(
           state: const AddWatermarkState(
@@ -804,9 +816,12 @@ void main() {
       ],
       verify: (_) {
         final captured =
-            verify(() => engine.addWatermark(input: captureAny(named: 'input')))
-                    .captured
-                    .single
+            verify(
+                  () => engine.addWatermark(
+                    input: captureAny(named: 'input'),
+                    context: any(named: 'context'),
+                  ),
+                ).captured.single
                 as AddWatermarkInput;
 
         expect(captured.file.path, '/documents/input.pdf');
@@ -823,8 +838,12 @@ void main() {
     blocTest<AddWatermarkCubit, AddWatermarkState>(
       'reports an unreadable watermark image',
       build: () {
-        when(() => engine.addWatermark(input: any(named: 'input')))
-            .thenThrow(const InvalidImageFailure(path: 'logo.png'));
+        when(
+          () => engine.addWatermark(
+            input: any(named: 'input'),
+            context: any(named: 'context'),
+          ),
+        ).thenThrow(const InvalidImageFailure(path: 'logo.png'));
 
         return buildCubit(
           state: const AddWatermarkState(
@@ -863,8 +882,12 @@ void main() {
     blocTest<AddWatermarkCubit, AddWatermarkState>(
       'shows error when engine throws unexpected error',
       build: () {
-        when(() => engine.addWatermark(input: any(named: 'input')))
-            .thenThrow(StateError('unexpected failure'));
+        when(
+          () => engine.addWatermark(
+            input: any(named: 'input'),
+            context: any(named: 'context'),
+          ),
+        ).thenThrow(StateError('unexpected failure'));
 
         return buildCubit(
           state: const AddWatermarkState(

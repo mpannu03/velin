@@ -64,10 +64,9 @@ void main() {
         operation: any(named: 'operation'),
       ),
     ).thenAnswer((invocation) async {
-      final operation =
-          invocation.namedArguments[#operation] as Future<void> Function();
+      final operation = invocation.namedArguments[#operation] as TaskOperation;
 
-      await operation();
+      await operation(TaskContext.detached());
     });
   }
 
@@ -390,6 +389,7 @@ void main() {
             inputFile: any(named: 'inputFile'),
             selection: any(named: 'selection'),
             outputFile: any(named: 'outputFile'),
+            context: any(named: 'context'),
           ),
         ).thenAnswer((_) async {
           return File('/documents/extracted.pdf');
@@ -434,6 +434,7 @@ void main() {
             inputFile: captureAny(named: 'inputFile'),
             selection: captureAny(named: 'selection'),
             outputFile: captureAny(named: 'outputFile'),
+            context: any(named: 'context'),
           ),
         ).captured;
 
@@ -469,6 +470,7 @@ void main() {
             inputFile: any(named: 'inputFile'),
             selection: any(named: 'selection'),
             outputFile: any(named: 'outputFile'),
+            context: any(named: 'context'),
           ),
         ).thenAnswer((_) async {
           return File('/documents/output/pages.pdf');
@@ -502,6 +504,7 @@ void main() {
                     inputFile: any(named: 'inputFile'),
                     selection: any(named: 'selection'),
                     outputFile: captureAny(named: 'outputFile'),
+                    context: any(named: 'context'),
                   ),
                 ).captured.single
                 as File;
@@ -518,6 +521,7 @@ void main() {
             inputFile: any(named: 'inputFile'),
             selection: any(named: 'selection'),
             outputFile: any(named: 'outputFile'),
+            context: any(named: 'context'),
           ),
         ).thenThrow(Exception('extraction failed'));
 
@@ -655,6 +659,7 @@ void main() {
             inputFile: any(named: 'inputFile'),
             selection: any(named: 'selection'),
             outputFile: any(named: 'outputFile'),
+            context: any(named: 'context'),
           ),
         );
       },

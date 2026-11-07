@@ -86,7 +86,8 @@ class DecryptPdfCubit extends Cubit<DecryptPdfState>
 
     await runToolTask(
       taskName: 'decrypt-pdf',
-      operation: () => _decryptPdfEngine.decrypt(engineInput),
+      operation: (context) =>
+          _decryptPdfEngine.decrypt(engineInput, context: context),
       successMessage: () =>
           (l10n) => l10n.toolsUnlockSuccess,
       failureMessage: (l10n) => l10n.toolsUnlockFailed,

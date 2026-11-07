@@ -64,10 +64,9 @@ void main() {
         operation: any(named: 'operation'),
       ),
     ).thenAnswer((invocation) async {
-      final operation =
-          invocation.namedArguments[#operation] as Future<void> Function();
+      final operation = invocation.namedArguments[#operation] as TaskOperation;
 
-      await operation();
+      await operation(TaskContext.detached());
     });
   }
 
@@ -497,6 +496,7 @@ void main() {
           () => imageToPdfEngine.convert(
             input: any(named: 'input'),
             outputFile: any(named: 'outputFile'),
+            context: any(named: 'context'),
           ),
         ).thenAnswer((_) async {
           return File('/documents/converted.pdf');
@@ -547,6 +547,7 @@ void main() {
           () => imageToPdfEngine.convert(
             input: captureAny(named: 'input'),
             outputFile: captureAny(named: 'outputFile'),
+            context: any(named: 'context'),
           ),
         ).captured;
 
@@ -595,6 +596,7 @@ void main() {
           () => imageToPdfEngine.convert(
             input: any(named: 'input'),
             outputFile: any(named: 'outputFile'),
+            context: any(named: 'context'),
           ),
         ).thenThrow(Exception('conversion failed'));
 

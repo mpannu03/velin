@@ -115,8 +115,11 @@ class MergePdfCubit extends Cubit<MergePdfState>
 
     await runToolTask(
       taskName: 'merge-pdf',
-      operation: () =>
-          _mergePdfEngine.merge(inputs: engineInputs, outputFile: outputFile),
+      operation: (context) => _mergePdfEngine.merge(
+        inputs: engineInputs,
+        outputFile: outputFile,
+        context: context,
+      ),
       successMessage: () =>
           (l10n) => l10n.toolsMergeSuccess,
       failureMessage: (l10n) => l10n.toolsMergeFailed,

@@ -103,6 +103,7 @@ class AddWatermarkDesktopLayout extends StatelessWidget {
             const SizedBox(height: AppSpacing.xl),
             ToolActionBar(
               isSubmitting: viewModel.isSubmitting,
+              task: viewModel.task,
               submittingText: l10n.toolsWatermarkSubmitting,
               canAction: viewModel.canApplyWatermark,
               icon: Icons.water_outlined,

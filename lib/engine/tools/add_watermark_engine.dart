@@ -8,6 +8,7 @@ import 'package:pdf_manipulator/pdf_manipulator.dart';
 import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/safe_file_writer.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
+import 'package:velin/core/task/task_context.dart';
 import 'package:velin/engine/isolate/run_in_background.dart';
 
 import 'add_watermark_input.dart';
@@ -17,7 +18,10 @@ class AddWatermarkEngine {
 
   final Pdf _pdf;
 
-  Future<File> addWatermark({required AddWatermarkInput input}) async {
+  Future<File> addWatermark({
+    required AddWatermarkInput input,
+    TaskContext? context,
+  }) async {
     _validate(input);
 
     return writeAtomically(input.outputFile, (temporary) async {
@@ -34,11 +38,14 @@ class AddWatermarkEngine {
 
         switch (input.type) {
           case WatermarkType.text:
-            await _addTextWatermark(editor, input, pages);
+            await _addTextWatermark(editor, input, pages, context);
 
           case WatermarkType.image:
-            await _addImageWatermark(editor, input, pages);
+            await _addImageWatermark(editor, input, pages, context);
         }
+
+        // Last chance before anything is saved.
+        context?.throwIfCancelled();
 
         await editor.save(output);
       } finally {
@@ -52,6 +59,7 @@ class AddWatermarkEngine {
     PdfEditor editor,
     AddWatermarkInput input,
     List<int> pages,
+    TaskContext? context,
   ) async {
     final style = PdfWatermarkStyle(
       fontSize: input.fontSize,
@@ -61,7 +69,10 @@ class AddWatermarkEngine {
       color: _parseColor(input.colorHex),
     );
 
-    for (final page in pages) {
+    for (final (index, page) in pages.indexed) {
+      context?.throwIfCancelled();
+      context?.reportProgress(index, pages.length);
+
       final position = await _textPosition(editor, page, input);
 
       await editor.addWatermark(
@@ -78,6 +89,7 @@ class AddWatermarkEngine {
     PdfEditor editor,
     AddWatermarkInput input,
     List<int> pages,
+    TaskContext? context,
   ) async {
     final imagePath = input.imageFile!.path;
     final rotation = input.rotation;
@@ -95,7 +107,10 @@ class AddWatermarkEngine {
 
     final imageSource = MemorySource(prepared.pngBytes);
 
-    for (final page in pages) {
+    for (final (index, page) in pages.indexed) {
+      context?.throwIfCancelled();
+      context?.reportProgress(index, pages.length);
+
       final mediaBox = await editor.pageMediaBox(page);
 
       final pageWidth = mediaBox.width;

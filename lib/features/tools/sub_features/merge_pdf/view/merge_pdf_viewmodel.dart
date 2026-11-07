@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 
 import '../merge_pdf.dart';
 
@@ -15,6 +16,7 @@ class MergePdfViewModel {
     required this.onChooseOutputFolder,
     required this.onMerge,
     required this.isSubmitting,
+    this.task,
     required this.hasInputFiles,
     required this.canMerge,
   });
@@ -35,6 +37,10 @@ class MergePdfViewModel {
   final VoidCallback onMerge;
 
   final bool isSubmitting;
+
+  /// Progress and cancellation of the running task.
+
+  final ToolTaskHandle? task;
   final bool hasInputFiles;
   final bool canMerge;
 }

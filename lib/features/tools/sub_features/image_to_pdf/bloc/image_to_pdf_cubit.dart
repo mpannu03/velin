@@ -158,8 +158,11 @@ class ImageToPdfCubit extends Cubit<ImageToPdfState>
 
     await runToolTask(
       taskName: 'image-to-pdf',
-      operation: () =>
-          _imageToPdfEngine.convert(input: input, outputFile: outputFile),
+      operation: (context) => _imageToPdfEngine.convert(
+        input: input,
+        outputFile: outputFile,
+        context: context,
+      ),
       successMessage: () =>
           (l10n) => l10n.toolsImageToPdfSuccess(imageCount),
       failureMessage: (l10n) => l10n.toolsImageToPdfFailed,

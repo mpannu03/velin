@@ -4,6 +4,7 @@ import 'package:pdfrx_engine/pdfrx_engine.dart';
 import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/safe_file_writer.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
+import 'package:velin/core/task/task_context.dart';
 
 class RotatePdfEngine {
   const RotatePdfEngine();
@@ -13,6 +14,7 @@ class RotatePdfEngine {
     required File outputFile,
     required int degrees,
     PageSelection? selection,
+    TaskContext? context,
   }) async {
     final rotation = switch (degrees) {
       90 => PdfPageRotation.clockwise90,
@@ -58,6 +60,8 @@ class RotatePdfEngine {
       ];
 
       final data = await outputDocument.encodePdf();
+
+      context?.throwIfCancelled();
 
       return await writeBytesAtomically(outputFile, data);
     } finally {

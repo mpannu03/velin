@@ -5,6 +5,7 @@ import 'package:image/image.dart' as img;
 import 'package:pdfrx_engine/pdfrx_engine.dart';
 import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/safe_file_writer.dart';
+import 'package:velin/core/task/task_context.dart';
 import 'package:velin/engine/isolate/run_in_background.dart';
 
 import 'image_to_pdf_input.dart';
@@ -24,6 +25,7 @@ class ImageToPdfEngine {
   Future<File> convert({
     required ImageToPdfInput input,
     required File outputFile,
+    TaskContext? context,
   }) async {
     if (input.images.isEmpty) {
       throw ArgumentError('At least one image is required.');
@@ -54,7 +56,14 @@ class ImageToPdfEngine {
 
       final pages = <PdfPage>[];
 
-      for (final imageFile in input.images) {
+      final images = input.images;
+      // Each image is a step; encoding the PDF counts as one more.
+      final steps = images.length + 1;
+
+      for (final (index, imageFile) in images.indexed) {
+        context?.throwIfCancelled();
+        context?.reportProgress(index, steps);
+
         final path = imageFile.path;
 
         // Decoding and re-encoding a photo takes long enough to freeze the
@@ -83,6 +92,9 @@ class ImageToPdfEngine {
       outputDocument.pages = pages;
 
       final data = await outputDocument.encodePdf();
+
+      context?.throwIfCancelled();
+      context?.reportProgress(steps, steps);
 
       return await writeBytesAtomically(outputFile, data);
     } finally {

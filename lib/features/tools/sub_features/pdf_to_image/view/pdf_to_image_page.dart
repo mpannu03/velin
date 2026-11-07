@@ -45,6 +45,7 @@ class _PdfToImagePageContent extends StatelessWidget {
       supportsQuality: state.supportsQuality,
       outputDirectory: state.outputDirectory,
       isSubmitting: state.isSubmitting,
+      task: cubit.task,
       canConvert: state.canConvert,
       onPickFile: cubit.pickFile,
       onScopeChanged: cubit.changeScope,

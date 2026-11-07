@@ -1738,5 +1738,31 @@
   "toolsOverwriteConfirm": "Replace",
   "@toolsOverwriteConfirm": {
     "description": "Confirm button that replaces an existing output file."
+  },
+  "toolsTaskCancelled": "Cancelled. Nothing was saved.",
+  "@toolsTaskCancelled": {
+    "description": "Shown after the user cancels a running tool."
+  },
+  "toolsTaskQueued": "Waiting for another task to finish…",
+  "@toolsTaskQueued": {
+    "description": "Shown on a tool's action bar while its task waits in the queue."
+  },
+  "toolsTaskCancelling": "Cancelling…",
+  "@toolsTaskCancelling": {
+    "description": "Shown on a tool's action bar after the user pressed Cancel, until the task stops."
+  },
+  "toolsTaskProgress": "{percent}% done",
+  "@toolsTaskProgress": {
+    "description": "Progress of a running tool.",
+    "placeholders": {
+      "percent": { "type": "int" }
+    }
+  },
+  "toolsOverwriteManyMessage": "{count} files with the same names already exist in this folder. Replacing them will overwrite their contents.",
+  "@toolsOverwriteManyMessage": {
+    "description": "Body of the dialog shown when several of a tool's output files already exist.",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
   }
 }

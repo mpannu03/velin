@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:velin/core/di/injection.dart';
 import 'package:velin/engine/engine.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 import 'package:velin/features/tools/tools.dart';
 
 import '../../../../../helpers/helpers.dart';
@@ -22,6 +23,7 @@ void main() {
 
   setUp(() {
     cubit = MockAddWatermarkCubit();
+    when(() => cubit.task).thenReturn(ToolTaskHandle());
 
     getIt.registerFactory<AddWatermarkCubit>(() => cubit);
   });

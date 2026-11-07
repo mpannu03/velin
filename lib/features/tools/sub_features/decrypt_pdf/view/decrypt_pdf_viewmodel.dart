@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 
 class DecryptPdfViewModel {
   const DecryptPdfViewModel({
@@ -7,6 +8,7 @@ class DecryptPdfViewModel {
     required this.outputDirectory,
     required this.password,
     required this.isSubmitting,
+    this.task,
     required this.canDecrypt,
     required this.onPickFile,
     required this.onPasswordChanged,
@@ -23,6 +25,10 @@ class DecryptPdfViewModel {
   final String password;
 
   final bool isSubmitting;
+
+  /// Progress and cancellation of the running task.
+
+  final ToolTaskHandle? task;
   final bool canDecrypt;
 
   final VoidCallback onPickFile;

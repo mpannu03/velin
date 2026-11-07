@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 import 'package:velin/features/tools/tools.dart';
 
 class RotatePdfViewModel {
@@ -11,6 +11,7 @@ class RotatePdfViewModel {
     required this.outputFileName,
     required this.outputDirectory,
     required this.isSubmitting,
+    this.task,
     required this.canRotate,
     required this.onPickFile,
     required this.onDirectionChanged,
@@ -30,6 +31,10 @@ class RotatePdfViewModel {
   final String? outputDirectory;
 
   final bool isSubmitting;
+
+  /// Progress and cancellation of the running task.
+
+  final ToolTaskHandle? task;
   final bool canRotate;
 
   final VoidCallback onPickFile;

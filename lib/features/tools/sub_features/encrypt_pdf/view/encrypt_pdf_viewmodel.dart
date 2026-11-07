@@ -1,5 +1,5 @@
 import 'package:material_ui/material_ui.dart';
-
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 import 'package:velin/features/tools/tools.dart';
 
 class EncryptPdfViewModel {
@@ -12,6 +12,7 @@ class EncryptPdfViewModel {
     required this.level,
     required this.permissions,
     required this.isSubmitting,
+    this.task,
     required this.canProtect,
     required this.onPickFile,
     required this.onUserPasswordChanged,
@@ -34,6 +35,10 @@ class EncryptPdfViewModel {
   final EncryptPdfPermissionPreset permissions;
 
   final bool isSubmitting;
+
+  /// Progress and cancellation of the running task.
+
+  final ToolTaskHandle? task;
   final bool canProtect;
 
   final VoidCallback onPickFile;

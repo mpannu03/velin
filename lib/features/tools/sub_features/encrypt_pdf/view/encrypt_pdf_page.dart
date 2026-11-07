@@ -43,6 +43,7 @@ class _EncryptPdfPageContent extends StatelessWidget {
       level: state.level,
       permissions: state.permissions,
       isSubmitting: state.isSubmitting,
+      task: cubit.task,
       canProtect: state.canProtect,
       onPickFile: cubit.pickFile,
       onUserPasswordChanged: cubit.updateUserPassword,

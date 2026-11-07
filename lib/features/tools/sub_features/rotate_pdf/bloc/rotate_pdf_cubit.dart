@@ -123,11 +123,12 @@ class RotatePdfCubit extends Cubit<RotatePdfState>
 
     await runToolTask(
       taskName: 'rotate-pdf',
-      operation: () => _rotatePdfEngine.rotate(
+      operation: (context) => _rotatePdfEngine.rotate(
         inputFile: inputFile,
         outputFile: outputFile,
         degrees: input.direction.degrees,
         selection: pageSelection,
+        context: context,
       ),
       successMessage: () =>
           (l10n) => l10n.toolsRotateSuccess,
