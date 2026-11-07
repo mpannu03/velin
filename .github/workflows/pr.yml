@@ -22,12 +22,36 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
-      
+
       - name: Check Formatting
         run: dart format --output=none --set-exit-if-changed .
 
       - name: Analyze
         run: flutter analyze
 
+      # pdfium is not available on the Linux runner; the engine integration
+      # tests run in the Windows job below.
       - name: Test
-        run: flutter test
+        run: flutter test --exclude-tags pdfium
+
+  # Velin ships on Windows, and the tool engines depend on native pdfium and
+  # pdf_manipulator libraries. Run the integration tests against the real
+  # binaries on the platform we release for.
+  engines-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Engine integration tests
+        run: flutter test --tags pdfium

@@ -1,0 +1,5 @@
+tags:
+  # Integration tests that load the real pdfium and pdf_manipulator native
+  # libraries. They run on Windows in CI (see .github/workflows/pr.yml);
+  # elsewhere exclude them with `flutter test --exclude-tags pdfium`.
+  pdfium:
