@@ -5,12 +5,15 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:velin/app/effects/effects.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/l10n/app_localizations.dart';
+
+import '../../../../../helpers/helpers.dart';
 
 class MockDocumentFilePicker extends Mock implements DocumentFilePicker {}
 
@@ -29,6 +32,8 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(NotificationType.error);
+    registerFallbackValue(const UnexpectedFailure());
+    registerLocalizedMessageFallback();
     registerFallbackValue(File('input.pdf'));
     registerFallbackValue(
       RotatePdfToolInput(
@@ -48,7 +53,6 @@ void main() {
 
   RotatePdfCubit createCubit() {
     return RotatePdfCubit(
-      l10n: l10n,
       filePicker: filePicker,
       rotatePdfEngine: rotatePdfEngine,
       taskManager: taskManager,
@@ -115,9 +119,8 @@ void main() {
     blocTest<RotatePdfCubit, RotatePdfState>(
       'does not change state for picker cancellation',
       build: () {
-        when(() => filePicker.pickFile(allowedExtensions: ['pdf'])).thenAnswer(
-          (_) async => Failure(DocumentFilePickerError('cancelled')),
-        );
+        when(() => filePicker.pickFile(allowedExtensions: ['pdf']))
+            .thenAnswer((_) async => const Success(null));
 
         return createCubit();
       },
@@ -137,7 +140,7 @@ void main() {
       'notifies an error for an unexpected picker failure',
       build: () {
         when(() => filePicker.pickFile(allowedExtensions: ['pdf']))
-            .thenAnswer((_) async => Failure(Exception('picker failed')));
+            .thenAnswer((_) async => const Failure(UnexpectedFailure()));
 
         return createCubit();
       },
@@ -146,7 +149,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsRotateFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorUnexpected),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -241,9 +247,8 @@ void main() {
     blocTest<RotatePdfCubit, RotatePdfState>(
       'does nothing for picker cancellation',
       build: () {
-        when(() => filePicker.pickDirectory()).thenAnswer(
-          (_) async => Failure(DocumentFilePickerError('cancelled')),
-        );
+        when(() => filePicker.pickDirectory())
+            .thenAnswer((_) async => const Success(null));
 
         return createCubit();
       },
@@ -255,7 +260,7 @@ void main() {
       'notifies an error for an unexpected failure',
       build: () {
         when(() => filePicker.pickDirectory())
-            .thenAnswer((_) async => Failure(Exception('picker failed')));
+            .thenAnswer((_) async => const Failure(UnexpectedFailure()));
 
         return createCubit();
       },
@@ -264,7 +269,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsRotateFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorUnexpected),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -280,7 +288,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsRotateWarningNoFile,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsRotateWarningNoFile),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -307,7 +318,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsRotateWarningNoFolder,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsRotateWarningNoFolder),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -325,7 +339,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsRotateWarningNoFileName,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsRotateWarningNoFileName),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -345,7 +362,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsRotateWarningNoSelection,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsRotateWarningNoSelection),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -366,7 +386,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsRotateSelectionInvalid,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsRotateSelectionInvalid),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -443,7 +466,10 @@ void main() {
 
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsRotateSuccess,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsRotateSuccess),
+            ),
             type: NotificationType.success,
           ),
         ).called(1);
@@ -512,7 +538,10 @@ void main() {
 
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsRotateSuccess,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsRotateSuccess),
+            ),
             type: NotificationType.success,
           ),
         ).called(1);
@@ -599,7 +628,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsRotateFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsRotateFailed),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -642,7 +674,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsRotateFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsRotateFailed),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);

@@ -23,13 +23,13 @@ void main() {
       );
 
       controller.notifyUser(
-        message: 'Could not open document',
+        message: (l10n) => l10n.errorFileNotFound,
         type: NotificationType.error,
       );
 
       await tester.pump();
 
-      expect(find.text('Could not open document'), findsOneWidget);
+      expect(find.text(testL10n.errorFileNotFound), findsOneWidget);
     });
 
     testWidgets('does not show notification before effect is emitted', (

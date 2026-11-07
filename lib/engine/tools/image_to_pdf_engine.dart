@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:image/image.dart' as img;
 import 'package:pdfrx_engine/pdfrx_engine.dart';
+import 'package:velin/core/error/error.dart';
 
 import 'image_to_pdf_input.dart';
 
@@ -56,7 +57,7 @@ class ImageToPdfEngine {
         final decoded = img.decodeImage(bytes);
 
         if (decoded == null) {
-          throw StateError('Unable to decode image: ${imageFile.path}');
+          throw InvalidImageFailure(path: imageFile.path);
         }
 
         final image = _prepareImage(decoded);

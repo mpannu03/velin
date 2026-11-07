@@ -1,66 +1,55 @@
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:path/path.dart' as p;
 import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
-import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
-import 'package:velin/l10n/app_localizations.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 import 'package:velin/shared/utils/utils.dart';
 
 import 'merge_pdf_input.dart';
 import 'merge_pdf_state.dart';
 
-class MergePdfCubit extends Cubit<MergePdfState> {
+class MergePdfCubit extends Cubit<MergePdfState>
+    with ToolTaskRunner<MergePdfState> {
   MergePdfCubit({
-    required this._l10n,
-    required this._filePicker,
+    required this.filePicker,
     required this._mergePdfEngine,
-    required this._taskManager,
-    required this._appEffectController,
+    required this.taskManager,
+    required this.appEffectController,
   }) : super(const MergePdfState());
 
-  final AppLocalizations _l10n;
-  final DocumentFilePicker _filePicker;
+  @override
+  final DocumentFilePicker filePicker;
+  @override
+  final TaskManager taskManager;
+  @override
+  final AppEffectController appEffectController;
+
   final MergePdfEngine _mergePdfEngine;
-  final TaskManager _taskManager;
-  final AppEffectController _appEffectController;
 
   Future<void> pickFiles() async {
-    final result = await _filePicker.pickFiles(allowedExtensions: ['pdf']);
+    final filePaths = await pickMultipleFiles(const ['pdf']);
 
-    switch (result) {
-      case Success(data: final filePaths):
-        if (filePaths.isEmpty) {
-          return;
-        }
-
-        final dirName = directoryWithTrailingSeparator(filePaths.first);
-        emit(
-          state.copyWith(
-            inputs: [
-              ...state.inputs,
-              for (final filePath in filePaths)
-                MergePdfToolInput(filePath: filePath),
-            ],
-            outputDirectory: state.outputDirectory ?? dirName,
-          ),
-        );
-
-      case Failure(error: final error):
-        // The user cancelled the picker: not an error, stay quiet.
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _appEffectController.notifyUser(
-          message: _l10n.toolsMergeFailed,
-          type: NotificationType.error,
-        );
+    if (filePaths.isEmpty || isClosed) {
+      return;
     }
+
+    emit(
+      state.copyWith(
+        inputs: [
+          ...state.inputs,
+          for (final filePath in filePaths)
+            MergePdfToolInput(filePath: filePath),
+        ],
+        outputDirectory:
+            state.outputDirectory ??
+            directoryWithTrailingSeparator(filePaths.first),
+      ),
+    );
   }
 
   void removeFile(int index) {
@@ -92,22 +81,13 @@ class MergePdfCubit extends Cubit<MergePdfState> {
   }
 
   Future<void> pickOutputDirectory() async {
-    final result = await _filePicker.pickDirectory();
+    final directoryPath = await pickDirectory();
 
-    switch (result) {
-      case Success(data: final directoryPath):
-        emit(state.copyWith(outputDirectory: directoryPath));
-
-      case Failure(error: final error):
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _appEffectController.notifyUser(
-          message: _l10n.toolsMergeFailed,
-          type: NotificationType.error,
-        );
+    if (directoryPath == null || isClosed) {
+      return;
     }
+
+    emit(state.copyWith(outputDirectory: directoryPath));
   }
 
   Future<void> merge() async {
@@ -115,83 +95,62 @@ class MergePdfCubit extends Cubit<MergePdfState> {
       return;
     }
 
-    if (!_validateInputs()) {
+    // Resolve everything from the current state *now*: the task may sit in
+    // the queue while the user keeps editing the list.
+    final engineInputs = _validateAndBuildInputs();
+
+    if (engineInputs == null) {
       return;
     }
 
     final outputFile = File(
-      '${state.outputDirectory}'
-      '${Platform.pathSeparator}'
-      '${state.outputFileName.trim()}',
+      joinOutputPath(state.outputDirectory!, state.outputFileName),
     );
 
     emit(state.copyWith(isSubmitting: true));
 
-    try {
-      await _taskManager.submit(
-        id: 'merge-pdf-${DateTime.now().microsecondsSinceEpoch}',
-        title: _l10n.toolsMergeButton,
-        operation: () async {
-          await _mergePdfEngine.merge(
-            inputs: [for (final input in state.inputs) input.toPdfInput()],
-            outputFile: outputFile,
-          );
-        },
-      );
+    await runToolTask(
+      taskName: 'merge-pdf',
+      operation: () =>
+          _mergePdfEngine.merge(inputs: engineInputs, outputFile: outputFile),
+      successMessage: () =>
+          (l10n) => l10n.toolsMergeSuccess,
+      failureMessage: (l10n) => l10n.toolsMergeFailed,
+    );
 
-      _appEffectController.notifyUser(
-        message: _l10n.toolsMergeSuccess,
-        type: NotificationType.success,
-      );
-    } catch (_) {
-      _appEffectController.notifyUser(
-        message: _l10n.toolsMergeFailed,
-        type: NotificationType.error,
-      );
-    } finally {
+    if (!isClosed) {
       emit(state.copyWith(isSubmitting: false));
     }
   }
 
-  bool _validateInputs() {
+  List<MergePdfInput>? _validateAndBuildInputs() {
     if (!state.hasInputFiles) {
-      _notifyWarning(_l10n.toolsMergeWarningNoFiles);
-      return false;
+      notifyWarning((l10n) => l10n.toolsMergeWarningNoFiles);
+      return null;
     }
 
     if (!state.hasValidOutputDirectory) {
-      _notifyWarning(_l10n.toolsMergeWarningNoFolder);
-      return false;
+      notifyWarning((l10n) => l10n.toolsMergeWarningNoFolder);
+      return null;
     }
 
     if (!state.hasValidOutputFileName) {
-      _notifyWarning(_l10n.toolsMergeWarningNoFileName);
-      return false;
+      notifyWarning((l10n) => l10n.toolsMergeWarningNoFileName);
+      return null;
     }
+
+    final engineInputs = <MergePdfInput>[];
 
     for (final input in state.inputs) {
       try {
-        input.toPdfInput();
+        engineInputs.add(input.toPdfInput());
       } on PageSelectionError {
-        _appEffectController.notifyUser(
-          message: _l10n.toolsMergePageSelectionInvalid(
-            _fileName(input.filePath),
-          ),
-          type: NotificationType.error,
-        );
-        return false;
+        final fileName = p.basename(input.filePath);
+        notifyError((l10n) => l10n.toolsMergePageSelectionInvalid(fileName));
+        return null;
       }
     }
 
-    return true;
+    return engineInputs;
   }
-
-  void _notifyWarning(String message) {
-    _appEffectController.notifyUser(
-      message: message,
-      type: NotificationType.warning,
-    );
-  }
-
-  String _fileName(String path) => path.split(Platform.pathSeparator).last;
 }

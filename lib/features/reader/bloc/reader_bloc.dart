@@ -1,13 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velin/app/effects/effects.dart';
-import 'package:velin/core/bloc/bloc.dart';
 import 'package:velin/core/document/document.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/result/result.dart';
 
 part 'reader_event.dart';
 part 'reader_state.dart';
 
-class ReaderBloc extends Bloc<ReaderEvent, ReaderState> with ErrorMessageMixin {
+class ReaderBloc extends Bloc<ReaderEvent, ReaderState> {
   ReaderBloc({
     required this._documentService,
     required this._appEffectController,
@@ -57,7 +57,7 @@ class ReaderBloc extends Bloc<ReaderEvent, ReaderState> with ErrorMessageMixin {
         );
       },
       onError: (Object error, StackTrace stackTrace) {
-        emit(ReaderError(errorMessage(error)));
+        emit(ReaderError(mapError(error, stackTrace)));
       },
     );
   }
@@ -68,11 +68,8 @@ class ReaderBloc extends Bloc<ReaderEvent, ReaderState> with ErrorMessageMixin {
   ) async {
     final result = await _documentService.open();
 
-    if (result case Failure<Document>(:final error)) {
-      _appEffectController.notifyUser(
-        message: errorMessage(error),
-        type: NotificationType.error,
-      );
+    if (result case Failure(:final failure)) {
+      _appEffectController.notifyFailure(failure);
     }
   }
 
@@ -99,11 +96,8 @@ class ReaderBloc extends Bloc<ReaderEvent, ReaderState> with ErrorMessageMixin {
   ) {
     final result = _documentService.close(event.document);
 
-    if (result case Failure<void>(:final error)) {
-      _appEffectController.notifyUser(
-        message: errorMessage(error),
-        type: NotificationType.error,
-      );
+    if (result case Failure(:final failure)) {
+      _appEffectController.notifyFailure(failure);
     }
   }
 }

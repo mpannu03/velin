@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/core/di/injection.dart';
 import 'package:velin/features/tools/tools.dart';
-import 'package:velin/shared/extensions/extensions.dart';
 
 class SplitPdfPage extends StatelessWidget {
   const SplitPdfPage({super.key});
@@ -10,7 +9,7 @@ class SplitPdfPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<SplitPdfCubit>(param1: context.l10n),
+      create: (_) => getIt<SplitPdfCubit>(),
       child: const _SplitPdfPageContent(),
     );
   }

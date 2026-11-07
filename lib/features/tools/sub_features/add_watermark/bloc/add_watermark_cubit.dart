@@ -2,71 +2,59 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
-import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
-import 'package:velin/l10n/app_localizations.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 import 'package:velin/shared/utils/utils.dart';
 
 import 'add_watermark_input.dart';
 import 'add_watermark_state.dart';
 
-class AddWatermarkCubit extends Cubit<AddWatermarkState> {
+class AddWatermarkCubit extends Cubit<AddWatermarkState>
+    with ToolTaskRunner<AddWatermarkState> {
   AddWatermarkCubit({
-    required this._l10n,
-    required this._filePicker,
+    required this.filePicker,
     required this._addWatermarkEngine,
-    required this._taskManager,
-    required this._appEffectController,
+    required this.taskManager,
+    required this.appEffectController,
   }) : super(const AddWatermarkState());
 
-  final AppLocalizations _l10n;
-  final DocumentFilePicker _filePicker;
+  @override
+  final DocumentFilePicker filePicker;
+  @override
+  final TaskManager taskManager;
+  @override
+  final AppEffectController appEffectController;
+
   final AddWatermarkEngine _addWatermarkEngine;
-  final TaskManager _taskManager;
-  final AppEffectController _appEffectController;
 
   Future<void> pickFile() async {
-    final result = await _filePicker.pickFile(allowedExtensions: ['pdf']);
+    final filePath = await pickSingleFile(const ['pdf']);
 
-    switch (result) {
-      case Success(data: final filePath):
-        emit(
-          state.copyWith(
-            inputFilePath: filePath,
-            outputDirectory:
-                state.outputDirectory ??
-                directoryWithTrailingSeparator(filePath),
-            outputFileName: '${fileNameFromPath(filePath)}_watermarked.pdf',
-          ),
-        );
-
-      case Failure(error: final error):
-        // The user cancelled the picker: not an error, stay quiet.
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _notifyError(_l10n.toolsWatermarkFailed);
+    if (filePath == null || isClosed) {
+      return;
     }
+
+    emit(
+      state.copyWith(
+        inputFilePath: filePath,
+        outputDirectory:
+            state.outputDirectory ?? directoryWithTrailingSeparator(filePath),
+        outputFileName: '${fileNameFromPath(filePath)}_watermarked.pdf',
+      ),
+    );
   }
 
   Future<void> pickWatermarkImage() async {
-    final result = await _filePicker.pickFile(
-      allowedExtensions: AddWatermarkToolInput.supportedImageExtensions,
+    final filePath = await pickSingleFile(
+      AddWatermarkToolInput.supportedImageExtensions,
     );
 
-    switch (result) {
-      case Success(data: final filePath):
-        emit(state.copyWith(imageFilePath: filePath));
-
-      case Failure(error: final error):
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _notifyError(_l10n.toolsWatermarkFailed);
+    if (filePath == null || isClosed) {
+      return;
     }
+
+    emit(state.copyWith(imageFilePath: filePath));
   }
 
   void clearWatermarkImage() {
@@ -120,7 +108,7 @@ class AddWatermarkCubit extends Cubit<AddWatermarkState> {
     }
 
     if (!AddWatermarkToolInput.colorHexPattern.hasMatch(normalized)) {
-      _notifyWarning(_l10n.toolsWatermarkWarningInvalidColor);
+      notifyWarning((l10n) => l10n.toolsWatermarkWarningInvalidColor);
       return;
     }
 
@@ -229,19 +217,13 @@ class AddWatermarkCubit extends Cubit<AddWatermarkState> {
   }
 
   Future<void> pickOutputDirectory() async {
-    final result = await _filePicker.pickDirectory();
+    final directoryPath = await pickDirectory();
 
-    switch (result) {
-      case Success(data: final directoryPath):
-        emit(state.copyWith(outputDirectory: directoryPath));
-
-      case Failure(error: final error):
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _notifyError(_l10n.toolsWatermarkFailed);
+    if (directoryPath == null || isClosed) {
+      return;
     }
+
+    emit(state.copyWith(outputDirectory: directoryPath));
   }
 
   Future<void> applyWatermark() async {
@@ -258,85 +240,61 @@ class AddWatermarkCubit extends Cubit<AddWatermarkState> {
     try {
       engineInput = state.toolInput.toAddWatermarkInput();
     } on PageSelectionError {
-      _notifyWarning(_l10n.toolsWatermarkSelectionInvalid);
+      notifyWarning((l10n) => l10n.toolsWatermarkSelectionInvalid);
       return;
     }
 
     emit(state.copyWith(isSubmitting: true));
 
-    try {
-      await _taskManager.submit(
-        id: 'add-watermark-${DateTime.now().microsecondsSinceEpoch}',
-        title: _l10n.toolsWatermarkButton,
-        operation: () async {
-          await _addWatermarkEngine.addWatermark(input: engineInput);
-        },
-      );
+    await runToolTask(
+      taskName: 'add-watermark',
+      operation: () => _addWatermarkEngine.addWatermark(input: engineInput),
+      successMessage: () =>
+          (l10n) => l10n.toolsWatermarkSuccess,
+      failureMessage: (l10n) => l10n.toolsWatermarkFailed,
+    );
 
-      _appEffectController.notifyUser(
-        message: _l10n.toolsWatermarkSuccess,
-        type: NotificationType.success,
-      );
-    } on ArgumentError {
-      // The engine rejects unusable inputs such as an unreadable image or a
-      // color it cannot parse, so explain rather than report a crash.
-      _notifyWarning(_l10n.toolsWatermarkFailed);
-    } catch (_) {
-      _notifyError(_l10n.toolsWatermarkFailed);
-    } finally {
+    if (!isClosed) {
       emit(state.copyWith(isSubmitting: false));
     }
   }
 
   bool _validateInputs() {
     if (!state.hasInputFile) {
-      _notifyWarning(_l10n.toolsWatermarkWarningNoFile);
+      notifyWarning((l10n) => l10n.toolsWatermarkWarningNoFile);
       return false;
     }
 
     if (!state.hasWatermarkContent) {
-      _notifyWarning(
-        state.type == WatermarkType.text
-            ? _l10n.toolsWatermarkWarningNoText
-            : _l10n.toolsWatermarkWarningNoImage,
+      final isText = state.type == WatermarkType.text;
+      notifyWarning(
+        (l10n) => isText
+            ? l10n.toolsWatermarkWarningNoText
+            : l10n.toolsWatermarkWarningNoImage,
       );
       return false;
     }
 
     if (!state.hasValidColor) {
-      _notifyWarning(_l10n.toolsWatermarkWarningInvalidColor);
+      notifyWarning((l10n) => l10n.toolsWatermarkWarningInvalidColor);
       return false;
     }
 
     if (!state.hasValidScopeConfig) {
-      _notifyWarning(_l10n.toolsWatermarkWarningNoSelection);
+      notifyWarning((l10n) => l10n.toolsWatermarkWarningNoSelection);
       return false;
     }
 
     if (!state.hasValidOutputDirectory) {
-      _notifyWarning(_l10n.toolsWatermarkWarningNoFolder);
+      notifyWarning((l10n) => l10n.toolsWatermarkWarningNoFolder);
       return false;
     }
 
     if (!state.hasValidOutputFileName) {
-      _notifyWarning(_l10n.toolsWatermarkWarningNoFileName);
+      notifyWarning((l10n) => l10n.toolsWatermarkWarningNoFileName);
       return false;
     }
 
     return true;
-  }
-
-  void _notifyWarning(String message) {
-    _appEffectController.notifyUser(
-      message: message,
-      type: NotificationType.warning,
-    );
-  }
-
-  void _notifyError(String message) {
-    _appEffectController.notifyUser(
-      message: message,
-      type: NotificationType.error,
-    );
   }
 }

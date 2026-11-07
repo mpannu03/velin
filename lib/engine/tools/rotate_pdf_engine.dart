@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:pdfrx_engine/pdfrx_engine.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
 
 class RotatePdfEngine {
@@ -36,8 +37,8 @@ class RotatePdfEngine {
       if (selectedPages != null) {
         for (final page in selectedPages) {
           if (page < 1 || page > totalPages) {
-            throw RangeError(
-              'Page $page is outside the valid range 1-$totalPages.',
+            throw InvalidPageSelectionFailure(
+              PageSelectionOutOfBoundsError(page: page, totalPages: totalPages),
             );
           }
         }

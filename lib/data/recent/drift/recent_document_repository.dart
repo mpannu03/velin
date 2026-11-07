@@ -16,33 +16,35 @@ class DriftRecentDocumentRepository implements RecentDocumentRepository {
       ..orderBy([(table) => OrderingTerm.desc(table.lastOpenedAt)])
       ..limit(limit);
 
-    return query.watch().map(
-      (rows) => Success(rows.map(_mapToRecentDocument).toList(growable: false)),
+    return Result.guardStream(
+      query.watch().map(
+        (rows) => rows.map(_mapToRecentDocument).toList(growable: false),
+      ),
     );
   }
 
   @override
-  Stream<Result<RecentDocument>> watch(String path) {
+  Stream<Result<RecentDocument?>> watch(String path) {
     final query = _database.select(_database.recentDocumentsTable)
       ..where((table) => table.path.equals(path));
 
-    return query.watchSingleOrNull().map(
-      (row) => row == null
-          ? Failure(StateError('Recent document for $path not found.'))
-          : Success(_mapToRecentDocument(row)),
+    return Result.guardStream(
+      query.watchSingleOrNull().map(
+        (row) => row == null ? null : _mapToRecentDocument(row),
+      ),
     );
   }
 
   @override
-  Future<Result<RecentDocument>> get(String path) async {
-    final query = _database.select(_database.recentDocumentsTable)
-      ..where((table) => table.path.equals(path));
+  Future<Result<RecentDocument?>> get(String path) {
+    return Result.guard(() async {
+      final query = _database.select(_database.recentDocumentsTable)
+        ..where((table) => table.path.equals(path));
 
-    final row = await query.getSingleOrNull();
+      final row = await query.getSingleOrNull();
 
-    return row == null
-        ? Failure(StateError('Recent document for $path not found.'))
-        : Success(_mapToRecentDocument(row));
+      return row == null ? null : _mapToRecentDocument(row);
+    });
   }
 
   @override

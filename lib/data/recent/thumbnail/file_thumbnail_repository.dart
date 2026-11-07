@@ -18,12 +18,12 @@ class FileThumbnailRepository implements ThumbnailRepository {
   }
 
   @override
-  Future<Result<File>> get(String path) async {
-    final file = await _fileFor(path);
+  Future<Result<File?>> get(String path) {
+    return Result.guard(() async {
+      final file = await _fileFor(path);
 
-    return await file.exists()
-        ? Success(file)
-        : Failure(StateError('Thumbnail for $path not found.'));
+      return await file.exists() ? file : null;
+    });
   }
 
   @override

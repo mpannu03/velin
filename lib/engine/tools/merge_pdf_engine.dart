@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:pdfrx_engine/pdfrx_engine.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
 
 class MergePdfInput {
@@ -17,6 +18,11 @@ class MergePdfEngine {
     required List<MergePdfInput> inputs,
     required File outputFile,
   }) async {
+    final outputPath = outputFile.absolute.path;
+    if (inputs.any((input) => input.file.absolute.path == outputPath)) {
+      throw const OutputSameAsInputFailure();
+    }
+
     final documents = <PdfDocument>[];
     PdfDocument? outputDocument;
 

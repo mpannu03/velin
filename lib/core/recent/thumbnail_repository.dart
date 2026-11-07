@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:velin/core/result/result.dart';
 
 abstract interface class ThumbnailRepository {
-  Future<Result<File>> get(String path);
+  /// `Success(null)` when no thumbnail has been generated for [path] yet.
+  Future<Result<File?>> get(String path);
 
   Future<void> save(String path, File thumbnail);
 

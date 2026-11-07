@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:pdfrx_engine/pdfrx_engine.dart';
+import 'package:velin/core/error/error.dart';
+import 'package:velin/core/page_selection/page_selection_error.dart';
 
 import 'split_pdf_input.dart';
 
@@ -118,8 +120,8 @@ class SplitPdfEngine {
 
     for (final page in pages) {
       if (page < 1 || page > totalPages) {
-        throw RangeError(
-          'Page $page is outside the valid range 1-$totalPages.',
+        throw InvalidPageSelectionFailure(
+          PageSelectionOutOfBoundsError(page: page, totalPages: totalPages),
         );
       }
     }

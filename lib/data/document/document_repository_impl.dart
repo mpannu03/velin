@@ -13,25 +13,20 @@ class DocumentRepositoryImpl implements DocumentRepository {
 
   @override
   Result<Document> open(String path, DocumentType type) {
-    try {
+    return Result.guardSync(() {
       final document = Document(path: path, type: type);
       _documents[document.id] = document;
       _emit();
-      return Success(document);
-    } catch (error, stackTrace) {
-      return Failure(error, stackTrace);
-    }
+      return document;
+    });
   }
 
   @override
   Result<void> close(String id) {
-    try {
+    return Result.guardSync(() {
       _documents.remove(id);
       _emit();
-      return const Success<void>(null);
-    } catch (error, stackTrace) {
-      return Failure(error, stackTrace);
-    }
+    });
   }
 
   @override

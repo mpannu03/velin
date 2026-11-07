@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
+import 'package:velin/core/error/error.dart';
 
 import 'task.dart';
 
@@ -63,15 +64,20 @@ class TaskManager {
 
           entry.completer.complete();
         } catch (error, stackTrace) {
-          _log.severe(
-            'Task "${entry.task.title}" (${entry.task.id}) failed',
-            error,
-            stackTrace,
+          // Unexpected errors are logged as SEVERE by mapError itself.
+          final failure = mapError(error, stackTrace);
+
+          if (!failure.isUnexpected) {
+            _log.info(
+              'Task "${entry.task.title}" (${entry.task.id}) failed: $failure',
+            );
+          }
+
+          _update(
+            entry.task.copyWith(status: TaskStatus.failed, error: failure),
           );
 
-          _update(entry.task.copyWith(status: TaskStatus.failed, error: error));
-
-          entry.completer.completeError(error, stackTrace);
+          entry.completer.completeError(failure, stackTrace);
         }
       }
     } finally {

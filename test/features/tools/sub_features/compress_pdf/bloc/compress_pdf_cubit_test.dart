@@ -4,12 +4,15 @@ import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:velin/app/effects/effects.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
 import 'package:velin/features/tools/sub_features/compress_pdf/compress_pdf.dart';
 import 'package:velin/l10n/app_localizations.dart';
+
+import '../../../../../helpers/helpers.dart';
 
 class MockDocumentFilePicker extends Mock implements DocumentFilePicker {}
 
@@ -30,6 +33,8 @@ void main() {
   setUpAll(() {
     registerFallbackValue(CompressPdfInput(file: File('input.pdf')));
     registerFallbackValue(NotificationType.error);
+    registerFallbackValue(const UnexpectedFailure());
+    registerLocalizedMessageFallback();
     registerFallbackValue(File('/documents/output/compressed.pdf'));
   });
 
@@ -41,7 +46,6 @@ void main() {
     effectController = MockAppEffectController();
 
     cubit = CompressPdfCubit(
-      l10n: l10n,
       filePicker: filePicker,
       compressPdfEngine: compressPdfEngine,
       taskManager: taskManager,
@@ -94,9 +98,8 @@ void main() {
     });
 
     test('stays unchanged when picker is cancelled', () async {
-      when(
-        () => filePicker.pickFile(allowedExtensions: ['pdf']),
-      ).thenAnswer((_) async => Failure(DocumentFilePickerError('cancelled')));
+      when(() => filePicker.pickFile(allowedExtensions: ['pdf']))
+          .thenAnswer((_) async => const Success(null));
 
       await cubit.pickFile();
 
@@ -111,13 +114,13 @@ void main() {
 
     test('notifies error when picker fails', () async {
       when(() => filePicker.pickFile(allowedExtensions: ['pdf']))
-          .thenAnswer((_) async => Failure(Exception('picker failed')));
+          .thenAnswer((_) async => const Failure(UnexpectedFailure()));
 
       await cubit.pickFile();
 
       verify(
         () => effectController.notifyUser(
-          message: l10n.toolsCompressFailed,
+          message: any(named: 'message', that: localizes(l10n.errorUnexpected)),
           type: NotificationType.error,
         ),
       ).called(1);
@@ -184,9 +187,8 @@ void main() {
     });
 
     test('stays unchanged when picker is cancelled', () async {
-      when(
-        () => filePicker.pickDirectory(),
-      ).thenAnswer((_) async => Failure(DocumentFilePickerError('cancelled')));
+      when(() => filePicker.pickDirectory())
+          .thenAnswer((_) async => const Success(null));
 
       await cubit.pickOutputDirectory();
 
@@ -202,13 +204,13 @@ void main() {
 
     test('notifies error when picker fails', () async {
       when(() => filePicker.pickDirectory())
-          .thenAnswer((_) async => Failure(Exception('picker failed')));
+          .thenAnswer((_) async => const Failure(UnexpectedFailure()));
 
       await cubit.pickOutputDirectory();
 
       verify(
         () => effectController.notifyUser(
-          message: l10n.toolsCompressFailed,
+          message: any(named: 'message', that: localizes(l10n.errorUnexpected)),
           type: NotificationType.error,
         ),
       ).called(1);
@@ -221,7 +223,10 @@ void main() {
 
       verify(
         () => effectController.notifyUser(
-          message: l10n.toolsCompressWarningNoFile,
+          message: any(
+            named: 'message',
+            that: localizes(l10n.toolsCompressWarningNoFile),
+          ),
           type: NotificationType.warning,
         ),
       ).called(1);
@@ -242,7 +247,10 @@ void main() {
 
       verify(
         () => effectController.notifyUser(
-          message: l10n.toolsCompressWarningNoFolder,
+          message: any(
+            named: 'message',
+            that: localizes(l10n.toolsCompressWarningNoFolder),
+          ),
           type: NotificationType.warning,
         ),
       ).called(1);
@@ -268,7 +276,10 @@ void main() {
 
       verify(
         () => effectController.notifyUser(
-          message: l10n.toolsCompressWarningNoFileName,
+          message: any(
+            named: 'message',
+            that: localizes(l10n.toolsCompressWarningNoFileName),
+          ),
           type: NotificationType.warning,
         ),
       ).called(1);
@@ -333,7 +344,7 @@ void main() {
       verify(
         () => taskManager.submit(
           id: any(named: 'id', that: startsWith('compress-pdf-')),
-          title: l10n.toolsCompressButton,
+          title: 'compress-pdf',
           operation: any(named: 'operation'),
         ),
       ).called(1);
@@ -374,7 +385,10 @@ void main() {
 
       verify(
         () => effectController.notifyUser(
-          message: l10n.toolsCompressSuccess,
+          message: any(
+            named: 'message',
+            that: localizes(l10n.toolsCompressSuccess),
+          ),
           type: NotificationType.success,
         ),
       ).called(1);
@@ -407,19 +421,22 @@ void main() {
           input: any(named: 'input'),
           outputFile: any(named: 'outputFile'),
         ),
-      ).thenThrow(UnsupportedError('encrypted'));
+      ).thenThrow(const PasswordRequiredFailure());
 
       await cubit.compress();
 
       verify(
         () => effectController.notifyUser(
-          message: l10n.toolsCompressEncrypted,
+          message: any(
+            named: 'message',
+            that: localizes(l10n.toolsCompressEncrypted),
+          ),
           type: NotificationType.warning,
         ),
       ).called(1);
     });
 
-    test('warns when input and output paths are the same', () async {
+    test('reports when input and output paths are the same', () async {
       cubit.emit(
         const CompressPdfState(
           inputFilePath: '/documents/input.pdf',
@@ -446,14 +463,17 @@ void main() {
           input: any(named: 'input'),
           outputFile: any(named: 'outputFile'),
         ),
-      ).thenThrow(ArgumentError('same file'));
+      ).thenThrow(const OutputSameAsInputFailure());
 
       await cubit.compress();
 
       verify(
         () => effectController.notifyUser(
-          message: l10n.toolsCompressWarningNoFileName,
-          type: NotificationType.warning,
+          message: any(
+            named: 'message',
+            that: localizes(l10n.errorOutputSameAsInput),
+          ),
+          type: NotificationType.error,
         ),
       ).called(1);
     });
@@ -491,7 +511,10 @@ void main() {
 
       verify(
         () => effectController.notifyUser(
-          message: l10n.toolsCompressFailed,
+          message: any(
+            named: 'message',
+            that: localizes(l10n.toolsCompressFailed),
+          ),
           type: NotificationType.error,
         ),
       ).called(1);

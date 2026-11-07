@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logging/logging.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/task/task.dart';
 
 void main() {
@@ -56,29 +58,78 @@ void main() {
     expect(task.error, isA<Exception>());
   });
 
-  test('logs a failed task with its stack trace', () async {
-    Logger.root.level = Level.ALL;
-    final records = <LogRecord>[];
-    final logSubscription = Logger.root.onRecord.listen(records.add);
+  group('failure mapping and logging', () {
+    late List<LogRecord> records;
+    late StreamSubscription<LogRecord> logSubscription;
 
-    final error = Exception('disk full');
+    setUp(() {
+      Logger.root.level = Level.ALL;
+      records = [];
+      logSubscription = Logger.root.onRecord.listen(records.add);
+    });
 
-    final future = taskManager.submit(
-      id: 'task-1',
-      title: 'Merge PDF',
-      operation: () async => throw error,
+    tearDown(() => logSubscription.cancel());
+
+    test('completes with a mapped AppFailure', () async {
+      final future = taskManager.submit(
+        id: 'task-1',
+        title: 'merge-pdf',
+        operation: () async => throw const PathNotFoundException(
+          '/gone.pdf',
+          OSError('missing', 2),
+        ),
+      );
+
+      await expectLater(future, throwsA(isA<FileNotFoundFailure>()));
+
+      expect(taskManager.currentTasks.single.error, isA<FileNotFoundFailure>());
+    });
+
+    test('logs an expected failure at info level', () async {
+      final future = taskManager.submit(
+        id: 'task-1',
+        title: 'merge-pdf',
+        operation: () async => throw const WrongPasswordFailure(),
+      );
+
+      await expectLater(future, throwsA(isA<WrongPasswordFailure>()));
+
+      final record = records.single;
+
+      expect(record.loggerName, 'velin.task');
+      expect(record.level, Level.INFO);
+      expect(record.message, contains('merge-pdf'));
+    });
+
+    test(
+      'logs an unexpected failure once, as severe, with its stack',
+      () async {
+        final error = StateError('bug');
+
+        final future = taskManager.submit(
+          id: 'task-1',
+          title: 'merge-pdf',
+          operation: () async => throw error,
+        );
+
+        await expectLater(
+          future,
+          throwsA(
+            isA<UnexpectedFailure>().having(
+              (f) => f.cause,
+              'cause',
+              same(error),
+            ),
+          ),
+        );
+
+        final record = records.single;
+
+        expect(record.level, Level.SEVERE);
+        expect(record.error, same(error));
+        expect(record.stackTrace, isNotNull);
+      },
     );
-
-    await expectLater(future, throwsA(same(error)));
-
-    final record = records.singleWhere((r) => r.loggerName == 'velin.task');
-
-    expect(record.level, Level.SEVERE);
-    expect(record.message, contains('Merge PDF'));
-    expect(record.error, same(error));
-    expect(record.stackTrace, isNotNull);
-
-    await logSubscription.cancel();
   });
 
   test('runs tasks sequentially', () async {

@@ -35,9 +35,9 @@ final class ReaderLoaded extends ReaderState {
 }
 
 final class ReaderError extends ReaderState {
-  const ReaderError(this.message);
+  const ReaderError(this.failure);
 
-  final String message;
+  final AppFailure failure;
 }
 
 const _unset = Object();

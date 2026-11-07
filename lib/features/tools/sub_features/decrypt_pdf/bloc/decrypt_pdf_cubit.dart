@@ -1,54 +1,48 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pdf_cos/pdf_cos.dart';
 import 'package:velin/app/effects/effects.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
-import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
-import 'package:velin/l10n/app_localizations.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 import 'package:velin/shared/utils/utils.dart';
 
 import 'decrypt_pdf_input.dart';
 import 'decrypt_pdf_state.dart';
 
-class DecryptPdfCubit extends Cubit<DecryptPdfState> {
+class DecryptPdfCubit extends Cubit<DecryptPdfState>
+    with ToolTaskRunner<DecryptPdfState> {
   DecryptPdfCubit({
-    required this._l10n,
-    required this._filePicker,
+    required this.filePicker,
     required this._decryptPdfEngine,
-    required this._taskManager,
-    required this._appEffectController,
+    required this.taskManager,
+    required this.appEffectController,
   }) : super(const DecryptPdfState());
 
-  final AppLocalizations _l10n;
-  final DocumentFilePicker _filePicker;
+  @override
+  final DocumentFilePicker filePicker;
+  @override
+  final TaskManager taskManager;
+  @override
+  final AppEffectController appEffectController;
+
   final DecryptPdfEngine _decryptPdfEngine;
-  final TaskManager _taskManager;
-  final AppEffectController _appEffectController;
 
   Future<void> pickFile() async {
-    final result = await _filePicker.pickFile(allowedExtensions: ['pdf']);
+    final filePath = await pickSingleFile(const ['pdf']);
 
-    switch (result) {
-      case Success(data: final filePath):
-        emit(
-          state.copyWith(
-            inputFilePath: filePath,
-            outputDirectory:
-                state.outputDirectory ??
-                directoryWithTrailingSeparator(filePath),
-            outputFileName: '${fileNameFromPath(filePath)}_unlocked.pdf',
-          ),
-        );
-
-      case Failure(error: final error):
-        // The user cancelled the picker: not an error, stay quiet.
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _notifyError(_l10n.toolsUnlockFailed);
+    if (filePath == null || isClosed) {
+      return;
     }
+
+    emit(
+      state.copyWith(
+        inputFilePath: filePath,
+        outputDirectory:
+            state.outputDirectory ?? directoryWithTrailingSeparator(filePath),
+        outputFileName: '${fileNameFromPath(filePath)}_unlocked.pdf',
+      ),
+    );
   }
 
   void updatePassword(String? password) {
@@ -64,19 +58,13 @@ class DecryptPdfCubit extends Cubit<DecryptPdfState> {
   }
 
   Future<void> pickOutputDirectory() async {
-    final result = await _filePicker.pickDirectory();
+    final directoryPath = await pickDirectory();
 
-    switch (result) {
-      case Success(data: final directoryPath):
-        emit(state.copyWith(outputDirectory: directoryPath));
-
-      case Failure(error: final error):
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _notifyError(_l10n.toolsUnlockFailed);
+    if (directoryPath == null || isClosed) {
+      return;
     }
+
+    emit(state.copyWith(outputDirectory: directoryPath));
   }
 
   Future<void> unlock() async {
@@ -92,64 +80,43 @@ class DecryptPdfCubit extends Cubit<DecryptPdfState> {
 
     emit(state.copyWith(isSubmitting: true));
 
-    try {
-      await _taskManager.submit(
-        id: 'decrypt-pdf-${DateTime.now().microsecondsSinceEpoch}',
-        title: _l10n.toolsUnlockButton,
-        operation: () async {
-          await _decryptPdfEngine.decrypt(engineInput);
-        },
-      );
+    await runToolTask(
+      taskName: 'decrypt-pdf',
+      operation: () => _decryptPdfEngine.decrypt(engineInput),
+      successMessage: () =>
+          (l10n) => l10n.toolsUnlockSuccess,
+      failureMessage: (l10n) => l10n.toolsUnlockFailed,
+      describeFailure: (failure) => switch (failure) {
+        // The password opened neither the user nor the owner door. The user
+        // can almost always fix this by retyping it.
+        PasswordRequiredFailure() ||
+        WrongPasswordFailure() => (l10n) => l10n.toolsUnlockWrongPassword,
+        DocumentNotEncryptedFailure() => (l10n) => l10n.toolsUnlockNotEncrypted,
+        _ => null,
+      },
+    );
 
-      _appEffectController.notifyUser(
-        message: _l10n.toolsUnlockSuccess,
-        type: NotificationType.success,
-      );
-    } on CosPasswordException {
-      // The password opened neither the user nor the owner door. Worth its own
-      // message: the user can almost always fix this by retyping it.
-      _notifyWarning(_l10n.toolsUnlockWrongPassword);
-    } on StateError {
-      // The engine throws this when the document has no /Encrypt entry, which
-      // is a wrong pick rather than a failure.
-      _notifyWarning(_l10n.toolsUnlockNotEncrypted);
-    } catch (_) {
-      _notifyError(_l10n.toolsUnlockFailed);
-    } finally {
+    if (!isClosed) {
       emit(state.copyWith(isSubmitting: false));
     }
   }
 
   bool _validateInputs() {
     if (!state.hasInputFile) {
-      _notifyWarning(_l10n.toolsUnlockWarningNoFile);
+      notifyWarning((l10n) => l10n.toolsUnlockWarningNoFile);
       return false;
     }
 
     if (!state.hasValidOutputDirectory) {
-      _notifyWarning(_l10n.toolsUnlockWarningNoFolder);
+      notifyWarning((l10n) => l10n.toolsUnlockWarningNoFolder);
       return false;
     }
 
     if (!state.hasValidOutputFileName) {
-      _notifyWarning(_l10n.toolsUnlockWarningNoFileName);
+      notifyWarning((l10n) => l10n.toolsUnlockWarningNoFileName);
       return false;
     }
 
     return true;
-  }
-
-  void _notifyWarning(String message) {
-    _appEffectController.notifyUser(
-      message: message,
-      type: NotificationType.warning,
-    );
-  }
-
-  void _notifyError(String message) {
-    _appEffectController.notifyUser(
-      message: message,
-      type: NotificationType.error,
-    );
   }
 }

@@ -4,52 +4,46 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:velin/app/effects/effects.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
-import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
-import 'package:velin/l10n/app_localizations.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 import 'package:velin/shared/utils/utils.dart';
 
 import 'split_pdf_input.dart';
 import 'split_pdf_state.dart';
 
-class SplitPdfCubit extends Cubit<SplitPdfState> {
+class SplitPdfCubit extends Cubit<SplitPdfState>
+    with ToolTaskRunner<SplitPdfState> {
   SplitPdfCubit({
-    required this._l10n,
-    required this._filePicker,
+    required this.filePicker,
     required this._splitPdfEngine,
-    required this._taskManager,
-    required this._appEffectController,
+    required this.taskManager,
+    required this.appEffectController,
   }) : super(const SplitPdfState());
 
-  final AppLocalizations _l10n;
-  final DocumentFilePicker _filePicker;
+  @override
+  final DocumentFilePicker filePicker;
+  @override
+  final TaskManager taskManager;
+  @override
+  final AppEffectController appEffectController;
+
   final SplitPdfEngine _splitPdfEngine;
-  final TaskManager _taskManager;
-  final AppEffectController _appEffectController;
 
   Future<void> pickFile() async {
-    final result = await _filePicker.pickFile(allowedExtensions: ['pdf']);
+    final filePath = await pickSingleFile(const ['pdf']);
 
-    switch (result) {
-      case Success(data: final filePath):
-        emit(
-          state.copyWith(
-            inputFilePath: filePath,
-            outputDirectory:
-                state.outputDirectory ??
-                directoryWithTrailingSeparator(filePath),
-          ),
-        );
-
-      case Failure(error: final error):
-        // The user cancelled the picker: not an error, stay quiet.
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _notifyError(_l10n.toolsSplitFailed);
+    if (filePath == null || isClosed) {
+      return;
     }
+
+    emit(
+      state.copyWith(
+        inputFilePath: filePath,
+        outputDirectory:
+            state.outputDirectory ?? directoryWithTrailingSeparator(filePath),
+      ),
+    );
   }
 
   void changeMode(SplitPdfMode mode) {
@@ -93,19 +87,13 @@ class SplitPdfCubit extends Cubit<SplitPdfState> {
   }
 
   Future<void> pickOutputDirectory() async {
-    final result = await _filePicker.pickDirectory();
+    final directoryPath = await pickDirectory();
 
-    switch (result) {
-      case Success(data: final directoryPath):
-        emit(state.copyWith(outputDirectory: directoryPath));
-
-      case Failure(error: final error):
-        if (error is DocumentFilePickerError) {
-          return;
-        }
-
-        _notifyError(_l10n.toolsSplitFailed);
+    if (directoryPath == null || isClosed) {
+      return;
     }
+
+    emit(state.copyWith(outputDirectory: directoryPath));
   }
 
   Future<void> split() async {
@@ -113,99 +101,79 @@ class SplitPdfCubit extends Cubit<SplitPdfState> {
       return;
     }
 
-    if (!_validateInputs()) {
+    // Resolve the input from the current state *now*: the task may sit in
+    // the queue while the user keeps editing.
+    final splitInput = _validateAndBuildInput();
+
+    if (splitInput == null) {
       return;
     }
-
-    final input = SplitPdfToolInput(
-      filePath: state.inputFilePath!,
-      selections: state.selections,
-      pageCount: state.parsedPageCount,
-    );
 
     final outputDirectory = Directory(state.outputDirectory!.trim());
 
     emit(state.copyWith(isSubmitting: true));
 
-    try {
-      var fileCount = 0;
+    var fileCount = 0;
 
-      await _taskManager.submit(
-        id: 'split-pdf-${DateTime.now().microsecondsSinceEpoch}',
-        title: _l10n.toolsSplitButton,
-        operation: () async {
-          final files = await _splitPdfEngine.split(
-            input: input.toSplitInput(state.mode),
-            outputDirectory: outputDirectory,
-          );
+    await runToolTask(
+      taskName: 'split-pdf',
+      operation: () async {
+        final files = await _splitPdfEngine.split(
+          input: splitInput,
+          outputDirectory: outputDirectory,
+        );
 
-          fileCount = files.length;
-        },
-      );
+        fileCount = files.length;
+      },
+      successMessage: () {
+        final count = fileCount;
+        return (l10n) => l10n.toolsSplitSuccess(count);
+      },
+      failureMessage: (l10n) => l10n.toolsSplitFailed,
+    );
 
-      _appEffectController.notifyUser(
-        message: _l10n.toolsSplitSuccess(fileCount),
-        type: NotificationType.success,
-      );
-    } catch (_) {
-      _notifyError(_l10n.toolsSplitFailed);
-    } finally {
+    if (!isClosed) {
       emit(state.copyWith(isSubmitting: false));
     }
   }
 
-  bool _validateInputs() {
+  SplitPdfInput? _validateAndBuildInput() {
     if (!state.hasInputFile) {
-      _notifyWarning(_l10n.toolsSplitWarningNoFile);
-      return false;
+      notifyWarning((l10n) => l10n.toolsSplitWarningNoFile);
+      return null;
     }
 
     if (!state.hasValidOutputDirectory) {
-      _notifyWarning(_l10n.toolsSplitWarningNoFolder);
-      return false;
+      notifyWarning((l10n) => l10n.toolsSplitWarningNoFolder);
+      return null;
     }
 
     switch (state.mode) {
       case SplitPdfMode.byPageCount:
         if (!state.hasValidPageCount) {
-          _notifyWarning(_l10n.toolsSplitWarningPagesPerFile);
-          return false;
+          notifyWarning((l10n) => l10n.toolsSplitWarningPagesPerFile);
+          return null;
         }
 
       case SplitPdfMode.bySelection:
         if (!state.hasValidSelections) {
-          _notifyWarning(_l10n.toolsSplitWarningNoSelection);
-          return false;
-        }
-
-        try {
-          SplitPdfToolInput(
-            filePath: state.inputFilePath!,
-            selections: state.selections,
-          ).toSplitInput(state.mode);
-        } on PageSelectionError catch (_) {
-          _notifyError(_l10n.toolsSplitSelectionInvalid);
-          return false;
+          notifyWarning((l10n) => l10n.toolsSplitWarningNoSelection);
+          return null;
         }
 
       case SplitPdfMode.extractAllPages:
         break;
     }
 
-    return true;
-  }
-
-  void _notifyWarning(String message) {
-    _appEffectController.notifyUser(
-      message: message,
-      type: NotificationType.warning,
-    );
-  }
-
-  void _notifyError(String message) {
-    _appEffectController.notifyUser(
-      message: message,
-      type: NotificationType.error,
-    );
+    try {
+      return SplitPdfToolInput(
+        filePath: state.inputFilePath!,
+        selections: state.selections,
+        pageCount: state.parsedPageCount,
+      ).toSplitInput(state.mode);
+    } on PageSelectionError {
+      notifyError((l10n) => l10n.toolsSplitSelectionInvalid);
+      return null;
+    }
   }
 }

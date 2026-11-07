@@ -5,6 +5,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:velin/app/effects/effects.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
@@ -12,6 +13,8 @@ import 'package:velin/engine/engine.dart';
 import 'package:velin/features/tools/sub_features/merge_pdf/bloc/bloc.dart';
 import 'package:velin/l10n/app_localizations.dart';
 import 'package:velin/shared/utils/utils.dart';
+
+import '../../../../../helpers/helpers.dart';
 
 class MockDocumentFilePicker extends Mock implements DocumentFilePicker {}
 
@@ -30,6 +33,8 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(NotificationType.error);
+    registerFallbackValue(const UnexpectedFailure());
+    registerLocalizedMessageFallback();
     registerFallbackValue(MergePdfToolInput(filePath: '/test.pdf'));
     registerFallbackValue(File('/output/result.pdf'));
   });
@@ -51,7 +56,6 @@ void main() {
 
   MergePdfCubit buildCubit() {
     return MergePdfCubit(
-      l10n: l10n,
       filePicker: filePicker,
       mergePdfEngine: mergePdfEngine,
       taskManager: taskManager,
@@ -108,7 +112,6 @@ void main() {
             .thenAnswer((_) async => const Success(['/documents/two.pdf']));
 
         return MergePdfCubit(
-          l10n: l10n,
           filePicker: filePicker,
           mergePdfEngine: mergePdfEngine,
           taskManager: taskManager,
@@ -147,9 +150,8 @@ void main() {
     blocTest<MergePdfCubit, MergePdfState>(
       'does not emit when picker is cancelled',
       build: () {
-        when(
-          () => filePicker.pickFiles(allowedExtensions: ['pdf']),
-        ).thenAnswer((_) async => Failure(DocumentFilePickerError('canceled')));
+        when(() => filePicker.pickFiles(allowedExtensions: ['pdf']))
+            .thenAnswer((_) async => const Success(<String>[]));
 
         return buildCubit();
       },
@@ -169,7 +171,7 @@ void main() {
       'notifies error for unexpected picker failure',
       build: () {
         when(() => filePicker.pickFiles(allowedExtensions: ['pdf']))
-            .thenAnswer((_) async => Failure(Exception('picker failed')));
+            .thenAnswer((_) async => const Failure(UnexpectedFailure()));
 
         return buildCubit();
       },
@@ -178,7 +180,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsMergeFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorUnexpected),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -314,9 +319,8 @@ void main() {
     blocTest<MergePdfCubit, MergePdfState>(
       'does not emit when directory picker is cancelled',
       build: () {
-        when(
-          () => filePicker.pickDirectory(),
-        ).thenAnswer((_) async => Failure(DocumentFilePickerError('canceled')));
+        when(() => filePicker.pickDirectory())
+            .thenAnswer((_) async => const Success(null));
 
         return buildCubit();
       },
@@ -335,9 +339,8 @@ void main() {
     blocTest<MergePdfCubit, MergePdfState>(
       'notifies error for unexpected directory picker failure',
       build: () {
-        when(() => filePicker.pickDirectory()).thenAnswer(
-          (_) async => Failure(Exception('directory picker failed')),
-        );
+        when(() => filePicker.pickDirectory())
+            .thenAnswer((_) async => const Failure(UnexpectedFailure()));
 
         return buildCubit();
       },
@@ -346,7 +349,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsMergeFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorUnexpected),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -363,7 +369,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsMergeWarningNoFiles,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsMergeWarningNoFiles),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -389,7 +398,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsMergeWarningNoFolder,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsMergeWarningNoFolder),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -409,7 +421,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsMergeWarningNoFileName,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsMergeWarningNoFileName),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -430,7 +445,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsMergePageSelectionInvalid('one.pdf'),
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsMergePageSelectionInvalid('one.pdf')),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -523,7 +541,10 @@ void main() {
 
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsMergeSuccess,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsMergeSuccess),
+            ),
             type: NotificationType.success,
           ),
         ).called(1);
@@ -575,7 +596,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsMergeFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsMergeFailed),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -615,7 +639,10 @@ void main() {
       verify: (_) {
         verify(
           () => effectController.notifyUser(
-            message: l10n.toolsMergeFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsMergeFailed),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);

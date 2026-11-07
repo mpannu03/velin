@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:image/image.dart' as img;
 import 'package:pdfrx_engine/pdfrx_engine.dart';
+import 'package:velin/core/error/error.dart';
+import 'package:velin/core/page_selection/page_selection_error.dart';
 
 import 'pdf_to_image_input.dart';
 
@@ -47,8 +49,8 @@ class PdfToImageEngine {
 
       for (final page in selectedPages) {
         if (page < 1 || page > totalPages) {
-          throw RangeError(
-            'Page $page is outside the valid range 1-$totalPages.',
+          throw InvalidPageSelectionFailure(
+            PageSelectionOutOfBoundsError(page: page, totalPages: totalPages),
           );
         }
       }

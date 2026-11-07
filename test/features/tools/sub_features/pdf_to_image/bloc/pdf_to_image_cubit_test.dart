@@ -5,12 +5,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:velin/app/effects/effects.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/l10n/app_localizations.dart';
+
+import '../../../../../helpers/helpers.dart';
 
 class MockDocumentFilePicker extends Mock implements DocumentFilePicker {}
 
@@ -29,6 +32,8 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(NotificationType.error);
+    registerFallbackValue(const UnexpectedFailure());
+    registerLocalizedMessageFallback();
     registerFallbackValue(PdfToImageToolInput(filePath: 'input.pdf'));
     registerFallbackValue(PdfToImageInput(file: File('input.pdf')));
     registerFallbackValue(File('input.pdf'));
@@ -45,7 +50,6 @@ void main() {
 
   PdfToImageCubit buildCubit() {
     return PdfToImageCubit(
-      l10n: l10n,
       filePicker: filePicker,
       pdfToImageEngine: pdfToImageEngine,
       taskManager: taskManager,
@@ -70,9 +74,8 @@ void main() {
     blocTest<PdfToImageCubit, PdfToImageState>(
       'does not emit when picker is cancelled',
       setUp: () {
-        when(() => filePicker.pickFile(allowedExtensions: ['pdf'])).thenAnswer(
-          (_) async => const Failure(DocumentFilePickerError('cancelled')),
-        );
+        when(() => filePicker.pickFile(allowedExtensions: ['pdf']))
+            .thenAnswer((_) async => const Success(null));
       },
       build: buildCubit,
       act: (cubit) => cubit.pickFile(),
@@ -91,7 +94,7 @@ void main() {
       'notifies an error for an unexpected picker failure',
       setUp: () {
         when(() => filePicker.pickFile(allowedExtensions: ['pdf']))
-            .thenAnswer((_) async => Failure(Exception('picker failed')));
+            .thenAnswer((_) async => const Failure(UnexpectedFailure()));
       },
       build: buildCubit,
       act: (cubit) => cubit.pickFile(),
@@ -99,7 +102,10 @@ void main() {
       verify: (_) {
         verify(
           () => appEffectController.notifyUser(
-            message: l10n.toolsPdfToImageFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorUnexpected),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -239,9 +245,8 @@ void main() {
     blocTest<PdfToImageCubit, PdfToImageState>(
       'does not emit when picker is cancelled',
       setUp: () {
-        when(() => filePicker.pickDirectory()).thenAnswer(
-          (_) async => const Failure(DocumentFilePickerError('cancelled')),
-        );
+        when(() => filePicker.pickDirectory())
+            .thenAnswer((_) async => const Success(null));
       },
       build: buildCubit,
       act: (cubit) => cubit.pickOutputDirectory(),
@@ -260,7 +265,7 @@ void main() {
       'notifies an error for an unexpected picker failure',
       setUp: () {
         when(() => filePicker.pickDirectory())
-            .thenAnswer((_) async => Failure(Exception('picker failed')));
+            .thenAnswer((_) async => const Failure(UnexpectedFailure()));
       },
       build: buildCubit,
       act: (cubit) => cubit.pickOutputDirectory(),
@@ -268,7 +273,10 @@ void main() {
       verify: (_) {
         verify(
           () => appEffectController.notifyUser(
-            message: l10n.toolsPdfToImageFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.errorUnexpected),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -285,7 +293,10 @@ void main() {
       verify: (_) {
         verify(
           () => appEffectController.notifyUser(
-            message: l10n.toolsPdfToImageWarningNoFile,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsPdfToImageWarningNoFile),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -308,7 +319,10 @@ void main() {
       verify: (_) {
         verify(
           () => appEffectController.notifyUser(
-            message: l10n.toolsPdfToImageWarningNoFolder,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsPdfToImageWarningNoFolder),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -328,7 +342,10 @@ void main() {
       verify: (_) {
         verify(
           () => appEffectController.notifyUser(
-            message: l10n.toolsPdfToImageWarningNoSelection,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsPdfToImageWarningNoSelection),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -349,7 +366,10 @@ void main() {
       verify: (_) {
         verify(
           () => appEffectController.notifyUser(
-            message: l10n.toolsPdfToImageSelectionInvalid,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsPdfToImageSelectionInvalid),
+            ),
             type: NotificationType.warning,
           ),
         ).called(1);
@@ -452,14 +472,17 @@ void main() {
         verify(
           () => taskManager.submit(
             id: any(named: 'id'),
-            title: l10n.toolsPdfToImageButton,
+            title: 'pdf-to-image',
             operation: any(named: 'operation'),
           ),
         ).called(1);
 
         verify(
           () => appEffectController.notifyUser(
-            message: l10n.toolsPdfToImageSuccess(3),
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsPdfToImageSuccess(3)),
+            ),
             type: NotificationType.success,
           ),
         ).called(1);
@@ -510,7 +533,10 @@ void main() {
       verify: (_) {
         verify(
           () => appEffectController.notifyUser(
-            message: l10n.toolsPdfToImageFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsPdfToImageFailed),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);
@@ -550,14 +576,17 @@ void main() {
         verify(
           () => taskManager.submit(
             id: any(named: 'id'),
-            title: l10n.toolsPdfToImageButton,
+            title: 'pdf-to-image',
             operation: any(named: 'operation'),
           ),
         ).called(1);
 
         verify(
           () => appEffectController.notifyUser(
-            message: l10n.toolsPdfToImageFailed,
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsPdfToImageFailed),
+            ),
             type: NotificationType.error,
           ),
         ).called(1);

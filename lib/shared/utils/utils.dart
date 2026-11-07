@@ -1,3 +1,5 @@
+import 'package:path/path.dart' as p;
+
 String getPercentagefromDouble(double value) {
   return "${(value * 100).toStringAsFixed(0)}%";
 }
@@ -54,4 +56,13 @@ String fileNameFromPath(String filePath) {
   final dot = name.lastIndexOf('.');
   if (dot <= 0) return name;
   return name.substring(0, dot);
+}
+
+/// Joins an output folder and file name with the platform separator.
+///
+/// Trailing separators on [directory] are stripped first, so a folder picked
+/// as `C:\out\` never produces a doubled separator.
+String joinOutputPath(String directory, String fileName) {
+  final trimmed = directory.trim().replaceFirst(RegExp(r'[/\\]+$'), '');
+  return p.join(trimmed, fileName.trim());
 }

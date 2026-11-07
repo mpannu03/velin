@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/core/di/injection.dart';
 import 'package:velin/features/tools/tools.dart';
-import 'package:velin/shared/extensions/extensions.dart';
 
 class CompressPdfPage extends StatelessWidget {
   const CompressPdfPage({super.key});
@@ -11,7 +10,7 @@ class CompressPdfPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<CompressPdfCubit>(param1: context.l10n),
+      create: (_) => getIt<CompressPdfCubit>(),
       child: const _CompressPdfPageContent(),
     );
   }

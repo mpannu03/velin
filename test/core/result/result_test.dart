@@ -1,14 +1,17 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:velin/core/error/error.dart';
 import 'package:velin/core/result/result.dart';
 
 void main() {
   group('Success', () {
-    test('stores data', () {
+    test('stores data and has no failure', () {
       const result = Success<int>(42);
 
       expect(result.data, 42);
-      expect(result.error, isNull);
-      expect(result.stackTrace, isNull);
+      expect(result.failureOrNull, isNull);
     });
 
     test('is equal when data is equal', () {
@@ -29,52 +32,96 @@ void main() {
   });
 
   group('Failure', () {
-    test('stores error and stack trace', () {
-      final stackTrace = StackTrace.current;
-      final result = Failure<int>('Something went wrong', stackTrace);
+    test('stores the failure', () {
+      const failure = FileNotFoundFailure(path: '/a.pdf');
+      const result = Failure<int>(failure);
 
-      expect(result.error, 'Something went wrong');
-      expect(result.stackTrace, stackTrace);
+      expect(result.failure, same(failure));
+      expect(result.failureOrNull, same(failure));
     });
 
-    test('stack trace is optional', () {
-      const result = Failure<int>('Something went wrong');
+    test('is equal when the failure is the same', () {
+      const failure = DiskFullFailure();
 
-      expect(result.error, 'Something went wrong');
-      expect(result.stackTrace, isNull);
+      expect(const Failure<int>(failure), equals(const Failure<int>(failure)));
     });
 
-    test('is equal when error and stack trace are equal', () {
-      final stackTrace = StackTrace.current;
-
+    test('is not equal when the failure differs', () {
       expect(
-        Failure<int>('error', stackTrace),
-        equals(Failure<int>('error', stackTrace)),
-      );
-    });
-
-    test('is not equal when error differs', () {
-      expect(
-        const Failure<int>('error'),
-        isNot(equals(const Failure<int>('other error'))),
-      );
-    });
-
-    test('is not equal when stack trace differs', () {
-      final first = StackTrace.fromString('trace 1');
-      final second = StackTrace.fromString('trace 2');
-
-      expect(
-        Failure<int>('error', first),
-        isNot(equals(Failure<int>('error', second))),
+        Failure<int>(FileNotFoundFailure(path: 'a')),
+        isNot(equals(Failure<int>(FileNotFoundFailure(path: 'a')))),
       );
     });
 
     test('has expected string representation', () {
       expect(
-        const Failure<int>('Something went wrong').toString(),
-        'Failure(Something went wrong)',
+        const Failure<int>(DiskFullFailure()).toString(),
+        'Failure(DiskFullFailure)',
       );
+    });
+  });
+
+  group('Result.guard', () {
+    test('wraps the value in Success', () async {
+      expect(await Result.guard(() async => 7), const Success(7));
+    });
+
+    test('maps a thrown exception to a typed Failure', () async {
+      final result = await Result.guard<int>(
+        () async => throw const PathNotFoundException(
+          '/missing.pdf',
+          OSError('not found', 2),
+        ),
+      );
+
+      expect(
+        result.failureOrNull,
+        isA<FileNotFoundFailure>().having(
+          (f) => f.path,
+          'path',
+          '/missing.pdf',
+        ),
+      );
+    });
+
+    test('passes an AppFailure through unchanged', () async {
+      const failure = WrongPasswordFailure();
+
+      final result = await Result.guard<int>(() async => throw failure);
+
+      expect(result.failureOrNull, same(failure));
+    });
+  });
+
+  group('Result.guardSync', () {
+    test('wraps the value and maps errors', () {
+      expect(Result.guardSync(() => 'ok'), const Success('ok'));
+      expect(
+        Result.guardSync<int>(() => throw StateError('bug')).failureOrNull,
+        isA<UnexpectedFailure>(),
+      );
+    });
+  });
+
+  group('Result.guardStream', () {
+    test('turns data into Success and errors into Failure', () async {
+      final controller = StreamController<int>();
+      final results = Result.guardStream(controller.stream).toList();
+
+      controller
+        ..add(1)
+        ..addError(TimeoutException('slow'))
+        ..add(2);
+      await controller.close();
+
+      final events = await results;
+
+      expect(events[0], const Success(1));
+      expect(
+        events[1].failureOrNull,
+        isA<NetworkFailure>().having((f) => f.isTimeout, 'isTimeout', isTrue),
+      );
+      expect(events[2], const Success(2));
     });
   });
 }

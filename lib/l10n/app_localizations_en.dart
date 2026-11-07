@@ -1056,4 +1056,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toolsWatermarkSubmitting => 'Applying watermark…';
+
+  @override
+  String get errorFileNotFound =>
+      'The file could not be found. It may have been moved or deleted.';
+
+  @override
+  String get errorFileAccessDenied =>
+      'Velin doesn\'t have permission to use this file or folder.';
+
+  @override
+  String get errorFileInUse =>
+      'The file is open in another program. Close it there and try again.';
+
+  @override
+  String get errorDiskFull =>
+      'There isn\'t enough disk space to save the file.';
+
+  @override
+  String get errorFileSystem => 'The file couldn\'t be read or saved.';
+
+  @override
+  String get errorOutputSameAsInput =>
+      'Choose a different output name. Saving over the original file isn\'t allowed.';
+
+  @override
+  String get errorUnsupportedFileType => 'This file type isn\'t supported.';
+
+  @override
+  String get errorPasswordRequired =>
+      'This PDF is password-protected. Unlock it first, then try again.';
+
+  @override
+  String get errorWrongPassword => 'That password doesn\'t open this document.';
+
+  @override
+  String get errorCorruptDocument =>
+      'This file is damaged or isn\'t a valid PDF.';
+
+  @override
+  String get errorUnsupportedDocumentFeature =>
+      'This PDF uses a feature Velin can\'t process yet.';
+
+  @override
+  String get errorInvalidImage =>
+      'One of the images couldn\'t be read. It may be damaged or in an unsupported format.';
+
+  @override
+  String get errorPageSelectionEmpty => 'Enter the pages to use.';
+
+  @override
+  String errorPageSelectionToken(String token) {
+    return '\"$token\" isn\'t a valid page or range.';
+  }
+
+  @override
+  String errorPageSelectionRange(String range) {
+    return '\"$range\" isn\'t a valid range.';
+  }
+
+  @override
+  String errorPageSelectionNumber(String number) {
+    return '\"$number\" isn\'t a valid page number.';
+  }
+
+  @override
+  String errorPageSelectionOutOfBounds(int page, int totalPages) {
+    return 'Page $page doesn\'t exist. The document has $totalPages pages.';
+  }
+
+  @override
+  String get errorNetwork =>
+      'Couldn\'t connect. Check your internet connection and try again.';
+
+  @override
+  String get errorNetworkTimeout => 'The request took too long. Try again.';
+
+  @override
+  String get errorServer =>
+      'The service isn\'t responding correctly. Try again later.';
+
+  @override
+  String errorDictionaryNotFound(String word) {
+    return 'No definition found for \"$word\".';
+  }
+
+  @override
+  String get errorUnexpected => 'Something went wrong. Please try again.';
 }
