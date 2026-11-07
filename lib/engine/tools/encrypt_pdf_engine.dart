@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:pdf_manipulator/io.dart';
 import 'package:pdf_manipulator/pdf_manipulator.dart' as manipulator;
 import 'package:velin/core/file/safe_file_writer.dart';
+import 'package:velin/core/task/task_context.dart';
 
 import 'encrypt_pdf_input.dart';
 
@@ -11,7 +12,9 @@ class EncryptPdfEngine {
 
   final manipulator.Pdf _pdf;
 
-  Future<File> encrypt(EncryptPdfInput input) async {
+  Future<File> encrypt(EncryptPdfInput input, {TaskContext? context}) async {
+    context?.throwIfCancelled();
+
     if (!await input.inputFile.exists()) {
       throw FileSystemException('Input file not found.', input.inputFile.path);
     }
@@ -44,6 +47,9 @@ class EncryptPdfEngine {
             ),
           ),
         );
+
+        // Throwing here discards the temporary file, so nothing is saved.
+        context?.throwIfCancelled();
       } finally {
         await output.close();
       }

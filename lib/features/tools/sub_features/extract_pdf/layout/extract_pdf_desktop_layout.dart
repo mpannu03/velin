@@ -51,6 +51,7 @@ class ExtractPdfDesktopLayout extends StatelessWidget {
             const SizedBox(height: AppSpacing.xl),
             ToolActionBar(
               isSubmitting: viewModel.isSubmitting,
+              task: viewModel.task,
               submittingText: l10n.toolsExtractSubmitting,
               canAction: viewModel.canExtract,
               icon: Icons.content_cut_outlined,

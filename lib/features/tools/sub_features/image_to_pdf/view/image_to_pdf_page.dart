@@ -44,6 +44,7 @@ class _ImageToPdfPageContent extends StatelessWidget {
       outputFileName: state.outputFileName,
       outputDirectory: state.outputDirectory,
       isSubmitting: state.isSubmitting,
+      task: cubit.task,
       canConvert: state.canConvert,
       onAddImages: cubit.pickImages,
       onRemoveImage: cubit.removeImage,

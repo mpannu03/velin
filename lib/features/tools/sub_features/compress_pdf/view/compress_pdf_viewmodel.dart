@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 
 class CompressPdfViewModel {
   const CompressPdfViewModel({
@@ -7,6 +8,7 @@ class CompressPdfViewModel {
     required this.outputDirectory,
     required this.quality,
     required this.isSubmitting,
+    this.task,
     required this.canCompress,
     required this.onPickFile,
     required this.onQualityChanged,
@@ -24,6 +26,10 @@ class CompressPdfViewModel {
   final int quality;
 
   final bool isSubmitting;
+
+  /// Progress and cancellation of the running task.
+
+  final ToolTaskHandle? task;
   final bool canCompress;
 
   final VoidCallback onPickFile;

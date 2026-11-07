@@ -4,6 +4,7 @@ import 'package:pdf_manipulator/io.dart';
 import 'package:pdf_manipulator/pdf_manipulator.dart';
 import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/safe_file_writer.dart';
+import 'package:velin/core/task/task_context.dart';
 
 import 'decrypt_pdf_input.dart';
 
@@ -12,7 +13,9 @@ class DecryptPdfEngine {
 
   final Pdf _pdf;
 
-  Future<File> decrypt(DecryptPdfInput input) async {
+  Future<File> decrypt(DecryptPdfInput input, {TaskContext? context}) async {
+    context?.throwIfCancelled();
+
     if (!await input.inputFile.exists()) {
       throw FileSystemException('Input file not found.', input.inputFile.path);
     }
@@ -27,6 +30,9 @@ class DecryptPdfEngine {
 
       try {
         await _pdf.decrypt(source, output, password: input.password);
+
+        // Throwing here discards the temporary file, so nothing is saved.
+        context?.throwIfCancelled();
       } on StateError catch (error, stackTrace) {
         // Raised when the document has no /Encrypt entry: a wrong pick, not
         // a crash.

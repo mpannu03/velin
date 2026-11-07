@@ -35,6 +35,7 @@ class _MergePdfPageContent extends StatelessWidget {
       outputFileName: state.outputFileName,
       outputDirectory: state.outputDirectory,
       isSubmitting: state.isSubmitting,
+      task: cubit.task,
       hasInputFiles: state.hasInputFiles,
       canMerge: state.canMerge,
       onAddFiles: cubit.pickFiles,

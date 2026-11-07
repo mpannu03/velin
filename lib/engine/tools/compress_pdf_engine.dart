@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:pdf_cos/pdf_cos.dart';
 import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/safe_file_writer.dart';
+import 'package:velin/core/task/task_context.dart';
 import 'package:velin/engine/isolate/run_in_background.dart';
 
 class CompressPdfInput {
@@ -20,6 +21,7 @@ class CompressPdfEngine {
   Future<File> compress({
     required CompressPdfInput input,
     required File outputFile,
+    TaskContext? context,
   }) async {
     final level = input.compressionLevel;
 
@@ -36,12 +38,18 @@ class CompressPdfEngine {
     final inputPath = input.file.path;
     final deflateLevel = (level * 9 / 100).round();
 
+    context?.throwIfCancelled();
+
     // Parsing and re-compressing every stream is pure Dart CPU work that
     // scales with file size; on the UI isolate it would freeze the window.
     final outputBytes = await runInBackground(_compressFile, (
       inputPath,
       deflateLevel,
     ));
+
+    // The background step cannot be interrupted, so check again before
+    // saving anything.
+    context?.throwIfCancelled();
 
     return writeBytesAtomically(outputFile, outputBytes);
   }

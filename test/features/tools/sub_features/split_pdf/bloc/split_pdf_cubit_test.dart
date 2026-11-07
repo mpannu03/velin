@@ -65,10 +65,9 @@ void main() {
         operation: any(named: 'operation'),
       ),
     ).thenAnswer((invocation) async {
-      final operation =
-          invocation.namedArguments[#operation] as Future<void> Function();
+      final operation = invocation.namedArguments[#operation] as TaskOperation;
 
-      await operation();
+      await operation(TaskContext.detached());
     });
   }
 
@@ -463,6 +462,8 @@ void main() {
           () => splitPdfEngine.split(
             input: any(named: 'input'),
             outputDirectory: any(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         ).thenAnswer(
           (_) async => [
@@ -502,6 +503,8 @@ void main() {
           () => splitPdfEngine.split(
             input: captureAny(named: 'input'),
             outputDirectory: captureAny(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         ).captured;
 
@@ -542,6 +545,8 @@ void main() {
           () => splitPdfEngine.split(
             input: any(named: 'input'),
             outputDirectory: any(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         ).thenAnswer(
           (_) async => [
@@ -580,6 +585,8 @@ void main() {
           () => splitPdfEngine.split(
             input: captureAny(named: 'input'),
             outputDirectory: captureAny(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         ).captured;
 
@@ -612,6 +619,8 @@ void main() {
           () => splitPdfEngine.split(
             input: any(named: 'input'),
             outputDirectory: any(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         ).thenAnswer((_) async => [File('/documents/output/input.pdf')]);
 
@@ -642,6 +651,8 @@ void main() {
           () => splitPdfEngine.split(
             input: captureAny(named: 'input'),
             outputDirectory: captureAny(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         ).captured;
 
@@ -672,6 +683,8 @@ void main() {
           () => splitPdfEngine.split(
             input: any(named: 'input'),
             outputDirectory: any(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         ).thenThrow(Exception('split failed'));
 
@@ -758,6 +771,8 @@ void main() {
           () => splitPdfEngine.split(
             input: any(named: 'input'),
             outputDirectory: any(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         );
       },
@@ -786,6 +801,8 @@ void main() {
           () => splitPdfEngine.split(
             input: any(named: 'input'),
             outputDirectory: any(named: 'outputDirectory'),
+            context: any(named: 'context'),
+            confirmOverwrite: any(named: 'confirmOverwrite'),
           ),
         );
       },

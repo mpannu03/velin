@@ -25,7 +25,7 @@ void main() {
     taskManager.submit(
       id: 'task-1',
       title: 'Merge PDF',
-      operation: () async {},
+      operation: (_) async {},
     );
 
     await _waitUntil(
@@ -41,7 +41,7 @@ void main() {
     final future = taskManager.submit(
       id: 'task-1',
       title: 'Merge PDF',
-      operation: () async {
+      operation: (_) async {
         throw Exception('Something went wrong');
       },
     );
@@ -74,7 +74,7 @@ void main() {
       final future = taskManager.submit(
         id: 'task-1',
         title: 'merge-pdf',
-        operation: () async => throw const PathNotFoundException(
+        operation: (_) async => throw const PathNotFoundException(
           '/gone.pdf',
           OSError('missing', 2),
         ),
@@ -89,7 +89,7 @@ void main() {
       final future = taskManager.submit(
         id: 'task-1',
         title: 'merge-pdf',
-        operation: () async => throw const WrongPasswordFailure(),
+        operation: (_) async => throw const WrongPasswordFailure(),
       );
 
       await expectLater(future, throwsA(isA<WrongPasswordFailure>()));
@@ -109,7 +109,7 @@ void main() {
         final future = taskManager.submit(
           id: 'task-1',
           title: 'merge-pdf',
-          operation: () async => throw error,
+          operation: (_) async => throw error,
         );
 
         await expectLater(
@@ -140,7 +140,7 @@ void main() {
     taskManager.submit(
       id: 'task-1',
       title: 'Task 1',
-      operation: () async {
+      operation: (_) async {
         events.add('task-1-started');
         await firstCompleter.future;
         events.add('task-1-finished');
@@ -150,7 +150,7 @@ void main() {
     taskManager.submit(
       id: 'task-2',
       title: 'Task 2',
-      operation: () async {
+      operation: (_) async {
         events.add('task-2-started');
         events.add('task-2-finished');
       },
@@ -178,7 +178,7 @@ void main() {
     final failedFuture = taskManager.submit(
       id: 'task-1',
       title: 'Task 1',
-      operation: () async {
+      operation: (_) async {
         events.add('task-1');
         throw Exception('Failed');
       },
@@ -187,7 +187,7 @@ void main() {
     final completedFuture = taskManager.submit(
       id: 'task-2',
       title: 'Task 2',
-      operation: () async {
+      operation: (_) async {
         events.add('task-2');
       },
     );
@@ -220,7 +220,7 @@ void main() {
     taskManager.submit(
       id: 'task-1',
       title: 'Merge PDF',
-      operation: () async {},
+      operation: (_) async {},
     );
 
     await _waitUntil(() => states.contains(TaskStatus.completed));

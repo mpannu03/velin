@@ -50,6 +50,7 @@ class CompressPdfDesktopLayout extends StatelessWidget {
             const SizedBox(height: AppSpacing.xl),
             ToolActionBar(
               isSubmitting: viewModel.isSubmitting,
+              task: viewModel.task,
               submittingText: l10n.toolsCompressSubmitting,
               canAction: viewModel.canCompress,
               icon: Icons.compress_outlined,

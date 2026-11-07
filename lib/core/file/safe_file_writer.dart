@@ -63,3 +63,49 @@ void ensureOutputDiffersFromInputs(File output, Iterable<File> inputs) {
     }
   }
 }
+
+/// Runs [body], which writes several files and records each one in
+/// [written]. If [body] is cancelled, the files written so far are deleted
+/// before the cancellation is rethrown, so a cancelled multi-file operation
+/// leaves nothing behind.
+Future<T> discardOnCancel<T>(
+  List<File> written,
+  Future<T> Function() body,
+) async {
+  try {
+    return await body();
+  } on CancelledFailure {
+    for (final file in written) {
+      try {
+        if (await file.exists()) await file.delete();
+      } on FileSystemException {
+        // Best effort.
+      }
+    }
+    rethrow;
+  }
+}
+
+/// Asks whether the [existing] files may be replaced. Resolves to `false` to
+/// abort.
+typedef OverwriteConfirmation = Future<bool> Function(List<File> existing);
+
+/// For operations that write several files whose names are only known once
+/// the work starts: checks which of [planned] already exist and, if any do,
+/// asks [confirm]. Throws [CancelledFailure] when the user declines, before
+/// anything has been written.
+Future<void> confirmOverwrites(
+  List<File> planned,
+  OverwriteConfirmation? confirm,
+) async {
+  if (confirm == null) return;
+
+  final existing = [
+    for (final file in planned)
+      if (await file.exists()) file,
+  ];
+
+  if (existing.isNotEmpty && !await confirm(existing)) {
+    throw const CancelledFailure();
+  }
+}

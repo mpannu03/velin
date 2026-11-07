@@ -311,15 +311,16 @@ void main() {
         ),
       ).thenAnswer((invocation) async {
         final operation =
-            invocation.namedArguments[#operation] as Future<void> Function();
+            invocation.namedArguments[#operation] as TaskOperation;
 
-        await operation();
+        await operation(TaskContext.detached());
       });
 
       when(
         () => compressPdfEngine.compress(
           input: any(named: 'input'),
           outputFile: any(named: 'outputFile'),
+          context: any(named: 'context'),
         ),
       ).thenAnswer((invocation) async {
         return Future.value(File('/documents/output/compressed.pdf'));
@@ -331,6 +332,7 @@ void main() {
         () => compressPdfEngine.compress(
           input: captureAny(named: 'input'),
           outputFile: captureAny(named: 'outputFile'),
+          context: any(named: 'context'),
         ),
       ).captured;
 
@@ -367,15 +369,16 @@ void main() {
         ),
       ).thenAnswer((invocation) async {
         final operation =
-            invocation.namedArguments[#operation] as Future<void> Function();
+            invocation.namedArguments[#operation] as TaskOperation;
 
-        await operation();
+        await operation(TaskContext.detached());
       });
 
       when(
         () => compressPdfEngine.compress(
           input: any(named: 'input'),
           outputFile: any(named: 'outputFile'),
+          context: any(named: 'context'),
         ),
       ).thenAnswer((_) async {
         return File('/documents/output/compressed.pdf');
@@ -411,15 +414,16 @@ void main() {
         ),
       ).thenAnswer((invocation) async {
         final operation =
-            invocation.namedArguments[#operation] as Future<void> Function();
+            invocation.namedArguments[#operation] as TaskOperation;
 
-        await operation();
+        await operation(TaskContext.detached());
       });
 
       when(
         () => compressPdfEngine.compress(
           input: any(named: 'input'),
           outputFile: any(named: 'outputFile'),
+          context: any(named: 'context'),
         ),
       ).thenThrow(const PasswordRequiredFailure());
 
@@ -453,15 +457,16 @@ void main() {
         ),
       ).thenAnswer((invocation) async {
         final operation =
-            invocation.namedArguments[#operation] as Future<void> Function();
+            invocation.namedArguments[#operation] as TaskOperation;
 
-        await operation();
+        await operation(TaskContext.detached());
       });
 
       when(
         () => compressPdfEngine.compress(
           input: any(named: 'input'),
           outputFile: any(named: 'outputFile'),
+          context: any(named: 'context'),
         ),
       ).thenThrow(const OutputSameAsInputFailure());
 
@@ -495,15 +500,16 @@ void main() {
         ),
       ).thenAnswer((invocation) async {
         final operation =
-            invocation.namedArguments[#operation] as Future<void> Function();
+            invocation.namedArguments[#operation] as TaskOperation;
 
-        await operation();
+        await operation(TaskContext.detached());
       });
 
       when(
         () => compressPdfEngine.compress(
           input: any(named: 'input'),
           outputFile: any(named: 'outputFile'),
+          context: any(named: 'context'),
         ),
       ).thenThrow(Exception('compression failed'));
 
@@ -537,15 +543,16 @@ void main() {
         ),
       ).thenAnswer((invocation) async {
         final operation =
-            invocation.namedArguments[#operation] as Future<void> Function();
+            invocation.namedArguments[#operation] as TaskOperation;
 
-        await operation();
+        await operation(TaskContext.detached());
       });
 
       when(
         () => compressPdfEngine.compress(
           input: any(named: 'input'),
           outputFile: any(named: 'outputFile'),
+          context: any(named: 'context'),
         ),
       ).thenAnswer((_) async {
         return File('/documents/output/compressed.pdf');

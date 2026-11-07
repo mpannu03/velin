@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 
 class ExtractPdfViewModel {
   const ExtractPdfViewModel({
@@ -7,6 +8,7 @@ class ExtractPdfViewModel {
     required this.outputFileName,
     required this.outputDirectory,
     required this.isSubmitting,
+    this.task,
     required this.canExtract,
     required this.onPickFile,
     required this.onSelectionChanged,
@@ -22,6 +24,10 @@ class ExtractPdfViewModel {
   final String? outputDirectory;
 
   final bool isSubmitting;
+
+  /// Progress and cancellation of the running task.
+
+  final ToolTaskHandle? task;
   final bool canExtract;
 
   final VoidCallback onPickFile;

@@ -68,10 +68,9 @@ void main() {
         operation: any(named: 'operation'),
       ),
     ).thenAnswer((invocation) async {
-      final operation =
-          invocation.namedArguments[#operation] as Future<void> Function();
+      final operation = invocation.namedArguments[#operation] as TaskOperation;
 
-      await operation();
+      await operation(TaskContext.detached());
     });
   }
 
@@ -302,6 +301,7 @@ void main() {
             outputFile: any(named: 'outputFile'),
             degrees: any(named: 'degrees'),
             selection: any(named: 'selection'),
+            context: any(named: 'context'),
           ),
         );
       },
@@ -400,6 +400,7 @@ void main() {
             outputFile: any(named: 'outputFile'),
             degrees: any(named: 'degrees'),
             selection: any(named: 'selection'),
+            context: any(named: 'context'),
           ),
         );
       },
@@ -416,6 +417,7 @@ void main() {
             outputFile: any(named: 'outputFile'),
             degrees: any(named: 'degrees'),
             selection: any(named: 'selection'),
+            context: any(named: 'context'),
           ),
         ).thenAnswer((_) async {
           return File('output/rotated.pdf');
@@ -453,6 +455,7 @@ void main() {
             outputFile: captureAny(named: 'outputFile'),
             degrees: captureAny(named: 'degrees'),
             selection: captureAny(named: 'selection'),
+            context: any(named: 'context'),
           ),
         ).captured;
 
@@ -487,6 +490,7 @@ void main() {
             outputFile: any(named: 'outputFile'),
             degrees: any(named: 'degrees'),
             selection: any(named: 'selection'),
+            context: any(named: 'context'),
           ),
         ).thenAnswer((_) async {
           return File('output/rotated.pdf');
@@ -530,6 +534,7 @@ void main() {
             outputFile: captureAny(named: 'outputFile'),
             degrees: captureAny(named: 'degrees'),
             selection: captureAny(named: 'selection'),
+            context: any(named: 'context'),
           ),
         ).captured;
 
@@ -559,6 +564,7 @@ void main() {
             outputFile: any(named: 'outputFile'),
             degrees: any(named: 'degrees'),
             selection: any(named: 'selection'),
+            context: any(named: 'context'),
           ),
         ).thenAnswer((_) async {
           return File('output/rotated.pdf');
@@ -579,6 +585,7 @@ void main() {
             outputFile: captureAny(named: 'outputFile'),
             degrees: captureAny(named: 'degrees'),
             selection: captureAny(named: 'selection'),
+            context: any(named: 'context'),
           ),
         ).captured;
 
@@ -600,6 +607,7 @@ void main() {
             outputFile: any(named: 'outputFile'),
             degrees: any(named: 'degrees'),
             selection: any(named: 'selection'),
+            context: any(named: 'context'),
           ),
         ).thenThrow(Exception('rotation failed'));
 
@@ -688,6 +696,7 @@ void main() {
             outputFile: any(named: 'outputFile'),
             degrees: any(named: 'degrees'),
             selection: any(named: 'selection'),
+            context: any(named: 'context'),
           ),
         );
       },

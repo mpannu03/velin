@@ -1154,4 +1154,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toolsOverwriteConfirm => 'Replace';
+
+  @override
+  String get toolsTaskCancelled => 'Cancelled. Nothing was saved.';
+
+  @override
+  String get toolsTaskQueued => 'Waiting for another task to finish…';
+
+  @override
+  String get toolsTaskCancelling => 'Cancelling…';
+
+  @override
+  String toolsTaskProgress(int percent) {
+    return '$percent% done';
+  }
+
+  @override
+  String toolsOverwriteManyMessage(int count) {
+    return '$count files with the same names already exist in this folder. Replacing them will overwrite their contents.';
+  }
 }

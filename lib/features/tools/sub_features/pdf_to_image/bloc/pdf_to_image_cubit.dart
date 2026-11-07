@@ -140,10 +140,12 @@ class PdfToImageCubit extends Cubit<PdfToImageState>
 
     await runToolTask(
       taskName: 'pdf-to-image',
-      operation: () async {
+      operation: (context) async {
         final files = await _pdfToImageEngine.convert(
           input: engineInput,
           outputDirectory: outputDirectory,
+          context: context,
+          confirmOverwrite: confirmOverwriteMany,
         );
 
         fileCount = files.length;

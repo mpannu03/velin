@@ -252,7 +252,10 @@ class AddWatermarkCubit extends Cubit<AddWatermarkState>
 
     await runToolTask(
       taskName: 'add-watermark',
-      operation: () => _addWatermarkEngine.addWatermark(input: engineInput),
+      operation: (context) => _addWatermarkEngine.addWatermark(
+        input: engineInput,
+        context: context,
+      ),
       successMessage: () =>
           (l10n) => l10n.toolsWatermarkSuccess,
       failureMessage: (l10n) => l10n.toolsWatermarkFailed,

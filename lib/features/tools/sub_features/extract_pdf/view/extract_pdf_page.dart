@@ -40,6 +40,7 @@ class _ExtractPdfPageContent extends StatelessWidget {
       outputFileName: state.outputFileName,
       outputDirectory: state.outputDirectory,
       isSubmitting: state.isSubmitting,
+      task: cubit.task,
       canExtract: state.canExtract,
       onPickFile: cubit.pickFile,
       onSelectionChanged: cubit.updateSelection,

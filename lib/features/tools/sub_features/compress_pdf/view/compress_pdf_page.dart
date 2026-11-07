@@ -40,6 +40,7 @@ class _CompressPdfPageContent extends StatelessWidget {
       outputDirectory: state.outputDirectory,
       quality: state.quality,
       isSubmitting: state.isSubmitting,
+      task: cubit.task,
       canCompress: state.canCompress,
       onPickFile: cubit.pickFile,
       onQualityChanged: cubit.changeQuality,

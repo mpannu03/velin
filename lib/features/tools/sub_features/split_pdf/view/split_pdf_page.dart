@@ -37,6 +37,7 @@ class _SplitPdfPageContent extends StatelessWidget {
       pageCount: state.pageCount,
       outputDirectory: state.outputDirectory,
       isSubmitting: state.isSubmitting,
+      task: cubit.task,
       canSplit: state.canSplit,
       onPickFile: cubit.pickFile,
       onModeChanged: cubit.changeMode,

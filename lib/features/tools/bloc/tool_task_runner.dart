@@ -9,6 +9,10 @@ import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/shared/extensions/app_failure_ext.dart';
 
+import 'tool_task_handle.dart';
+
+export 'tool_task_handle.dart';
+
 /// Shared plumbing for the PDF tool cubits: file pickers, running the
 /// operation as a background task, and telling the user how it went.
 ///
@@ -18,6 +22,20 @@ mixin ToolTaskRunner<S> on Cubit<S> {
   DocumentFilePicker get filePicker;
   TaskManager get taskManager;
   AppEffectController get appEffectController;
+
+  /// Status, progress and cancellation of the tool's current task, for the
+  /// action bar.
+  final ToolTaskHandle task = ToolTaskHandle();
+
+  @override
+  Future<void> close() {
+    // If the page closes mid-task, stop the work rather than finishing a
+    // result nobody is waiting for.
+    task
+      ..cancel()
+      ..dispose();
+    return super.close();
+  }
 
   /// Picks one file. Returns `null` when cancelled or when the picker failed
   /// (the failure has already been reported).
@@ -84,6 +102,21 @@ mixin ToolTaskRunner<S> on Cubit<S> {
     );
   }
 
+  /// For tools that write several files: asks once before replacing the
+  /// [existing] ones. Pass as the engine's `confirmOverwrite` callback.
+  Future<bool> confirmOverwriteMany(List<File> existing) {
+    if (existing.length == 1) return confirmOverwrite(existing.single);
+
+    final count = existing.length;
+
+    return appEffectController.confirm(
+      title: (l10n) => l10n.toolsOverwriteTitle,
+      message: (l10n) => l10n.toolsOverwriteManyMessage(count),
+      confirmLabel: (l10n) => l10n.toolsOverwriteConfirm,
+      isDestructive: true,
+    );
+  }
+
   /// Runs [operation] through the [TaskManager] and reports the outcome.
   ///
   /// * On success, shows [successMessage] (resolved after the operation, so
@@ -92,22 +125,44 @@ mixin ToolTaskRunner<S> on Cubit<S> {
   ///   a known failure; otherwise the failure's own message is shown, or
   ///   [failureMessage] if the failure is unexpected.
   ///
+  /// * When the user cancels (through [task]), shows a short notice.
+  ///
+  /// [operation] receives a [TaskContext]; pass it to the engine so it can
+  /// report progress and stop when cancelled. Progress and cancellation are
+  /// exposed to the UI through [task].
+  ///
   /// Returns whether the operation succeeded. Never throws.
   Future<bool> runToolTask({
     required String taskName,
-    required Future<void> Function() operation,
+    required TaskOperation operation,
     required LocalizedMessage Function() successMessage,
     required LocalizedMessage failureMessage,
     LocalizedMessage? Function(AppFailure failure)? describeFailure,
   }) async {
+    final id = '$taskName-${DateTime.now().microsecondsSinceEpoch}';
+
+    task.queued(cancel: () => taskManager.cancel(id));
+
     try {
       await taskManager.submit(
-        id: '$taskName-${DateTime.now().microsecondsSinceEpoch}',
+        id: id,
         title: taskName,
-        operation: operation,
+        operation: (context) {
+          task.running();
+          return operation(context.observedBy(task.running));
+        },
       );
     } catch (error, stackTrace) {
       final failure = mapError(error, stackTrace);
+
+      if (failure.isCancellation) {
+        appEffectController.notifyUser(
+          message: (l10n) => l10n.toolsTaskCancelled,
+          type: NotificationType.info,
+        );
+        return false;
+      }
+
       final custom = describeFailure?.call(failure);
 
       if (custom != null) {
@@ -117,6 +172,8 @@ mixin ToolTaskRunner<S> on Cubit<S> {
       }
 
       return false;
+    } finally {
+      if (!isClosed) task.finished();
     }
 
     appEffectController.notifyUser(

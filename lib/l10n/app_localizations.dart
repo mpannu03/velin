@@ -2169,6 +2169,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Replace'**
   String get toolsOverwriteConfirm;
+
+  /// Shown after the user cancels a running tool.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled. Nothing was saved.'**
+  String get toolsTaskCancelled;
+
+  /// Shown on a tool's action bar while its task waits in the queue.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for another task to finish…'**
+  String get toolsTaskQueued;
+
+  /// Shown on a tool's action bar after the user pressed Cancel, until the task stops.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelling…'**
+  String get toolsTaskCancelling;
+
+  /// Progress of a running tool.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% done'**
+  String toolsTaskProgress(int percent);
+
+  /// Body of the dialog shown when several of a tool's output files already exist.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} files with the same names already exist in this folder. Replacing them will overwrite their contents.'**
+  String toolsOverwriteManyMessage(int count);
 }
 
 class _AppLocalizationsDelegate

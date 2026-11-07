@@ -46,6 +46,7 @@ class ImageToPdfDesktopLayout extends StatelessWidget {
             const SizedBox(height: AppSpacing.xl),
             ToolActionBar(
               isSubmitting: viewModel.isSubmitting,
+              task: viewModel.task,
               submittingText: l10n.toolsImageToPdfSubmitting,
               canAction: viewModel.canConvert,
               icon: Icons.picture_as_pdf_outlined,

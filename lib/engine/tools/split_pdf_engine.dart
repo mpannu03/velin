@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:path/path.dart' as p;
 import 'package:pdfrx_engine/pdfrx_engine.dart';
 import 'package:velin/core/error/error.dart';
 import 'package:velin/core/file/safe_file_writer.dart';
 import 'package:velin/core/page_selection/page_selection_error.dart';
+import 'package:velin/core/task/task_context.dart';
 
 import 'split_pdf_input.dart';
 
@@ -13,6 +15,8 @@ class SplitPdfEngine {
   Future<List<File>> split({
     required SplitPdfInput input,
     required Directory outputDirectory,
+    TaskContext? context,
+    OverwriteConfirmation? confirmOverwrite,
   }) async {
     PdfDocument? sourceDocument;
 
@@ -36,38 +40,57 @@ class SplitPdfEngine {
 
       await outputDirectory.create(recursive: true);
 
+      final source = sourceDocument;
       final outputFiles = <File>[];
 
-      for (var index = 0; index < pageGroups.length; index++) {
-        final pages = pageGroups[index];
+      final planned = [
+        for (final (index, pages) in pageGroups.indexed)
+          File(
+            p.join(outputDirectory.path, _buildFileName(input, pages, index)),
+          ),
+      ];
 
-        final outputFile = File(
-          '${outputDirectory.path}'
-          '${Platform.pathSeparator}'
-          '${_buildFileName(input, pages, index)}',
-        );
+      await confirmOverwrites(planned, confirmOverwrite);
 
-        final outputDocument = await PdfDocument.createNew(
-          sourceName: outputFile.path,
-        );
+      // Cancelling removes the files already written, so the folder is left
+      // as it was.
+      return await discardOnCancel(outputFiles, () async {
+        for (final (index, pages) in pageGroups.indexed) {
+          context?.throwIfCancelled();
+          context?.reportProgress(index, pageGroups.length);
 
-        try {
-          outputDocument.pages = [
-            for (final pageNumber in pages)
-              sourceDocument.pages[pageNumber - 1],
-          ];
-
-          final data = await outputDocument.encodePdf();
-
-          outputFiles.add(await writeBytesAtomically(outputFile, data));
-        } finally {
-          await outputDocument.dispose();
+          outputFiles.add(await _writeGroup(source, pages, planned[index]));
         }
-      }
 
-      return outputFiles;
+        context?.reportProgress(pageGroups.length, pageGroups.length);
+
+        return outputFiles;
+      });
     } finally {
       await sourceDocument?.dispose();
+    }
+  }
+
+  Future<File> _writeGroup(
+    PdfDocument source,
+    List<int> pages,
+    File outputFile,
+  ) async {
+    final outputDocument = await PdfDocument.createNew(
+      sourceName: outputFile.path,
+    );
+
+    try {
+      outputDocument.pages = [
+        for (final pageNumber in pages) source.pages[pageNumber - 1],
+      ];
+
+      return await writeBytesAtomically(
+        outputFile,
+        await outputDocument.encodePdf(),
+      );
+    } finally {
+      await outputDocument.dispose();
     }
   }
 

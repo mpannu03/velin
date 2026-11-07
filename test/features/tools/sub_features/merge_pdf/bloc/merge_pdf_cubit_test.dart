@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
@@ -10,6 +11,7 @@ import 'package:velin/core/file/file_picker.dart';
 import 'package:velin/core/result/result.dart';
 import 'package:velin/core/task/task.dart';
 import 'package:velin/engine/engine.dart';
+import 'package:velin/features/tools/bloc/tool_task_runner.dart';
 import 'package:velin/features/tools/sub_features/merge_pdf/bloc/bloc.dart';
 import 'package:velin/l10n/app_localizations.dart';
 import 'package:velin/shared/utils/utils.dart';
@@ -62,6 +64,80 @@ void main() {
       appEffectController: effectController,
     );
   }
+
+  group('cancellation', () {
+    const readyState = MergePdfState(
+      inputs: [MergePdfToolInput(filePath: '/docs/one.pdf')],
+      outputDirectory: '/output',
+      outputFileName: 'merged.pdf',
+    );
+
+    blocTest<MergePdfCubit, MergePdfState>(
+      'shows a cancelled notice, not an error, when the task is cancelled',
+      build: () {
+        when(
+          () => taskManager.submit(
+            id: any(named: 'id'),
+            title: any(named: 'title'),
+            operation: any(named: 'operation'),
+          ),
+        ).thenThrow(const CancelledFailure());
+
+        return buildCubit();
+      },
+      seed: () => readyState,
+      act: (cubit) => cubit.merge(),
+      expect: () => [
+        readyState.copyWith(isSubmitting: true),
+        readyState.copyWith(isSubmitting: false),
+      ],
+      verify: (cubit) {
+        verify(
+          () => effectController.notifyUser(
+            message: any(
+              named: 'message',
+              that: localizes(l10n.toolsTaskCancelled),
+            ),
+            type: NotificationType.info,
+          ),
+        ).called(1);
+        verifyNever(
+          () => effectController.notifyUser(
+            message: any(named: 'message'),
+            type: NotificationType.error,
+          ),
+        );
+        expect(cubit.task.status.value, ToolTaskStatus.idle);
+      },
+    );
+
+    test('closing the cubit cancels the running task', () async {
+      final release = Completer<void>();
+
+      when(
+        () => taskManager.submit(
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          operation: any(named: 'operation'),
+        ),
+      ).thenAnswer((_) => release.future);
+      when(() => taskManager.cancel(any())).thenReturn(null);
+
+      final cubit = buildCubit()..emit(readyState);
+
+      unawaited(cubit.merge());
+      await pumpEventQueue();
+
+      expect(cubit.task.status.value.phase, ToolTaskPhase.queued);
+
+      await cubit.close();
+
+      verify(() => taskManager.cancel(any(that: startsWith('merge-pdf-'))))
+          .called(1);
+
+      release.complete();
+    });
+  });
 
   group('overwrite confirmation', () {
     late Directory tempDir;
@@ -156,10 +232,9 @@ void main() {
         operation: any(named: 'operation'),
       ),
     ).thenAnswer((invocation) async {
-      final operation =
-          invocation.namedArguments[#operation] as Future<void> Function();
+      final operation = invocation.namedArguments[#operation] as TaskOperation;
 
-      await operation();
+      await operation(TaskContext.detached());
     });
   }
 
@@ -557,6 +632,7 @@ void main() {
           () => mergePdfEngine.merge(
             inputs: any(named: 'inputs'),
             outputFile: any(named: 'outputFile'),
+            context: any(named: 'context'),
           ),
         ).thenAnswer((_) async {
           return File('/output/result.pdf');
@@ -607,6 +683,7 @@ void main() {
           () => mergePdfEngine.merge(
             inputs: captureAny(named: 'inputs'),
             outputFile: captureAny(named: 'outputFile'),
+            context: any(named: 'context'),
           ),
         ).captured;
 
@@ -647,15 +724,16 @@ void main() {
           ),
         ).thenAnswer((invocation) async {
           final operation =
-              invocation.namedArguments[#operation] as Future<void> Function();
+              invocation.namedArguments[#operation] as TaskOperation;
 
-          await operation();
+          await operation(TaskContext.detached());
         });
 
         when(
           () => mergePdfEngine.merge(
             inputs: any(named: 'inputs'),
             outputFile: any(named: 'outputFile'),
+            context: any(named: 'context'),
           ),
         ).thenThrow(Exception('merge failed'));
 
