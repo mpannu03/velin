@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:pdf_cos/pdf_cos.dart';
 import 'package:velin/core/error/error.dart';
+import 'package:velin/core/file/safe_file_writer.dart';
+import 'package:velin/engine/isolate/run_in_background.dart';
 
 class CompressPdfInput {
   const CompressPdfInput({required this.file, this.compressionLevel = 75})
@@ -28,28 +31,36 @@ class CompressPdfEngine {
       );
     }
 
-    if (input.file.absolute.path == outputFile.absolute.path) {
-      throw const OutputSameAsInputFailure();
-    }
+    ensureOutputDiffersFromInputs(outputFile, [input.file]);
 
-    final sourceBytes = await input.file.readAsBytes();
-
-    final document = CosDocument.open(sourceBytes);
-
-    if (document.isEncrypted) {
-      throw const PasswordRequiredFailure();
-    }
-
+    final inputPath = input.file.path;
     final deflateLevel = (level * 9 / 100).round();
 
-    final result = CosCompactor(document, deflateLevel: deflateLevel).run();
+    // Parsing and re-compressing every stream is pure Dart CPU work that
+    // scales with file size; on the UI isolate it would freeze the window.
+    final outputBytes = await runInBackground(_compressFile, (
+      inputPath,
+      deflateLevel,
+    ));
 
-    final outputBytes = result.bytes.length < sourceBytes.length
-        ? result.bytes
-        : sourceBytes;
-
-    await outputFile.writeAsBytes(outputBytes, flush: true);
-
-    return outputFile;
+    return writeBytesAtomically(outputFile, outputBytes);
   }
+}
+
+/// Runs on a background isolate: top-level so it captures nothing.
+Uint8List _compressFile((String, int) job) {
+  final (inputPath, deflateLevel) = job;
+
+  final sourceBytes = File(inputPath).readAsBytesSync();
+
+  final document = CosDocument.open(sourceBytes);
+
+  if (document.isEncrypted) {
+    throw const PasswordRequiredFailure();
+  }
+
+  final result = CosCompactor(document, deflateLevel: deflateLevel).run();
+
+  // Never make the file bigger.
+  return result.bytes.length < sourceBytes.length ? result.bytes : sourceBytes;
 }

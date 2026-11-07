@@ -1,9 +1,13 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:image/image.dart' as img;
+import 'package:path/path.dart' as p;
 import 'package:pdfrx_engine/pdfrx_engine.dart';
 import 'package:velin/core/error/error.dart';
+import 'package:velin/core/file/safe_file_writer.dart';
 import 'package:velin/core/page_selection/page_selection_error.dart';
+import 'package:velin/engine/isolate/run_in_background.dart';
 
 import 'pdf_to_image_input.dart';
 
@@ -79,27 +83,34 @@ class PdfToImageEngine {
           throw StateError('Failed to render page $pageNumber.');
         }
 
+        final Uint8List bytes;
+
         try {
-          var image = rendered.createImageNF();
-
-          if (input.colorMode == PdfImageColorMode.grayscale) {
-            image = img.grayscale(image);
-          }
-
-          final bytes = _encodeImage(image, input);
-
-          final outputFile = File(
-            '${outputDirectory.path}'
-            '${Platform.pathSeparator}'
-            '${baseName}_page_$pageNumber.'
-            '${input.format.extension}',
+          final job = _EncodeJob(
+            pixels: rendered.pixels,
+            width: rendered.width,
+            height: rendered.height,
+            format: input.format,
+            quality: input.quality,
+            grayscale: input.colorMode == PdfImageColorMode.grayscale,
           );
 
-          await outputFile.writeAsBytes(bytes);
-          outputFiles.add(outputFile);
+          // Encoding a 300–600 DPI page takes seconds; on the UI isolate it
+          // would freeze the window. Rendering stays here because pdfium
+          // handles cannot leave this isolate.
+          bytes = await runInBackground(_encodePage, job);
         } finally {
           rendered.dispose();
         }
+
+        final outputFile = File(
+          p.join(
+            outputDirectory.path,
+            '${baseName}_page_$pageNumber.${input.format.extension}',
+          ),
+        );
+
+        outputFiles.add(await writeBytesAtomically(outputFile, bytes));
       }
 
       return outputFiles;
@@ -108,22 +119,55 @@ class PdfToImageEngine {
     }
   }
 
-  List<int> _encodeImage(img.Image image, PdfToImageInput input) {
-    return switch (input.format) {
-      PdfImageFormat.png => img.encodePng(image),
-      PdfImageFormat.jpeg => img.encodeJpg(image, quality: input.quality),
-      PdfImageFormat.webp => img.encodeWebP(
-        image,
-        lossless: false,
-        quality: input.quality,
-      ),
-    };
-  }
-
   String _baseName(File file) {
     final name = file.uri.pathSegments.last;
     final extensionIndex = name.lastIndexOf('.');
 
     return extensionIndex > 0 ? name.substring(0, extensionIndex) : name;
   }
+}
+
+class _EncodeJob {
+  const _EncodeJob({
+    required this.pixels,
+    required this.width,
+    required this.height,
+    required this.format,
+    required this.quality,
+    required this.grayscale,
+  });
+
+  /// BGRA pixels as produced by pdfium.
+  final Uint8List pixels;
+  final int width;
+  final int height;
+  final PdfImageFormat format;
+  final int quality;
+  final bool grayscale;
+}
+
+/// Runs on a background isolate: top-level so it captures nothing.
+Uint8List _encodePage(_EncodeJob job) {
+  var image = img.Image.fromBytes(
+    width: job.width,
+    height: job.height,
+    bytes: job.pixels.buffer,
+    bytesOffset: job.pixels.offsetInBytes,
+    numChannels: 4,
+    order: img.ChannelOrder.bgra,
+  );
+
+  if (job.grayscale) {
+    image = img.grayscale(image);
+  }
+
+  return switch (job.format) {
+    PdfImageFormat.png => img.encodePng(image),
+    PdfImageFormat.jpeg => img.encodeJpg(image, quality: job.quality),
+    PdfImageFormat.webp => img.encodeWebP(
+      image,
+      lossless: false,
+      quality: job.quality,
+    ),
+  };
 }

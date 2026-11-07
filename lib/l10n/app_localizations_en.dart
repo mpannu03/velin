@@ -1143,4 +1143,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorUnexpected => 'Something went wrong. Please try again.';
+
+  @override
+  String get toolsOverwriteTitle => 'Replace existing file?';
+
+  @override
+  String toolsOverwriteMessage(String fileName) {
+    return '\"$fileName\" already exists in this folder. Replacing it will overwrite its contents.';
+  }
+
+  @override
+  String get toolsOverwriteConfirm => 'Replace';
 }

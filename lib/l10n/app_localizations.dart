@@ -2151,6 +2151,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong. Please try again.'**
   String get errorUnexpected;
+
+  /// Title of the dialog shown when a tool's output file already exists.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace existing file?'**
+  String get toolsOverwriteTitle;
+
+  /// Body of the dialog shown when a tool's output file already exists.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{fileName}\" already exists in this folder. Replacing it will overwrite its contents.'**
+  String toolsOverwriteMessage(String fileName);
+
+  /// Confirm button that replaces an existing output file.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get toolsOverwriteConfirm;
 }
 
 class _AppLocalizationsDelegate

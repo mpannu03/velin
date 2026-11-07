@@ -21,6 +21,7 @@ class VelinApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       builder: (context, child) => AppEffectListener(
         controller: getIt<AppEffectController>(),
+        navigatorKey: AppRouter.rootNavigatorKey,
         child: child ?? const SizedBox.shrink(),
       ),
     );

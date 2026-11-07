@@ -150,6 +150,10 @@ class ImageToPdfCubit extends Cubit<ImageToPdfState>
       joinOutputPath(state.outputDirectory!, state.outputFileName),
     );
 
+    if (!await confirmOverwrite(outputFile) || isClosed) {
+      return;
+    }
+
     emit(state.copyWith(isSubmitting: true));
 
     await runToolTask(

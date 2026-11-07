@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:pdfrx_engine/pdfrx_engine.dart';
 import 'package:velin/core/error/error.dart';
+import 'package:velin/core/file/safe_file_writer.dart';
 import 'package:velin/core/page_selection/page_selection_error.dart';
 
 import 'split_pdf_input.dart';
@@ -58,9 +59,7 @@ class SplitPdfEngine {
 
           final data = await outputDocument.encodePdf();
 
-          await outputFile.writeAsBytes(data);
-
-          outputFiles.add(outputFile);
+          outputFiles.add(await writeBytesAtomically(outputFile, data));
         } finally {
           await outputDocument.dispose();
         }

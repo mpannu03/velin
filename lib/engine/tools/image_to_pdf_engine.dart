@@ -1,8 +1,11 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:image/image.dart' as img;
 import 'package:pdfrx_engine/pdfrx_engine.dart';
 import 'package:velin/core/error/error.dart';
+import 'package:velin/core/file/safe_file_writer.dart';
+import 'package:velin/engine/isolate/run_in_background.dart';
 
 import 'image_to_pdf_input.dart';
 
@@ -52,22 +55,21 @@ class ImageToPdfEngine {
       final pages = <PdfPage>[];
 
       for (final imageFile in input.images) {
-        final bytes = await imageFile.readAsBytes();
+        final path = imageFile.path;
 
-        final decoded = img.decodeImage(bytes);
+        // Decoding and re-encoding a photo takes long enough to freeze the
+        // window, so it runs on a background isolate. One image at a time
+        // keeps peak memory to a single decoded image.
+        final jpeg = await runInBackground(_decodeToJpeg, path);
 
-        if (decoded == null) {
-          throw InvalidImageFailure(path: imageFile.path);
+        if (jpeg == null) {
+          throw InvalidImageFailure(path: path);
         }
 
-        final image = _prepareImage(decoded);
-
-        final pageSize = _resolvePageSize(image, input);
-
-        final jpegData = img.encodeJpg(image, quality: 95);
+        final pageSize = _resolvePageSize(jpeg.width, jpeg.height, input);
 
         final imageDocument = await PdfDocument.createFromJpegData(
-          jpegData,
+          jpeg.bytes,
           width: pageSize.width,
           height: pageSize.height,
           sourceName: imageFile.path,
@@ -82,10 +84,7 @@ class ImageToPdfEngine {
 
       final data = await outputDocument.encodePdf();
 
-      await outputFile.parent.create(recursive: true);
-      await outputFile.writeAsBytes(data);
-
-      return outputFile;
+      return await writeBytesAtomically(outputFile, data);
     } finally {
       for (final document in sourceDocuments) {
         await document.dispose();
@@ -95,25 +94,15 @@ class ImageToPdfEngine {
     }
   }
 
-  img.Image _prepareImage(img.Image image) {
-    if (!image.hasAlpha) {
-      return image;
-    }
-
-    final background = img.Image(width: image.width, height: image.height);
-
-    img.fill(background, color: img.ColorRgb8(255, 255, 255));
-
-    img.compositeImage(background, image);
-
-    return background;
-  }
-
-  _PageSize _resolvePageSize(img.Image image, ImageToPdfInput input) {
+  _PageSize _resolvePageSize(
+    int imageWidth,
+    int imageHeight,
+    ImageToPdfInput input,
+  ) {
     if (input.pageSize == ImageToPdfPageSize.auto) {
       return _PageSize(
-        width: _pixelsToPoints(image.width, input.dpi),
-        height: _pixelsToPoints(image.height, input.dpi),
+        width: _pixelsToPoints(imageWidth, input.dpi),
+        height: _pixelsToPoints(imageHeight, input.dpi),
       );
     }
 
@@ -126,7 +115,7 @@ class ImageToPdfEngine {
     final isPortrait = switch (input.orientation) {
       ImageToPdfOrientation.portrait => true,
       ImageToPdfOrientation.landscape => false,
-      ImageToPdfOrientation.auto => image.width <= image.height,
+      ImageToPdfOrientation.auto => imageWidth <= imageHeight,
     };
 
     return isPortrait
@@ -154,4 +143,34 @@ class _PageSize {
 
   final double width;
   final double height;
+}
+
+class _Jpeg {
+  const _Jpeg(this.bytes, this.width, this.height);
+
+  final Uint8List bytes;
+  final int width;
+  final int height;
+}
+
+/// Runs on a background isolate: top-level so it captures nothing.
+///
+/// Decodes any supported image, flattens transparency onto white (JPEG has
+/// no alpha) and re-encodes it as JPEG. Returns `null` when the file is not
+/// a decodable image.
+_Jpeg? _decodeToJpeg(String path) {
+  final decoded = img.decodeImage(File(path).readAsBytesSync());
+
+  if (decoded == null) return null;
+
+  var image = decoded;
+
+  if (image.hasAlpha) {
+    final background = img.Image(width: image.width, height: image.height);
+    img.fill(background, color: img.ColorRgb8(255, 255, 255));
+    img.compositeImage(background, image);
+    image = background;
+  }
+
+  return _Jpeg(img.encodeJpg(image, quality: 95), image.width, image.height);
 }

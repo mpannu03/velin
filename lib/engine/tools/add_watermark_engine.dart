@@ -6,7 +6,9 @@ import 'package:image/image.dart' as img;
 import 'package:pdf_manipulator/io.dart';
 import 'package:pdf_manipulator/pdf_manipulator.dart';
 import 'package:velin/core/error/error.dart';
+import 'package:velin/core/file/safe_file_writer.dart';
 import 'package:velin/core/page_selection/page_selection.dart';
+import 'package:velin/engine/isolate/run_in_background.dart';
 
 import 'add_watermark_input.dart';
 
@@ -18,33 +20,32 @@ class AddWatermarkEngine {
   Future<File> addWatermark({required AddWatermarkInput input}) async {
     _validate(input);
 
-    final source = FileSource(input.file);
-    final output = await FileSink.create(input.outputFile);
+    return writeAtomically(input.outputFile, (temporary) async {
+      final source = FileSource(input.file);
+      final output = await FileSink.create(temporary);
 
-    PdfEditor? editor;
+      PdfEditor? editor;
 
-    try {
-      editor = await _pdf.edit(source);
+      try {
+        editor = await _pdf.edit(source);
 
-      final pageCount = await editor.pageCount;
-      final pages = _resolvePages(input.selection, pageCount);
+        final pageCount = await editor.pageCount;
+        final pages = _resolvePages(input.selection, pageCount);
 
-      switch (input.type) {
-        case WatermarkType.text:
-          await _addTextWatermark(editor, input, pages);
+        switch (input.type) {
+          case WatermarkType.text:
+            await _addTextWatermark(editor, input, pages);
 
-        case WatermarkType.image:
-          await _addImageWatermark(editor, input, pages);
+          case WatermarkType.image:
+            await _addImageWatermark(editor, input, pages);
+        }
+
+        await editor.save(output);
+      } finally {
+        await editor?.dispose();
+        await output.close();
       }
-
-      await editor.save(output);
-
-      return input.outputFile;
-    } finally {
-      await editor?.dispose();
-      await output.close();
-      // await _pdf.dispose();
-    }
+    });
   }
 
   Future<void> _addTextWatermark(
@@ -78,21 +79,21 @@ class AddWatermarkEngine {
     AddWatermarkInput input,
     List<int> pages,
   ) async {
-    final imageFile = input.imageFile!;
+    final imagePath = input.imageFile!.path;
+    final rotation = input.rotation;
 
-    final originalBytes = await imageFile.readAsBytes();
+    // Decoding, rotating and re-encoding a large image takes long enough to
+    // freeze the window, so it runs on a background isolate.
+    final prepared = await runInBackground(_prepareWatermarkImage, (
+      imagePath,
+      rotation,
+    ));
 
-    final decoded = img.decodeImage(originalBytes);
-
-    if (decoded == null) {
-      throw InvalidImageFailure(path: imageFile.path);
+    if (prepared == null) {
+      throw InvalidImageFailure(path: imagePath);
     }
 
-    final rotated = _rotateImage(decoded, input.rotation);
-
-    final encodedBytes = Uint8List.fromList(img.encodePng(rotated));
-
-    final imageSource = MemorySource(encodedBytes);
+    final imageSource = MemorySource(prepared.pngBytes);
 
     for (final page in pages) {
       final mediaBox = await editor.pageMediaBox(page);
@@ -102,7 +103,7 @@ class AddWatermarkEngine {
 
       final width = pageWidth * (input.imageWidthPercent / 100);
 
-      final aspectRatio = rotated.height / rotated.width;
+      final aspectRatio = prepared.height / prepared.width;
 
       final height = width * aspectRatio;
 
@@ -222,16 +223,6 @@ class AddWatermarkEngine {
     );
   }
 
-  img.Image _rotateImage(img.Image image, double degrees) {
-    final normalized = degrees % 360;
-
-    if (normalized == 0) {
-      return image;
-    }
-
-    return img.copyRotate(image, angle: normalized);
-  }
-
   double _estimateTextWidth(String text, double fontSize) {
     // A conservative approximation for the standard
     // sans-serif watermark font.
@@ -291,9 +282,7 @@ class AddWatermarkEngine {
       );
     }
 
-    if (input.outputFile.absolute.path == input.file.absolute.path) {
-      throw const OutputSameAsInputFailure();
-    }
+    ensureOutputDiffersFromInputs(input.outputFile, [input.file]);
 
     if (input.type == WatermarkType.text && input.text.trim().isEmpty) {
       throw ArgumentError.value(
@@ -339,4 +328,35 @@ class AddWatermarkEngine {
       );
     }
   }
+}
+
+/// A watermark image ready to stamp: rotated and re-encoded as PNG.
+class _PreparedImage {
+  const _PreparedImage(this.pngBytes, this.width, this.height);
+
+  final Uint8List pngBytes;
+  final int width;
+  final int height;
+}
+
+/// Runs on a background isolate: top-level so it captures nothing.
+///
+/// Returns `null` when the file is not a decodable image.
+_PreparedImage? _prepareWatermarkImage((String, double) job) {
+  final (path, rotation) = job;
+
+  final decoded = img.decodeImage(File(path).readAsBytesSync());
+
+  if (decoded == null) return null;
+
+  final normalized = rotation % 360;
+  final rotated = normalized == 0
+      ? decoded
+      : img.copyRotate(decoded, angle: normalized);
+
+  return _PreparedImage(
+    Uint8List.fromList(img.encodePng(rotated)),
+    rotated.width,
+    rotated.height,
+  );
 }
