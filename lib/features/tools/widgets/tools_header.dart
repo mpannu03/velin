@@ -23,7 +23,7 @@ class Header extends StatelessWidget {
       children: [
         Text(
           context.l10n.navigationTools,
-          style: theme.textTheme.headlineMedium?.copyWith(
+          style: theme.textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.w700,
           ),
         ),

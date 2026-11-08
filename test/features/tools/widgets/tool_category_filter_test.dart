@@ -37,7 +37,7 @@ void main() {
 
       expect(
         materials.any(
-          (material) => material.color == theme.colorScheme.primary,
+          (material) => material.color == theme.colorScheme.secondaryContainer,
         ),
         isTrue,
       );
