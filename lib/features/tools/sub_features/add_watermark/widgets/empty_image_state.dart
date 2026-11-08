@@ -22,7 +22,6 @@ class ImageEmptyState extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surfaceContainer,
         borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: colors.outlineVariant),
       ),
       child: Column(
         children: [

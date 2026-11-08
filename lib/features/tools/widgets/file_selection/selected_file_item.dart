@@ -49,7 +49,6 @@ class SelectedFileItem extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: colors.surfaceContainerLow,
-        border: Border.all(color: colors.outlineVariant),
         borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       child: Row(

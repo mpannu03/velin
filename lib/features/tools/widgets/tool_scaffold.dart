@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 
 class ToolScaffold extends StatelessWidget {
   const ToolScaffold({
@@ -22,57 +23,62 @@ class ToolScaffold extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(24, 16, 24, 20),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    // Title and form share one centred column so their edges line up.
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xxl,
+        vertical: AppSpacing.xl,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: _maxContentWidth),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              IconButton(
-                onPressed: onBack,
-                tooltip: 'Back',
-                icon: const Icon(Icons.arrow_back),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
+              // A small "← Tools" link above the title keeps the title on
+              // the same edge as the form below it.
+              Align(
+                alignment: Alignment.centerLeft,
+                // Shift by the button's padding so the arrow sits on the
+                // title's edge.
+                child: Transform.translate(
+                  offset: const Offset(-AppSpacing.sm, 0),
+                  child: TextButton.icon(
+                    onPressed: onBack,
+                    icon: const Icon(Icons.arrow_back, size: 16),
+                    label: Text(context.l10n.navigationTools),
+                    style: TextButton.styleFrom(
+                      foregroundColor: colors.onSurfaceVariant,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.sm,
                       ),
+                      minimumSize: const Size(0, 28),
                     ),
-                    if (description != null) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        description!,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: colors.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ],
+                  ),
                 ),
               ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                title,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (description != null) ...[
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  description!,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colors.onSurfaceVariant,
+                  ),
+                ),
+              ],
+              const SizedBox(height: AppSpacing.xl),
+              child,
             ],
           ),
         ),
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(AppSpacing.xxl),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: _maxContentWidth),
-                child: child,
-              ),
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

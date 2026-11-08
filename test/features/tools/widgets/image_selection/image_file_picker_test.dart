@@ -235,7 +235,7 @@ void main() {
       expect(find.text('Choose photos for your document.'), findsOneWidget);
     });
 
-    testWidgets('view mode toggle is present even when empty', (tester) async {
+    testWidgets('view mode toggle is hidden while empty', (tester) async {
       await pumpApp(
         tester,
         const ImageFilePicker(
@@ -251,7 +251,7 @@ void main() {
 
       expect(
         find.byKey(const ValueKey('image-file-picker-view-mode')),
-        findsOneWidget,
+        findsNothing,
       );
     });
   });

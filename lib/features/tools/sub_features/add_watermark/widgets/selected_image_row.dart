@@ -26,7 +26,6 @@ class SelectedImageRow extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow,
-        border: Border.all(color: theme.colorScheme.outlineVariant),
         borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       child: Row(

@@ -3,6 +3,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
+import '../tool_section_card.dart';
+
 import 'image_file_picker_grid.dart';
 import 'image_file_picker_item.dart';
 import 'image_picker_view_mode.dart';
@@ -40,79 +42,55 @@ class ImageFilePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
     final l10n = context.l10n;
 
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
-        color: colors.surfaceContainerLow,
-        border: Border.all(color: colors.outlineVariant),
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                l10n.toolsImageToPdfSourceSectionTitle,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w600,
+    final isEmpty = filePaths.isEmpty;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ToolSectionHeader(
+          title: l10n.toolsImageToPdfSourceSectionTitle,
+          badge: isEmpty ? null : l10n.toolsFileCount(filePaths.length),
+          // The empty state has its own button; one is enough.
+          trailing: isEmpty
+              ? null
+              : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _ViewModeToggle(
+                      viewMode: viewMode,
+                      onViewModeChanged: onViewModeChanged,
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    OutlinedButton.icon(
+                      onPressed: onAddFiles,
+                      icon: const Icon(Icons.add, size: 18),
+                      label: Text(l10n.toolsAddFiles),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.sm,
-                  vertical: AppSpacing.xxs,
-                ),
-                decoration: BoxDecoration(
-                  color: colors.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Text(
-                  l10n.toolsFileCount(filePaths.length),
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: colors.onSurfaceVariant,
-                  ),
-                ),
-              ),
-              const Spacer(),
-              _ViewModeToggle(
-                viewMode: viewMode,
-                onViewModeChanged: onViewModeChanged,
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              OutlinedButton.icon(
-                onPressed: onAddFiles,
-                icon: const Icon(Icons.add, size: 18),
-                label: Text(l10n.toolsAddFiles),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          if (filePaths.isEmpty)
-            _EmptyState(
-              description: emptyStateDescription,
-              onAddFiles: onAddFiles,
-            )
-          else
-            switch (viewMode) {
-              ImagePickerViewMode.list => _ImageList(
-                filePaths: filePaths,
-                onRemoveFile: onRemoveFile,
-                onReorderItem: onReorderItem,
-              ),
-              ImagePickerViewMode.grid => ImageFilePickerGrid(
-                filePaths: filePaths,
-                onRemoveFile: onRemoveFile,
-                onReorderItem: onReorderItem,
-              ),
-            },
-        ],
-      ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        if (isEmpty)
+          _EmptyState(
+            description: emptyStateDescription,
+            onAddFiles: onAddFiles,
+          )
+        else
+          switch (viewMode) {
+            ImagePickerViewMode.list => _ImageList(
+              filePaths: filePaths,
+              onRemoveFile: onRemoveFile,
+              onReorderItem: onReorderItem,
+            ),
+            ImagePickerViewMode.grid => ImageFilePickerGrid(
+              filePaths: filePaths,
+              onRemoveFile: onRemoveFile,
+              onReorderItem: onReorderItem,
+            ),
+          },
+      ],
     );
   }
 }
@@ -176,24 +154,10 @@ class _EmptyState extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surfaceContainer,
         borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: colors.outlineVariant),
       ),
       child: Column(
         children: [
-          Container(
-            width: 56,
-            height: 56,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: colors.primaryContainer,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.image_outlined,
-              size: 26,
-              color: colors.onPrimaryContainer,
-            ),
-          ),
+          Icon(Icons.image_outlined, size: 32, color: colors.onSurfaceVariant),
           const SizedBox(height: AppSpacing.md),
           Text(
             l10n.toolsNoFilesTitle,

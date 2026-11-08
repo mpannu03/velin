@@ -44,10 +44,9 @@ class SingleFilePicker extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: colors.surface,
-        border: Border.all(color: colors.outlineVariant),
+        color: colors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: _buildFileRow(theme, colors, l10n),
@@ -122,23 +121,13 @@ class SingleFilePicker extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surfaceContainer,
         borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(color: colors.outlineVariant),
       ),
       child: Column(
         children: [
-          Container(
-            width: 56,
-            height: 56,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: colors.primaryContainer,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.picture_as_pdf_outlined,
-              size: 26,
-              color: colors.onPrimaryContainer,
-            ),
+          Icon(
+            Icons.picture_as_pdf_outlined,
+            size: 32,
+            color: colors.onSurfaceVariant,
           ),
           const SizedBox(height: 16),
           Text(

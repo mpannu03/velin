@@ -35,36 +35,21 @@ void main() {
           buildPicker(emptyStateDescription: 'Add PDF files to begin.'),
         );
 
-        expect(find.text('Add files'), findsNWidgets(2));
         expect(find.text('No files added'), findsOneWidget);
         expect(find.text('Add PDF files to begin.'), findsOneWidget);
       });
 
-      testWidgets('shows add files button in the header', (tester) async {
+      testWidgets('shows a single add files button, in the empty state', (
+        tester,
+      ) async {
         var callCount = 0;
 
         await pumpApp(tester, buildPicker(onAddFiles: () => callCount++));
 
-        final button = find.widgetWithText(OutlinedButton, 'Add files');
+        expect(find.text('Add files'), findsOneWidget);
+        expect(find.widgetWithText(OutlinedButton, 'Add files'), findsNothing);
 
-        expect(button, findsOneWidget);
-
-        await tester.tap(button);
-        await tester.pump();
-
-        expect(callCount, 1);
-      });
-
-      testWidgets('shows add files button in the empty state', (tester) async {
-        var callCount = 0;
-
-        await pumpApp(tester, buildPicker(onAddFiles: () => callCount++));
-
-        final buttons = find.text('Add files');
-
-        expect(buttons, findsNWidgets(2));
-
-        await tester.tap(buttons.last);
+        await tester.tap(find.text('Add files'));
         await tester.pump();
 
         expect(callCount, 1);
