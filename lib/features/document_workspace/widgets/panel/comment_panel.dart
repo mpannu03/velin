@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/app/theme/theme.dart';
 import 'package:velin/core/document/engine/engine.dart';
 
 class CommentPanel extends StatelessWidget {
@@ -161,7 +162,7 @@ class _TypeBadge extends StatelessWidget {
       height: 36,
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Icon(icon, size: 20, color: color),
     );

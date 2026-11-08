@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/app/theme/theme.dart';
 import 'package:velin/l10n/app_localizations.dart';
 
 import 'package:velin/shared/extensions/extensions.dart';
@@ -47,7 +48,7 @@ class SingleFilePicker extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface,
         border: Border.all(color: colors.outlineVariant),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: _buildFileRow(theme, colors, l10n),
     );
@@ -66,7 +67,7 @@ class SingleFilePicker extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: colors.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(AppRadius.md),
           ),
           child: Icon(
             Icons.insert_drive_file_outlined,
@@ -120,7 +121,7 @@ class SingleFilePicker extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       decoration: BoxDecoration(
         color: colors.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         border: Border.all(color: colors.outlineVariant),
       ),
       child: Column(

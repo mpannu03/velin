@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 import 'package:velin/core/recent/recent.dart';
 import 'package:velin/features/home/widgets/recent_helpers.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 
 class HomeStatsCard extends StatelessWidget {
   const HomeStatsCard({required this.documents, super.key});
@@ -30,7 +31,7 @@ class HomeStatsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Library',
+            context.l10n.homeLibrary,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w600,
             ),
@@ -38,19 +39,19 @@ class HomeStatsCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.md),
           _StatRow(
             icon: Icons.folder_outlined,
-            label: 'Documents',
+            label: context.l10n.homeStatDocuments,
             value: '${documents.length}',
           ),
           const SizedBox(height: AppSpacing.sm),
           _StatRow(
             icon: Icons.auto_stories_outlined,
-            label: 'Pages left',
-            value: '$remaining of $totalPages',
+            label: context.l10n.homeStatPagesLeft,
+            value: context.l10n.homeStatPagesLeftValue(remaining, totalPages),
           ),
           const SizedBox(height: AppSpacing.sm),
           _StatRow(
             icon: Icons.check_circle_outline,
-            label: 'Finished',
+            label: context.l10n.homeStatFinished,
             value: '$finished',
           ),
         ],

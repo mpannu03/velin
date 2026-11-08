@@ -5,6 +5,7 @@ import 'package:velin/features/home/view/home_view_model.dart';
 import 'package:velin/features/home/widgets/recent_helpers.dart';
 import 'package:velin/features/home/widgets/recent_progress_bar.dart';
 import 'package:velin/features/home/widgets/recent_thumbnail.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 
 class RecentListRow extends StatefulWidget {
   const RecentListRow({
@@ -76,7 +77,7 @@ class _RecentListRowState extends State<RecentListRow> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '${recentDirectory(doc.path)} · ${relativeTime(doc.lastOpenedAt)}',
+                        '${recentDirectory(doc.path)} · ${relativeTime(doc.lastOpenedAt, context.l10n)}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodySmall?.copyWith(
