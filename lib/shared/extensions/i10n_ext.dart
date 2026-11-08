@@ -12,7 +12,6 @@ extension AppNavigationItemX on AppNavigationItem {
     return switch (this) {
       AppNavigationItem.home => context.l10n.navigationHome,
       AppNavigationItem.reader => context.l10n.navigationReader,
-      AppNavigationItem.edit => context.l10n.navigationEdit,
       AppNavigationItem.tools => context.l10n.navigationTools,
     };
   }

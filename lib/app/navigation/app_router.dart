@@ -41,15 +41,6 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/edit',
-                builder: (context, state) =>
-                    const _PlaceholderPage(title: 'Edit'),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
                 path: '/tools',
                 builder: (context, state) => const ToolsPage(),
                 routes: [
@@ -145,15 +136,4 @@ Page<void> _toolPage({required LocalKey key, required Widget child}) {
     );
   }
   return MaterialPage(key: key, child: child);
-}
-
-class _PlaceholderPage extends StatelessWidget {
-  const _PlaceholderPage({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text(title));
-  }
 }

@@ -18,7 +18,7 @@ void main() {
 
       expect(find.text('Home'), findsOneWidget);
       expect(find.text('Reader'), findsOneWidget);
-      expect(find.text('Edit'), findsOneWidget);
+      expect(find.text('Edit'), findsNothing);
       expect(find.text('Tools'), findsOneWidget);
     });
 
