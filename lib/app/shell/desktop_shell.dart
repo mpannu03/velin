@@ -44,7 +44,7 @@ class _TitleBar extends StatelessWidget {
     final showAppMenu = defaultTargetPlatform != TargetPlatform.macOS;
 
     return ColoredBox(
-      color: colorScheme.primaryContainer,
+      color: colorScheme.surfaceContainerHigh,
       child: SizedBox(
         height: AppDimensions.desktopRibbonHeight,
         child: Row(

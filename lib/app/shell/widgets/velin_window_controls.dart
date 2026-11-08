@@ -123,7 +123,9 @@ class _CloseButton extends StatelessWidget {
     return _WindowButtonShell(
       icon: Icons.close,
       onPressed: () => windowManager.close(),
-      hoverColor: Colors.red,
+      // The Windows close-button red, with a white glyph.
+      hoverColor: const Color(0xFFC42B1C),
+      hoverIconColor: Colors.white,
     );
   }
 }
@@ -133,12 +135,14 @@ class _WindowButtonShell extends StatefulWidget {
     required this.icon,
     required this.onPressed,
     this.hoverColor,
+    this.hoverIconColor,
     this.iconSize,
   });
 
   final IconData icon;
   final VoidCallback onPressed;
   final Color? hoverColor;
+  final Color? hoverIconColor;
   final double? iconSize;
 
   @override
@@ -161,13 +165,15 @@ class _WindowButtonShellState extends State<_WindowButtonShell> {
           width: AppDimensions.desktopControlButtonWidth,
           height: AppDimensions.desktopRibbonHeight,
           color: _hovered
-              ? widget.hoverColor ?? scheme.primaryFixedDim
+              ? widget.hoverColor ?? scheme.onSurface.withValues(alpha: 0.08)
               : Colors.transparent,
           alignment: Alignment.center,
           child: Icon(
             widget.icon,
             size: widget.iconSize ?? 16,
-            color: scheme.onSurface,
+            color: _hovered && widget.hoverIconColor != null
+                ? widget.hoverIconColor
+                : scheme.onSurface,
           ),
         ),
       ),
