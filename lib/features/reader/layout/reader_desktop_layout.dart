@@ -13,30 +13,36 @@ class ReaderDesktopLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final selectedDocument = viewModel.selectedDocument;
 
-    return Column(
-      children: [
-        ReaderDocumentTabs(
-          documents: viewModel.documents,
-          selectedDocument: selectedDocument,
-          onDocumentSelected: viewModel.onDocumentSelected,
-          onDocumentClosed: viewModel.onDocumentClosed,
-          onOpenDocument: viewModel.onOpenDocument,
-        ),
-        Expanded(
-          child: selectedDocument == null
-              ? ReaderEmptyState(onOpenDocument: viewModel.onOpenDocument)
-              : IndexedStack(
-                  index: viewModel.documents.indexOf(selectedDocument),
-                  children: [
-                    for (final document in viewModel.documents)
-                      DocumentWorkspacePage(
-                        key: ValueKey(document.path),
-                        document: document,
-                      ),
-                  ],
-                ),
-        ),
-      ],
+    return ReaderShortcuts(
+      documents: viewModel.documents,
+      selectedDocument: selectedDocument,
+      onDocumentSelected: viewModel.onDocumentSelected,
+      onDocumentClosed: viewModel.onDocumentClosed,
+      child: Column(
+        children: [
+          ReaderDocumentTabs(
+            documents: viewModel.documents,
+            selectedDocument: selectedDocument,
+            onDocumentSelected: viewModel.onDocumentSelected,
+            onDocumentClosed: viewModel.onDocumentClosed,
+            onOpenDocument: viewModel.onOpenDocument,
+          ),
+          Expanded(
+            child: selectedDocument == null
+                ? ReaderEmptyState(onOpenDocument: viewModel.onOpenDocument)
+                : IndexedStack(
+                    index: viewModel.documents.indexOf(selectedDocument),
+                    children: [
+                      for (final document in viewModel.documents)
+                        DocumentWorkspacePage(
+                          key: ValueKey(document.path),
+                          document: document,
+                        ),
+                    ],
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }
