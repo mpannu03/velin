@@ -505,14 +505,56 @@ abstract class AppLocalizations {
   /// Label for the Zoom In action.
   ///
   /// In en, this message translates to:
-  /// **'Zoom In'**
+  /// **'Zoom in'**
   String get toolZoomIn;
 
   /// Label for the Zoom Out action.
   ///
   /// In en, this message translates to:
-  /// **'Zoom Out'**
+  /// **'Zoom out'**
   String get toolZoomOut;
+
+  /// Reader toolbar: zoom so the page fills the width.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit width'**
+  String get toolFitWidth;
+
+  /// Reader toolbar: zoom so the whole page is visible.
+  ///
+  /// In en, this message translates to:
+  /// **'Fit page'**
+  String get toolFitPage;
+
+  /// Reader toolbar: go to the previous page.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous page'**
+  String get toolPreviousPage;
+
+  /// Reader toolbar: go to the next page.
+  ///
+  /// In en, this message translates to:
+  /// **'Next page'**
+  String get toolNextPage;
+
+  /// Accessibility label of the reader's page number field.
+  ///
+  /// In en, this message translates to:
+  /// **'Page number'**
+  String get toolPageNumber;
+
+  /// Tooltip of the button that closes the reader's side panel.
+  ///
+  /// In en, this message translates to:
+  /// **'Close panel'**
+  String get panelClose;
+
+  /// Accessibility label of the reader's toolbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Reader toolbar'**
+  String get readerToolbar;
 
   /// Displays the current page number and total number of pages in the PDF.
   ///

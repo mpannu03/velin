@@ -15,6 +15,10 @@ class DocumentWorkspaceViewModel {
     required this.capabilities,
     required this.zoomIn,
     required this.zoomOut,
+    required this.fitWidth,
+    required this.fitPage,
+    required this.previousPage,
+    required this.nextPage,
     required this.onToolSelected,
     required this.onPanelSelected,
     required this.onGotoPage,
@@ -44,6 +48,10 @@ class DocumentWorkspaceViewModel {
 
   final VoidCallback zoomIn;
   final VoidCallback zoomOut;
+  final VoidCallback fitWidth;
+  final VoidCallback fitPage;
+  final VoidCallback previousPage;
+  final VoidCallback nextPage;
 
   final ValueChanged<WorkspaceTool> onToolSelected;
   final ValueChanged<WorkspacePanel> onPanelSelected;

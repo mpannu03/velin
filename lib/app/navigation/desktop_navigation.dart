@@ -18,7 +18,8 @@ class DesktopNavigation extends StatelessWidget {
   static const _containerPadding = 3.0;
   static const _iconSize = 16.0;
   static const _horizontalItemPadding = 12.0;
-  static const _radius = _height / 2;
+  static const _radius = AppRadius.lg;
+  static const _segmentRadius = AppRadius.md;
 
   /// Measures the widest segment so the pill has a uniform width.
   double _measureSegmentWidth(TextStyle? textStyle, BuildContext context) {
@@ -69,8 +70,15 @@ class DesktopNavigation extends StatelessWidget {
                 width: segmentWidth,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: colorScheme.primary,
-                    borderRadius: BorderRadius.circular(_radius),
+                    color: colorScheme.surface,
+                    borderRadius: BorderRadius.circular(_segmentRadius),
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorScheme.shadow.withValues(alpha: 0.12),
+                        blurRadius: 2,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -111,9 +119,7 @@ class _NavigationItem extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
-    final fg = selected
-        ? colorScheme.onPrimary
-        : colorScheme.onSurface.withValues(alpha: 0.65);
+    final fg = selected ? colorScheme.onSurface : colorScheme.onSurfaceVariant;
 
     return SizedBox(
       width: width,
@@ -121,7 +127,7 @@ class _NavigationItem extends StatelessWidget {
           DesktopNavigation._height - 2 * DesktopNavigation._containerPadding,
       child: InkWell(
         onTap: onPressed,
-        borderRadius: BorderRadius.circular(DesktopNavigation._radius),
+        borderRadius: BorderRadius.circular(DesktopNavigation._segmentRadius),
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: DesktopNavigation._horizontalItemPadding,

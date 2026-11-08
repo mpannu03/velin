@@ -3,6 +3,8 @@ import 'package:material_ui/material_ui.dart';
 import '../view/view.dart';
 import '../widgets/widgets.dart';
 
+/// Toolbar on top; the page fills the rest, with the selected panel docked
+/// on the right behind a hairline.
 class DocumentWorkspaceDesktopLayout extends StatelessWidget {
   const DocumentWorkspaceDesktopLayout({required this.viewModel, super.key});
 
@@ -10,34 +12,26 @@ class DocumentWorkspaceDesktopLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    final selectedPanel = viewModel.selectedPanel;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Positioned.fill(
-          child: DocumentWorkspaceViewport(
-            documentViewer: viewModel.documentViewer,
-          ),
-        ),
-
-        Positioned(
-          top: 0,
-          left: 0,
-          child: DocumentWorkspaceToolRail(
-            capabilities: viewModel.capabilities,
-            selectedTool: viewModel.selectedTool,
-            onToolSelected: viewModel.onToolSelected,
-          ),
-        ),
-
-        Positioned(
-          top: 0,
-          right: 0,
-          bottom: 0,
+        DocumentWorkspaceToolbar(viewModel: viewModel),
+        Expanded(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (viewModel.selectedPanel != null)
+              Expanded(
+                child: DocumentWorkspaceViewport(
+                  documentViewer: viewModel.documentViewer,
+                ),
+              ),
+              if (selectedPanel != null) ...[
+                const VerticalDivider(width: 1),
                 DocumentWorkspacePanel(
-                  panel: viewModel.selectedPanel!,
+                  panel: selectedPanel,
+                  onClose: viewModel.onPanelClosed,
                   onTextSearch: viewModel.onTextSearch,
                   onClearSearch: viewModel.onClearSearch,
                   onTextSearchResultSelected:
@@ -51,17 +45,7 @@ class DocumentWorkspaceDesktopLayout extends StatelessWidget {
                   onDictionaryLookup: viewModel.onDictionaryLookup,
                   onClearDictionary: viewModel.onClearDictionary,
                 ),
-              DocumentWorkspacePanelRail(
-                selectedPanel: viewModel.selectedPanel,
-                currentPage: viewModel.currentPage,
-                pageCount: viewModel.pageCount,
-                currentZoom: viewModel.currentZoom,
-                capabilities: viewModel.capabilities,
-                zoomIn: viewModel.zoomIn,
-                zoomOut: viewModel.zoomOut,
-                onPanelSelected: viewModel.onPanelSelected,
-                onGotoPage: viewModel.onGotoPage,
-              ),
+              ],
             ],
           ),
         ),

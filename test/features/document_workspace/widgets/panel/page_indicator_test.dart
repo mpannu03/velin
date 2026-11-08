@@ -31,7 +31,7 @@ void main() {
       );
 
       expect(find.text('3'), findsOneWidget);
-      expect(find.text('10'), findsOneWidget);
+      expect(find.text('/ 10'), findsOneWidget);
     });
 
     testWidgets('calls onGotoPage when valid page is submitted', (
