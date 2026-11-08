@@ -110,7 +110,6 @@ class ImageFilePickerItem extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerLow,
-        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       child: Row(

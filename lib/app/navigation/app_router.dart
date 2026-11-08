@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/navigation/navigation.dart';
@@ -16,7 +17,11 @@ class AppRouter {
 
   static final router = GoRouter(
     navigatorKey: rootNavigatorKey,
-    initialLocation: '/',
+    // Development aid: `--dart-define=VELIN_START_ROUTE=/tools/merge-pdf`
+    // starts on that page (e.g. for screenshots). Always `/` in releases.
+    initialLocation: kReleaseMode
+        ? '/'
+        : const String.fromEnvironment('VELIN_START_ROUTE', defaultValue: '/'),
     routes: [
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

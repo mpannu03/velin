@@ -1,4 +1,4 @@
-import 'package:flutter/services.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -8,25 +8,18 @@ import '../../../helpers/helpers.dart';
 
 void main() {
   group('ToolCard', () {
-    testWidgets('renders tool title and description', (tester) async {
-      final tool = _createTool();
-
-      await pumpApp(tester, ToolCard(tool: tool, onTap: _noop));
+    testWidgets('renders tool icon, title and description', (tester) async {
+      await pumpApp(tester, ToolCard(tool: _createTool(), onTap: _noop));
 
       expect(find.text('Merge PDF'), findsOneWidget);
       expect(
         find.text('Combine multiple PDF files into one document.'),
         findsOneWidget,
       );
-    });
-
-    testWidgets('renders tool icon', (tester) async {
-      await pumpApp(tester, ToolCard(tool: _createTool(), onTap: _noop));
-
       expect(find.byIcon(Icons.merge_type), findsOneWidget);
     });
 
-    testWidgets('calls onTap when card is tapped', (tester) async {
+    testWidgets('calls onTap when tapped', (tester) async {
       var tapped = false;
 
       await pumpApp(
@@ -40,101 +33,29 @@ void main() {
       expect(tapped, isTrue);
     });
 
-    testWidgets('shows arrow when hovered', (tester) async {
+    testWidgets('highlights on hover', (tester) async {
       await pumpApp(tester, ToolCard(tool: _createTool(), onTap: _noop));
 
-      final opacityFinder = find.descendant(
-        of: find.byType(ToolCard),
-        matching: find.byType(AnimatedOpacity),
-      );
+      Color? cardColor() => tester
+          .widget<Material>(
+            find
+                .descendant(
+                  of: find.byType(ToolCard),
+                  matching: find.byType(Material),
+                )
+                .first,
+          )
+          .color;
 
-      expect(tester.widget<AnimatedOpacity>(opacityFinder).opacity, 0);
+      final initial = cardColor();
 
-      final mouseRegionFinder = find.byWidgetPredicate(
-        (widget) =>
-            widget is MouseRegion && widget.cursor == SystemMouseCursors.click,
-      );
+      final gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      addTearDown(gesture.removePointer);
+      await gesture.addPointer(location: Offset.zero);
+      await gesture.moveTo(tester.getCenter(find.byType(ToolCard)));
+      await tester.pumpAndSettle();
 
-      expect(mouseRegionFinder, findsOneWidget);
-
-      final mouseRegion = tester.widget<MouseRegion>(mouseRegionFinder);
-
-      mouseRegion.onEnter?.call(const PointerEnterEvent());
-      await tester.pump();
-
-      expect(tester.widget<AnimatedOpacity>(opacityFinder).opacity, 1);
-    });
-
-    testWidgets('hides arrow when hover ends', (tester) async {
-      await pumpApp(tester, ToolCard(tool: _createTool(), onTap: _noop));
-
-      final mouseRegion = tester.widget<MouseRegion>(
-        find.byWidgetPredicate(
-          (widget) =>
-              widget is MouseRegion &&
-              widget.cursor == SystemMouseCursors.click,
-        ),
-      );
-
-      mouseRegion.onEnter?.call(const PointerEnterEvent());
-      await tester.pump();
-
-      mouseRegion.onExit?.call(const PointerExitEvent());
-      await tester.pump();
-
-      final opacity = tester.widget<AnimatedOpacity>(
-        find.descendant(
-          of: find.byType(ToolCard),
-          matching: find.byType(AnimatedOpacity),
-        ),
-      );
-
-      expect(opacity.opacity, 0);
-    });
-
-    testWidgets('changes icon chip when hovered', (tester) async {
-      await pumpApp(tester, ToolCard(tool: _createTool(), onTap: _noop));
-
-      final containerFinder = find.descendant(
-        of: find.byType(ToolCard),
-        matching: find.byType(AnimatedContainer),
-      );
-
-      final initialContainer = tester.widget<AnimatedContainer>(
-        containerFinder,
-      );
-
-      final initialDecoration = initialContainer.decoration! as BoxDecoration;
-
-      final mouseRegion = tester.widget<MouseRegion>(
-        find.byWidgetPredicate(
-          (widget) =>
-              widget is MouseRegion &&
-              widget.cursor == SystemMouseCursors.click,
-        ),
-      );
-
-      mouseRegion.onEnter?.call(const PointerEnterEvent());
-      await tester.pump();
-
-      final hoveredContainer = tester.widget<AnimatedContainer>(
-        containerFinder,
-      );
-
-      final hoveredDecoration = hoveredContainer.decoration! as BoxDecoration;
-
-      expect(hoveredDecoration.color, isNot(equals(initialDecoration.color)));
-    });
-
-    testWidgets('uses click cursor for mouse interaction', (tester) async {
-      await pumpApp(tester, ToolCard(tool: _createTool(), onTap: _noop));
-
-      final mouseRegionFinder = find.byWidgetPredicate(
-        (widget) =>
-            widget is MouseRegion && widget.cursor == SystemMouseCursors.click,
-      );
-
-      expect(mouseRegionFinder, findsOneWidget);
+      expect(cardColor(), isNot(initial));
     });
   });
 }

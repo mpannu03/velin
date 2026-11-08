@@ -4,7 +4,7 @@ import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
-/// A pill-style filter bar that narrows the tools grid to a single category.
+/// A quiet filter bar that narrows the tools grid to a single category.
 ///
 /// `selected == null` represents the "All" filter which shows every category.
 class ToolCategoryFilter extends StatelessWidget {
@@ -20,8 +20,8 @@ class ToolCategoryFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: AppSpacing.sm,
-      runSpacing: AppSpacing.sm,
+      spacing: AppSpacing.xs,
+      runSpacing: AppSpacing.xs,
       children: [
         _FilterChip(
           label: context.l10n.toolsCategoryAll,
@@ -56,21 +56,19 @@ class _FilterChip extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     final foreground = selected
-        ? colorScheme.onPrimary
+        ? colorScheme.onSecondaryContainer
         : colorScheme.onSurfaceVariant;
 
     return Material(
-      color: selected
-          ? colorScheme.primary
-          : colorScheme.surfaceContainerHighest,
-      shape: const StadiumBorder(),
+      color: selected ? colorScheme.secondaryContainer : Colors.transparent,
+      borderRadius: BorderRadius.circular(AppRadius.md),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.lg,
-            vertical: AppSpacing.sm,
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.xs + AppSpacing.xxs,
           ),
           child: Text(
             label,

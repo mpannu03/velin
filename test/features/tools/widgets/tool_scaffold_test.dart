@@ -72,27 +72,23 @@ void main() {
         const ToolScaffold(title: 'Merge PDF', child: Text('Tool content')),
       );
 
-      final button = tester.widget<IconButton>(
-        find.widgetWithIcon(IconButton, Icons.arrow_back),
+      final button = tester.widget<TextButton>(
+        find.ancestor(
+          of: find.byIcon(Icons.arrow_back),
+          matching: find.byWidgetPredicate((widget) => widget is TextButton),
+        ),
       );
 
       expect(button.onPressed, isNull);
     });
 
-    testWidgets('renders back button with Back tooltip', (tester) async {
+    testWidgets('labels the back link with the Tools section', (tester) async {
       await pumpApp(
         tester,
         const ToolScaffold(title: 'Merge PDF', child: Text('Tool content')),
       );
 
-      final tooltip = tester.widget<Tooltip>(
-        find.ancestor(
-          of: find.byIcon(Icons.arrow_back),
-          matching: find.byType(Tooltip),
-        ),
-      );
-
-      expect(tooltip.message, 'Back');
+      expect(find.text('Tools'), findsOneWidget);
     });
 
     testWidgets('places child inside scrollable content', (tester) async {

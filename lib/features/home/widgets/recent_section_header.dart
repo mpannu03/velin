@@ -38,25 +38,15 @@ class RecentSectionHeader extends StatelessWidget {
       children: [
         Text(
           context.l10n.homeRecent,
-          style: theme.textTheme.titleLarge?.copyWith(
+          style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(width: AppSpacing.sm),
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.sm,
-            vertical: AppSpacing.xxs,
-          ),
-          decoration: BoxDecoration(
-            color: colors.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(999),
-          ),
-          child: Text(
-            '$totalCount',
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: colors.onSurfaceVariant,
-            ),
+        Text(
+          '$totalCount',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: colors.onSurfaceVariant,
           ),
         ),
         const Spacer(),
