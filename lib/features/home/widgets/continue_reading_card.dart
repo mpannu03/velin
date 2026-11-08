@@ -5,6 +5,7 @@ import 'package:velin/features/home/view/home_view_model.dart';
 import 'package:velin/features/home/widgets/recent_helpers.dart';
 import 'package:velin/features/home/widgets/recent_progress_bar.dart';
 import 'package:velin/features/home/widgets/recent_thumbnail.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 
 class ContinueReadingCard extends StatelessWidget {
   const ContinueReadingCard({
@@ -56,7 +57,7 @@ class ContinueReadingCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
-                    'CONTINUE READING',
+                    context.l10n.homeContinueReading.toUpperCase(),
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: colors.onPrimaryContainer,
                       fontWeight: FontWeight.w700,
@@ -75,7 +76,7 @@ class ContinueReadingCard extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
-                  'Page ${document.currentPage} of ${document.pageCount} · $pct% · ${relativeTime(document.lastOpenedAt)}',
+                  '${context.l10n.homePageProgress(document.currentPage, document.pageCount)} · $pct% · ${relativeTime(document.lastOpenedAt, context.l10n)}',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: colors.onSurfaceVariant,
                   ),
@@ -83,22 +84,12 @@ class ContinueReadingCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.md),
                 RecentProgressBar(value: progress, height: 6),
                 const SizedBox(height: AppSpacing.lg),
-                Row(
-                  children: [
-                    FilledButton.icon(
-                      onPressed: viewModel.isOpening
-                          ? null
-                          : () => viewModel.onRecentDocumentSelected(document),
-                      icon: const Icon(Icons.play_arrow_rounded, size: 18),
-                      label: const Text('Resume'),
-                    ),
-                    const SizedBox(width: AppSpacing.sm),
-                    TextButton.icon(
-                      onPressed: viewModel.onOpenDocument,
-                      icon: const Icon(Icons.folder_open_outlined, size: 18),
-                      label: const Text('Open another'),
-                    ),
-                  ],
+                FilledButton.icon(
+                  onPressed: viewModel.isOpening
+                      ? null
+                      : () => viewModel.onRecentDocumentSelected(document),
+                  icon: const Icon(Icons.play_arrow_rounded, size: 18),
+                  label: Text(context.l10n.homeResume),
                 ),
               ],
             ),

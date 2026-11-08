@@ -1,4 +1,6 @@
+import 'package:intl/intl.dart';
 import 'package:velin/core/recent/recent.dart';
+import 'package:velin/l10n/app_localizations.dart';
 import 'package:velin/shared/utils/utils.dart';
 
 /// How recents are laid out in the desktop home section.
@@ -33,18 +35,18 @@ String recentDirectory(String path) {
   return dir;
 }
 
-String relativeTime(DateTime time) {
-  final now = DateTime.now();
-  final diff = now.difference(time);
-  if (diff.isNegative) return 'Just now';
-  if (diff.inMinutes < 1) return 'Just now';
-  if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
-  if (diff.inHours < 24) return '${diff.inHours}h ago';
-  if (diff.inDays == 1) return 'Yesterday';
-  if (diff.inDays < 7) return '${diff.inDays}d ago';
-  final weeks = (diff.inDays / 7).floor();
-  if (weeks < 5) return '${weeks}w ago';
-  return '${time.year}-${time.month.toString().padLeft(2, '0')}-${time.day.toString().padLeft(2, '0')}';
+/// Short, localized "how long ago", e.g. "5m ago" or "Yesterday"; a date
+/// for anything older than a month.
+String relativeTime(DateTime time, AppLocalizations l10n, {DateTime? now}) {
+  final diff = (now ?? DateTime.now()).difference(time);
+  if (diff.isNegative || diff.inMinutes < 1) return l10n.timeJustNow;
+  if (diff.inMinutes < 60) return l10n.timeMinutesAgo(diff.inMinutes);
+  if (diff.inHours < 24) return l10n.timeHoursAgo(diff.inHours);
+  if (diff.inDays == 1) return l10n.timeYesterday;
+  if (diff.inDays < 7) return l10n.timeDaysAgo(diff.inDays);
+  final weeks = diff.inDays ~/ 7;
+  if (weeks < 5) return l10n.timeWeeksAgo(weeks);
+  return DateFormat.yMMMd(l10n.localeName).format(time);
 }
 
 List<RecentDocument> sortRecents(

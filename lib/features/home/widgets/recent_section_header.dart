@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/home/widgets/recent_helpers.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 
 class RecentSectionHeader extends StatelessWidget {
   const RecentSectionHeader({
@@ -27,106 +28,85 @@ class RecentSectionHeader extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    String sortLabel(RecentSortMode mode) => switch (mode) {
+      RecentSortMode.lastOpened => context.l10n.homeSortLastOpened,
+      RecentSortMode.progress => context.l10n.homeSortProgress,
+      RecentSortMode.name => context.l10n.homeSortName,
+    };
+
+    return Row(
       children: [
-        Row(
-          children: [
-            Text(
-              'Recent',
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+        Text(
+          context.l10n.homeRecent,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(width: AppSpacing.sm),
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.sm,
+            vertical: AppSpacing.xxs,
+          ),
+          decoration: BoxDecoration(
+            color: colors.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(999),
+          ),
+          child: Text(
+            '$totalCount',
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: colors.onSurfaceVariant,
             ),
-            const SizedBox(width: AppSpacing.sm),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.sm,
-                vertical: AppSpacing.xxs,
-              ),
-              decoration: BoxDecoration(
-                color: colors.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(999),
-              ),
-              child: Text(
-                '$totalCount',
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: colors.onSurfaceVariant,
-                ),
-              ),
+          ),
+        ),
+        const Spacer(),
+        SizedBox(
+          width: 280,
+          child: TextField(
+            onChanged: onQueryChanged,
+            decoration: InputDecoration(
+              hintText: context.l10n.homeSearchHint,
+              prefixIcon: const Icon(Icons.search, size: 18),
+              prefixIconConstraints: const BoxConstraints(minWidth: 36),
             ),
-            const Spacer(),
-            SegmentedButton<RecentViewMode>(
-              segments: const [
-                ButtonSegment(
-                  value: RecentViewMode.list,
-                  icon: Icon(Icons.view_list_outlined, size: 18),
-                  tooltip: 'List view',
-                ),
-                ButtonSegment(
-                  value: RecentViewMode.grid,
-                  icon: Icon(Icons.grid_view_outlined, size: 18),
-                  tooltip: 'Grid view',
-                ),
-              ],
-              selected: {mode},
-              showSelectedIcon: false,
-              onSelectionChanged: (s) => onModeChanged(s.first),
-              style: SegmentedButton.styleFrom(
-                visualDensity: VisualDensity.compact,
+          ),
+        ),
+        const SizedBox(width: AppSpacing.sm),
+        MenuAnchor(
+          builder: (context, controller, _) => OutlinedButton.icon(
+            onPressed: () =>
+                controller.isOpen ? controller.close() : controller.open(),
+            icon: const Icon(Icons.sort_outlined, size: 18),
+            label: Text(sortLabel(sort)),
+          ),
+          menuChildren: [
+            for (final m in RecentSortMode.values)
+              MenuItemButton(
+                onPressed: () => onSortChanged(m),
+                leadingIcon: m == sort
+                    ? const Icon(Icons.check, size: 18)
+                    : const SizedBox(width: 18),
+                child: Text(sortLabel(m)),
               ),
-            ),
           ],
         ),
-        const SizedBox(height: AppSpacing.md),
-        Row(
-          children: [
-            Expanded(
-              child: SizedBox(
-                height: 40,
-                child: TextField(
-                  onChanged: onQueryChanged,
-                  decoration: InputDecoration(
-                    hintText: 'Search by name or folder…',
-                    prefixIcon: const Icon(Icons.search, size: 18),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.md,
-                    ),
-                  ),
-                ),
-              ),
+        const SizedBox(width: AppSpacing.sm),
+        SegmentedButton<RecentViewMode>(
+          segments: [
+            ButtonSegment(
+              value: RecentViewMode.list,
+              icon: const Icon(Icons.view_list_outlined, size: 18),
+              tooltip: context.l10n.homeListView,
             ),
-            const SizedBox(width: AppSpacing.sm),
-            MenuAnchor(
-              builder: (context, controller, _) => OutlinedButton.icon(
-                onPressed: () =>
-                    controller.isOpen ? controller.close() : controller.open(),
-                icon: const Icon(Icons.sort_outlined, size: 18),
-                label: Text(switch (sort) {
-                  RecentSortMode.lastOpened => 'Last opened',
-                  RecentSortMode.progress => 'Progress',
-                  RecentSortMode.name => 'Name',
-                }),
-              ),
-              menuChildren: [
-                for (final m in RecentSortMode.values)
-                  MenuItemButton(
-                    onPressed: () => onSortChanged(m),
-                    leadingIcon: m == sort
-                        ? const Icon(Icons.check, size: 18)
-                        : const SizedBox(width: 18),
-                    child: Text(switch (m) {
-                      RecentSortMode.lastOpened => 'Last opened',
-                      RecentSortMode.progress => 'Progress',
-                      RecentSortMode.name => 'Name',
-                    }),
-                  ),
-              ],
+            ButtonSegment(
+              value: RecentViewMode.grid,
+              icon: const Icon(Icons.grid_view_outlined, size: 18),
+              tooltip: context.l10n.homeGridView,
             ),
           ],
+          selected: {mode},
+          showSelectedIcon: false,
+          onSelectionChanged: (s) => onModeChanged(s.first),
         ),
       ],
     );

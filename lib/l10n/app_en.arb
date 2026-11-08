@@ -66,6 +66,169 @@
     "description": "Description for the message displayed in the Reader when no document is currently open."
   },
 
+  "homeTitleEmpty": "Open your first document",
+  "@homeTitleEmpty": {
+    "description": "Home page title when there are no recent documents."
+  },
+
+  "homeTitle": "Pick up where you left off",
+  "@homeTitle": {
+    "description": "Home page title when there are recent documents."
+  },
+
+  "homeSubtitleEmpty": "Open a PDF or drop one on this window. Velin remembers your place on this device.",
+  "@homeSubtitleEmpty": {
+    "description": "Home page subtitle when there are no recent documents."
+  },
+
+  "homeSubtitle": "{count, plural, =1{1 recent document} other{{count} recent documents}}",
+  "@homeSubtitle": {
+    "description": "Home page subtitle with the number of recent documents.",
+    "placeholders": {"count": {"type": "int"}}
+  },
+
+  "homeOpenDocument": "Open…",
+  "@homeOpenDocument": {
+    "description": "Home page button that lets the user pick a document."
+  },
+
+  "homeOpening": "Opening…",
+  "@homeOpening": {
+    "description": "Home page button label while a document is being opened."
+  },
+
+  "homeBrowseTools": "Browse tools",
+  "@homeBrowseTools": {
+    "description": "Home page button that goes to the PDF tools."
+  },
+
+  "homeContinueReading": "Continue reading",
+  "@homeContinueReading": {
+    "description": "Label of the card that resumes the most recently read document."
+  },
+
+  "homeResume": "Resume",
+  "@homeResume": {
+    "description": "Button that reopens the most recently read document at its last page."
+  },
+
+  "homeLibrary": "Library",
+  "@homeLibrary": {
+    "description": "Title of the reading statistics card."
+  },
+
+  "homeStatDocuments": "Documents",
+  "@homeStatDocuments": {
+    "description": "Statistic: number of recent documents."
+  },
+
+  "homeStatPagesLeft": "Pages left",
+  "@homeStatPagesLeft": {
+    "description": "Statistic: pages left to read across recent documents."
+  },
+
+  "homeStatPagesLeftValue": "{remaining} of {total}",
+  "@homeStatPagesLeftValue": {
+    "description": "Value of the pages-left statistic.",
+    "placeholders": {"remaining": {"type": "int"}, "total": {"type": "int"}}
+  },
+
+  "homeStatFinished": "Finished",
+  "@homeStatFinished": {
+    "description": "Statistic: number of documents read to the end."
+  },
+
+  "homeRecent": "Recent",
+  "@homeRecent": {
+    "description": "Heading of the recent documents section."
+  },
+
+  "homeListView": "List view",
+  "@homeListView": {
+    "description": "Tooltip of the button that shows recent documents as a list."
+  },
+
+  "homeGridView": "Grid view",
+  "@homeGridView": {
+    "description": "Tooltip of the button that shows recent documents as a grid."
+  },
+
+  "homeSearchHint": "Search by name or folder…",
+  "@homeSearchHint": {
+    "description": "Hint of the recent documents search field."
+  },
+
+  "homeSortLastOpened": "Last opened",
+  "@homeSortLastOpened": {
+    "description": "Sort recent documents by when they were last opened."
+  },
+
+  "homeSortProgress": "Progress",
+  "@homeSortProgress": {
+    "description": "Sort recent documents by reading progress."
+  },
+
+  "homeSortName": "Name",
+  "@homeSortName": {
+    "description": "Sort recent documents by file name."
+  },
+
+  "homeNoMatches": "No matches for \"{query}\".",
+  "@homeNoMatches": {
+    "description": "Shown when the recent documents search finds nothing.",
+    "placeholders": {"query": {"type": "String"}}
+  },
+
+  "homeEmptyTitle": "No recent documents yet",
+  "@homeEmptyTitle": {
+    "description": "Title shown when there are no recent documents."
+  },
+
+  "homeEmptyMessage": "Documents you open show up here.",
+  "@homeEmptyMessage": {
+    "description": "Message shown when there are no recent documents."
+  },
+
+  "homePageProgress": "Page {current} of {total}",
+  "@homePageProgress": {
+    "description": "Reading position of a recent document.",
+    "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}
+  },
+
+  "timeJustNow": "Just now",
+  "@timeJustNow": {
+    "description": "Relative time: less than a minute ago."
+  },
+
+  "timeMinutesAgo": "{minutes}m ago",
+  "@timeMinutesAgo": {
+    "description": "Relative time in minutes, short form.",
+    "placeholders": {"minutes": {"type": "int"}}
+  },
+
+  "timeHoursAgo": "{hours}h ago",
+  "@timeHoursAgo": {
+    "description": "Relative time in hours, short form.",
+    "placeholders": {"hours": {"type": "int"}}
+  },
+
+  "timeYesterday": "Yesterday",
+  "@timeYesterday": {
+    "description": "Relative time: one day ago."
+  },
+
+  "timeDaysAgo": "{days}d ago",
+  "@timeDaysAgo": {
+    "description": "Relative time in days, short form.",
+    "placeholders": {"days": {"type": "int"}}
+  },
+
+  "timeWeeksAgo": "{weeks}w ago",
+  "@timeWeeksAgo": {
+    "description": "Relative time in weeks, short form.",
+    "placeholders": {"weeks": {"type": "int"}}
+  },
+
   "menuApp": "Menu",
   "@menuApp": {
     "description": "Tooltip of the application menu button in the title bar."

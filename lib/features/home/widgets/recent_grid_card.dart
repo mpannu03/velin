@@ -5,6 +5,7 @@ import 'package:velin/features/home/view/home_view_model.dart';
 import 'package:velin/features/home/widgets/recent_helpers.dart';
 import 'package:velin/features/home/widgets/recent_progress_bar.dart';
 import 'package:velin/features/home/widgets/recent_thumbnail.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 
 class RecentGridCard extends StatefulWidget {
   const RecentGridCard({
@@ -120,7 +121,7 @@ class _RecentGridCardState extends State<RecentGridCard> {
                     ),
                     const SizedBox(height: AppSpacing.xxs),
                     Text(
-                      'Page ${doc.currentPage} of ${doc.pageCount} · ${relativeTime(doc.lastOpenedAt)}',
+                      '${context.l10n.homePageProgress(doc.currentPage, doc.pageCount)} · ${relativeTime(doc.lastOpenedAt, context.l10n)}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodySmall?.copyWith(

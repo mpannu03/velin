@@ -1,6 +1,5 @@
 export 'continue_reading_card.dart';
-export 'home_hero.dart';
-export 'home_quick_actions.dart';
+export 'home_header.dart';
 export 'home_stats_card.dart';
 export 'recent_empty_state.dart';
 export 'recent_grid.dart';

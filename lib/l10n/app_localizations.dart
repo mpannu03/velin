@@ -172,6 +172,192 @@ abstract class AppLocalizations {
   /// **'Open a file to start reading.'**
   String get readerNoDocumentOpenDescription;
 
+  /// Home page title when there are no recent documents.
+  ///
+  /// In en, this message translates to:
+  /// **'Open your first document'**
+  String get homeTitleEmpty;
+
+  /// Home page title when there are recent documents.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick up where you left off'**
+  String get homeTitle;
+
+  /// Home page subtitle when there are no recent documents.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a PDF or drop one on this window. Velin remembers your place on this device.'**
+  String get homeSubtitleEmpty;
+
+  /// Home page subtitle with the number of recent documents.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 recent document} other{{count} recent documents}}'**
+  String homeSubtitle(int count);
+
+  /// Home page button that lets the user pick a document.
+  ///
+  /// In en, this message translates to:
+  /// **'Open…'**
+  String get homeOpenDocument;
+
+  /// Home page button label while a document is being opened.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening…'**
+  String get homeOpening;
+
+  /// Home page button that goes to the PDF tools.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse tools'**
+  String get homeBrowseTools;
+
+  /// Label of the card that resumes the most recently read document.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue reading'**
+  String get homeContinueReading;
+
+  /// Button that reopens the most recently read document at its last page.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get homeResume;
+
+  /// Title of the reading statistics card.
+  ///
+  /// In en, this message translates to:
+  /// **'Library'**
+  String get homeLibrary;
+
+  /// Statistic: number of recent documents.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents'**
+  String get homeStatDocuments;
+
+  /// Statistic: pages left to read across recent documents.
+  ///
+  /// In en, this message translates to:
+  /// **'Pages left'**
+  String get homeStatPagesLeft;
+
+  /// Value of the pages-left statistic.
+  ///
+  /// In en, this message translates to:
+  /// **'{remaining} of {total}'**
+  String homeStatPagesLeftValue(int remaining, int total);
+
+  /// Statistic: number of documents read to the end.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get homeStatFinished;
+
+  /// Heading of the recent documents section.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent'**
+  String get homeRecent;
+
+  /// Tooltip of the button that shows recent documents as a list.
+  ///
+  /// In en, this message translates to:
+  /// **'List view'**
+  String get homeListView;
+
+  /// Tooltip of the button that shows recent documents as a grid.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid view'**
+  String get homeGridView;
+
+  /// Hint of the recent documents search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or folder…'**
+  String get homeSearchHint;
+
+  /// Sort recent documents by when they were last opened.
+  ///
+  /// In en, this message translates to:
+  /// **'Last opened'**
+  String get homeSortLastOpened;
+
+  /// Sort recent documents by reading progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get homeSortProgress;
+
+  /// Sort recent documents by file name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get homeSortName;
+
+  /// Shown when the recent documents search finds nothing.
+  ///
+  /// In en, this message translates to:
+  /// **'No matches for \"{query}\".'**
+  String homeNoMatches(String query);
+
+  /// Title shown when there are no recent documents.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent documents yet'**
+  String get homeEmptyTitle;
+
+  /// Message shown when there are no recent documents.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents you open show up here.'**
+  String get homeEmptyMessage;
+
+  /// Reading position of a recent document.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {current} of {total}'**
+  String homePageProgress(int current, int total);
+
+  /// Relative time: less than a minute ago.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get timeJustNow;
+
+  /// Relative time in minutes, short form.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}m ago'**
+  String timeMinutesAgo(int minutes);
+
+  /// Relative time in hours, short form.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h ago'**
+  String timeHoursAgo(int hours);
+
+  /// Relative time: one day ago.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get timeYesterday;
+
+  /// Relative time in days, short form.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}d ago'**
+  String timeDaysAgo(int days);
+
+  /// Relative time in weeks, short form.
+  ///
+  /// In en, this message translates to:
+  /// **'{weeks}w ago'**
+  String timeWeeksAgo(int weeks);
+
   /// Tooltip of the application menu button in the title bar.
   ///
   /// In en, this message translates to:

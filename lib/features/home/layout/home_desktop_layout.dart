@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/home/view/home_view_model.dart';
 import 'package:velin/features/home/widgets/widgets.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 
 class HomeDesktopLayout extends StatefulWidget {
   const HomeDesktopLayout({super.key, required this.viewModel});
@@ -36,103 +37,68 @@ class _HomeDesktopLayoutState extends State<HomeDesktopLayout> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: HomeHero(
-                        docCount: viewModel.recentDocuments.length,
-                        isOpening: viewModel.isOpening,
-                        onOpenDocument: viewModel.onOpenDocument,
-                        onBrowseTools: viewModel.onBrowseTools,
-                      ),
-                    ),
-                    const SizedBox(width: AppSpacing.lg),
-                    SizedBox(
-                      width: 280,
-                      child: HomeStatsCard(
-                        documents: viewModel.recentDocuments,
-                      ),
-                    ),
-                  ],
-                ),
+              HomeHeader(
+                docCount: viewModel.recentDocuments.length,
+                isOpening: viewModel.isOpening,
+                onOpenDocument: viewModel.onOpenDocument,
+                onBrowseTools: viewModel.onBrowseTools,
               ),
-              if (hasRecents) ...[
-                const SizedBox(height: AppSpacing.xl),
-                ContinueReadingCard(
-                  document: sortRecents(
-                    viewModel.recentDocuments,
-                    RecentSortMode.lastOpened,
-                  ).first,
-                  viewModel: viewModel,
-                ),
-              ],
-              const SizedBox(height: AppSpacing.xxl),
-              RecentSectionHeader(
-                totalCount: viewModel.recentDocuments.length,
-                mode: _mode,
-                sort: _sort,
-                query: _query,
-                onModeChanged: (m) => setState(() => _mode = m),
-                onSortChanged: (s) => setState(() => _sort = s),
-                onQueryChanged: (q) => setState(() => _query = q),
-              ),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.xl),
               if (!hasRecents)
-                RecentEmptyState(
-                  isOpening: viewModel.isOpening,
-                  onOpenDocument: viewModel.onOpenDocument,
-                )
-              else if (docs.isEmpty)
-                _NoResults(query: _query)
-              else
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  child: _mode == RecentViewMode.grid
-                      ? RecentGrid(
-                          key: const ValueKey('grid'),
-                          documents: docs,
-                          viewModel: viewModel,
-                        )
-                      : RecentList(
-                          key: const ValueKey('list'),
-                          documents: docs,
+                const RecentEmptyState()
+              else ...[
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: ContinueReadingCard(
+                          document: sortRecents(
+                            viewModel.recentDocuments,
+                            RecentSortMode.lastOpened,
+                          ).first,
                           viewModel: viewModel,
                         ),
+                      ),
+                      const SizedBox(width: AppSpacing.lg),
+                      SizedBox(
+                        width: 280,
+                        child: HomeStatsCard(
+                          documents: viewModel.recentDocuments,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              const SizedBox(height: AppSpacing.xxl),
-              HomeQuickActions(
-                actions: [
-                  HomeQuickAction(
-                    icon: Icons.folder_open_outlined,
-                    title: 'Open document',
-                    description: 'Pick a PDF from your files',
-                    onTap: viewModel.onOpenDocument,
-                  ),
-                  HomeQuickAction(
-                    icon: Icons.construction_outlined,
-                    title: 'PDF tools',
-                    description: 'Merge, split, compress & more',
-                    onTap: viewModel.onBrowseTools,
-                  ),
-                  HomeQuickAction(
-                    icon: Icons.menu_book_outlined,
-                    title: 'Continue reading',
-                    description: hasRecents
-                        ? 'Resume your latest document'
-                        : 'Your recents will appear here',
-                    onTap: hasRecents
-                        ? () => viewModel.onRecentDocumentSelected(
-                            sortRecents(
-                              viewModel.recentDocuments,
-                              RecentSortMode.lastOpened,
-                            ).first,
+                const SizedBox(height: AppSpacing.xxl),
+                RecentSectionHeader(
+                  totalCount: viewModel.recentDocuments.length,
+                  mode: _mode,
+                  sort: _sort,
+                  query: _query,
+                  onModeChanged: (m) => setState(() => _mode = m),
+                  onSortChanged: (s) => setState(() => _sort = s),
+                  onQueryChanged: (q) => setState(() => _query = q),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                if (docs.isEmpty)
+                  _NoResults(query: _query)
+                else
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    child: _mode == RecentViewMode.grid
+                        ? RecentGrid(
+                            key: const ValueKey('grid'),
+                            documents: docs,
+                            viewModel: viewModel,
                           )
-                        : viewModel.onOpenDocument,
+                        : RecentList(
+                            key: const ValueKey('list'),
+                            documents: docs,
+                            viewModel: viewModel,
+                          ),
                   ),
-                ],
-              ),
+              ],
             ],
           ),
         ),
@@ -159,7 +125,7 @@ class _NoResults extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Text(
-        'No matches for "$query".',
+        context.l10n.homeNoMatches(query),
         textAlign: TextAlign.center,
         style: theme.textTheme.bodyMedium?.copyWith(
           color: colors.onSurfaceVariant,

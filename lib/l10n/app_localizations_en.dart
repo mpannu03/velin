@@ -49,6 +49,122 @@ class AppLocalizationsEn extends AppLocalizations {
   String get readerNoDocumentOpenDescription => 'Open a file to start reading.';
 
   @override
+  String get homeTitleEmpty => 'Open your first document';
+
+  @override
+  String get homeTitle => 'Pick up where you left off';
+
+  @override
+  String get homeSubtitleEmpty =>
+      'Open a PDF or drop one on this window. Velin remembers your place on this device.';
+
+  @override
+  String homeSubtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count recent documents',
+      one: '1 recent document',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get homeOpenDocument => 'Open…';
+
+  @override
+  String get homeOpening => 'Opening…';
+
+  @override
+  String get homeBrowseTools => 'Browse tools';
+
+  @override
+  String get homeContinueReading => 'Continue reading';
+
+  @override
+  String get homeResume => 'Resume';
+
+  @override
+  String get homeLibrary => 'Library';
+
+  @override
+  String get homeStatDocuments => 'Documents';
+
+  @override
+  String get homeStatPagesLeft => 'Pages left';
+
+  @override
+  String homeStatPagesLeftValue(int remaining, int total) {
+    return '$remaining of $total';
+  }
+
+  @override
+  String get homeStatFinished => 'Finished';
+
+  @override
+  String get homeRecent => 'Recent';
+
+  @override
+  String get homeListView => 'List view';
+
+  @override
+  String get homeGridView => 'Grid view';
+
+  @override
+  String get homeSearchHint => 'Search by name or folder…';
+
+  @override
+  String get homeSortLastOpened => 'Last opened';
+
+  @override
+  String get homeSortProgress => 'Progress';
+
+  @override
+  String get homeSortName => 'Name';
+
+  @override
+  String homeNoMatches(String query) {
+    return 'No matches for \"$query\".';
+  }
+
+  @override
+  String get homeEmptyTitle => 'No recent documents yet';
+
+  @override
+  String get homeEmptyMessage => 'Documents you open show up here.';
+
+  @override
+  String homePageProgress(int current, int total) {
+    return 'Page $current of $total';
+  }
+
+  @override
+  String get timeJustNow => 'Just now';
+
+  @override
+  String timeMinutesAgo(int minutes) {
+    return '${minutes}m ago';
+  }
+
+  @override
+  String timeHoursAgo(int hours) {
+    return '${hours}h ago';
+  }
+
+  @override
+  String get timeYesterday => 'Yesterday';
+
+  @override
+  String timeDaysAgo(int days) {
+    return '${days}d ago';
+  }
+
+  @override
+  String timeWeeksAgo(int weeks) {
+    return '${weeks}w ago';
+  }
+
+  @override
   String get menuApp => 'Menu';
 
   @override

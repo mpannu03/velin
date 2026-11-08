@@ -1,20 +1,17 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/shared/extensions/extensions.dart';
 
+/// Shown instead of the recents section before anything was opened. The
+/// Open button lives in the page header, so this only explains.
 class RecentEmptyState extends StatelessWidget {
-  const RecentEmptyState({
-    required this.isOpening,
-    required this.onOpenDocument,
-    super.key,
-  });
-
-  final bool isOpening;
-  final VoidCallback onOpenDocument;
+  const RecentEmptyState({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.xxl),
@@ -28,38 +25,20 @@ class RecentEmptyState extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              color: colors.primaryContainer,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.folder_open_outlined,
-              size: 30,
-              color: colors.onPrimaryContainer,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.lg),
+          Icon(Icons.history, size: 32, color: colors.onSurfaceVariant),
+          const SizedBox(height: AppSpacing.md),
           Text(
-            'No recent documents yet',
+            context.l10n.homeEmptyTitle,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Open a PDF to start building your library.',
+            context.l10n.homeEmptyMessage,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: colors.onSurfaceVariant,
             ),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          FilledButton.icon(
-            onPressed: isOpening ? null : onOpenDocument,
-            icon: const Icon(Icons.folder_open_outlined, size: 18),
-            label: Text(isOpening ? 'Opening…' : 'Open document'),
           ),
         ],
       ),
