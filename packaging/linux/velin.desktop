@@ -1,9 +1,10 @@
 [Desktop Entry]
 Name=Velin
 Comment=PDF reader and toolkit
-Exec=velin
+Exec=velin %F
 Icon=velin
 Terminal=false
 Type=Application
 Categories=Office;Viewer;
 StartupNotify=true
+MimeType=application/pdf;

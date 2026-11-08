@@ -26,6 +26,9 @@ SolidCompression=yes
 
 WizardStyle=modern
 
+; Refresh Explorer after (un)registering the .pdf handler below.
+ChangesAssociations=yes
+
 SetupIconFile=..\..\windows\runner\resources\app_icon.ico
 UninstallDisplayIcon={app}\velin.exe
 
@@ -51,3 +54,24 @@ Name: "desktopicon"; \
 Filename: "{app}\velin.exe"; \
   Description: "Launch Velin"; \
   Flags: nowait postinstall skipifsilent
+
+; Offer Velin under "Open with" for PDFs. This does not take over the
+; default PDF app; Windows lets the user choose that.
+[Registry]
+Root: HKA; Subkey: "Software\Classes\.pdf\OpenWithProgids"; \
+  ValueType: string; ValueName: "Velin.PDF"; ValueData: ""; \
+  Flags: uninsdeletevalue
+
+Root: HKA; Subkey: "Software\Classes\Velin.PDF"; \
+  ValueType: string; ValueName: ""; ValueData: "PDF Document"; \
+  Flags: uninsdeletekey
+
+Root: HKA; Subkey: "Software\Classes\Velin.PDF\DefaultIcon"; \
+  ValueType: string; ValueName: ""; ValueData: "{app}\velin.exe,0"
+
+Root: HKA; Subkey: "Software\Classes\Velin.PDF\shell\open\command"; \
+  ValueType: string; ValueName: ""; ValueData: """{app}\velin.exe"" ""%1"""
+
+Root: HKA; Subkey: "Software\Classes\Applications\velin.exe\SupportedTypes"; \
+  ValueType: string; ValueName: ".pdf"; ValueData: ""; \
+  Flags: uninsdeletekey
