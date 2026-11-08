@@ -62,10 +62,6 @@ void main() {
       await tester.pumpAndSettle();
       expect(AppRouter.router.state.uri.path, '/reader');
 
-      await tester.tap(find.text('Edit'));
-      await tester.pumpAndSettle();
-      expect(AppRouter.router.state.uri.path, '/edit');
-
       await tester.tap(find.text('Tools'));
       await tester.pumpAndSettle();
       expect(AppRouter.router.state.uri.path, '/tools');

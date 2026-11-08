@@ -38,14 +38,6 @@ void main() {
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/edit',
-                  builder: (_, _) => const Text('Edit content'),
-                ),
-              ],
-            ),
-            StatefulShellBranch(
-              routes: [
-                GoRoute(
                   path: '/tools',
                   builder: (_, _) => const Text('Tools content'),
                 ),
@@ -79,12 +71,6 @@ void main() {
 
     expect(find.text('Tools'), findsOneWidget);
     expect(find.text('Tools content'), findsOneWidget);
-
-    await tester.tap(find.text('Edit'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Edit'), findsOneWidget);
-    expect(find.text('Edit content'), findsOneWidget);
 
     await tester.tap(find.text('Home'));
     await tester.pumpAndSettle();

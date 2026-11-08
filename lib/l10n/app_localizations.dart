@@ -112,12 +112,6 @@ abstract class AppLocalizations {
   /// **'Reader'**
   String get navigationReader;
 
-  /// Label for the Edit section in the main application navigation.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit'**
-  String get navigationEdit;
-
   /// Label for the Tools section in the main application navigation.
   ///
   /// In en, this message translates to:
@@ -178,23 +172,83 @@ abstract class AppLocalizations {
   /// **'Open a file to start reading.'**
   String get readerNoDocumentOpenDescription;
 
-  /// Label for the File menu in the application.
+  /// Tooltip of the application menu button in the title bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menuApp;
+
+  /// File menu in the macOS menu bar.
   ///
   /// In en, this message translates to:
   /// **'File'**
   String get menuFile;
 
-  /// Label for the Edit menu in the application.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit'**
-  String get menuEdit;
-
-  /// Label for the View menu in the application.
+  /// View menu in the macOS menu bar.
   ///
   /// In en, this message translates to:
   /// **'View'**
   String get menuView;
+
+  /// Help menu in the macOS menu bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get menuHelp;
+
+  /// Menu item that lets the user pick a document to open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open…'**
+  String get commandOpenDocument;
+
+  /// Menu item that enters or leaves full screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Full screen'**
+  String get commandToggleFullScreen;
+
+  /// Help menu item that opens the folder containing the app's log files, for bug reports.
+  ///
+  /// In en, this message translates to:
+  /// **'Open logs folder'**
+  String get commandOpenLogsFolder;
+
+  /// Menu item that shows the app version and license.
+  ///
+  /// In en, this message translates to:
+  /// **'About Velin'**
+  String get commandAbout;
+
+  /// Menu item that closes the application.
+  ///
+  /// In en, this message translates to:
+  /// **'Quit'**
+  String get commandQuit;
+
+  /// Shown when the logs folder could not be opened in the system file manager.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the logs folder.'**
+  String get commandOpenLogsFolderFailed;
+
+  /// Shown when the user asks for the logs folder but file logging could not be started.
+  ///
+  /// In en, this message translates to:
+  /// **'Logging to a file is turned off, so there is no logs folder.'**
+  String get commandLogsUnavailable;
+
+  /// One-line description of the app in the About dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'A free, open-source PDF app.'**
+  String get aboutDescription;
+
+  /// License line in the About dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Licensed under the GNU Affero General Public License v3.0.'**
+  String get aboutLicense;
 
   /// Label for the Select action.
   ///

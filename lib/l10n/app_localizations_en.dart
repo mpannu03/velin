@@ -19,9 +19,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navigationReader => 'Reader';
 
   @override
-  String get navigationEdit => 'Edit';
-
-  @override
   String get navigationTools => 'Tools';
 
   @override
@@ -52,13 +49,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get readerNoDocumentOpenDescription => 'Open a file to start reading.';
 
   @override
+  String get menuApp => 'Menu';
+
+  @override
   String get menuFile => 'File';
 
   @override
-  String get menuEdit => 'Edit';
+  String get menuView => 'View';
 
   @override
-  String get menuView => 'View';
+  String get menuHelp => 'Help';
+
+  @override
+  String get commandOpenDocument => 'Open…';
+
+  @override
+  String get commandToggleFullScreen => 'Full screen';
+
+  @override
+  String get commandOpenLogsFolder => 'Open logs folder';
+
+  @override
+  String get commandAbout => 'About Velin';
+
+  @override
+  String get commandQuit => 'Quit';
+
+  @override
+  String get commandOpenLogsFolderFailed => 'Couldn\'t open the logs folder.';
+
+  @override
+  String get commandLogsUnavailable =>
+      'Logging to a file is turned off, so there is no logs folder.';
+
+  @override
+  String get aboutDescription => 'A free, open-source PDF app.';
+
+  @override
+  String get aboutLicense =>
+      'Licensed under the GNU Affero General Public License v3.0.';
 
   @override
   String get toolSelect => 'Select';

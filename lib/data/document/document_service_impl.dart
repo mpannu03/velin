@@ -65,4 +65,9 @@ class DocumentServiceImpl implements DocumentService {
   Stream<List<Document>> watch() {
     return _documentRepository.watch();
   }
+
+  @override
+  Stream<Document> watchActivated() {
+    return _documentRepository.watchActivated();
+  }
 }
