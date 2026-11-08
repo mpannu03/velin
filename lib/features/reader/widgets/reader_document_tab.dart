@@ -16,7 +16,7 @@ class ReaderDocumentTab extends StatelessWidget {
   final ValueChanged<Document> onSelected;
   final ValueChanged<Document> onClosed;
 
-  static const _maxWidth = 200.0;
+  static const _maxWidth = 220.0;
 
   @override
   Widget build(BuildContext context) {
@@ -27,46 +27,54 @@ class ReaderDocumentTab extends StatelessWidget {
 
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: _maxWidth),
-      child: Material(
-        color: isSelected
-            ? colorScheme.surfaceContainerHighest
-            : colorScheme.surface,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(AppRadius.md),
-          topRight: Radius.circular(AppRadius.md),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: () => onSelected(document),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.sm,
-              vertical: AppSpacing.sm,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: Text(
-                    fileName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.labelSmall,
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.xs),
-                IconButton(
-                  onPressed: () => onClosed(document),
-                  icon: const Icon(Icons.close, size: 16),
-                  padding: EdgeInsets.zero,
-                  style: IconButton.styleFrom(
-                    minimumSize: Size.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.md),
+      child: Tooltip(
+        message: document.path,
+        waitDuration: const Duration(seconds: 1),
+        child: Material(
+          color: isSelected ? colorScheme.surface : Colors.transparent,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(AppRadius.md),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () => onSelected(document),
+            hoverColor: colorScheme.onSurface.withValues(alpha: 0.05),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: AppSpacing.md,
+                right: AppSpacing.xs,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      fileName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: textTheme.bodySmall?.copyWith(
+                        color: isSelected
+                            ? colorScheme.onSurface
+                            : colorScheme.onSurfaceVariant,
+                        fontWeight: isSelected ? FontWeight.w600 : null,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(width: AppSpacing.xs),
+                  IconButton(
+                    onPressed: () => onClosed(document),
+                    icon: const Icon(Icons.close, size: 14),
+                    padding: EdgeInsets.zero,
+                    style: IconButton.styleFrom(
+                      fixedSize: const Size.square(22),
+                      minimumSize: const Size.square(22),
+                      foregroundColor: colorScheme.onSurfaceVariant,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
