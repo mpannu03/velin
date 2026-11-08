@@ -16,11 +16,6 @@
     "description": "Label for the Reader section in the main application navigation."
   },
 
-  "navigationEdit": "Edit",
-  "@navigationEdit": {
-    "description": "Label for the Edit section in the main application navigation."
-  },
-
   "navigationTools": "Tools",
   "@navigationTools": {
     "description": "Label for the Tools section in the main application navigation."
@@ -71,19 +66,69 @@
     "description": "Description for the message displayed in the Reader when no document is currently open."
   },
 
-  "menuFile": "File",
-  "@menuFile": {
-    "description": "Label for the File menu in the application."
+  "menuApp": "Menu",
+  "@menuApp": {
+    "description": "Tooltip of the application menu button in the title bar."
   },
 
-  "menuEdit": "Edit",
-  "@menuEdit": {
-    "description": "Label for the Edit menu in the application."
+  "menuFile": "File",
+  "@menuFile": {
+    "description": "File menu in the macOS menu bar."
   },
 
   "menuView": "View",
   "@menuView": {
-    "description": "Label for the View menu in the application."
+    "description": "View menu in the macOS menu bar."
+  },
+
+  "menuHelp": "Help",
+  "@menuHelp": {
+    "description": "Help menu in the macOS menu bar."
+  },
+
+  "commandOpenDocument": "Open…",
+  "@commandOpenDocument": {
+    "description": "Menu item that lets the user pick a document to open."
+  },
+
+  "commandToggleFullScreen": "Full screen",
+  "@commandToggleFullScreen": {
+    "description": "Menu item that enters or leaves full screen."
+  },
+
+  "commandOpenLogsFolder": "Open logs folder",
+  "@commandOpenLogsFolder": {
+    "description": "Help menu item that opens the folder containing the app's log files, for bug reports."
+  },
+
+  "commandAbout": "About Velin",
+  "@commandAbout": {
+    "description": "Menu item that shows the app version and license."
+  },
+
+  "commandQuit": "Quit",
+  "@commandQuit": {
+    "description": "Menu item that closes the application."
+  },
+
+  "commandOpenLogsFolderFailed": "Couldn't open the logs folder.",
+  "@commandOpenLogsFolderFailed": {
+    "description": "Shown when the logs folder could not be opened in the system file manager."
+  },
+
+  "commandLogsUnavailable": "Logging to a file is turned off, so there is no logs folder.",
+  "@commandLogsUnavailable": {
+    "description": "Shown when the user asks for the logs folder but file logging could not be started."
+  },
+
+  "aboutDescription": "A free, open-source PDF app.",
+  "@aboutDescription": {
+    "description": "One-line description of the app in the About dialog."
+  },
+
+  "aboutLicense": "Licensed under the GNU Affero General Public License v3.0.",
+  "@aboutLicense": {
+    "description": "License line in the About dialog."
   },
 
   "toolSelect": "Select",

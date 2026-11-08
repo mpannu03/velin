@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:pdfrx/pdfrx.dart';
+import 'package:velin/core/app_info/app_info.dart';
 import 'package:velin/core/bloc/bloc.dart';
 import 'package:velin/core/di/injection.dart' as di;
 import 'package:velin/core/error/global_error_handlers.dart';
@@ -22,8 +23,11 @@ void main() async {
   installGlobalErrorHandlers();
   Bloc.observer = AppBlocObserver();
 
+  final appInfo = await AppInfo.load();
+
   Logger('velin.main').info(
-    'Starting Velin (${kReleaseMode ? 'release' : 'debug'}) on '
+    'Starting Velin ${appInfo.displayVersion} '
+    '(${kReleaseMode ? 'release' : 'debug'}) on '
     '${Platform.operatingSystem} ${Platform.operatingSystemVersion}',
   );
 
@@ -43,7 +47,7 @@ void main() async {
 
   pdfrxFlutterInitialize();
 
-  di.configureDependencies(logging: logging);
+  di.configureDependencies(logging: logging, appInfo: appInfo);
 
   runApp(const VelinApp());
 }
