@@ -15,28 +15,31 @@ class PanelShell extends StatelessWidget {
 
   final Widget? trailing;
 
+  static const width = 320.0;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Card(
+    // Flat: the layout separates it from the page with a hairline.
+    return ColoredBox(
       color: colorScheme.surface,
       child: SizedBox(
-        width: 320,
+        width: width,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _Header(title: title, trailing: trailing),
-            Divider(
-              height: 1,
-              thickness: 1,
-              color: colorScheme.outlineVariant.withValues(alpha: 0.4),
-            ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(AppSpacing.md),
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  0,
+                  AppSpacing.md,
+                  AppSpacing.md,
+                ),
                 child: child,
               ),
             ),
@@ -59,7 +62,12 @@ class _Header extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.md,
+        AppSpacing.sm,
+        AppSpacing.xs,
+        AppSpacing.sm,
+      ),
       child: Row(
         children: [
           Expanded(

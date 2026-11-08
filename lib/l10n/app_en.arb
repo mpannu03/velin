@@ -349,14 +349,49 @@
     "description": "Message shown in the Dictionary panel when no definition was found."
   },
 
-  "toolZoomIn": "Zoom In",
+  "toolZoomIn": "Zoom in",
   "@toolZoomIn": {
     "description": "Label for the Zoom In action."
   },
 
-  "toolZoomOut": "Zoom Out",
+  "toolZoomOut": "Zoom out",
   "@toolZoomOut": {
     "description": "Label for the Zoom Out action."
+  },
+
+  "toolFitWidth": "Fit width",
+  "@toolFitWidth": {
+    "description": "Reader toolbar: zoom so the page fills the width."
+  },
+
+  "toolFitPage": "Fit page",
+  "@toolFitPage": {
+    "description": "Reader toolbar: zoom so the whole page is visible."
+  },
+
+  "toolPreviousPage": "Previous page",
+  "@toolPreviousPage": {
+    "description": "Reader toolbar: go to the previous page."
+  },
+
+  "toolNextPage": "Next page",
+  "@toolNextPage": {
+    "description": "Reader toolbar: go to the next page."
+  },
+
+  "toolPageNumber": "Page number",
+  "@toolPageNumber": {
+    "description": "Accessibility label of the reader's page number field."
+  },
+
+  "panelClose": "Close panel",
+  "@panelClose": {
+    "description": "Tooltip of the button that closes the reader's side panel."
+  },
+
+  "readerToolbar": "Reader toolbar",
+  "@readerToolbar": {
+    "description": "Accessibility label of the reader's toolbar."
   },
 
   "toolPageOf": "Page {current} of {total}",

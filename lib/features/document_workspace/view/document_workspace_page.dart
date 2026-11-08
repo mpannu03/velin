@@ -126,6 +126,10 @@ class _DocumentWorkspaceHostState extends State<_DocumentWorkspaceHost> {
               onGotoPage: widget.engine.actions.goToPage,
               zoomIn: widget.engine.actions.zoomIn,
               zoomOut: widget.engine.actions.zoomOut,
+              fitWidth: widget.engine.actions.fitWidth,
+              fitPage: widget.engine.actions.fitPage,
+              previousPage: widget.engine.actions.previousPage,
+              nextPage: widget.engine.actions.nextPage,
               onTextSearch: (text, caseInsensitive) {
                 context.read<DocumentWorkspaceBloc>().add(
                   DocumentWorkspaceSearch(text, caseInsensitive),

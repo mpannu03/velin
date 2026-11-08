@@ -21,6 +21,7 @@ void main() {
           dictionaryState: DictionaryState(),
           onDictionaryLookup: (_) {},
           onClearDictionary: () {},
+          onClose: () {},
         ),
       );
 
@@ -43,6 +44,7 @@ void main() {
           dictionaryState: DictionaryState(),
           onDictionaryLookup: (_) {},
           onClearDictionary: () {},
+          onClose: () {},
         ),
       );
 
@@ -65,6 +67,7 @@ void main() {
           dictionaryState: DictionaryState(),
           onDictionaryLookup: (_) {},
           onClearDictionary: () {},
+          onClose: () {},
         ),
       );
 
@@ -87,6 +90,7 @@ void main() {
           dictionaryState: DictionaryState(),
           onDictionaryLookup: (_) {},
           onClearDictionary: () {},
+          onClose: () {},
         ),
       );
 

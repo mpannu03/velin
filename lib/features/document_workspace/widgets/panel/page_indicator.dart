@@ -26,20 +26,20 @@ class PageIndicator extends StatelessWidget {
 
     return Tooltip(
       message: context.l10n.toolPageOf(currentPage!, pageCount),
-      child: Column(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           _PageInputField(
             currentPage: currentPage!,
             pageCount: pageCount,
             onGotoPage: onGotoPage,
           ),
-          Container(
-            width: 16,
-            height: 1,
-            margin: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
-            color: colorScheme.outlineVariant,
+          const SizedBox(width: AppSpacing.xs),
+          Text(
+            '/ $pageCount',
+            style: Theme.of(context).textTheme.bodyMedium
+                ?.copyWith(color: colorScheme.onSurfaceVariant),
           ),
-          Text('$pageCount'),
         ],
       ),
     );
@@ -94,7 +94,8 @@ class _PageInputFieldState extends State<_PageInputField> {
       return;
     }
 
-    widget.onGotoPage(value);
+    // Re-submitting the current page would only jump to its top.
+    if (value != widget.currentPage) widget.onGotoPage(value);
   }
 
   void _submitAndUnfocus() {
@@ -112,22 +113,26 @@ class _PageInputFieldState extends State<_PageInputField> {
       builder: (context, _) {
         final isFocused = _focusNode.hasFocus;
 
-        final borderColor = isFocused
-            ? colorScheme.primary
-            : colorScheme.outlineVariant;
-        final borderWidth = isFocused ? 1.5 : 1.0;
+        // Wide enough for the largest page number.
+        final digits = '${widget.pageCount}'.length;
 
         return Container(
-          width: 32,
-          height: 32,
+          width: 20.0 + digits * 9,
+          height: 28,
           decoration: BoxDecoration(
-            border: Border.all(color: borderColor, width: borderWidth),
+            color: colorScheme.surfaceContainerHighest,
+            border: Border.all(
+              color: isFocused ? colorScheme.primary : Colors.transparent,
+              width: 1.5,
+            ),
             borderRadius: BorderRadius.circular(AppRadius.md),
           ),
           alignment: Alignment.center,
           child: EditableText(
             controller: _controller,
             focusNode: _focusNode,
+            // Clicking elsewhere commits the typed page, like pressing Enter.
+            onTapOutside: (_) => _submitAndUnfocus(),
             style: (textTheme.bodyMedium ?? const TextStyle()).copyWith(
               color: colorScheme.onSurface,
               fontSize: 14,

@@ -1,5 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/core/document/engine/engine.dart';
+import 'package:velin/shared/extensions/extensions.dart';
+import 'package:velin/shared/widgets/widgets.dart';
 
 import '../../bloc/bloc.dart';
 import '../../models/models.dart';
@@ -20,6 +22,7 @@ class DocumentWorkspacePanel extends StatelessWidget {
     required this.dictionaryState,
     required this.onDictionaryLookup,
     required this.onClearDictionary,
+    required this.onClose,
   });
 
   final WorkspacePanel panel;
@@ -38,10 +41,19 @@ class DocumentWorkspacePanel extends StatelessWidget {
   final DictionaryState dictionaryState;
   final ValueChanged<String> onDictionaryLookup;
   final VoidCallback onClearDictionary;
+  final VoidCallback onClose;
 
   @override
   Widget build(BuildContext context) {
-    return PanelShell(title: panel.label(context), child: panelBody);
+    return PanelShell(
+      title: panel.label(context),
+      trailing: ToolbarIconButton(
+        icon: Icons.close,
+        tooltip: context.l10n.panelClose,
+        onPressed: onClose,
+      ),
+      child: panelBody,
+    );
   }
 
   Widget get panelBody => switch (panel) {

@@ -239,10 +239,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get panelDictionaryNotFound => 'No definition found';
 
   @override
-  String get toolZoomIn => 'Zoom In';
+  String get toolZoomIn => 'Zoom in';
 
   @override
-  String get toolZoomOut => 'Zoom Out';
+  String get toolZoomOut => 'Zoom out';
+
+  @override
+  String get toolFitWidth => 'Fit width';
+
+  @override
+  String get toolFitPage => 'Fit page';
+
+  @override
+  String get toolPreviousPage => 'Previous page';
+
+  @override
+  String get toolNextPage => 'Next page';
+
+  @override
+  String get toolPageNumber => 'Page number';
+
+  @override
+  String get panelClose => 'Close panel';
+
+  @override
+  String get readerToolbar => 'Reader toolbar';
 
   @override
   String toolPageOf(int current, int total) {
