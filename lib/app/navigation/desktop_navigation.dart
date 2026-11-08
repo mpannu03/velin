@@ -14,10 +14,11 @@ class DesktopNavigation extends StatelessWidget {
   final AppNavigationItem selectedItem;
   final ValueChanged<AppNavigationItem> onItemSelected;
 
-  static const _height = 44.0;
-  static const _containerPadding = 4.0;
-  static const _iconSize = 18.0;
+  static const _height = 30.0;
+  static const _containerPadding = 3.0;
+  static const _iconSize = 16.0;
   static const _horizontalItemPadding = 12.0;
+  static const _radius = _height / 2;
 
   /// Measures the widest segment so the pill has a uniform width.
   double _measureSegmentWidth(TextStyle? textStyle, BuildContext context) {
@@ -39,65 +40,55 @@ class DesktopNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final textStyle = Theme.of(context).textTheme.bodyMedium;
+    // Measured with the selected (bolder) style so labels never clip.
+    final textStyle = Theme.of(context).textTheme.bodySmall
+        ?.copyWith(fontWeight: FontWeight.w600);
 
     final segmentWidth = _measureSegmentWidth(textStyle, context);
     final containerWidth =
         segmentWidth * AppNavigationItem.values.length + 2 * _containerPadding;
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-          child: SizedBox(
-            height: 48,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: SizedBox(
-                width: containerWidth,
-                height: _height,
-                child: Container(
+    return SizedBox(
+      width: containerWidth,
+      height: _height,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(_radius),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(_containerPadding),
+          child: Stack(
+            children: [
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 220),
+                curve: Curves.easeOutCubic,
+                left: selectedItem.index * segmentWidth,
+                top: 0,
+                bottom: 0,
+                width: segmentWidth,
+                child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: const EdgeInsets.all(_containerPadding),
-                  child: Stack(
-                    children: [
-                      AnimatedPositioned(
-                        duration: const Duration(milliseconds: 220),
-                        curve: Curves.easeOutCubic,
-                        left: selectedItem.index * segmentWidth,
-                        top: 0,
-                        bottom: 0,
-                        width: segmentWidth,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: colorScheme.primary,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          for (final item in AppNavigationItem.values)
-                            _NavigationItem(
-                              item: item,
-                              width: segmentWidth,
-                              selected: item == selectedItem,
-                              onPressed: () => onItemSelected(item),
-                            ),
-                        ],
-                      ),
-                    ],
+                    color: colorScheme.primary,
+                    borderRadius: BorderRadius.circular(_radius),
                   ),
                 ),
               ),
-            ),
+              Row(
+                children: [
+                  for (final item in AppNavigationItem.values)
+                    _NavigationItem(
+                      item: item,
+                      width: segmentWidth,
+                      selected: item == selectedItem,
+                      onPressed: () => onItemSelected(item),
+                    ),
+                ],
+              ),
+            ],
           ),
         ),
-        const Divider(height: 1),
-      ],
+      ),
     );
   }
 }
@@ -126,10 +117,11 @@ class _NavigationItem extends StatelessWidget {
 
     return SizedBox(
       width: width,
-      height: DesktopNavigation._height,
+      height:
+          DesktopNavigation._height - 2 * DesktopNavigation._containerPadding,
       child: InkWell(
         onTap: onPressed,
-        borderRadius: BorderRadius.circular(AppRadius.md),
+        borderRadius: BorderRadius.circular(DesktopNavigation._radius),
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: DesktopNavigation._horizontalItemPadding,
@@ -145,7 +137,10 @@ class _NavigationItem extends StatelessWidget {
                   item.label(context),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: textTheme.bodyMedium?.copyWith(color: fg),
+                  style: textTheme.bodySmall?.copyWith(
+                    color: fg,
+                    fontWeight: selected ? FontWeight.w600 : null,
+                  ),
                 ),
               ),
             ],
