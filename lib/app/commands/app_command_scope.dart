@@ -43,6 +43,12 @@ class AppCommandScope extends StatelessWidget {
             return null;
           },
         ),
+        OpenFilesIntent: CallbackAction<OpenFilesIntent>(
+          onInvoke: (intent) {
+            handler.openPaths(intent.paths);
+            return null;
+          },
+        ),
       },
       child: child,
     );

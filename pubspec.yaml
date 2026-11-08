@@ -39,6 +39,7 @@ dependencies:
   flutter_widget_from_html_core: ^0.17.4
   bloc_concurrency: ^0.3.0
   package_info_plus: ^10.2.2
+  desktop_drop: ^0.8.0
 
 dev_dependencies:
   flutter_test:

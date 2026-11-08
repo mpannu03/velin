@@ -111,6 +111,57 @@ void main() {
     });
   });
 
+  group('openPaths', () {
+    test('opens every file and shows the reader', () async {
+      when(() => documentService.openPath(any())).thenAnswer(
+        (invocation) async => Success(
+          Document(
+            path: invocation.positionalArguments.single as String,
+            type: DocumentType.pdf,
+          ),
+        ),
+      );
+
+      await buildHandler().openPaths(['/docs/a.pdf', '/docs/b.pdf']);
+
+      verify(() => documentService.openPath('/docs/a.pdf')).called(1);
+      verify(() => documentService.openPath('/docs/b.pdf')).called(1);
+      expect(locations, ['/reader']);
+    });
+
+    test('reports files that cannot be opened and opens the rest', () async {
+      const failure = UnsupportedFileTypeFailure(path: '/docs/notes.txt');
+      when(() => documentService.openPath('/docs/notes.txt'))
+          .thenAnswer((_) async => const Failure(failure));
+      when(() => documentService.openPath('/docs/a.pdf')).thenAnswer(
+        (_) async =>
+            Success(Document(path: '/docs/a.pdf', type: DocumentType.pdf)),
+      );
+
+      await buildHandler().openPaths(['/docs/notes.txt', '/docs/a.pdf']);
+
+      verify(() => effects.notifyFailure(failure)).called(1);
+      expect(locations, ['/reader']);
+    });
+
+    test('stays put when nothing could be opened', () async {
+      const failure = FileNotFoundFailure(path: '/docs/gone.pdf');
+      when(() => documentService.openPath(any()))
+          .thenAnswer((_) async => const Failure(failure));
+
+      await buildHandler().openPaths(['/docs/gone.pdf']);
+
+      expect(locations, isEmpty);
+    });
+
+    test('does nothing for an empty list', () async {
+      await buildHandler().openPaths(const []);
+
+      verifyNever(() => documentService.openPath(any()));
+      expect(locations, isEmpty);
+    });
+  });
+
   group('toggleFullScreen', () {
     test('enters full screen when windowed', () async {
       when(() => windowManager.isFullScreen()).thenAnswer((_) async => false);

@@ -72,3 +72,10 @@ class AppCommandIntent extends Intent {
 
   final AppCommand command;
 }
+
+/// Opens files from outside the app, e.g. dropped on the window.
+class OpenFilesIntent extends Intent {
+  const OpenFilesIntent(this.paths);
+
+  final List<String> paths;
+}

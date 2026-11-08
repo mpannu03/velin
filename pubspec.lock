@@ -265,6 +265,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.8.0"
+  desktop_drop:
+    dependency: "direct main"
+    description:
+      name: desktop_drop
+      sha256: "8b07a8b4db47e0768c2a3a9433eb29160478be5f80905643fc0f79a4ae188e1e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.0"
   diff_match_patch:
     dependency: transitive
     description:
@@ -934,7 +942,7 @@ packages:
     source: hosted
     version: "0.28.0"
   screen_retriever:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: screen_retriever
       sha256: ace919117a7520c13a50a6259e60c4a0d4cbe98809468792a91b5c5adada2aa6
@@ -1154,6 +1162,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  universal_platform:
+    dependency: transitive
+    description:
+      name: universal_platform
+      sha256: "64e16458a0ea9b99260ceb5467a214c1f298d647c659af1bff6d3bf82536b1ec"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   url_launcher:
     dependency: transitive
     description:

@@ -7,6 +7,7 @@ import 'widgets/widgets.dart';
 
 /// Desktop window chrome: a single title bar holding the app menu, the
 /// section [navigation] and the window controls, above the page content.
+/// Files dropped anywhere on the window are opened.
 class DesktopShell extends StatelessWidget {
   const DesktopShell({
     required this.navigation,
@@ -19,11 +20,13 @@ class DesktopShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _TitleBar(navigation: navigation),
-        Expanded(child: child),
-      ],
+    return FileDropTarget(
+      child: Column(
+        children: [
+          _TitleBar(navigation: navigation),
+          Expanded(child: child),
+        ],
+      ),
     );
   }
 }
