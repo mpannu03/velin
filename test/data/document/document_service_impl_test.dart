@@ -109,6 +109,50 @@ void main() {
     });
   });
 
+  group('openPath', () {
+    late Directory tempDir;
+
+    setUp(() {
+      tempDir = Directory.systemTemp.createTempSync('velin_open_path_');
+    });
+
+    tearDown(() => tempDir.deleteSync(recursive: true));
+
+    test('opens an existing PDF through the repository', () async {
+      final file = File(p.join(tempDir.path, 'dropped.PDF'))
+        ..writeAsStringSync('');
+      final document = Document(path: file.path, type: DocumentType.pdf);
+
+      when(() => repository.open(file.path, DocumentType.pdf))
+          .thenReturn(Success(document));
+
+      final result = await service.openPath(file.path);
+
+      expect(result, Success(document));
+    });
+
+    test('fails with UnsupportedFileTypeFailure for other files', () async {
+      final file = File(p.join(tempDir.path, 'notes.txt'))
+        ..writeAsStringSync('');
+
+      final result = await service.openPath(file.path);
+
+      expect(result.failureOrNull, isA<UnsupportedFileTypeFailure>());
+      verifyNever(() => repository.open(any(), any()));
+    });
+
+    test('fails with FileNotFoundFailure when the file is missing', () async {
+      final path = p.join(tempDir.path, 'missing.pdf');
+
+      final result = await service.openPath(path);
+
+      expect(
+        result.failureOrNull,
+        isA<FileNotFoundFailure>().having((f) => f.path, 'path', path),
+      );
+    });
+  });
+
   group('openRecent', () {
     late Directory tempDir;
 
