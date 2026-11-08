@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/widgets/widgets.dart';
 
 import '../../../../helpers/helpers.dart';
@@ -59,7 +60,7 @@ void main() {
 
       final clip = tester.widget<ClipRRect>(find.byType(ClipRRect));
 
-      expect(clip.borderRadius, BorderRadius.circular(8));
+      expect(clip.borderRadius, BorderRadius.circular(AppRadius.md));
     });
   });
 
