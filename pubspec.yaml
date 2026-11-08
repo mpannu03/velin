@@ -40,6 +40,7 @@ dependencies:
   bloc_concurrency: ^0.3.0
   package_info_plus: ^10.2.2
   desktop_drop: ^0.8.0
+  screen_retriever: ^0.2.2
 
 dev_dependencies:
   flutter_test:
