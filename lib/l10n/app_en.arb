@@ -121,6 +121,11 @@
     "description": "Shown when the user asks for the logs folder but file logging could not be started."
   },
 
+  "dropFilesToOpen": "Drop PDF files to open them",
+  "@dropFilesToOpen": {
+    "description": "Shown over the window while the user drags files onto it."
+  },
+
   "aboutDescription": "A free, open-source PDF app.",
   "@aboutDescription": {
     "description": "One-line description of the app in the About dialog."

@@ -8,6 +8,13 @@ abstract interface class DocumentService {
   /// `Success(null)` means the user cancelled the picker.
   Future<Result<Document?>> open();
 
+  /// Opens the file at [path], e.g. one dropped on the window or passed on
+  /// the command line.
+  ///
+  /// Fails with `FileNotFoundFailure` when there is no such file and with
+  /// `UnsupportedFileTypeFailure` when it is not a document Velin can open.
+  Future<Result<Document>> openPath(String path);
+
   /// Fails with `FileNotFoundFailure` when the file was moved or deleted
   /// since it was last opened.
   Future<Result<Document>> openRecent(RecentDocument recentDocument);

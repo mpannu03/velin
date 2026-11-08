@@ -46,6 +46,21 @@ class DocumentServiceImpl implements DocumentService {
   }
 
   @override
+  Future<Result<Document>> openPath(String path) async {
+    final type = DocumentType.fromPath(path);
+
+    if (type == null) {
+      return Failure(UnsupportedFileTypeFailure(path: path));
+    }
+
+    if (!await File(path).exists()) {
+      return Failure(FileNotFoundFailure(path: path));
+    }
+
+    return _documentRepository.open(path, type);
+  }
+
+  @override
   Future<Result<Document>> openRecent(RecentDocument recentDocument) async {
     final path = recentDocument.path;
 

@@ -10,9 +10,63 @@
 struct _MyApplication {
   GtkApplication parent_instance;
   char** dart_entrypoint_arguments;
+
+  // The main window, once created. Velin runs as a single instance (see
+  // my_application_local_command_line), so later launches reuse it.
+  GtkWindow* window;
+
+  // "velin/open_files": delivers files from later launches to Dart.
+  FlMethodChannel* open_files_channel;
+
+  // Paths received before Dart called "ready".
+  GPtrArray* pending_files;
+  gboolean dart_ready;
 };
 
 G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
+
+// Sends |paths| (a GPtrArray of gchar*) to Dart, or queues them until Dart
+// is ready.
+static void send_open_files(MyApplication* self, GPtrArray* paths) {
+  if (paths->len == 0) {
+    return;
+  }
+
+  if (!self->dart_ready || self->open_files_channel == nullptr) {
+    for (guint i = 0; i < paths->len; i++) {
+      g_ptr_array_add(self->pending_files,
+                      g_strdup(static_cast<gchar*>(g_ptr_array_index(paths, i))));
+    }
+    return;
+  }
+
+  g_autoptr(FlValue) list = fl_value_new_list();
+  for (guint i = 0; i < paths->len; i++) {
+    fl_value_append_take(
+        list,
+        fl_value_new_string(static_cast<gchar*>(g_ptr_array_index(paths, i))));
+  }
+  fl_method_channel_invoke_method(self->open_files_channel, "openFiles", list,
+                                  nullptr, nullptr, nullptr);
+}
+
+static void open_files_method_call_cb(FlMethodChannel* channel,
+                                      FlMethodCall* method_call,
+                                      gpointer user_data) {
+  MyApplication* self = MY_APPLICATION(user_data);
+
+  if (g_strcmp0(fl_method_call_get_name(method_call), "ready") != 0) {
+    fl_method_call_respond_not_implemented(method_call, nullptr);
+    return;
+  }
+
+  self->dart_ready = TRUE;
+  fl_method_call_respond_success(method_call, nullptr, nullptr);
+
+  g_autoptr(GPtrArray) pending = self->pending_files;
+  self->pending_files = g_ptr_array_new_with_free_func(g_free);
+  send_open_files(self, pending);
+}
 
 // Called when first Flutter frame received.
 static void first_frame_cb(MyApplication* self, FlView* view) {
@@ -22,8 +76,16 @@ static void first_frame_cb(MyApplication* self, FlView* view) {
 // Implements GApplication::activate.
 static void my_application_activate(GApplication* application) {
   MyApplication* self = MY_APPLICATION(application);
+
+  // A later launch activated us: show the existing window.
+  if (self->window != nullptr) {
+    gtk_window_present(self->window);
+    return;
+  }
+
   GtkWindow* window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
+  self->window = window;
 
   // Use a header bar when running in GNOME as this is the common style used
   // by applications and is the setup most users will be using (e.g. Ubuntu
@@ -75,6 +137,14 @@ static void my_application_activate(GApplication* application) {
 
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
 
+  FlEngine* engine = fl_view_get_engine(view);
+  g_autoptr(FlStandardMethodCodec) codec = fl_standard_method_codec_new();
+  self->open_files_channel = fl_method_channel_new(
+      fl_engine_get_binary_messenger(engine), "velin/open_files",
+      FL_METHOD_CODEC(codec));
+  fl_method_channel_set_method_call_handler(
+      self->open_files_channel, open_files_method_call_cb, self, nullptr);
+
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
 
@@ -93,10 +163,57 @@ static gboolean my_application_local_command_line(GApplication* application,
     return TRUE;
   }
 
+  // Velin is already running: hand it our files (or just raise it) and exit.
+  if (g_application_get_is_remote(application)) {
+    gchar** arguments = self->dart_entrypoint_arguments;
+    GPtrArray* files = g_ptr_array_new_with_free_func(g_object_unref);
+    for (gchar** argument = arguments; *argument != nullptr; argument++) {
+      if ((*argument)[0] != '\0' && (*argument)[0] != '-') {
+        // Resolves relative paths against this process's directory.
+        g_ptr_array_add(files, g_file_new_for_commandline_arg(*argument));
+      }
+    }
+
+    if (files->len > 0) {
+      g_application_open(application,
+                         reinterpret_cast<GFile**>(files->pdata),
+                         static_cast<gint>(files->len), "");
+    } else {
+      g_application_activate(application);
+    }
+    g_ptr_array_unref(files);
+
+    GDBusConnection* connection = g_application_get_dbus_connection(application);
+    if (connection != nullptr) {
+      g_dbus_connection_flush_sync(connection, nullptr, nullptr);
+    }
+
+    *exit_status = 0;
+    return TRUE;
+  }
+
   g_application_activate(application);
   *exit_status = 0;
 
   return TRUE;
+}
+
+// Implements GApplication::open: files from a later launch.
+static void my_application_open(GApplication* application, GFile** files,
+                                gint n_files, const gchar* hint) {
+  MyApplication* self = MY_APPLICATION(application);
+
+  g_autoptr(GPtrArray) paths = g_ptr_array_new_with_free_func(g_free);
+  for (gint i = 0; i < n_files; i++) {
+    gchar* path = g_file_get_path(files[i]);
+    if (path != nullptr) {
+      g_ptr_array_add(paths, path);
+    }
+  }
+
+  // Creates the window if needed, otherwise brings it to the front.
+  my_application_activate(application);
+  send_open_files(self, paths);
 }
 
 // Implements GApplication::startup.
@@ -121,11 +238,14 @@ static void my_application_shutdown(GApplication* application) {
 static void my_application_dispose(GObject* object) {
   MyApplication* self = MY_APPLICATION(object);
   g_clear_pointer(&self->dart_entrypoint_arguments, g_strfreev);
+  g_clear_object(&self->open_files_channel);
+  g_clear_pointer(&self->pending_files, g_ptr_array_unref);
   G_OBJECT_CLASS(my_application_parent_class)->dispose(object);
 }
 
 static void my_application_class_init(MyApplicationClass* klass) {
   G_APPLICATION_CLASS(klass)->activate = my_application_activate;
+  G_APPLICATION_CLASS(klass)->open = my_application_open;
   G_APPLICATION_CLASS(klass)->local_command_line =
       my_application_local_command_line;
   G_APPLICATION_CLASS(klass)->startup = my_application_startup;
@@ -133,7 +253,9 @@ static void my_application_class_init(MyApplicationClass* klass) {
   G_OBJECT_CLASS(klass)->dispose = my_application_dispose;
 }
 
-static void my_application_init(MyApplication* self) {}
+static void my_application_init(MyApplication* self) {
+  self->pending_files = g_ptr_array_new_with_free_func(g_free);
+}
 
 MyApplication* my_application_new() {
   // Set the program name to the application ID, which helps various systems
@@ -144,5 +266,5 @@ MyApplication* my_application_new() {
 
   return MY_APPLICATION(g_object_new(my_application_get_type(),
                                      "application-id", APPLICATION_ID, "flags",
-                                     G_APPLICATION_NON_UNIQUE, nullptr));
+                                     G_APPLICATION_HANDLES_OPEN, nullptr));
 }

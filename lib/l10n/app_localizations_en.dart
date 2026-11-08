@@ -83,6 +83,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Logging to a file is turned off, so there is no logs folder.';
 
   @override
+  String get dropFilesToOpen => 'Drop PDF files to open them';
+
+  @override
   String get aboutDescription => 'A free, open-source PDF app.';
 
   @override

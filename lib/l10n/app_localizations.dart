@@ -238,6 +238,12 @@ abstract class AppLocalizations {
   /// **'Logging to a file is turned off, so there is no logs folder.'**
   String get commandLogsUnavailable;
 
+  /// Shown over the window while the user drags files onto it.
+  ///
+  /// In en, this message translates to:
+  /// **'Drop PDF files to open them'**
+  String get dropFilesToOpen;
+
   /// One-line description of the app in the About dialog.
   ///
   /// In en, this message translates to:

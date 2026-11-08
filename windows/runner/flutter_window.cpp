@@ -1,8 +1,11 @@
 #include "flutter_window.h"
 
+#include <flutter/standard_method_codec.h>
+
 #include <optional>
 
 #include "flutter/generated_plugin_registrant.h"
+#include "single_instance.h"
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
     : project_(project) {}
@@ -25,6 +28,7 @@ bool FlutterWindow::OnCreate() {
     return false;
   }
   RegisterPlugins(flutter_controller_->engine());
+  SetUpOpenFilesChannel();
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 
   flutter_controller_->engine()->SetNextFrameCallback([&]() {
@@ -40,6 +44,7 @@ bool FlutterWindow::OnCreate() {
 }
 
 void FlutterWindow::OnDestroy() {
+  open_files_channel_ = nullptr;
   if (flutter_controller_) {
     flutter_controller_ = nullptr;
   }
@@ -47,10 +52,60 @@ void FlutterWindow::OnDestroy() {
   Win32Window::OnDestroy();
 }
 
+void FlutterWindow::SetUpOpenFilesChannel() {
+  open_files_channel_ =
+      std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+          flutter_controller_->engine()->messenger(), "velin/open_files",
+          &flutter::StandardMethodCodec::GetInstance());
+
+  open_files_channel_->SetMethodCallHandler(
+      [this](const flutter::MethodCall<flutter::EncodableValue>& call,
+             std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>>
+                 result) {
+        if (call.method_name() != "ready") {
+          result->NotImplemented();
+          return;
+        }
+        dart_ready_ = true;
+        result->Success();
+
+        std::vector<std::string> pending = std::move(pending_files_);
+        pending_files_.clear();
+        OpenFiles(std::move(pending));
+      });
+}
+
+void FlutterWindow::OpenFiles(std::vector<std::string> paths) {
+  if (paths.empty()) {
+    return;
+  }
+  if (!dart_ready_ || !open_files_channel_) {
+    pending_files_.insert(pending_files_.end(), paths.begin(), paths.end());
+    return;
+  }
+
+  flutter::EncodableList list;
+  for (std::string& path : paths) {
+    list.emplace_back(std::move(path));
+  }
+  open_files_channel_->InvokeMethod(
+      "openFiles", std::make_unique<flutter::EncodableValue>(std::move(list)));
+}
+
 LRESULT
 FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
                               WPARAM const wparam,
                               LPARAM const lparam) noexcept {
+  // Files from a second launch (see single_instance.h).
+  if (message == WM_COPYDATA) {
+    std::vector<std::string> paths;
+    if (DecodeOpenFilesMessage(reinterpret_cast<COPYDATASTRUCT*>(lparam),
+                               &paths)) {
+      OpenFiles(std::move(paths));
+      return TRUE;
+    }
+  }
+
   // Give Flutter, including plugins, an opportunity to handle window messages.
   if (flutter_controller_) {
     std::optional<LRESULT> result =

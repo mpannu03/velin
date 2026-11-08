@@ -56,6 +56,31 @@ class AppCommandHandler {
     }
   }
 
+  /// Opens files handed to the app from outside: dropped on the window,
+  /// passed on the command line or sent by a second launch ("Open with").
+  ///
+  /// Each file that cannot be opened is reported; the reader is shown if
+  /// at least one was opened.
+  Future<void> openPaths(List<String> paths) async {
+    if (paths.isEmpty) return;
+    _log.info('Opening ${paths.length} file(s) from outside the app');
+
+    var openedAny = false;
+
+    for (final path in paths) {
+      final result = await _documentService.openPath(path);
+
+      switch (result) {
+        case Success():
+          openedAny = true;
+        case Failure(:final failure):
+          _appEffectController.notifyFailure(failure);
+      }
+    }
+
+    if (openedAny) _navigate('/reader');
+  }
+
   Future<void> toggleFullScreen() async {
     final isFullScreen = await _windowManager.isFullScreen();
     await _windowManager.setFullScreen(!isFullScreen);
