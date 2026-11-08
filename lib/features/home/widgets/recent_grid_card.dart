@@ -42,11 +42,6 @@ class _RecentGridCardState extends State<RecentGridCard> {
             : colors.surfaceContainerLow,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.lg),
-          side: BorderSide(
-            color: _hovered
-                ? colors.outlineVariant
-                : colors.outlineVariant.withValues(alpha: 0.6),
-          ),
         ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(

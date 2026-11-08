@@ -17,10 +17,6 @@ class RecentEmptyState extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.xxl),
       decoration: BoxDecoration(
         color: colors.surfaceContainerLow,
-        border: Border.all(
-          color: colors.outlineVariant,
-          strokeAlign: BorderSide.strokeAlignInside,
-        ),
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Column(

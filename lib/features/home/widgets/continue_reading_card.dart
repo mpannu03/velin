@@ -28,7 +28,6 @@ class ContinueReadingCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: colors.surfaceContainerLow,
-        border: Border.all(color: colors.outlineVariant),
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Row(
@@ -47,22 +46,12 @@ class ContinueReadingCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.sm,
-                    vertical: AppSpacing.xxs,
-                  ),
-                  decoration: BoxDecoration(
-                    color: colors.primaryContainer,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: Text(
-                    context.l10n.homeContinueReading.toUpperCase(),
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: colors.onPrimaryContainer,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.8,
-                    ),
+                Text(
+                  context.l10n.homeContinueReading.toUpperCase(),
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: colors.primary,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 0.8,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.sm),

@@ -24,7 +24,6 @@ class HomeStatsCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: colors.surfaceContainerLow,
-        border: Border.all(color: colors.outlineVariant),
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Column(
@@ -77,15 +76,7 @@ class _StatRow extends StatelessWidget {
     final colors = theme.colorScheme;
     return Row(
       children: [
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            color: colors.primaryContainer,
-            borderRadius: BorderRadius.circular(AppRadius.md),
-          ),
-          child: Icon(icon, size: 18, color: colors.onPrimaryContainer),
-        ),
+        Icon(icon, size: 18, color: colors.onSurfaceVariant),
         const SizedBox(width: AppSpacing.md),
         Expanded(
           child: Text(

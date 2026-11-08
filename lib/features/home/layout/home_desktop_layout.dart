@@ -121,7 +121,6 @@ class _NoResults extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
         color: colors.surfaceContainerLow,
-        border: Border.all(color: colors.outlineVariant),
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Text(
