@@ -32,6 +32,9 @@ void main() {
       documentService = MockDocumentService();
       effectController = MockAppEffectController();
 
+      when(() => documentService.watchActivated())
+          .thenAnswer((_) => const Stream.empty());
+
       firstDocument = Document(
         path: r'C:\Documents\first.pdf',
         type: DocumentType.pdf,
@@ -134,6 +137,91 @@ void main() {
           bloc.add(ReaderDocumentSelected(secondDocument));
 
           await Future<void>.delayed(Duration.zero);
+        },
+        expect: () => [
+          isA<ReaderLoading>(),
+          isA<ReaderLoaded>().having(
+            (state) => state.selectedDocument,
+            'selectedDocument',
+            same(firstDocument),
+          ),
+          isA<ReaderLoaded>().having(
+            (state) => state.selectedDocument,
+            'selectedDocument',
+            same(secondDocument),
+          ),
+        ],
+      );
+    });
+
+    group('document activation', () {
+      blocTest<ReaderBloc, ReaderState>(
+        'selects a newly opened document once it is in the list',
+        setUp: () {
+          final documents = StreamController<List<Document>>();
+          final activated = StreamController<Document>();
+
+          when(() => documentService.watch())
+              .thenAnswer((_) => documents.stream);
+          when(() => documentService.watchActivated())
+              .thenAnswer((_) => activated.stream);
+
+          addTearDown(documents.close);
+          addTearDown(activated.close);
+
+          documents.add([firstDocument]);
+
+          // The activation arrives before the list update that contains it.
+          Future<void>.delayed(Duration.zero, () {
+            activated.add(secondDocument);
+            documents.add([firstDocument, secondDocument]);
+          });
+        },
+        build: buildBloc,
+        act: (bloc) async {
+          bloc.add(const ReaderStarted());
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+        },
+        expect: () => [
+          isA<ReaderLoading>(),
+          isA<ReaderLoaded>().having(
+            (state) => state.selectedDocument,
+            'selectedDocument',
+            same(firstDocument),
+          ),
+          isA<ReaderLoaded>()
+              .having((state) => state.documents, 'documents', [
+                firstDocument,
+                secondDocument,
+              ])
+              .having(
+                (state) => state.selectedDocument,
+                'selectedDocument',
+                same(secondDocument),
+              ),
+        ],
+      );
+
+      blocTest<ReaderBloc, ReaderState>(
+        'brings an already open document to the front when re-opened',
+        setUp: () {
+          final activated = StreamController<Document>();
+
+          when(() => documentService.watch())
+              .thenAnswer((_) => Stream.value([firstDocument, secondDocument]));
+          when(() => documentService.watchActivated())
+              .thenAnswer((_) => activated.stream);
+
+          addTearDown(activated.close);
+
+          Future<void>.delayed(Duration.zero, () {
+            activated.add(secondDocument);
+          });
+        },
+        build: buildBloc,
+        act: (bloc) async {
+          bloc.add(const ReaderStarted());
+          await Future<void>.delayed(const Duration(milliseconds: 10));
         },
         expect: () => [
           isA<ReaderLoading>(),

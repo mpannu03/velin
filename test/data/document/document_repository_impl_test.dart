@@ -28,6 +28,45 @@ void main() {
     });
   });
 
+  group('open an already open file', () {
+    test('returns the existing document instead of a duplicate', () {
+      final first = (repository.open(
+        '/documents/test.pdf',
+        DocumentType.pdf,
+      ) as Success<Document>).data;
+      final second = (repository.open(
+        '/documents/test.pdf',
+        DocumentType.pdf,
+      ) as Success<Document>).data;
+
+      expect(second, same(first));
+    });
+
+    test('announces both the first and the repeated open', () async {
+      final activated = <Document>[];
+      final subscription = repository.watchActivated().listen(activated.add);
+      addTearDown(subscription.cancel);
+
+      final document = (repository.open(
+        '/documents/test.pdf',
+        DocumentType.pdf,
+      ) as Success<Document>).data;
+      repository.open('/documents/test.pdf', DocumentType.pdf);
+      await Future<void>.delayed(Duration.zero);
+
+      expect(activated, [document, document]);
+    });
+
+    test('lists the document only once', () async {
+      repository.open('/documents/test.pdf', DocumentType.pdf);
+      repository.open('/documents/test.pdf', DocumentType.pdf);
+
+      final documents = await repository.watch().first;
+
+      expect(documents, hasLength(1));
+    });
+  });
+
   group('get', () {
     test('returns null for unknown id', () {
       expect(repository.get('unknown-id'), isNull);

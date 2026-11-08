@@ -21,45 +21,89 @@ class ReaderBloc extends Bloc<ReaderEvent, ReaderState> {
   final DocumentService _documentService;
   final AppEffectController _appEffectController;
 
+  /// A document that was opened before it showed up in the watched list
+  /// (the two streams are independent); selected once it arrives.
+  Document? _pendingActivation;
+
   Future<void> _onStarted(
     ReaderStarted event,
     Emitter<ReaderState> emit,
   ) async {
     emit(const ReaderLoading());
 
-    await emit.onEach<List<Document>>(
-      _documentService.watch(),
-      onData: (documents) {
-        final currentState = state;
+    await Future.wait([
+      emit.onEach<List<Document>>(
+        _documentService.watch(),
+        onData: (documents) => _onDocumentsChanged(documents, emit),
+        onError: (Object error, StackTrace stackTrace) {
+          emit(ReaderError(mapError(error, stackTrace)));
+        },
+      ),
+      emit.onEach<Document>(
+        _documentService.watchActivated(),
+        onData: (document) => _onDocumentActivated(document, emit),
+      ),
+    ]);
+  }
 
-        if (currentState is ReaderLoaded) {
-          final selectedDocument = currentState.selectedDocument;
+  void _onDocumentsChanged(
+    List<Document> documents,
+    Emitter<ReaderState> emit,
+  ) {
+    final currentState = state;
 
-          emit(
-            currentState.copyWith(
-              documents: documents,
-              selectedDocument: documents.contains(selectedDocument)
-                  ? selectedDocument
-                  : documents.isEmpty
-                  ? null
-                  : documents.first,
-            ),
-          );
+    final pending = _pendingActivation;
+    if (pending != null && documents.contains(pending)) {
+      _pendingActivation = null;
 
-          return;
-        }
+      emit(
+        currentState is ReaderLoaded
+            ? currentState.copyWith(
+                documents: documents,
+                selectedDocument: pending,
+              )
+            : ReaderLoaded(documents: documents, selectedDocument: pending),
+      );
 
-        emit(
-          ReaderLoaded(
-            documents: documents,
-            selectedDocument: documents.isEmpty ? null : documents.first,
-          ),
-        );
-      },
-      onError: (Object error, StackTrace stackTrace) {
-        emit(ReaderError(mapError(error, stackTrace)));
-      },
+      return;
+    }
+
+    if (currentState is ReaderLoaded) {
+      final selectedDocument = currentState.selectedDocument;
+
+      emit(
+        currentState.copyWith(
+          documents: documents,
+          selectedDocument: documents.contains(selectedDocument)
+              ? selectedDocument
+              : documents.isEmpty
+              ? null
+              : documents.first,
+        ),
+      );
+
+      return;
+    }
+
+    emit(
+      ReaderLoaded(
+        documents: documents,
+        selectedDocument: documents.isEmpty ? null : documents.first,
+      ),
     );
+  }
+
+  void _onDocumentActivated(Document document, Emitter<ReaderState> emit) {
+    final currentState = state;
+
+    if (currentState is ReaderLoaded &&
+        currentState.documents.contains(document)) {
+      _pendingActivation = null;
+      emit(currentState.copyWith(selectedDocument: document));
+      return;
+    }
+
+    _pendingActivation = document;
   }
 
   Future<void> _onDocumentOpened(

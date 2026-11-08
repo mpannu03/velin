@@ -15,4 +15,7 @@ abstract interface class DocumentService {
   Result<void> close(Document document);
 
   Stream<List<Document>> watch();
+
+  /// Emits each document that is opened, including re-opened ones.
+  Stream<Document> watchActivated();
 }
