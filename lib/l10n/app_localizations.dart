@@ -628,6 +628,12 @@ abstract class AppLocalizations {
   /// **'Security'**
   String get toolsCategorySecurity;
 
+  /// Shown in a tool's settings pane before a file is chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a file to see the options.'**
+  String get toolsSettingsEmpty;
+
   /// Hint of the search field on the Tools page.
   ///
   /// In en, this message translates to:

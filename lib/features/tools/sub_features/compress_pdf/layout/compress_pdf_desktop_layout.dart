@@ -1,6 +1,5 @@
 import 'package:material_ui/material_ui.dart';
 
-import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
@@ -20,35 +19,25 @@ class CompressPdfDesktopLayout extends StatelessWidget {
       title: l10n.toolsCompressPdf,
       description: l10n.toolsCompressIntro,
       onBack: viewModel.onBack,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+      settings: [
+        if (hasInputFile) ...[
           ToolSectionCard(
-            title: l10n.toolsCompressSourceSectionTitle,
-            child: SingleFilePicker(
-              filePath: viewModel.inputFilePath,
-              emptyStateDescription: l10n.toolsCompressSourceDescription,
-              onPickFile: viewModel.onPickFile,
+            title: l10n.toolsCompressQualitySectionTitle,
+            child: QualityEditor(
+              quality: viewModel.quality,
+              onQualityChanged: viewModel.onQualityChanged,
             ),
           ),
-          if (hasInputFile) ...[
-            const SizedBox(height: AppSpacing.lg),
-            ToolSectionCard(
-              title: l10n.toolsCompressQualitySectionTitle,
-              child: QualityEditor(
-                quality: viewModel.quality,
-                onQualityChanged: viewModel.onQualityChanged,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            OutputFilePicker(
-              fileName: viewModel.outputFileName,
-              directoryPath: viewModel.outputDirectory,
-              onFileNameChanged: viewModel.onOutputFileNameChanged,
-              onChooseFolder: viewModel.onChooseOutputFolder,
-            ),
-            const SizedBox(height: AppSpacing.xl),
-            ToolActionBar(
+          OutputFilePicker(
+            fileName: viewModel.outputFileName,
+            directoryPath: viewModel.outputDirectory,
+            onFileNameChanged: viewModel.onOutputFileNameChanged,
+            onChooseFolder: viewModel.onChooseOutputFolder,
+          ),
+        ],
+      ],
+      action: hasInputFile
+          ? ToolActionBar(
               isSubmitting: viewModel.isSubmitting,
               task: viewModel.task,
               submittingText: l10n.toolsCompressSubmitting,
@@ -57,9 +46,15 @@ class CompressPdfDesktopLayout extends StatelessWidget {
               label: l10n.toolsCompressButton,
               hintText: l10n.toolsCompressButtonDisabledHint,
               onAction: viewModel.onCompress,
-            ),
-          ],
-        ],
+            )
+          : null,
+      child: ToolSectionCard(
+        title: l10n.toolsCompressSourceSectionTitle,
+        child: SingleFilePicker(
+          filePath: viewModel.inputFilePath,
+          emptyStateDescription: l10n.toolsCompressSourceDescription,
+          onPickFile: viewModel.onPickFile,
+        ),
       ),
     );
   }

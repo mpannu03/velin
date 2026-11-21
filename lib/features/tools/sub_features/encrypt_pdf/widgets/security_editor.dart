@@ -31,21 +31,19 @@ class SecurityEditor extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
         SegmentedButton<EncryptPdfEncryptionLevel>(
           key: const ValueKey('encrypt-level'),
-          showSelectedIcon: true,
+          showSelectedIcon: false,
+          expandedInsets: EdgeInsets.zero,
           segments: [
             ButtonSegment(
               value: EncryptPdfEncryptionLevel.aes256,
-              icon: const Icon(Icons.enhanced_encryption_outlined, size: 18),
               label: Text(l10n.toolsProtectEncryptionAes256),
             ),
             ButtonSegment(
               value: EncryptPdfEncryptionLevel.aes128,
-              icon: const Icon(Icons.lock_outline, size: 18),
               label: Text(l10n.toolsProtectEncryptionAes128),
             ),
             ButtonSegment(
               value: EncryptPdfEncryptionLevel.rc4,
-              icon: const Icon(Icons.lock_open_outlined, size: 18),
               label: Text(l10n.toolsProtectEncryptionRc4),
             ),
           ],
@@ -59,21 +57,19 @@ class SecurityEditor extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
         SegmentedButton<EncryptPdfPermissionPreset>(
           key: const ValueKey('encrypt-permissions'),
-          showSelectedIcon: true,
+          showSelectedIcon: false,
+          expandedInsets: EdgeInsets.zero,
           segments: [
             ButtonSegment(
               value: EncryptPdfPermissionPreset.all,
-              icon: const Icon(Icons.done_all_outlined, size: 18),
               label: Text(l10n.toolsProtectPermissionsAll),
             ),
             ButtonSegment(
               value: EncryptPdfPermissionPreset.readOnly,
-              icon: const Icon(Icons.print_outlined, size: 18),
               label: Text(l10n.toolsProtectPermissionsReadOnly),
             ),
             ButtonSegment(
               value: EncryptPdfPermissionPreset.none,
-              icon: const Icon(Icons.visibility_off_outlined, size: 18),
               label: Text(l10n.toolsProtectPermissionsNone),
             ),
           ],

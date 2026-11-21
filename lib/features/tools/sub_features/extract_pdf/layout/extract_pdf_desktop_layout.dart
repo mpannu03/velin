@@ -1,5 +1,4 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
@@ -18,38 +17,28 @@ class ExtractPdfDesktopLayout extends StatelessWidget {
       title: l10n.toolsExtractPdf,
       description: l10n.toolsExtractIntro,
       onBack: viewModel.onBack,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // _buildContent(context),
+      settings: [
+        if (hasInputFile) ...[
           ToolSectionCard(
-            title: l10n.toolsExtractSourceSectionTitle,
-            child: SingleFilePicker(
-              filePath: viewModel.inputFilePath,
-              onPickFile: viewModel.onPickFile,
+            title: l10n.toolsExtractSelectionSectionTitle,
+            child: PageSelectionField(
+              value: viewModel.pageSelection ?? '',
+              fieldKey: const ValueKey('extract-page-selection'),
+              width: 260,
+              hintText: l10n.toolsExtractSelectionHint,
+              onSubmitted: viewModel.onSelectionChanged,
             ),
           ),
-          if (hasInputFile) ...[
-            const SizedBox(height: AppSpacing.lg),
-            ToolSectionCard(
-              title: l10n.toolsExtractSelectionSectionTitle,
-              child: PageSelectionField(
-                value: viewModel.pageSelection ?? '',
-                fieldKey: const ValueKey('extract-page-selection'),
-                width: 260,
-                hintText: l10n.toolsExtractSelectionHint,
-                onSubmitted: viewModel.onSelectionChanged,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            OutputFilePicker(
-              fileName: viewModel.outputFileName,
-              directoryPath: viewModel.outputDirectory,
-              onFileNameChanged: viewModel.onOutputFileNameChanged,
-              onChooseFolder: viewModel.onChooseOutputFolder,
-            ),
-            const SizedBox(height: AppSpacing.xl),
-            ToolActionBar(
+          OutputFilePicker(
+            fileName: viewModel.outputFileName,
+            directoryPath: viewModel.outputDirectory,
+            onFileNameChanged: viewModel.onOutputFileNameChanged,
+            onChooseFolder: viewModel.onChooseOutputFolder,
+          ),
+        ],
+      ],
+      action: hasInputFile
+          ? ToolActionBar(
               isSubmitting: viewModel.isSubmitting,
               task: viewModel.task,
               submittingText: l10n.toolsExtractSubmitting,
@@ -58,9 +47,14 @@ class ExtractPdfDesktopLayout extends StatelessWidget {
               label: l10n.toolsExtractButton,
               hintText: l10n.toolsExtractButtonDisabledHint,
               onAction: viewModel.onExtract,
-            ),
-          ],
-        ],
+            )
+          : null,
+      child: ToolSectionCard(
+        title: l10n.toolsExtractSourceSectionTitle,
+        child: SingleFilePicker(
+          filePath: viewModel.inputFilePath,
+          onPickFile: viewModel.onPickFile,
+        ),
       ),
     );
   }

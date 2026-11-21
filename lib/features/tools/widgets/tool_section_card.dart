@@ -25,7 +25,7 @@ class ToolSectionCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ToolSectionHeader(title: title, trailing: trailing),
-        const SizedBox(height: AppSpacing.md),
+        const SizedBox(height: AppSpacing.sm),
         child,
       ],
     );
@@ -54,12 +54,12 @@ class ToolSectionHeader extends StatelessWidget {
     final colors = theme.colorScheme;
 
     return SizedBox(
-      height: 36,
+      height: 32,
       child: Row(
         children: [
           Text(
             title,
-            style: theme.textTheme.titleMedium?.copyWith(
+            style: theme.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),

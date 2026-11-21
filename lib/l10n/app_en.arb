@@ -465,6 +465,11 @@
     "description": "Label for the Security category."
   },
 
+  "toolsSettingsEmpty": "Add a file to see the options.",
+  "@toolsSettingsEmpty": {
+    "description": "Shown in a tool's settings pane before a file is chosen."
+  },
+
   "toolsSearchHint": "Find a tool…",
   "@toolsSearchHint": {
     "description": "Hint of the search field on the Tools page."

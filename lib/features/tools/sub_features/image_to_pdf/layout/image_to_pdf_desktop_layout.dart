@@ -18,33 +18,22 @@ class ImageToPdfDesktopLayout extends StatelessWidget {
       title: l10n.toolsImageToPdf,
       description: l10n.toolsImageToPdfIntro,
       onBack: viewModel.onBack,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ImageFilePicker(
-            filePaths: [for (final input in viewModel.inputs) input.filePath],
-            viewMode: viewModel.viewMode,
-            emptyStateDescription: l10n.toolsImageToPdfNoImagesDescription,
-            onAddFiles: viewModel.onAddImages,
-            onRemoveFile: viewModel.onRemoveImage,
-            onReorderItem: viewModel.onReorder,
-            onViewModeChanged: viewModel.onViewModeChanged,
+      settings: [
+        if (hasImages) ...[
+          ToolSectionCard(
+            title: l10n.toolsImageToPdfPageSetupSectionTitle,
+            child: _PageSetupEditor(viewModel: viewModel),
           ),
-          if (hasImages) ...[
-            const SizedBox(height: AppSpacing.lg),
-            ToolSectionCard(
-              title: l10n.toolsImageToPdfPageSetupSectionTitle,
-              child: _PageSetupEditor(viewModel: viewModel),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            OutputFilePicker(
-              fileName: viewModel.outputFileName,
-              directoryPath: viewModel.outputDirectory,
-              onFileNameChanged: viewModel.onOutputFileNameChanged,
-              onChooseFolder: viewModel.onChooseOutputFolder,
-            ),
-            const SizedBox(height: AppSpacing.xl),
-            ToolActionBar(
+          OutputFilePicker(
+            fileName: viewModel.outputFileName,
+            directoryPath: viewModel.outputDirectory,
+            onFileNameChanged: viewModel.onOutputFileNameChanged,
+            onChooseFolder: viewModel.onChooseOutputFolder,
+          ),
+        ],
+      ],
+      action: hasImages
+          ? ToolActionBar(
               isSubmitting: viewModel.isSubmitting,
               task: viewModel.task,
               submittingText: l10n.toolsImageToPdfSubmitting,
@@ -53,9 +42,16 @@ class ImageToPdfDesktopLayout extends StatelessWidget {
               label: l10n.toolsImageToPdfButton,
               hintText: l10n.toolsImageToPdfButtonDisabledHint,
               onAction: viewModel.onConvert,
-            ),
-          ],
-        ],
+            )
+          : null,
+      child: ImageFilePicker(
+        filePaths: [for (final input in viewModel.inputs) input.filePath],
+        viewMode: viewModel.viewMode,
+        emptyStateDescription: l10n.toolsImageToPdfNoImagesDescription,
+        onAddFiles: viewModel.onAddImages,
+        onRemoveFile: viewModel.onRemoveImage,
+        onReorderItem: viewModel.onReorder,
+        onViewModeChanged: viewModel.onViewModeChanged,
       ),
     );
   }

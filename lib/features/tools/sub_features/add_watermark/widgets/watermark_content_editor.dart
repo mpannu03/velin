@@ -60,16 +60,15 @@ class WatermarkContentEditor extends StatelessWidget {
       children: [
         SegmentedButton<WatermarkType>(
           key: const ValueKey('add-watermark-type'),
-          showSelectedIcon: true,
+          showSelectedIcon: false,
+          expandedInsets: EdgeInsets.zero,
           segments: [
             ButtonSegment(
               value: WatermarkType.text,
-              icon: const Icon(Icons.text_fields, size: 18),
               label: Text(l10n.toolsWatermarkTypeText),
             ),
             ButtonSegment(
               value: WatermarkType.image,
-              icon: const Icon(Icons.image_outlined, size: 18),
               label: Text(l10n.toolsWatermarkTypeImage),
             ),
           ],
