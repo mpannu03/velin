@@ -101,6 +101,11 @@
     "description": "Column heading: the folder a recent document is in."
   },
 
+  "homeEarlier": "Earlier",
+  "@homeEarlier": {
+    "description": "Heading of the table of recent documents older than the ones shown as covers."
+  },
+
   "homeRecent": "Recent",
   "@homeRecent": {
     "description": "Heading of the recent documents section."

@@ -214,6 +214,12 @@ abstract class AppLocalizations {
   /// **'Folder'**
   String get homeColumnFolder;
 
+  /// Heading of the table of recent documents older than the ones shown as covers.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier'**
+  String get homeEarlier;
+
   /// Heading of the recent documents section.
   ///
   /// In en, this message translates to:

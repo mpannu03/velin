@@ -59,10 +59,7 @@ class RecentEmptyState extends StatelessWidget {
                   child: Text(l10n.homeBrowseTools),
                 ),
                 const SizedBox(width: AppSpacing.sm),
-                HomeOpenButton(
-                  isOpening: isOpening,
-                  onPressed: onOpenDocument,
-                ),
+                HomeOpenButton(isOpening: isOpening, onPressed: onOpenDocument),
               ],
             ),
           ],

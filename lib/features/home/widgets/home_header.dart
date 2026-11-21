@@ -27,7 +27,7 @@ class HomeHeader extends StatelessWidget {
         Expanded(child: HomeSectionTitle(title)),
         TextButton.icon(
           onPressed: onBrowseTools,
-          icon: const Icon(Icons.build_outlined, size: 16),
+          icon: const Icon(Icons.build_outlined, size: 18),
           label: Text(l10n.homeBrowseTools),
         ),
         const SizedBox(width: AppSpacing.sm),
@@ -55,10 +55,10 @@ class HomeOpenButton extends StatelessWidget {
       onPressed: isOpening ? null : onPressed,
       icon: isOpening
           ? const SizedBox.square(
-              dimension: 14,
+              dimension: 16,
               child: CircularProgressIndicator(strokeWidth: 2),
             )
-          : const Icon(Icons.folder_open_outlined, size: 16),
+          : const Icon(Icons.folder_open_outlined, size: 18),
       label: Text(isOpening ? l10n.homeOpening : l10n.homeOpenDocument),
     );
   }

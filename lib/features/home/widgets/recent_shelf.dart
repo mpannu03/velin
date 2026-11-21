@@ -8,12 +8,12 @@ import 'package:velin/features/home/widgets/recent_thumbnail.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
 /// One row of page covers for the most recently opened documents; as many
-/// as fit the width, up to [maxItems].
+/// as fit the width ([itemsFor]), up to [maxItems].
 class RecentShelf extends StatelessWidget {
   const RecentShelf({
     required this.documents,
     required this.viewModel,
-    this.maxItems = 6,
+    this.maxItems = 10,
     super.key,
   });
 
@@ -25,14 +25,17 @@ class RecentShelf extends StatelessWidget {
   static const _minItemWidth = 148.0;
   static const _gap = AppSpacing.xl;
 
+  /// How many covers fit in [width]; the layout uses it to leave those
+  /// documents out of the table below.
+  static int itemsFor(double width, {int maxItems = 10}) =>
+      ((width + _gap) / (_minItemWidth + _gap)).floor().clamp(1, maxItems);
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-        final columns = ((width + _gap) / (_minItemWidth + _gap))
-            .floor()
-            .clamp(1, maxItems);
+        final columns = itemsFor(width, maxItems: maxItems);
         final itemWidth = (width - _gap * (columns - 1)) / columns;
 
         return Row(

@@ -3,9 +3,10 @@ import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/home/view/home_view_model.dart';
 import 'package:velin/features/home/widgets/widgets.dart';
 import 'package:velin/shared/extensions/extensions.dart';
+import 'package:velin/shared/widgets/widgets.dart';
 
 /// Home on desktop: covers of the latest documents to jump back in, then
-/// every recent document in a sortable, searchable table.
+/// the earlier ones in a sortable table. Searching covers every document.
 class HomeDesktopLayout extends StatefulWidget {
   const HomeDesktopLayout({super.key, required this.viewModel});
 
@@ -18,8 +19,6 @@ class HomeDesktopLayout extends StatefulWidget {
 class _HomeDesktopLayoutState extends State<HomeDesktopLayout> {
   RecentSortMode _sort = RecentSortMode.lastOpened;
   String _query = '';
-
-  static const _maxContentWidth = 1120.0;
 
   @override
   Widget build(BuildContext context) {
@@ -38,20 +37,26 @@ class _HomeDesktopLayoutState extends State<HomeDesktopLayout> {
       viewModel.recentDocuments,
       RecentSortMode.lastOpened,
     );
-    final rows = filterRecents(
-      sortRecents(viewModel.recentDocuments, _sort),
-      _query,
-    );
+    final searching = _query.trim().isNotEmpty;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.xxl,
         vertical: AppSpacing.xl,
       ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: _maxContentWidth),
-          child: Column(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Documents shown as covers are left out of the table, so
+          // nothing appears twice. A search looks through everything.
+          final onShelf = RecentShelf.itemsFor(constraints.maxWidth);
+          final earlier = latest.skip(onShelf).toList();
+          final rows = filterRecents(
+            sortRecents(searching ? latest : earlier, _sort),
+            _query,
+          );
+          final showTable = searching || earlier.isNotEmpty;
+
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               HomeHeader(
@@ -60,59 +65,49 @@ class _HomeDesktopLayoutState extends State<HomeDesktopLayout> {
                 onOpenDocument: viewModel.onOpenDocument,
                 onBrowseTools: viewModel.onBrowseTools,
               ),
-              const SizedBox(height: AppSpacing.lg),
-              RecentShelf(documents: latest, viewModel: viewModel),
-              const SizedBox(height: AppSpacing.xxl + AppSpacing.sm),
-              Row(
-                children: [
-                  Expanded(
-                    child: HomeSectionTitle(
-                      l10n.homeRecent,
-                      count: viewModel.recentDocuments.length,
-                    ),
+              // Hidden rather than removed while searching, so the
+              // search box below keeps its place in the tree (and its
+              // focus and text).
+              Visibility(
+                visible: !searching,
+                replacement: const SizedBox(height: AppSpacing.xl),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: AppSpacing.lg,
+                    bottom: AppSpacing.xxl + AppSpacing.sm,
                   ),
-                  SizedBox(
-                    width: 260,
-                    child: TextField(
-                      onChanged: (q) => setState(() => _query = q),
-                      decoration: InputDecoration(
-                        hintText: l10n.homeSearchHint,
-                        prefixIcon: const Icon(Icons.search, size: 16),
-                        prefixIconConstraints: const BoxConstraints(
-                          minWidth: 32,
-                        ),
-                        filled: true,
-                        fillColor: Theme.of(
-                          context,
-                        ).colorScheme.surfaceContainer,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppRadius.md),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(AppRadius.md),
-                          borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
+                  child: RecentShelf(documents: latest, viewModel: viewModel),
+                ),
+              ),
+              if (showTable) ...[
+                Row(
+                  children: [
+                    Expanded(
+                      child: HomeSectionTitle(
+                        searching ? l10n.homeRecent : l10n.homeEarlier,
+                        count: searching ? rows.length : earlier.length,
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.md),
-              if (rows.isEmpty)
-                _NoResults(query: _query)
-              else
-                RecentTable(
-                  documents: rows,
-                  viewModel: viewModel,
-                  sort: _sort,
-                  onSortChanged: (s) => setState(() => _sort = s),
+                    SearchField(
+                      hintText: l10n.homeSearchHint,
+                      onChanged: (q) => setState(() => _query = q),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: AppSpacing.md),
+                if (rows.isEmpty)
+                  _NoResults(query: _query)
+                else
+                  RecentTable(
+                    documents: rows,
+                    viewModel: viewModel,
+                    sort: _sort,
+                    onSortChanged: (s) => setState(() => _sort = s),
+                  ),
+              ],
             ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }
