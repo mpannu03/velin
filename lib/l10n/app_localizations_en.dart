@@ -52,22 +52,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTitleEmpty => 'Open your first document';
 
   @override
-  String get homeTitle => 'Pick up where you left off';
-
-  @override
   String get homeSubtitleEmpty =>
       'Open a PDF or drop one on this window. Velin remembers your place on this device.';
-
-  @override
-  String homeSubtitle(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count recent documents',
-      one: '1 recent document',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get homeOpenDocument => 'Open…';
@@ -79,36 +65,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeBrowseTools => 'Browse tools';
 
   @override
-  String get homeContinueReading => 'Continue reading';
+  String get homeJumpBackIn => 'Jump back in';
 
   @override
-  String get homeResume => 'Resume';
-
-  @override
-  String get homeLibrary => 'Library';
-
-  @override
-  String get homeStatDocuments => 'Documents';
-
-  @override
-  String get homeStatPagesLeft => 'Pages left';
-
-  @override
-  String homeStatPagesLeftValue(int remaining, int total) {
-    return '$remaining of $total';
-  }
-
-  @override
-  String get homeStatFinished => 'Finished';
+  String get homeColumnFolder => 'Folder';
 
   @override
   String get homeRecent => 'Recent';
-
-  @override
-  String get homeListView => 'List view';
-
-  @override
-  String get homeGridView => 'Grid view';
 
   @override
   String get homeSearchHint => 'Search by name or folder…';
@@ -126,12 +89,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String homeNoMatches(String query) {
     return 'No matches for \"$query\".';
   }
-
-  @override
-  String get homeEmptyTitle => 'No recent documents yet';
-
-  @override
-  String get homeEmptyMessage => 'Documents you open show up here.';
 
   @override
   String homePageProgress(int current, int total) {

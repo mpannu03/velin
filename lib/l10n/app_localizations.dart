@@ -178,23 +178,11 @@ abstract class AppLocalizations {
   /// **'Open your first document'**
   String get homeTitleEmpty;
 
-  /// Home page title when there are recent documents.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick up where you left off'**
-  String get homeTitle;
-
   /// Home page subtitle when there are no recent documents.
   ///
   /// In en, this message translates to:
   /// **'Open a PDF or drop one on this window. Velin remembers your place on this device.'**
   String get homeSubtitleEmpty;
-
-  /// Home page subtitle with the number of recent documents.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 recent document} other{{count} recent documents}}'**
-  String homeSubtitle(int count);
 
   /// Home page button that lets the user pick a document.
   ///
@@ -214,65 +202,23 @@ abstract class AppLocalizations {
   /// **'Browse tools'**
   String get homeBrowseTools;
 
-  /// Label of the card that resumes the most recently read document.
+  /// Heading above the covers of the most recently opened documents.
   ///
   /// In en, this message translates to:
-  /// **'Continue reading'**
-  String get homeContinueReading;
+  /// **'Jump back in'**
+  String get homeJumpBackIn;
 
-  /// Button that reopens the most recently read document at its last page.
+  /// Column heading: the folder a recent document is in.
   ///
   /// In en, this message translates to:
-  /// **'Resume'**
-  String get homeResume;
-
-  /// Title of the reading statistics card.
-  ///
-  /// In en, this message translates to:
-  /// **'Library'**
-  String get homeLibrary;
-
-  /// Statistic: number of recent documents.
-  ///
-  /// In en, this message translates to:
-  /// **'Documents'**
-  String get homeStatDocuments;
-
-  /// Statistic: pages left to read across recent documents.
-  ///
-  /// In en, this message translates to:
-  /// **'Pages left'**
-  String get homeStatPagesLeft;
-
-  /// Value of the pages-left statistic.
-  ///
-  /// In en, this message translates to:
-  /// **'{remaining} of {total}'**
-  String homeStatPagesLeftValue(int remaining, int total);
-
-  /// Statistic: number of documents read to the end.
-  ///
-  /// In en, this message translates to:
-  /// **'Finished'**
-  String get homeStatFinished;
+  /// **'Folder'**
+  String get homeColumnFolder;
 
   /// Heading of the recent documents section.
   ///
   /// In en, this message translates to:
   /// **'Recent'**
   String get homeRecent;
-
-  /// Tooltip of the button that shows recent documents as a list.
-  ///
-  /// In en, this message translates to:
-  /// **'List view'**
-  String get homeListView;
-
-  /// Tooltip of the button that shows recent documents as a grid.
-  ///
-  /// In en, this message translates to:
-  /// **'Grid view'**
-  String get homeGridView;
 
   /// Hint of the recent documents search field.
   ///
@@ -303,18 +249,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No matches for \"{query}\".'**
   String homeNoMatches(String query);
-
-  /// Title shown when there are no recent documents.
-  ///
-  /// In en, this message translates to:
-  /// **'No recent documents yet'**
-  String get homeEmptyTitle;
-
-  /// Message shown when there are no recent documents.
-  ///
-  /// In en, this message translates to:
-  /// **'Documents you open show up here.'**
-  String get homeEmptyMessage;
 
   /// Reading position of a recent document.
   ///

@@ -71,20 +71,9 @@
     "description": "Home page title when there are no recent documents."
   },
 
-  "homeTitle": "Pick up where you left off",
-  "@homeTitle": {
-    "description": "Home page title when there are recent documents."
-  },
-
   "homeSubtitleEmpty": "Open a PDF or drop one on this window. Velin remembers your place on this device.",
   "@homeSubtitleEmpty": {
     "description": "Home page subtitle when there are no recent documents."
-  },
-
-  "homeSubtitle": "{count, plural, =1{1 recent document} other{{count} recent documents}}",
-  "@homeSubtitle": {
-    "description": "Home page subtitle with the number of recent documents.",
-    "placeholders": {"count": {"type": "int"}}
   },
 
   "homeOpenDocument": "Open…",
@@ -102,55 +91,19 @@
     "description": "Home page button that goes to the PDF tools."
   },
 
-  "homeContinueReading": "Continue reading",
-  "@homeContinueReading": {
-    "description": "Label of the card that resumes the most recently read document."
+  "homeJumpBackIn": "Jump back in",
+  "@homeJumpBackIn": {
+    "description": "Heading above the covers of the most recently opened documents."
   },
 
-  "homeResume": "Resume",
-  "@homeResume": {
-    "description": "Button that reopens the most recently read document at its last page."
-  },
-
-  "homeLibrary": "Library",
-  "@homeLibrary": {
-    "description": "Title of the reading statistics card."
-  },
-
-  "homeStatDocuments": "Documents",
-  "@homeStatDocuments": {
-    "description": "Statistic: number of recent documents."
-  },
-
-  "homeStatPagesLeft": "Pages left",
-  "@homeStatPagesLeft": {
-    "description": "Statistic: pages left to read across recent documents."
-  },
-
-  "homeStatPagesLeftValue": "{remaining} of {total}",
-  "@homeStatPagesLeftValue": {
-    "description": "Value of the pages-left statistic.",
-    "placeholders": {"remaining": {"type": "int"}, "total": {"type": "int"}}
-  },
-
-  "homeStatFinished": "Finished",
-  "@homeStatFinished": {
-    "description": "Statistic: number of documents read to the end."
+  "homeColumnFolder": "Folder",
+  "@homeColumnFolder": {
+    "description": "Column heading: the folder a recent document is in."
   },
 
   "homeRecent": "Recent",
   "@homeRecent": {
     "description": "Heading of the recent documents section."
-  },
-
-  "homeListView": "List view",
-  "@homeListView": {
-    "description": "Tooltip of the button that shows recent documents as a list."
-  },
-
-  "homeGridView": "Grid view",
-  "@homeGridView": {
-    "description": "Tooltip of the button that shows recent documents as a grid."
   },
 
   "homeSearchHint": "Search by name or folder…",
@@ -177,16 +130,6 @@
   "@homeNoMatches": {
     "description": "Shown when the recent documents search finds nothing.",
     "placeholders": {"query": {"type": "String"}}
-  },
-
-  "homeEmptyTitle": "No recent documents yet",
-  "@homeEmptyTitle": {
-    "description": "Title shown when there are no recent documents."
-  },
-
-  "homeEmptyMessage": "Documents you open show up here.",
-  "@homeEmptyMessage": {
-    "description": "Message shown when there are no recent documents."
   },
 
   "homePageProgress": "Page {current} of {total}",

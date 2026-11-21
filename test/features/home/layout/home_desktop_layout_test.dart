@@ -54,40 +54,63 @@ void main() {
     await tester.pump();
   }
 
-  testWidgets('without recents: one Open button and an empty state', (
+  testWidgets('without recents: an invitation with one Open button', (
     tester,
   ) async {
     await pumpLayout(tester, documents: const []);
 
     expect(find.text('Open your first document'), findsOneWidget);
     expect(find.text('Open…'), findsOneWidget);
-    expect(find.text('No recent documents yet'), findsOneWidget);
-    expect(find.text('Continue reading'.toUpperCase()), findsNothing);
+    expect(find.text('Jump back in'), findsNothing);
     expect(find.text('Recent'), findsNothing);
 
     await tester.tap(find.text('Open…'));
     expect(openRequests, 1);
   });
 
-  testWidgets('with recents: one Open button and one Continue reading', (
+  testWidgets('with recents: covers, one Open button and the table', (
     tester,
   ) async {
     await pumpLayout(tester, documents: recents);
 
-    expect(find.text('Pick up where you left off'), findsOneWidget);
-    expect(find.text('2 recent documents'), findsOneWidget);
+    expect(find.text('Jump back in'), findsOneWidget);
     expect(find.text('Open…'), findsOneWidget);
-    expect(find.text('CONTINUE READING'), findsOneWidget);
-    expect(find.text('Resume'), findsOneWidget);
     expect(find.text('Recent'), findsOneWidget);
+    // Each document appears on a cover and in the table.
+    expect(find.text('latest'), findsNWidgets(2));
+    expect(find.text('older'), findsNWidgets(2));
   });
 
-  testWidgets('Resume opens the most recently read document', (tester) async {
+  testWidgets('covers start with the most recently opened document', (
+    tester,
+  ) async {
     await pumpLayout(tester, documents: recents);
 
-    await tester.tap(find.text('Resume'));
+    await tester.tap(find.text('latest').first);
 
     expect(resumed, [recents.last]);
+  });
+
+  testWidgets('clicking a table row opens that document', (tester) async {
+    await pumpLayout(tester, documents: recents);
+
+    await tester.tap(find.text('older').last);
+
+    expect(resumed, [recents.first]);
+  });
+
+  testWidgets('the Progress heading sorts the table by progress', (
+    tester,
+  ) async {
+    await pumpLayout(tester, documents: recents);
+
+    await tester.tap(find.text('Progress'));
+    await tester.pump();
+
+    // older is finished, latest a quarter read.
+    final latestY = tester.getTopLeft(find.text('latest').last).dy;
+    final olderY = tester.getTopLeft(find.text('older').last).dy;
+    expect(olderY, lessThan(latestY));
   });
 
   testWidgets('search without matches says so', (tester) async {
