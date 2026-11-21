@@ -24,11 +24,7 @@ abstract final class AppTheme {
   };
 
   static ThemeData _build(Brightness brightness) {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.velinSeedColor,
-      primary: AppColors.velinSeedColor,
-      brightness: brightness,
-    );
+    final colorScheme = AppColors.scheme(brightness);
 
     if (!_isDesktop) {
       return ThemeData(brightness: brightness, colorScheme: colorScheme);
@@ -45,6 +41,12 @@ abstract final class AppTheme {
       vertical: AppSpacing.sm,
     );
     const buttonSize = Size(64, 36);
+
+    // Floating surfaces (menus, dialogs) sit above the page: white with a
+    // shadow in light mode, one step lighter than the page in dark mode.
+    final floatingColor = brightness == Brightness.light
+        ? colorScheme.surface
+        : colorScheme.surfaceContainerHigh;
 
     return ThemeData(
       brightness: brightness,
@@ -102,12 +104,19 @@ abstract final class AppTheme {
         shape: surfaceShape,
         margin: EdgeInsets.zero,
       ),
-      dialogTheme: const DialogThemeData(shape: surfaceShape),
-      popupMenuTheme: const PopupMenuThemeData(shape: surfaceShape),
-      menuTheme: const MenuThemeData(
+      dialogTheme: DialogThemeData(
+        shape: surfaceShape,
+        backgroundColor: floatingColor,
+      ),
+      popupMenuTheme: PopupMenuThemeData(
+        shape: surfaceShape,
+        color: floatingColor,
+      ),
+      menuTheme: MenuThemeData(
         style: MenuStyle(
-          shape: WidgetStatePropertyAll(surfaceShape),
-          padding: WidgetStatePropertyAll(
+          shape: const WidgetStatePropertyAll(surfaceShape),
+          backgroundColor: WidgetStatePropertyAll(floatingColor),
+          padding: const WidgetStatePropertyAll(
             EdgeInsets.symmetric(vertical: AppSpacing.xs),
           ),
         ),
