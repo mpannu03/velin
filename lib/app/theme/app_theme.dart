@@ -41,6 +41,9 @@ abstract final class AppTheme {
       vertical: AppSpacing.sm,
     );
     const buttonSize = Size(64, 36);
+    // The app-wide compact density would take 8px off every button;
+    // buttons keep the declared 36px height so labels have room.
+    const buttonDensity = VisualDensity.standard;
 
     // Floating surfaces (menus, dialogs) sit above the page: white with a
     // shadow in light mode, one step lighter than the page in dark mode.
@@ -56,6 +59,7 @@ abstract final class AppTheme {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           shape: controlShape,
+          visualDensity: buttonDensity,
           padding: buttonPadding,
           minimumSize: buttonSize,
         ),
@@ -63,6 +67,7 @@ abstract final class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           shape: controlShape,
+          visualDensity: buttonDensity,
           padding: buttonPadding,
           minimumSize: buttonSize,
         ),
@@ -70,6 +75,7 @@ abstract final class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           shape: controlShape,
+          visualDensity: buttonDensity,
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.md,
             vertical: AppSpacing.sm,
@@ -80,6 +86,7 @@ abstract final class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           shape: controlShape,
+          visualDensity: buttonDensity,
           padding: buttonPadding,
           minimumSize: buttonSize,
         ),
