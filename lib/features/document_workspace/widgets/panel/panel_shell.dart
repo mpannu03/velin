@@ -22,8 +22,9 @@ class PanelShell extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    // Flat: the layout separates it from the page with a hairline.
-    return ColoredBox(
+    // Flat: the layout separates it from the page with a hairline. A
+    // Material (not a ColoredBox) so list rows' hover and ink show.
+    return Material(
       color: colorScheme.surface,
       child: SizedBox(
         width: width,
