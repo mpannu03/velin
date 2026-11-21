@@ -465,9 +465,15 @@
     "description": "Label for the Security category."
   },
 
-  "toolsCategoryAll": "All",
-  "@toolsCategoryAll": {
-    "description": "Label for the filter option that shows tools from every category."
+  "toolsSearchHint": "Find a tool…",
+  "@toolsSearchHint": {
+    "description": "Hint of the search field on the Tools page."
+  },
+
+  "toolsNoMatches": "No tools match \"{query}\".",
+  "@toolsNoMatches": {
+    "description": "Shown when the Tools page search finds nothing.",
+    "placeholders": {"query": {"type": "String"}}
   },
 
   "toolsIntro": "Combine, split, convert, optimize and secure your PDFs \u2014 all processed locally on your device.",

@@ -628,11 +628,17 @@ abstract class AppLocalizations {
   /// **'Security'**
   String get toolsCategorySecurity;
 
-  /// Label for the filter option that shows tools from every category.
+  /// Hint of the search field on the Tools page.
   ///
   /// In en, this message translates to:
-  /// **'All'**
-  String get toolsCategoryAll;
+  /// **'Find a tool…'**
+  String get toolsSearchHint;
+
+  /// Shown when the Tools page search finds nothing.
+  ///
+  /// In en, this message translates to:
+  /// **'No tools match \"{query}\".'**
+  String toolsNoMatches(String query);
 
   /// Introductory description shown on the Tools screen.
   ///

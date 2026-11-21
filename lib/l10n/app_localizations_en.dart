@@ -296,7 +296,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolsCategorySecurity => 'Security';
 
   @override
-  String get toolsCategoryAll => 'All';
+  String get toolsSearchHint => 'Find a tool…';
+
+  @override
+  String toolsNoMatches(String query) {
+    return 'No tools match \"$query\".';
+  }
 
   @override
   String get toolsIntro =>

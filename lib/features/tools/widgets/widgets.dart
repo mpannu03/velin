@@ -6,7 +6,6 @@ export 'page_selection/page_selection.dart';
 export 'password_field.dart';
 export 'tool_action_bar.dart';
 export 'tool_card.dart';
-export 'tool_category_filter.dart';
 export 'tool_category_section.dart';
 export 'tool_scaffold.dart';
 export 'tool_section_card.dart';
