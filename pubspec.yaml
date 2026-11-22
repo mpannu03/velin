@@ -29,7 +29,7 @@ dependencies:
   material_symbols_icons: ^4.2960.0
   pdfrx_engine: ^0.6.1
   image: ^4.10.1
-  pdf_cos: ^6.0.0
+  pdf_cos: ^16.1.0
   crypto: ^3.0.7
   pdf_manipulator: ^5.0.1
   drift: ^2.35.1
