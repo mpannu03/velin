@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
@@ -115,6 +116,21 @@ void main() {
       );
     }
 
+    /// Waits until the store holds [expected], failing after two seconds.
+    ///
+    /// The keeper saves asynchronously to a real file, so how long that takes
+    /// depends on the machine; a fixed delay made these tests flaky under load.
+    Future<void> expectSaved(WindowPlacement expected) async {
+      final deadline = DateTime.now().add(const Duration(seconds: 2));
+      WindowPlacement? saved;
+      while (DateTime.now().isBefore(deadline)) {
+        saved = await store.load();
+        if (saved == expected) return;
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+      expect(saved, expected);
+    }
+
     test('restores the saved bounds and maximized state', () async {
       await store.save(placement);
 
@@ -142,10 +158,8 @@ void main() {
       when(() => windowManager.getBounds()).thenAnswer((_) async => moved);
 
       final keeper = buildKeeper()..onWindowMoved();
-      await Future<void>.delayed(const Duration(milliseconds: 20));
 
-      expect(
-        await store.load(),
+      await expectSaved(
         const WindowPlacement(bounds: moved, isMaximized: false),
       );
       keeper.dispose();
@@ -159,10 +173,8 @@ void main() {
         ..onWindowMove()
         ..onWindowMove()
         ..onWindowResize();
-      await Future<void>.delayed(const Duration(milliseconds: 20));
 
-      expect(
-        await store.load(),
+      await expectSaved(
         const WindowPlacement(bounds: moved, isMaximized: false),
       );
       verify(() => windowManager.getBounds()).called(1);
@@ -178,10 +190,8 @@ void main() {
 
       when(() => windowManager.isMaximized()).thenAnswer((_) async => true);
       keeper.onWindowMaximize();
-      await Future<void>.delayed(const Duration(milliseconds: 20));
 
-      expect(
-        await store.load(),
+      await expectSaved(
         const WindowPlacement(bounds: screen, isMaximized: true),
       );
       verifyNever(() => windowManager.getBounds());
@@ -189,10 +199,16 @@ void main() {
     });
 
     test('does not save full-screen bounds', () async {
-      when(() => windowManager.isFullScreen()).thenAnswer((_) async => true);
+      // Completes when the keeper's save has checked for full screen, after
+      // which it returns without writing.
+      final checked = Completer<void>();
+      when(() => windowManager.isFullScreen()).thenAnswer((_) async {
+        checked.complete();
+        return true;
+      });
 
       final keeper = buildKeeper()..onWindowResized();
-      await Future<void>.delayed(const Duration(milliseconds: 20));
+      await checked.future;
 
       expect(await store.load(), isNull);
       keeper.dispose();
