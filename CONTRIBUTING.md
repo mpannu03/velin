@@ -56,6 +56,13 @@ Run static analysis:
 flutter analyze
 ```
 
+The bloc lint rules (`bloc_lint` in `analysis_options.yaml`) are not run by `flutter analyze` or the IDE; run them with the bloc CLI:
+
+```
+dart pub global activate bloc_tools 0.1.0-dev.25
+dart pub global run bloc_tools:bloc lint .
+```
+
 Run tests:
 
 ```
@@ -272,7 +279,7 @@ Velin intentionally avoids unnecessary code generation and abstraction layers. N
 
 Every pull request runs the `CI` workflow:
 
-* **Checks**: formatting, `flutter analyze` and the unit and widget tests.
+* **Checks**: formatting, `flutter analyze`, `bloc lint` and the unit and widget tests.
 * **Windows**, **macOS** and **Linux**: a debug build of the app on that platform and the `pdfium` engine tests against its native libraries.
 
 All of them must pass, and the branch must be up to date with `main`, before a pull request can be merged. Releases run the same workflow before building the installers.
@@ -283,7 +290,7 @@ Before opening a pull request:
 
 1. Make sure your branch is based on the current `main` branch.
 2. Run `dart format .`.
-3. Run `flutter analyze`.
+3. Run `flutter analyze` and `bloc lint` (see Development).
 4. Run `flutter test --exclude-tags pdfium`.
 5. Verify the application manually when the change affects UI or runtime behavior.
 6. Keep the pull request focused on one logical change.

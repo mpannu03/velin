@@ -15,18 +15,24 @@ import 'compress_pdf_state.dart';
 class CompressPdfCubit extends Cubit<CompressPdfState>
     with ToolTaskRunner<CompressPdfState> {
   CompressPdfCubit({
-    required this.filePicker,
+    required this._filePicker,
     required this._compressPdfEngine,
-    required this.taskManager,
-    required this.appEffectController,
+    required this._taskManager,
+    required this._appEffectController,
   }) : super(const CompressPdfState());
 
+  final DocumentFilePicker _filePicker;
+  final TaskManager _taskManager;
+  final AppEffectController _appEffectController;
+
   @override
-  final DocumentFilePicker filePicker;
+  DocumentFilePicker get filePicker => _filePicker;
+
   @override
-  final TaskManager taskManager;
+  TaskManager get taskManager => _taskManager;
+
   @override
-  final AppEffectController appEffectController;
+  AppEffectController get appEffectController => _appEffectController;
 
   final CompressPdfEngine _compressPdfEngine;
 

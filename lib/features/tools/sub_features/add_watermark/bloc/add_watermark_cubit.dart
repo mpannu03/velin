@@ -13,18 +13,24 @@ import 'add_watermark_state.dart';
 class AddWatermarkCubit extends Cubit<AddWatermarkState>
     with ToolTaskRunner<AddWatermarkState> {
   AddWatermarkCubit({
-    required this.filePicker,
+    required this._filePicker,
     required this._addWatermarkEngine,
-    required this.taskManager,
-    required this.appEffectController,
+    required this._taskManager,
+    required this._appEffectController,
   }) : super(const AddWatermarkState());
 
+  final DocumentFilePicker _filePicker;
+  final TaskManager _taskManager;
+  final AppEffectController _appEffectController;
+
   @override
-  final DocumentFilePicker filePicker;
+  DocumentFilePicker get filePicker => _filePicker;
+
   @override
-  final TaskManager taskManager;
+  TaskManager get taskManager => _taskManager;
+
   @override
-  final AppEffectController appEffectController;
+  AppEffectController get appEffectController => _appEffectController;
 
   final AddWatermarkEngine _addWatermarkEngine;
 
