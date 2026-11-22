@@ -17,3 +17,6 @@ ignore:
 comment:
   layout: "condensed_header, diff, files"
   require_changes: false
+  # Also show overall coverage and how the pull request changes it, not only
+  # the coverage of the changed lines.
+  hide_project_coverage: false
