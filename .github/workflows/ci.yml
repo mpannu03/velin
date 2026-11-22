@@ -21,6 +21,11 @@ jobs:
   checks:
     name: Checks
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Lets the Codecov upload sign in with GitHub's OIDC token instead of a
+      # stored secret.
+      id-token: write
 
     steps:
       - name: Checkout
@@ -37,7 +42,16 @@ jobs:
 
       # Tests that need the native pdfium binaries run per platform below.
       - name: Test
-        run: flutter test --exclude-tags pdfium
+        run: flutter test --exclude-tags pdfium --coverage
+
+      # Informational only (see codecov.yml). Pull requests from forks get no
+      # OIDC token, so a failed upload never fails the job.
+      - name: Upload coverage
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage/lcov.info
+          use_oidc: true
+          fail_ci_if_error: false
 
   # Every platform Velin ships on, on the same runners as the release builds:
   # the app must compile there, and the PDF engines must work against that
