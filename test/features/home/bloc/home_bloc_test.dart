@@ -49,9 +49,8 @@ void main() {
     appEffectController = MockAppEffectController();
     recents = StreamController.broadcast();
 
-    when(
-      () => recentDocumentService.watchRecent(limit: any(named: 'limit')),
-    ).thenAnswer((_) => recents.stream);
+    when(() => recentDocumentService.watchRecent(limit: any(named: 'limit')))
+        .thenAnswer((_) => recents.stream);
   });
 
   tearDown(() => recents.close());
@@ -102,22 +101,19 @@ void main() {
     blocTest<HomeBloc, HomeState>(
       'opens the document and asks the page to navigate',
       build: buildBloc,
-      setUp: () => when(
-        () => documentService.openRecent(any()),
-      ).thenAnswer((_) async => Success(document)),
+      setUp: () =>
+          when(() => documentService.openRecent(any()))
+              .thenAnswer((_) async => Success(document)),
       act: (bloc) => bloc.add(HomeRecentDocumentSelected(recent)),
-      expect: () => const [
-        HomeState(isOpening: true),
-        HomeState(openToken: 1),
-      ],
+      expect: () => const [HomeState(isOpening: true), HomeState(openToken: 1)],
     );
 
     blocTest<HomeBloc, HomeState>(
       'reports a failure and stays on Home',
       build: buildBloc,
-      setUp: () => when(
-        () => documentService.openRecent(any()),
-      ).thenAnswer((_) async => const Failure(failure)),
+      setUp: () =>
+          when(() => documentService.openRecent(any()))
+              .thenAnswer((_) async => const Failure(failure)),
       act: (bloc) => bloc.add(HomeRecentDocumentSelected(recent)),
       expect: () => const [HomeState(isOpening: true), HomeState()],
       verify: (_) =>
@@ -129,22 +125,19 @@ void main() {
     blocTest<HomeBloc, HomeState>(
       'opens the picked document and asks the page to navigate',
       build: buildBloc,
-      setUp: () => when(
-        () => documentService.open(),
-      ).thenAnswer((_) async => Success(document)),
+      setUp: () =>
+          when(() => documentService.open())
+              .thenAnswer((_) async => Success(document)),
       act: (bloc) => bloc.add(const HomeOpenRequested()),
-      expect: () => const [
-        HomeState(isOpening: true),
-        HomeState(openToken: 1),
-      ],
+      expect: () => const [HomeState(isOpening: true), HomeState(openToken: 1)],
     );
 
     blocTest<HomeBloc, HomeState>(
       'does nothing more when the picker is cancelled',
       build: buildBloc,
-      setUp: () => when(
-        () => documentService.open(),
-      ).thenAnswer((_) async => const Success(null)),
+      setUp: () =>
+          when(() => documentService.open())
+              .thenAnswer((_) async => const Success(null)),
       act: (bloc) => bloc.add(const HomeOpenRequested()),
       expect: () => const [HomeState(isOpening: true), HomeState()],
     );
@@ -152,9 +145,9 @@ void main() {
     blocTest<HomeBloc, HomeState>(
       'reports a failure',
       build: buildBloc,
-      setUp: () => when(
-        () => documentService.open(),
-      ).thenAnswer((_) async => const Failure(failure)),
+      setUp: () =>
+          when(() => documentService.open())
+              .thenAnswer((_) async => const Failure(failure)),
       act: (bloc) => bloc.add(const HomeOpenRequested()),
       expect: () => const [HomeState(isOpening: true), HomeState()],
       verify: (_) =>
