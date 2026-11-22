@@ -1,6 +1,5 @@
 import 'package:material_ui/material_ui.dart';
 
-import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/sub_features/sub_features.dart';
 import 'package:velin/features/tools/widgets/widgets.dart';
 import 'package:velin/shared/extensions/extensions.dart';
@@ -21,74 +20,60 @@ class PdfToImageDesktopLayout extends StatelessWidget {
       title: l10n.toolsPdfToImage,
       description: l10n.toolsPdfToImageIntro,
       onBack: viewModel.onBack,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+      settings: [
+        if (hasInputFile) ...[
           ToolSectionCard(
-            title: l10n.toolsPdfToImageSourceSectionTitle,
-            child: SingleFilePicker(
-              filePath: viewModel.inputFilePath,
-              onPickFile: viewModel.onPickFile,
+            title: l10n.toolsPdfToImageFormatSectionTitle,
+            child: FormatSelector(
+              format: viewModel.format,
+              onFormatChanged: viewModel.onFormatChanged,
             ),
           ),
-          if (hasInputFile) ...[
-            const SizedBox(height: AppSpacing.lg),
-            ToolSectionCard(
-              title: l10n.toolsPdfToImageFormatSectionTitle,
-              child: FormatSelector(
-                format: viewModel.format,
-                onFormatChanged: viewModel.onFormatChanged,
-              ),
+          ToolSectionCard(
+            title: l10n.toolsPdfToImageColorSectionTitle,
+            child: ColorModeSelector(
+              colorMode: viewModel.colorMode,
+              onColorModeChanged: viewModel.onColorModeChanged,
             ),
-            const SizedBox(height: AppSpacing.lg),
-            ToolSectionCard(
-              title: l10n.toolsPdfToImageColorSectionTitle,
-              child: ColorModeSelector(
-                colorMode: viewModel.colorMode,
-                onColorModeChanged: viewModel.onColorModeChanged,
-              ),
+          ),
+          ToolSectionCard(
+            title: l10n.toolsPdfToImageResolutionSectionTitle,
+            child: ResolutionEditor(
+              quality: viewModel.quality,
+              onQualityChanged: viewModel.onQualityChanged,
+              supportsQuality: viewModel.supportsQuality,
+              dpi: viewModel.dpi,
+              onDpiChanged: viewModel.onDpiChanged,
             ),
-            const SizedBox(height: AppSpacing.lg),
-            ToolSectionCard(
-              title: l10n.toolsPdfToImageResolutionSectionTitle,
-              child: ResolutionEditor(
-                quality: viewModel.quality,
-                onQualityChanged: viewModel.onQualityChanged,
-                supportsQuality: viewModel.supportsQuality,
-                dpi: viewModel.dpi,
-                onDpiChanged: viewModel.onDpiChanged,
-              ),
+          ),
+          ToolSectionCard(
+            title: l10n.toolsPdfToImagePagesSectionTitle,
+            child: PageScopeEditor<PdfToImagePageScope>(
+              allPagesScope: PdfToImagePageScope.allPages,
+              selectedPagesScope: PdfToImagePageScope.selectedPages,
+              scope: viewModel.scope,
+              requiresSelection: viewModel.scope.requiresSelection,
+              allPagesLabel: l10n.toolsPdfToImageScopeAll,
+              selectedPagesLabel: l10n.toolsPdfToImageScopeSelected,
+              onScopeChanged: viewModel.onScopeChanged,
+              selection: viewModel.selection,
+              selectionFieldKey: const ValueKey('pdf-to-image-page-selection'),
+              selectionHintText: l10n.toolsPdfToImageSelectionHint,
+              selectionHelperText: l10n.toolsPdfToImageSelectionHelper,
+              onSelectionChanged: viewModel.onSelectionChanged,
             ),
-            const SizedBox(height: AppSpacing.lg),
-            ToolSectionCard(
-              title: l10n.toolsPdfToImagePagesSectionTitle,
-              child: PageScopeEditor<PdfToImagePageScope>(
-                allPagesScope: PdfToImagePageScope.allPages,
-                selectedPagesScope: PdfToImagePageScope.selectedPages,
-                scope: viewModel.scope,
-                requiresSelection: viewModel.scope.requiresSelection,
-                allPagesLabel: l10n.toolsPdfToImageScopeAll,
-                selectedPagesLabel: l10n.toolsPdfToImageScopeSelected,
-                onScopeChanged: viewModel.onScopeChanged,
-                selection: viewModel.selection,
-                selectionFieldKey: const ValueKey(
-                  'pdf-to-image-page-selection',
-                ),
-                selectionHintText: l10n.toolsPdfToImageSelectionHint,
-                selectionHelperText: l10n.toolsPdfToImageSelectionHelper,
-                onSelectionChanged: viewModel.onSelectionChanged,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            OutputFilePicker(
-              fileName: '',
-              directoryPath: viewModel.outputDirectory,
-              showFileName: false,
-              onFileNameChanged: (_) {},
-              onChooseFolder: viewModel.onChooseOutputFolder,
-            ),
-            const SizedBox(height: AppSpacing.xl),
-            ToolActionBar(
+          ),
+          OutputFilePicker(
+            fileName: '',
+            directoryPath: viewModel.outputDirectory,
+            showFileName: false,
+            onFileNameChanged: (_) {},
+            onChooseFolder: viewModel.onChooseOutputFolder,
+          ),
+        ],
+      ],
+      action: hasInputFile
+          ? ToolActionBar(
               isSubmitting: viewModel.isSubmitting,
               task: viewModel.task,
               submittingText: l10n.toolsPdfToImageSubmitting,
@@ -97,9 +82,14 @@ class PdfToImageDesktopLayout extends StatelessWidget {
               label: l10n.toolsPdfToImageButton,
               hintText: l10n.toolsPdfToImageButtonDisabledHint,
               onAction: viewModel.onConvert,
-            ),
-          ],
-        ],
+            )
+          : null,
+      child: ToolSectionCard(
+        title: l10n.toolsPdfToImageSourceSectionTitle,
+        child: SingleFilePicker(
+          filePath: viewModel.inputFilePath,
+          onPickFile: viewModel.onPickFile,
+        ),
       ),
     );
   }

@@ -1,42 +1,69 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/features/home/widgets/home_header.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
-/// Shown instead of the recents section before anything was opened. The
-/// Open button lives in the page header, so this only explains.
+/// Home before anything was opened: a short invitation with the two ways
+/// in, centred in the page.
 class RecentEmptyState extends StatelessWidget {
-  const RecentEmptyState({super.key});
+  const RecentEmptyState({
+    required this.isOpening,
+    required this.onOpenDocument,
+    required this.onBrowseTools,
+    super.key,
+  });
+
+  final bool isOpening;
+  final VoidCallback onOpenDocument;
+  final VoidCallback onBrowseTools;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
+    final l10n = context.l10n;
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppSpacing.xxl),
-      decoration: BoxDecoration(
-        color: colors.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(AppRadius.lg),
-      ),
-      child: Column(
-        children: [
-          Icon(Icons.history, size: 32, color: colors.onSurfaceVariant),
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            context.l10n.homeEmptyTitle,
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 420),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.description_outlined,
+              size: 40,
+              color: colors.onSurfaceVariant.withValues(alpha: 0.7),
             ),
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            context.l10n.homeEmptyMessage,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: colors.onSurfaceVariant,
+            const SizedBox(height: AppSpacing.lg),
+            Text(
+              l10n.homeTitleEmpty,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              l10n.homeSubtitleEmpty,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colors.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextButton(
+                  onPressed: onBrowseTools,
+                  child: Text(l10n.homeBrowseTools),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                HomeOpenButton(isOpening: isOpening, onPressed: onOpenDocument),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

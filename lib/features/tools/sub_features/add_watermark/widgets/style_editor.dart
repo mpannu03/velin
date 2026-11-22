@@ -111,16 +111,15 @@ class StyleEditor extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
         SegmentedButton<WatermarkLayer>(
           key: const ValueKey('add-watermark-layer'),
-          showSelectedIcon: true,
+          showSelectedIcon: false,
+          expandedInsets: EdgeInsets.zero,
           segments: [
             ButtonSegment(
               value: WatermarkLayer.foreground,
-              icon: const Icon(Icons.layers_outlined, size: 18),
               label: Text(l10n.toolsWatermarkLayerForeground),
             ),
             ButtonSegment(
               value: WatermarkLayer.background,
-              icon: const Icon(Icons.layers_clear_outlined, size: 18),
               label: Text(l10n.toolsWatermarkLayerBackground),
             ),
           ],

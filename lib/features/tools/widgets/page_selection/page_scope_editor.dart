@@ -74,16 +74,12 @@ class PageScopeEditor<T> extends StatelessWidget {
       children: [
         SegmentedButton<T>(
           key: scopeKey,
-          showSelectedIcon: true,
+          showSelectedIcon: false,
+          expandedInsets: EdgeInsets.zero,
           segments: [
-            ButtonSegment(
-              value: allPagesScope,
-              icon: const Icon(Icons.auto_stories_outlined, size: 18),
-              label: Text(allPagesLabel),
-            ),
+            ButtonSegment(value: allPagesScope, label: Text(allPagesLabel)),
             ButtonSegment(
               value: selectedPagesScope,
-              icon: const Icon(Icons.tune_outlined, size: 18),
               label: Text(selectedPagesLabel),
             ),
           ],

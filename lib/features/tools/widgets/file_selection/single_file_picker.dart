@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
+import 'package:velin/features/tools/widgets/file_selection/pdf_pages_preview.dart';
 import 'package:velin/l10n/app_localizations.dart';
 
 import 'package:velin/shared/extensions/extensions.dart';
@@ -9,6 +10,7 @@ class SingleFilePicker extends StatelessWidget {
     required this.onPickFile,
     this.filePath,
     this.emptyStateDescription,
+    this.showPreview = true,
     super.key,
   });
 
@@ -18,6 +20,9 @@ class SingleFilePicker extends StatelessWidget {
   /// Tool-specific copy shown in the empty state.
   /// Falls back to [l10n.toolsChooseFileHint] when null.
   final String? emptyStateDescription;
+
+  /// Whether to show the first pages of the selected file under it.
+  final bool showPreview;
 
   bool get hasFile => filePath != null && filePath!.isNotEmpty;
 
@@ -43,13 +48,24 @@ class SingleFilePicker extends StatelessWidget {
       return _buildEmptyState(theme, colors, l10n);
     }
 
-    return Container(
+    final fileRow = Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: colors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: _buildFileRow(theme, colors, l10n),
+    );
+
+    if (!showPreview) return fileRow;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        fileRow,
+        const SizedBox(height: AppSpacing.xl),
+        PdfPagesPreview(filePath: filePath!),
+      ],
     );
   }
 

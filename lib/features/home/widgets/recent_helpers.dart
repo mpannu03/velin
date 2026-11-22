@@ -3,10 +3,7 @@ import 'package:velin/core/recent/recent.dart';
 import 'package:velin/l10n/app_localizations.dart';
 import 'package:velin/shared/utils/utils.dart';
 
-/// How recents are laid out in the desktop home section.
-enum RecentViewMode { list, grid }
-
-/// Sort order for the recents section. Pure view preference.
+/// Sort order of the recents table. Pure view preference.
 enum RecentSortMode { lastOpened, progress, name }
 
 double recentProgress(RecentDocument doc) {

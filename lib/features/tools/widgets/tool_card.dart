@@ -2,10 +2,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/tools.dart';
 
-/// A tool in the Tools list: icon, name and a short description.
-///
-/// Flat like a list row; a soft fill on hover and keyboard focus shows it
-/// is clickable.
+/// A tool in its category column: icon, name and a short description.
+/// Hover and keyboard focus fill the row.
 class ToolCard extends StatefulWidget {
   const ToolCard({required this.tool, required this.onTap, super.key});
 
@@ -25,31 +23,23 @@ class _ToolCardState extends State<ToolCard> {
     final colorScheme = theme.colorScheme;
 
     return Material(
-      color: _highlighted
-          ? colorScheme.surfaceContainerHigh
-          : colorScheme.surfaceContainerLow,
-      borderRadius: BorderRadius.circular(AppRadius.lg),
+      color: _highlighted ? colorScheme.surfaceContainer : Colors.transparent,
+      borderRadius: BorderRadius.circular(AppRadius.md),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: widget.onTap,
         onHover: (value) => setState(() => _highlighted = value),
         onFocusChange: (value) => setState(() => _highlighted = value),
         hoverColor: Colors.transparent,
-        child: Container(
-          // Same height whether the description takes one line or two.
-          constraints: const BoxConstraints(minHeight: 80),
-          padding: const EdgeInsets.all(AppSpacing.md),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.sm,
+            vertical: AppSpacing.sm + AppSpacing.xxs,
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: AppSpacing.xxs),
-                child: Icon(
-                  widget.tool.icon,
-                  size: 22,
-                  color: colorScheme.primary,
-                ),
-              ),
+              Icon(widget.tool.icon, size: 20, color: colorScheme.primary),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
@@ -59,7 +49,7 @@ class _ToolCardState extends State<ToolCard> {
                       widget.tool.title(context),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleSmall?.copyWith(
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
