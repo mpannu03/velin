@@ -1,0 +1,19 @@
+# Coverage is reported on pull requests but never blocks a merge.
+coverage:
+  status:
+    project:
+      default:
+        informational: true
+    # Coverage of the lines a pull request adds or changes.
+    patch:
+      default:
+        informational: true
+
+# Generated code says nothing about how well the app is tested.
+ignore:
+  - "lib/l10n/**"
+  - "**/*.g.dart"
+
+comment:
+  layout: "condensed_header, diff, files"
+  require_changes: false

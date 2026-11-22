@@ -1,10 +1,14 @@
 name: CI
 
 # Runs on every pull request to main, and from the Publish workflow before a
-# release is built. main itself needs no run of its own: it only changes
-# through pull requests, which must be up to date with main and pass here.
+# release is built. main only changes through pull requests, which must be up
+# to date with main and pass here, so after a merge only the Checks job runs
+# again: it records main's coverage, the base Codecov compares pull requests
+# against.
 on:
   pull_request:
+    branches: [main]
+  push:
     branches: [main]
   workflow_call:
   workflow_dispatch:
@@ -21,6 +25,11 @@ jobs:
   checks:
     name: Checks
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Lets the Codecov upload sign in with GitHub's OIDC token instead of a
+      # stored secret.
+      id-token: write
 
     steps:
       - name: Checkout
@@ -37,13 +46,24 @@ jobs:
 
       # Tests that need the native pdfium binaries run per platform below.
       - name: Test
-        run: flutter test --exclude-tags pdfium
+        run: flutter test --exclude-tags pdfium --coverage
+
+      # Informational only (see codecov.yml). Pull requests from forks get no
+      # OIDC token, so a failed upload never fails the job.
+      - name: Upload coverage
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage/lcov.info
+          use_oidc: true
+          fail_ci_if_error: false
 
   # Every platform Velin ships on, on the same runners as the release builds:
   # the app must compile there, and the PDF engines must work against that
   # platform's native libraries. Add Android and iOS here when they ship.
   platform:
     name: ${{ matrix.name }}
+    # Already built and tested on the pull request that changed main.
+    if: github.event_name != 'push'
     runs-on: ${{ matrix.os }}
 
     strategy:
