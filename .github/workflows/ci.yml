@@ -44,6 +44,14 @@ jobs:
       - name: Analyze
         run: flutter analyze
 
+      # The bloc_lint rules in analysis_options.yaml only run through the
+      # bloc CLI, not flutter analyze. Pinned so new rules arrive on purpose;
+      # bump the version here.
+      - name: Bloc lint
+        run: |
+          dart pub global activate bloc_tools 0.1.0-dev.25
+          dart pub global run bloc_tools:bloc lint .
+
       # Tests that need the native pdfium binaries run per platform below.
       - name: Test
         run: flutter test --exclude-tags pdfium --coverage
