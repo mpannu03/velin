@@ -432,6 +432,37 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String toolsPreviewPageCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pages',
+      one: '1 page',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String toolsPreviewMorePages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '+$count more pages',
+      one: '+1 more page',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get toolsPreviewUnavailable =>
+      'No preview for this file. It may be password protected.';
+
+  @override
+  String toolsPreviewPageLabel(int page) {
+    return 'Page $page';
+  }
+
+  @override
   String get toolsChooseFile => 'Choose file';
 
   @override

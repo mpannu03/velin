@@ -5,8 +5,14 @@ import 'package:image/image.dart' as img;
 import 'package:pdfrx_engine/pdfrx_engine.dart';
 import 'package:velin/core/result/result.dart';
 import 'package:velin/engine/isolate/run_in_background.dart';
+import 'package:velin/engine/rendering/pdf_preview_document.dart';
 
 class PdfPageRenderer {
+  /// Opens [path] for rendering on-screen page previews.
+  Future<Result<PdfPreviewDocument>> openPreview(String path) {
+    return Result.guard(() => PdfPreviewDocument.open(path));
+  }
+
   Future<Result<File>> render({
     required File document,
     required int page,

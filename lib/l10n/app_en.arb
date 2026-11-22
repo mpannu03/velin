@@ -671,6 +671,41 @@
     }
   },
 
+  "toolsPreviewPageCount": "{count, plural, =1{1 page} other{{count} pages}}",
+  "@toolsPreviewPageCount": {
+    "description": "Number of pages in the selected file, shown above its page preview.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "toolsPreviewMorePages": "{count, plural, =1{+1 more page} other{+{count} more pages}}",
+  "@toolsPreviewMorePages": {
+    "description": "Shown under the page preview when only the first pages are previewed.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "toolsPreviewUnavailable": "No preview for this file. It may be password protected.",
+  "@toolsPreviewUnavailable": {
+    "description": "Shown instead of the page preview when the selected file could not be opened for previewing."
+  },
+
+  "toolsPreviewPageLabel": "Page {page}",
+  "@toolsPreviewPageLabel": {
+    "description": "Accessibility label of one page in the page preview.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
+
   "toolsChooseFile": "Choose file",
   "@toolsChooseFile": {
     "description": "Label for the button to select a source file."

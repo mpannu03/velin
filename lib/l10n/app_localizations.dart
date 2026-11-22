@@ -856,6 +856,30 @@ abstract class AppLocalizations {
   /// **'Check the page selection for {file}.'**
   String toolsMergePageSelectionInvalid(String file);
 
+  /// Number of pages in the selected file, shown above its page preview.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 page} other{{count} pages}}'**
+  String toolsPreviewPageCount(int count);
+
+  /// Shown under the page preview when only the first pages are previewed.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{+1 more page} other{+{count} more pages}}'**
+  String toolsPreviewMorePages(int count);
+
+  /// Shown instead of the page preview when the selected file could not be opened for previewing.
+  ///
+  /// In en, this message translates to:
+  /// **'No preview for this file. It may be password protected.'**
+  String get toolsPreviewUnavailable;
+
+  /// Accessibility label of one page in the page preview.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page}'**
+  String toolsPreviewPageLabel(int page);
+
   /// Label for the button to select a source file.
   ///
   /// In en, this message translates to:
