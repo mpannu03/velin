@@ -7,6 +7,9 @@ version: 0.5.0+1
 
 environment:
   sdk: ^3.13.1
+  # The Flutter version CI and releases build with (read by
+  # .github/actions/setup-flutter). Use the same one locally; bump it here.
+  flutter: 3.47.1
 
 dependencies:
   flutter:
