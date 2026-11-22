@@ -817,10 +817,10 @@ packages:
     dependency: "direct main"
     description:
       name: pdf_manipulator
-      sha256: "50a236946cb793d4d90ebafe8245cb247f35bec097cd23c3ce9dfc05e49657a8"
+      sha256: "64b5a64915ed5ea1085fa0b13def748861b1c8dec95f884380eded5896d04b35"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.1"
+    version: "6.0.0"
   pdfium_dart:
     dependency: transitive
     description:
