@@ -66,6 +66,8 @@ abstract final class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
+          // Secondary actions stay neutral; blue is for the primary one.
+          foregroundColor: colorScheme.onSurface,
           shape: controlShape,
           visualDensity: buttonDensity,
           padding: buttonPadding,
@@ -95,7 +97,11 @@ abstract final class AppTheme {
         style: IconButton.styleFrom(shape: controlShape),
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
-        style: SegmentedButton.styleFrom(shape: controlShape),
+        style: SegmentedButton.styleFrom(
+          shape: controlShape,
+          // 36px tall like the buttons it often sits next to.
+          visualDensity: const VisualDensity(horizontal: -2, vertical: -1),
+        ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         isDense: true,
