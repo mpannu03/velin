@@ -6,6 +6,8 @@ Velin is a modern PDF reader and productivity suite focused on providing useful 
 
 [![Latest Release](https://img.shields.io/github/v/release/mpannu03/velin)](https://github.com/mpannu03/velin/releases)
 [![License](https://img.shields.io/github/license/mpannu03/velin)](https://github.com/mpannu03/velin/blob/main/LICENSE)
+[![CI](https://github.com/mpannu03/velin/actions/workflows/ci.yml/badge.svg)](https://github.com/mpannu03/velin/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/mpannu03/velin/graph/badge.svg)](https://codecov.io/gh/mpannu03/velin)
 
 ## Screenshots
 
