@@ -24,11 +24,7 @@ abstract final class AppTheme {
   };
 
   static ThemeData _build(Brightness brightness) {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.velinSeedColor,
-      primary: AppColors.velinSeedColor,
-      brightness: brightness,
-    );
+    final colorScheme = AppColors.scheme(brightness);
 
     if (!_isDesktop) {
       return ThemeData(brightness: brightness, colorScheme: colorScheme);
@@ -45,6 +41,15 @@ abstract final class AppTheme {
       vertical: AppSpacing.sm,
     );
     const buttonSize = Size(64, 36);
+    // The app-wide compact density would take 8px off every button;
+    // buttons keep the declared 36px height so labels have room.
+    const buttonDensity = VisualDensity.standard;
+
+    // Floating surfaces (menus, dialogs) sit above the page: white with a
+    // shadow in light mode, one step lighter than the page in dark mode.
+    final floatingColor = brightness == Brightness.light
+        ? colorScheme.surface
+        : colorScheme.surfaceContainerHigh;
 
     return ThemeData(
       brightness: brightness,
@@ -54,13 +59,17 @@ abstract final class AppTheme {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           shape: controlShape,
+          visualDensity: buttonDensity,
           padding: buttonPadding,
           minimumSize: buttonSize,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
+          // Secondary actions stay neutral; blue is for the primary one.
+          foregroundColor: colorScheme.onSurface,
           shape: controlShape,
+          visualDensity: buttonDensity,
           padding: buttonPadding,
           minimumSize: buttonSize,
         ),
@@ -68,6 +77,7 @@ abstract final class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           shape: controlShape,
+          visualDensity: buttonDensity,
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.md,
             vertical: AppSpacing.sm,
@@ -78,6 +88,7 @@ abstract final class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           shape: controlShape,
+          visualDensity: buttonDensity,
           padding: buttonPadding,
           minimumSize: buttonSize,
         ),
@@ -86,7 +97,11 @@ abstract final class AppTheme {
         style: IconButton.styleFrom(shape: controlShape),
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
-        style: SegmentedButton.styleFrom(shape: controlShape),
+        style: SegmentedButton.styleFrom(
+          shape: controlShape,
+          // 36px tall like the buttons it often sits next to.
+          visualDensity: const VisualDensity(horizontal: -2, vertical: -1),
+        ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         isDense: true,
@@ -102,12 +117,19 @@ abstract final class AppTheme {
         shape: surfaceShape,
         margin: EdgeInsets.zero,
       ),
-      dialogTheme: const DialogThemeData(shape: surfaceShape),
-      popupMenuTheme: const PopupMenuThemeData(shape: surfaceShape),
-      menuTheme: const MenuThemeData(
+      dialogTheme: DialogThemeData(
+        shape: surfaceShape,
+        backgroundColor: floatingColor,
+      ),
+      popupMenuTheme: PopupMenuThemeData(
+        shape: surfaceShape,
+        color: floatingColor,
+      ),
+      menuTheme: MenuThemeData(
         style: MenuStyle(
-          shape: WidgetStatePropertyAll(surfaceShape),
-          padding: WidgetStatePropertyAll(
+          shape: const WidgetStatePropertyAll(surfaceShape),
+          backgroundColor: WidgetStatePropertyAll(floatingColor),
+          padding: const WidgetStatePropertyAll(
             EdgeInsets.symmetric(vertical: AppSpacing.xs),
           ),
         ),

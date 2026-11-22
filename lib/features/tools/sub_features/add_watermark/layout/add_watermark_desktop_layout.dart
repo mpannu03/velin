@@ -1,6 +1,5 @@
 import 'package:material_ui/material_ui.dart';
 
-import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/tools.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
@@ -20,88 +19,73 @@ class AddWatermarkDesktopLayout extends StatelessWidget {
       title: l10n.toolsWatermark,
       description: l10n.toolsWatermarkIntro,
       onBack: viewModel.onBack,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+      settings: [
+        if (hasInputFile) ...[
           ToolSectionCard(
-            title: l10n.toolsWatermarkSourceSectionTitle,
-            child: SingleFilePicker(
-              filePath: viewModel.inputFilePath,
-              emptyStateDescription: l10n.toolsWatermarkSourceDescription,
-              onPickFile: viewModel.onPickFile,
+            title: l10n.toolsWatermarkTypeSectionTitle,
+            child: WatermarkContentEditor(
+              type: viewModel.type,
+              text: viewModel.text,
+              imageFilePath: viewModel.imageFilePath,
+              fontName: viewModel.fontName,
+              fontSize: viewModel.fontSize,
+              colorHex: viewModel.colorHex,
+              imageWidthPercent: viewModel.imageWidthPercent,
+              onTypeChanged: viewModel.onTypeChanged,
+              onTextChanged: viewModel.onTextChanged,
+              onFontNameChanged: viewModel.onFontNameChanged,
+              onFontSizeChanged: viewModel.onFontSizeChanged,
+              onColorHexChanged: viewModel.onColorHexChanged,
+              onPickWatermarkImage: viewModel.onPickWatermarkImage,
+              onClearWatermarkImage: viewModel.onClearWatermarkImage,
+              onImageWidthPercentChanged: viewModel.onImageWidthPercentChanged,
             ),
           ),
-          if (hasInputFile) ...[
-            const SizedBox(height: AppSpacing.lg),
-            ToolSectionCard(
-              title: l10n.toolsWatermarkTypeSectionTitle,
-              child: WatermarkContentEditor(
-                type: viewModel.type,
-                text: viewModel.text,
-                imageFilePath: viewModel.imageFilePath,
-                fontName: viewModel.fontName,
-                fontSize: viewModel.fontSize,
-                colorHex: viewModel.colorHex,
-                imageWidthPercent: viewModel.imageWidthPercent,
-                onTypeChanged: viewModel.onTypeChanged,
-                onTextChanged: viewModel.onTextChanged,
-                onFontNameChanged: viewModel.onFontNameChanged,
-                onFontSizeChanged: viewModel.onFontSizeChanged,
-                onColorHexChanged: viewModel.onColorHexChanged,
-                onPickWatermarkImage: viewModel.onPickWatermarkImage,
-                onClearWatermarkImage: viewModel.onClearWatermarkImage,
-                onImageWidthPercentChanged:
-                    viewModel.onImageWidthPercentChanged,
-              ),
+          ToolSectionCard(
+            title: l10n.toolsWatermarkStyleSectionTitle,
+            child: StyleEditor(
+              opacity: viewModel.opacity,
+              rotation: viewModel.rotation,
+              position: viewModel.position,
+              xOffset: viewModel.xOffset,
+              yOffset: viewModel.yOffset,
+              layer: viewModel.layer,
+              onOpacityChanged: viewModel.onOpacityChanged,
+              onRotationChanged: viewModel.onRotationChanged,
+              onPositionChanged: viewModel.onPositionChanged,
+              onXOffsetChanged: viewModel.onXOffsetChanged,
+              onYOffsetChanged: viewModel.onYOffsetChanged,
+              onLayerChanged: viewModel.onLayerChanged,
             ),
-            const SizedBox(height: AppSpacing.lg),
-            ToolSectionCard(
-              title: l10n.toolsWatermarkStyleSectionTitle,
-              child: StyleEditor(
-                opacity: viewModel.opacity,
-                rotation: viewModel.rotation,
-                position: viewModel.position,
-                xOffset: viewModel.xOffset,
-                yOffset: viewModel.yOffset,
-                layer: viewModel.layer,
-                onOpacityChanged: viewModel.onOpacityChanged,
-                onRotationChanged: viewModel.onRotationChanged,
-                onPositionChanged: viewModel.onPositionChanged,
-                onXOffsetChanged: viewModel.onXOffsetChanged,
-                onYOffsetChanged: viewModel.onYOffsetChanged,
-                onLayerChanged: viewModel.onLayerChanged,
-              ),
+          ),
+          ToolSectionCard(
+            title: l10n.toolsWatermarkPagesSectionTitle,
+            child: PageScopeEditor<WatermarkPageScope>(
+              allPagesScope: WatermarkPageScope.allPages,
+              selectedPagesScope: WatermarkPageScope.selectedPages,
+              scope: viewModel.scope,
+              requiresSelection: viewModel.scope.requiresSelection,
+              scopeKey: const ValueKey('add-watermark-scope'),
+              allPagesLabel: l10n.toolsWatermarkScopeAll,
+              selectedPagesLabel: l10n.toolsWatermarkScopeSelected,
+              onScopeChanged: viewModel.onScopeChanged,
+              selection: viewModel.selection,
+              selectionFieldKey: const ValueKey('add-watermark-page-selection'),
+              selectionHintText: l10n.toolsWatermarkSelectionHint,
+              selectionHelperText: l10n.toolsWatermarkSelectionHelper,
+              onSelectionChanged: viewModel.onSelectionChanged,
             ),
-            const SizedBox(height: AppSpacing.lg),
-            ToolSectionCard(
-              title: l10n.toolsWatermarkPagesSectionTitle,
-              child: PageScopeEditor<WatermarkPageScope>(
-                allPagesScope: WatermarkPageScope.allPages,
-                selectedPagesScope: WatermarkPageScope.selectedPages,
-                scope: viewModel.scope,
-                requiresSelection: viewModel.scope.requiresSelection,
-                scopeKey: const ValueKey('add-watermark-scope'),
-                allPagesLabel: l10n.toolsWatermarkScopeAll,
-                selectedPagesLabel: l10n.toolsWatermarkScopeSelected,
-                onScopeChanged: viewModel.onScopeChanged,
-                selection: viewModel.selection,
-                selectionFieldKey: const ValueKey(
-                  'add-watermark-page-selection',
-                ),
-                selectionHintText: l10n.toolsWatermarkSelectionHint,
-                selectionHelperText: l10n.toolsWatermarkSelectionHelper,
-                onSelectionChanged: viewModel.onSelectionChanged,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            OutputFilePicker(
-              fileName: viewModel.outputFileName,
-              directoryPath: viewModel.outputDirectory,
-              onFileNameChanged: viewModel.onOutputFileNameChanged,
-              onChooseFolder: viewModel.onChooseOutputFolder,
-            ),
-            const SizedBox(height: AppSpacing.xl),
-            ToolActionBar(
+          ),
+          OutputFilePicker(
+            fileName: viewModel.outputFileName,
+            directoryPath: viewModel.outputDirectory,
+            onFileNameChanged: viewModel.onOutputFileNameChanged,
+            onChooseFolder: viewModel.onChooseOutputFolder,
+          ),
+        ],
+      ],
+      action: hasInputFile
+          ? ToolActionBar(
               isSubmitting: viewModel.isSubmitting,
               task: viewModel.task,
               submittingText: l10n.toolsWatermarkSubmitting,
@@ -110,9 +94,15 @@ class AddWatermarkDesktopLayout extends StatelessWidget {
               label: l10n.toolsWatermarkButton,
               hintText: l10n.toolsWatermarkButtonDisabledHint,
               onAction: viewModel.onApplyWatermark,
-            ),
-          ],
-        ],
+            )
+          : null,
+      child: ToolSectionCard(
+        title: l10n.toolsWatermarkSourceSectionTitle,
+        child: SingleFilePicker(
+          filePath: viewModel.inputFilePath,
+          emptyStateDescription: l10n.toolsWatermarkSourceDescription,
+          onPickFile: viewModel.onPickFile,
+        ),
       ),
     );
   }

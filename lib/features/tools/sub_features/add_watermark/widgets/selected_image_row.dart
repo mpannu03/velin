@@ -46,19 +46,20 @@ class SelectedImageRow extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: AppSpacing.sm),
-          OutlinedButton.icon(
+          const SizedBox(width: AppSpacing.xs),
+          // Icon buttons: labelled ones leave the file name no room in the
+          // settings pane.
+          IconButton(
             key: const ValueKey('selected-image-replace'),
             onPressed: onReplace,
-            icon: const Icon(Icons.swap_horiz, size: 18),
-            label: Text(l10n.toolsWatermarkImageReplace),
+            tooltip: l10n.toolsWatermarkImageReplace,
+            icon: const Icon(Icons.swap_horiz, size: 20),
           ),
-          const SizedBox(width: AppSpacing.sm),
-          OutlinedButton.icon(
+          IconButton(
             key: const ValueKey('selected-image-remove'),
             onPressed: onRemove,
-            icon: const Icon(Icons.close, size: 18),
-            label: Text(l10n.toolsWatermarkImageRemove),
+            tooltip: l10n.toolsWatermarkImageRemove,
+            icon: const Icon(Icons.close, size: 20),
           ),
         ],
       ),

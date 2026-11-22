@@ -71,20 +71,9 @@
     "description": "Home page title when there are no recent documents."
   },
 
-  "homeTitle": "Pick up where you left off",
-  "@homeTitle": {
-    "description": "Home page title when there are recent documents."
-  },
-
   "homeSubtitleEmpty": "Open a PDF or drop one on this window. Velin remembers your place on this device.",
   "@homeSubtitleEmpty": {
     "description": "Home page subtitle when there are no recent documents."
-  },
-
-  "homeSubtitle": "{count, plural, =1{1 recent document} other{{count} recent documents}}",
-  "@homeSubtitle": {
-    "description": "Home page subtitle with the number of recent documents.",
-    "placeholders": {"count": {"type": "int"}}
   },
 
   "homeOpenDocument": "Open…",
@@ -102,55 +91,34 @@
     "description": "Home page button that goes to the PDF tools."
   },
 
-  "homeContinueReading": "Continue reading",
-  "@homeContinueReading": {
-    "description": "Label of the card that resumes the most recently read document."
+  "homeJumpBackIn": "Jump back in",
+  "@homeJumpBackIn": {
+    "description": "Heading above the covers of the most recently opened documents."
   },
 
-  "homeResume": "Resume",
-  "@homeResume": {
-    "description": "Button that reopens the most recently read document at its last page."
+  "homeColumnFolder": "Folder",
+  "@homeColumnFolder": {
+    "description": "Column heading: the folder a recent document is in."
   },
 
-  "homeLibrary": "Library",
-  "@homeLibrary": {
-    "description": "Title of the reading statistics card."
+  "homeQuickTools": "Quick tools",
+  "@homeQuickTools": {
+    "description": "Heading of the row of common PDF tools on the home page."
   },
 
-  "homeStatDocuments": "Documents",
-  "@homeStatDocuments": {
-    "description": "Statistic: number of recent documents."
+  "homeAllTools": "All tools",
+  "@homeAllTools": {
+    "description": "Link next to the quick tools heading that opens the full Tools page."
   },
 
-  "homeStatPagesLeft": "Pages left",
-  "@homeStatPagesLeft": {
-    "description": "Statistic: pages left to read across recent documents."
-  },
-
-  "homeStatPagesLeftValue": "{remaining} of {total}",
-  "@homeStatPagesLeftValue": {
-    "description": "Value of the pages-left statistic.",
-    "placeholders": {"remaining": {"type": "int"}, "total": {"type": "int"}}
-  },
-
-  "homeStatFinished": "Finished",
-  "@homeStatFinished": {
-    "description": "Statistic: number of documents read to the end."
+  "homeAllDocuments": "All documents",
+  "@homeAllDocuments": {
+    "description": "Heading of the table listing every recently opened document."
   },
 
   "homeRecent": "Recent",
   "@homeRecent": {
     "description": "Heading of the recent documents section."
-  },
-
-  "homeListView": "List view",
-  "@homeListView": {
-    "description": "Tooltip of the button that shows recent documents as a list."
-  },
-
-  "homeGridView": "Grid view",
-  "@homeGridView": {
-    "description": "Tooltip of the button that shows recent documents as a grid."
   },
 
   "homeSearchHint": "Search by name or folder…",
@@ -177,16 +145,6 @@
   "@homeNoMatches": {
     "description": "Shown when the recent documents search finds nothing.",
     "placeholders": {"query": {"type": "String"}}
-  },
-
-  "homeEmptyTitle": "No recent documents yet",
-  "@homeEmptyTitle": {
-    "description": "Title shown when there are no recent documents."
-  },
-
-  "homeEmptyMessage": "Documents you open show up here.",
-  "@homeEmptyMessage": {
-    "description": "Message shown when there are no recent documents."
   },
 
   "homePageProgress": "Page {current} of {total}",
@@ -517,9 +475,25 @@
     "description": "Label for the Security category."
   },
 
-  "toolsCategoryAll": "All",
-  "@toolsCategoryAll": {
-    "description": "Label for the filter option that shows tools from every category."
+  "toolsSettingsEmptyTitle": "No options yet",
+  "@toolsSettingsEmptyTitle": {
+    "description": "Heading shown in a tool's settings pane before a file is chosen."
+  },
+
+  "toolsSettingsEmpty": "Add a file and this tool's options will appear here.",
+  "@toolsSettingsEmpty": {
+    "description": "Shown in a tool's settings pane before a file is chosen."
+  },
+
+  "toolsSearchHint": "Find a tool…",
+  "@toolsSearchHint": {
+    "description": "Hint of the search field on the Tools page."
+  },
+
+  "toolsNoMatches": "No tools match \"{query}\".",
+  "@toolsNoMatches": {
+    "description": "Shown when the Tools page search finds nothing.",
+    "placeholders": {"query": {"type": "String"}}
   },
 
   "toolsIntro": "Combine, split, convert, optimize and secure your PDFs \u2014 all processed locally on your device.",
@@ -622,21 +596,6 @@
     "description": "Hint shown when no output folder has been selected yet."
   },
 
-  "toolsOutputPathHint": "Select where the output files should be saved.",
-  "@toolsOutputPathHint": {
-    "description": "Helper text shown when no output folder is selected."
-  },
-
-  "toolsWillSaveAs": "Will save as: {path}",
-  "@toolsWillSaveAs": {
-    "description": "Shows the full path of the file that will be created.",
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-
   "toolsMergeButton": "Merge PDF",
   "@toolsMergeButton": {
     "description": "Label for the primary merge action button."
@@ -708,6 +667,41 @@
     "placeholders": {
       "file": {
         "type": "String"
+      }
+    }
+  },
+
+  "toolsPreviewPageCount": "{count, plural, =1{1 page} other{{count} pages}}",
+  "@toolsPreviewPageCount": {
+    "description": "Number of pages in the selected file, shown above its page preview.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "toolsPreviewMorePages": "{count, plural, =1{+1 more page} other{+{count} more pages}}",
+  "@toolsPreviewMorePages": {
+    "description": "Shown under the page preview when only the first pages are previewed.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "toolsPreviewUnavailable": "No preview for this file. It may be password protected.",
+  "@toolsPreviewUnavailable": {
+    "description": "Shown instead of the page preview when the selected file could not be opened for previewing."
+  },
+
+  "toolsPreviewPageLabel": "Page {page}",
+  "@toolsPreviewPageLabel": {
+    "description": "Accessibility label of one page in the page preview.",
+    "placeholders": {
+      "page": {
+        "type": "int"
       }
     }
   },

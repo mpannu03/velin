@@ -19,21 +19,19 @@ class FitSelector extends StatelessWidget {
       children: [
         SegmentedButton<ImageToPdfFit>(
           key: const ValueKey('image-to-pdf-fit'),
-          showSelectedIcon: true,
+          showSelectedIcon: false,
+          expandedInsets: EdgeInsets.zero,
           segments: [
             ButtonSegment(
               value: ImageToPdfFit.contain,
-              icon: const Icon(Icons.fit_screen_outlined, size: 18),
               label: Text(l10n.toolsImageToPdfFitContain),
             ),
             ButtonSegment(
               value: ImageToPdfFit.cover,
-              icon: const Icon(Icons.crop_free_outlined, size: 18),
               label: Text(l10n.toolsImageToPdfFitCover),
             ),
             ButtonSegment(
               value: ImageToPdfFit.stretch,
-              icon: const Icon(Icons.open_in_full_outlined, size: 18),
               label: Text(l10n.toolsImageToPdfFitStretch),
             ),
           ],

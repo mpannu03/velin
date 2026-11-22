@@ -178,23 +178,11 @@ abstract class AppLocalizations {
   /// **'Open your first document'**
   String get homeTitleEmpty;
 
-  /// Home page title when there are recent documents.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick up where you left off'**
-  String get homeTitle;
-
   /// Home page subtitle when there are no recent documents.
   ///
   /// In en, this message translates to:
   /// **'Open a PDF or drop one on this window. Velin remembers your place on this device.'**
   String get homeSubtitleEmpty;
-
-  /// Home page subtitle with the number of recent documents.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 recent document} other{{count} recent documents}}'**
-  String homeSubtitle(int count);
 
   /// Home page button that lets the user pick a document.
   ///
@@ -214,65 +202,41 @@ abstract class AppLocalizations {
   /// **'Browse tools'**
   String get homeBrowseTools;
 
-  /// Label of the card that resumes the most recently read document.
+  /// Heading above the covers of the most recently opened documents.
   ///
   /// In en, this message translates to:
-  /// **'Continue reading'**
-  String get homeContinueReading;
+  /// **'Jump back in'**
+  String get homeJumpBackIn;
 
-  /// Button that reopens the most recently read document at its last page.
+  /// Column heading: the folder a recent document is in.
   ///
   /// In en, this message translates to:
-  /// **'Resume'**
-  String get homeResume;
+  /// **'Folder'**
+  String get homeColumnFolder;
 
-  /// Title of the reading statistics card.
+  /// Heading of the row of common PDF tools on the home page.
   ///
   /// In en, this message translates to:
-  /// **'Library'**
-  String get homeLibrary;
+  /// **'Quick tools'**
+  String get homeQuickTools;
 
-  /// Statistic: number of recent documents.
+  /// Link next to the quick tools heading that opens the full Tools page.
   ///
   /// In en, this message translates to:
-  /// **'Documents'**
-  String get homeStatDocuments;
+  /// **'All tools'**
+  String get homeAllTools;
 
-  /// Statistic: pages left to read across recent documents.
+  /// Heading of the table listing every recently opened document.
   ///
   /// In en, this message translates to:
-  /// **'Pages left'**
-  String get homeStatPagesLeft;
-
-  /// Value of the pages-left statistic.
-  ///
-  /// In en, this message translates to:
-  /// **'{remaining} of {total}'**
-  String homeStatPagesLeftValue(int remaining, int total);
-
-  /// Statistic: number of documents read to the end.
-  ///
-  /// In en, this message translates to:
-  /// **'Finished'**
-  String get homeStatFinished;
+  /// **'All documents'**
+  String get homeAllDocuments;
 
   /// Heading of the recent documents section.
   ///
   /// In en, this message translates to:
   /// **'Recent'**
   String get homeRecent;
-
-  /// Tooltip of the button that shows recent documents as a list.
-  ///
-  /// In en, this message translates to:
-  /// **'List view'**
-  String get homeListView;
-
-  /// Tooltip of the button that shows recent documents as a grid.
-  ///
-  /// In en, this message translates to:
-  /// **'Grid view'**
-  String get homeGridView;
 
   /// Hint of the recent documents search field.
   ///
@@ -303,18 +267,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No matches for \"{query}\".'**
   String homeNoMatches(String query);
-
-  /// Title shown when there are no recent documents.
-  ///
-  /// In en, this message translates to:
-  /// **'No recent documents yet'**
-  String get homeEmptyTitle;
-
-  /// Message shown when there are no recent documents.
-  ///
-  /// In en, this message translates to:
-  /// **'Documents you open show up here.'**
-  String get homeEmptyMessage;
 
   /// Reading position of a recent document.
   ///
@@ -688,11 +640,29 @@ abstract class AppLocalizations {
   /// **'Security'**
   String get toolsCategorySecurity;
 
-  /// Label for the filter option that shows tools from every category.
+  /// Heading shown in a tool's settings pane before a file is chosen.
   ///
   /// In en, this message translates to:
-  /// **'All'**
-  String get toolsCategoryAll;
+  /// **'No options yet'**
+  String get toolsSettingsEmptyTitle;
+
+  /// Shown in a tool's settings pane before a file is chosen.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a file and this tool\'s options will appear here.'**
+  String get toolsSettingsEmpty;
+
+  /// Hint of the search field on the Tools page.
+  ///
+  /// In en, this message translates to:
+  /// **'Find a tool…'**
+  String get toolsSearchHint;
+
+  /// Shown when the Tools page search finds nothing.
+  ///
+  /// In en, this message translates to:
+  /// **'No tools match \"{query}\".'**
+  String toolsNoMatches(String query);
 
   /// Introductory description shown on the Tools screen.
   ///
@@ -814,18 +784,6 @@ abstract class AppLocalizations {
   /// **'Choose an output folder'**
   String get toolsChooseOutputFolder;
 
-  /// Helper text shown when no output folder is selected.
-  ///
-  /// In en, this message translates to:
-  /// **'Select where the output files should be saved.'**
-  String get toolsOutputPathHint;
-
-  /// Shows the full path of the file that will be created.
-  ///
-  /// In en, this message translates to:
-  /// **'Will save as: {path}'**
-  String toolsWillSaveAs(String path);
-
   /// Label for the primary merge action button.
   ///
   /// In en, this message translates to:
@@ -903,6 +861,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check the page selection for {file}.'**
   String toolsMergePageSelectionInvalid(String file);
+
+  /// Number of pages in the selected file, shown above its page preview.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 page} other{{count} pages}}'**
+  String toolsPreviewPageCount(int count);
+
+  /// Shown under the page preview when only the first pages are previewed.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{+1 more page} other{+{count} more pages}}'**
+  String toolsPreviewMorePages(int count);
+
+  /// Shown instead of the page preview when the selected file could not be opened for previewing.
+  ///
+  /// In en, this message translates to:
+  /// **'No preview for this file. It may be password protected.'**
+  String get toolsPreviewUnavailable;
+
+  /// Accessibility label of one page in the page preview.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page}'**
+  String toolsPreviewPageLabel(int page);
 
   /// Label for the button to select a source file.
   ///

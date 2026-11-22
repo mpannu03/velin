@@ -65,10 +65,13 @@ void main() {
       final context = tester.element(find.byType(SelectedImageRow));
 
       expect(
-        find.text(context.l10n.toolsWatermarkImageReplace),
+        find.byTooltip(context.l10n.toolsWatermarkImageReplace),
         findsOneWidget,
       );
-      expect(find.text(context.l10n.toolsWatermarkImageRemove), findsOneWidget);
+      expect(
+        find.byTooltip(context.l10n.toolsWatermarkImageRemove),
+        findsOneWidget,
+      );
     });
 
     testWidgets('calls onReplace when replace is tapped', (tester) async {

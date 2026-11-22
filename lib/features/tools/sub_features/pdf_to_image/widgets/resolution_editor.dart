@@ -32,7 +32,13 @@ class ResolutionEditor extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(l10n.toolsPdfToImageDpiLabel),
+            Flexible(
+              child: Text(
+                l10n.toolsPdfToImageDpiLabel,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
             const SizedBox(width: AppSpacing.md),
             DropdownButton<int>(
               key: const ValueKey('pdf-to-image-dpi'),

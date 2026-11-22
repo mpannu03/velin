@@ -21,6 +21,8 @@ class FontDropdown extends StatelessWidget {
       key: const ValueKey('add-watermark-font'),
       initialValue: fontName,
       isDense: true,
+      // Long font names shorten instead of pushing past the pane.
+      isExpanded: true,
       decoration: InputDecoration(
         labelText: l10n.toolsWatermarkFontLabel,
         border: const OutlineInputBorder(),
