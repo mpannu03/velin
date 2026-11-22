@@ -57,23 +57,41 @@ class ToolSectionHeader extends StatelessWidget {
       height: 32,
       child: Row(
         children: [
-          Text(
-            title,
-            style: theme.textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.w600,
+          // The title gives way (with an ellipsis) before the trailing
+          // action does, e.g. in a narrow window or a long translation.
+          Expanded(
+            child: Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                if (badge != null) ...[
+                  const SizedBox(width: AppSpacing.sm),
+                  Flexible(
+                    child: Text(
+                      badge!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colors.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
-          if (badge != null) ...[
+          if (trailing != null) ...[
             const SizedBox(width: AppSpacing.sm),
-            Text(
-              badge!,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: colors.onSurfaceVariant,
-              ),
-            ),
+            trailing!,
           ],
-          const Spacer(),
-          ?trailing,
         ],
       ),
     );
