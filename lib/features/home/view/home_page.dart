@@ -30,6 +30,7 @@ class HomePage extends StatelessWidget {
                 },
                 onOpenDocument: () => bloc.add(const HomeOpenRequested()),
                 onBrowseTools: () => context.go('/tools'),
+                onToolSelected: (tool) => context.go(tool.route),
                 thumbnailLoader: (path) async {
                   final result = await getIt<ThumbnailRepository>().get(path);
                   return switch (result) {

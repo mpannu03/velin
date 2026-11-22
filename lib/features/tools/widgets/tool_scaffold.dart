@@ -2,81 +2,212 @@ import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
+/// The frame of a tool page on desktop.
+///
+/// The left side holds the title and what the tool works on ([child]:
+/// the file pickers), using the window's width. The right side is a
+/// settings pane: the [settings] sections stacked with hairlines between
+/// them, and the [action] pinned at the bottom so it is always in reach.
 class ToolScaffold extends StatelessWidget {
   const ToolScaffold({
     required this.title,
     required this.child,
     this.description,
     this.onBack,
+    this.settings = const [],
+    this.action,
     super.key,
   });
 
   final String title;
   final String? description;
   final VoidCallback? onBack;
+
+  /// The input of the tool, e.g. the file picker.
   final Widget child;
 
-  static const _maxContentWidth = 1000.0;
+  /// Option sections shown in the settings pane, top to bottom.
+  final List<Widget> settings;
+
+  /// The tool's action bar, pinned to the bottom of the settings pane.
+  final Widget? action;
+
+  static const settingsPaneWidth = 380.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.xxl,
+              vertical: AppSpacing.xl,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _TitleBlock(
+                  title: title,
+                  description: description,
+                  onBack: onBack,
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                child,
+              ],
+            ),
+          ),
+        ),
+        const VerticalDivider(width: 1),
+        SizedBox(
+          width: settingsPaneWidth,
+          child: _SettingsPane(settings: settings, action: action),
+        ),
+      ],
+    );
+  }
+}
+
+class _TitleBlock extends StatelessWidget {
+  const _TitleBlock({required this.title, this.description, this.onBack});
+
+  final String title;
+  final String? description;
+  final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
 
-    // Title and form share one centred column so their edges line up.
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.xxl,
-        vertical: AppSpacing.xl,
-      ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: _maxContentWidth),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // A small "← Tools" link above the title keeps the title on
-              // the same edge as the form below it.
-              Align(
-                alignment: Alignment.centerLeft,
-                // Shift by the button's padding so the arrow sits on the
-                // title's edge.
-                child: Transform.translate(
-                  offset: const Offset(-AppSpacing.sm, 0),
-                  child: TextButton.icon(
-                    onPressed: onBack,
-                    icon: const Icon(Icons.arrow_back, size: 16),
-                    label: Text(context.l10n.navigationTools),
-                    style: TextButton.styleFrom(
-                      foregroundColor: colors.onSurfaceVariant,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.sm,
-                      ),
-                      minimumSize: const Size(0, 28),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // A "← Tools" link above the title, at the normal button size.
+        // Shifted by the theme's button padding so the arrow sits on the
+        // title's edge.
+        Transform.translate(
+          offset: const Offset(-AppSpacing.md, 0),
+          child: TextButton.icon(
+            onPressed: onBack,
+            icon: const Icon(Icons.arrow_back, size: 18),
+            label: Text(context.l10n.navigationTools),
+            style: TextButton.styleFrom(
+              foregroundColor: colors.onSurfaceVariant,
+            ),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Text(
+          title,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        if (description != null) ...[
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            description!,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: colors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _SettingsPane extends StatelessWidget {
+  const _SettingsPane({required this.settings, required this.action});
+
+  final List<Widget> settings;
+  final Widget? action;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+
+    return ColoredBox(
+      color: colors.surfaceContainerLowest,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: settings.isEmpty
+                ? const _SettingsEmptyState()
+                : SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.xl,
+                      vertical: AppSpacing.lg,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        for (final (index, section) in settings.indexed) ...[
+                          if (index > 0)
+                            const Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: AppSpacing.lg,
+                              ),
+                              child: Divider(),
+                            ),
+                          section,
+                        ],
+                      ],
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                title,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              if (description != null) ...[
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  description!,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: colors.onSurfaceVariant,
-                  ),
-                ),
-              ],
-              const SizedBox(height: AppSpacing.xl),
-              child,
-            ],
           ),
+          if (action != null) ...[
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              child: action,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _SettingsEmptyState extends StatelessWidget {
+  const _SettingsEmptyState();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final l10n = context.l10n;
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.xxl),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.tune, size: 32, color: colors.outline),
+            const SizedBox(height: AppSpacing.md),
+            Text(
+              l10n.toolsSettingsEmptyTitle,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xs),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 240),
+              child: Text(
+                l10n.toolsSettingsEmpty,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: colors.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

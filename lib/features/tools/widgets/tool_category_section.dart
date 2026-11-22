@@ -2,6 +2,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 import 'package:velin/features/tools/tools.dart';
 
+/// One category of the Tools page as a column: a small heading over a
+/// hairline, then its tools as rows.
 class ToolCategorySection extends StatelessWidget {
   const ToolCategorySection({
     super.key,
@@ -23,54 +25,28 @@ class ToolCategorySection extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacing.xl),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(
-                category.label(context),
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Text(
-                '${tools.length}',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+          child: Text(
+            category.label(context).toUpperCase(),
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.8,
+            ),
           ),
-          const SizedBox(height: AppSpacing.md),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final width = constraints.maxWidth;
-              const minCardWidth = 280.0;
-              final columns = (width / minCardWidth).floor().clamp(1, 4);
-              const cardGap = AppSpacing.md;
-              final itemWidth = (width - (cardGap * (columns - 1))) / columns;
-
-              return Wrap(
-                spacing: cardGap,
-                runSpacing: cardGap,
-                children: [
-                  for (final tool in tools)
-                    SizedBox(
-                      width: itemWidth,
-                      child: ToolCard(tool: tool, onTap: () => onToolTap(tool)),
-                    ),
-                ],
-              );
-            },
-          ),
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        const Divider(),
+        const SizedBox(height: AppSpacing.sm),
+        for (final tool in tools) ...[
+          ToolCard(tool: tool, onTap: () => onToolTap(tool)),
+          const SizedBox(height: AppSpacing.xxs),
         ],
-      ),
+      ],
     );
   }
 }

@@ -1,80 +1,56 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:velin/features/tools/tools.dart';
-import 'package:velin/shared/extensions/extensions.dart';
 
 import '../../../helpers/helpers.dart';
 
 void main() {
   group('ToolsDesktopLayout', () {
+    Future<void> pumpLayout(
+      WidgetTester tester, {
+      ValueChanged<ToolDefinition>? onToolTap,
+    }) async {
+      await setViewSize(tester, const Size(1400, 1000));
+      addTearDown(() => resetViewSize(tester));
+      await pumpApp(tester, ToolsDesktopLayout(onToolTap: onToolTap ?? (_) {}));
+    }
+
     testWidgets('renders all tool categories by default', (tester) async {
-      await pumpApp(tester, ToolsDesktopLayout(onToolTap: (_) {}));
+      await pumpLayout(tester);
 
       expect(
         find.byType(ToolCategorySection),
         findsNWidgets(ToolCategory.values.length),
       );
+      expect(find.byType(ToolCard), findsNWidgets(ToolRegistry.all.length));
     });
 
-    testWidgets('filters tools when a category is selected', (tester) async {
-      await pumpApp(tester, ToolsDesktopLayout(onToolTap: (_) {}));
+    testWidgets('search narrows the list to matching tools', (tester) async {
+      await pumpLayout(tester);
 
-      final context = tester.element(find.byType(ToolsDesktopLayout));
-      final filter = find.byType(ToolCategoryFilter);
-
-      await tester.tap(
-        find.descendant(
-          of: filter,
-          matching: find.text(context.l10n.toolsCategoryEdit),
-        ),
-      );
+      await tester.enterText(find.byType(TextField), 'merge');
       await tester.pump();
 
+      final context = tester.element(find.byType(ToolsDesktopLayout));
+      expect(find.byType(ToolCard), findsOneWidget);
+      expect(find.text(ToolRegistry.mergePdf.title(context)), findsOneWidget);
       expect(find.byType(ToolCategorySection), findsOneWidget);
-
-      final section = tester.widget<ToolCategorySection>(
-        find.byType(ToolCategorySection),
-      );
-
-      expect(section.category, ToolCategory.edit);
     });
 
-    testWidgets('restores all categories when All is selected', (tester) async {
-      await pumpApp(tester, ToolsDesktopLayout(onToolTap: (_) {}));
+    testWidgets('search without matches says so', (tester) async {
+      await pumpLayout(tester);
 
-      final context = tester.element(find.byType(ToolsDesktopLayout));
-      final filter = find.byType(ToolCategoryFilter);
-
-      await tester.tap(
-        find.descendant(
-          of: filter,
-          matching: find.text(context.l10n.toolsCategoryEdit),
-        ),
-      );
+      await tester.enterText(find.byType(TextField), 'nothing-like-this');
       await tester.pump();
 
-      expect(find.byType(ToolCategorySection), findsOneWidget);
-
-      await tester.tap(
-        find.descendant(
-          of: filter,
-          matching: find.text(context.l10n.toolsCategoryAll),
-        ),
-      );
-      await tester.pump();
-
-      expect(
-        find.byType(ToolCategorySection),
-        findsNWidgets(ToolCategory.values.length),
-      );
+      expect(find.byType(ToolCard), findsNothing);
+      expect(find.text('No tools match "nothing-like-this".'), findsOneWidget);
     });
 
     testWidgets('forwards the tapped tool', (tester) async {
       ToolDefinition? tappedTool;
 
-      await pumpApp(
-        tester,
-        ToolsDesktopLayout(onToolTap: (tool) => tappedTool = tool),
-      );
+      await pumpLayout(tester, onToolTap: (tool) => tappedTool = tool);
 
       final context = tester.element(find.byType(ToolsDesktopLayout));
       final tool = ToolRegistry.mergePdf;

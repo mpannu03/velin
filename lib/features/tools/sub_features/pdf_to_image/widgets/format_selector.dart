@@ -20,12 +20,12 @@ class FormatSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SegmentedButton<PdfImageFormat>(
-          showSelectedIcon: true,
+          showSelectedIcon: false,
+          expandedInsets: EdgeInsets.zero,
           segments: [
             for (final format in PdfImageFormat.values)
               ButtonSegment(
                 value: format,
-                icon: Icon(_iconFor(format), size: 18),
                 label: Text(_labelFor(context, format)),
               ),
           ],
@@ -47,14 +47,6 @@ class FormatSelector extends StatelessWidget {
       PdfImageFormat.png => l10n.toolsPdfToImageFormatPng,
       PdfImageFormat.jpeg => l10n.toolsPdfToImageFormatJpeg,
       PdfImageFormat.webp => l10n.toolsPdfToImageFormatWebp,
-    };
-  }
-
-  IconData _iconFor(PdfImageFormat format) {
-    return switch (format) {
-      PdfImageFormat.png => Icons.image_outlined,
-      PdfImageFormat.jpeg => Icons.photo_outlined,
-      PdfImageFormat.webp => Icons.data_object,
     };
   }
 }
