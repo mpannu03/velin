@@ -465,7 +465,12 @@
     "description": "Label for the Security category."
   },
 
-  "toolsSettingsEmpty": "Add a file to see the options.",
+  "toolsSettingsEmptyTitle": "No options yet",
+  "@toolsSettingsEmptyTitle": {
+    "description": "Heading shown in a tool's settings pane before a file is chosen."
+  },
+
+  "toolsSettingsEmpty": "Add a file and this tool's options will appear here.",
   "@toolsSettingsEmpty": {
     "description": "Shown in a tool's settings pane before a file is chosen."
   },

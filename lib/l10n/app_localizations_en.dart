@@ -296,7 +296,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolsCategorySecurity => 'Security';
 
   @override
-  String get toolsSettingsEmpty => 'Add a file to see the options.';
+  String get toolsSettingsEmptyTitle => 'No options yet';
+
+  @override
+  String get toolsSettingsEmpty =>
+      'Add a file and this tool\'s options will appear here.';
 
   @override
   String get toolsSearchHint => 'Find a tool…';
