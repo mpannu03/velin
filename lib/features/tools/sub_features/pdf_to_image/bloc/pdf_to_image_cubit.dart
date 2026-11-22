@@ -15,18 +15,24 @@ import 'pdf_to_image_state.dart';
 class PdfToImageCubit extends Cubit<PdfToImageState>
     with ToolTaskRunner<PdfToImageState> {
   PdfToImageCubit({
-    required this.filePicker,
+    required this._filePicker,
     required this._pdfToImageEngine,
-    required this.taskManager,
-    required this.appEffectController,
+    required this._taskManager,
+    required this._appEffectController,
   }) : super(const PdfToImageState());
 
+  final DocumentFilePicker _filePicker;
+  final TaskManager _taskManager;
+  final AppEffectController _appEffectController;
+
   @override
-  final DocumentFilePicker filePicker;
+  DocumentFilePicker get filePicker => _filePicker;
+
   @override
-  final TaskManager taskManager;
+  TaskManager get taskManager => _taskManager;
+
   @override
-  final AppEffectController appEffectController;
+  AppEffectController get appEffectController => _appEffectController;
 
   final PdfToImageEngine _pdfToImageEngine;
 

@@ -15,10 +15,10 @@ import 'image_to_pdf_state.dart';
 class ImageToPdfCubit extends Cubit<ImageToPdfState>
     with ToolTaskRunner<ImageToPdfState> {
   ImageToPdfCubit({
-    required this.filePicker,
+    required this._filePicker,
     required this._imageToPdfEngine,
-    required this.taskManager,
-    required this.appEffectController,
+    required this._taskManager,
+    required this._appEffectController,
   }) : super(const ImageToPdfState());
 
   /// Image formats `ImageToPdfEngine` can decode.
@@ -32,12 +32,18 @@ class ImageToPdfCubit extends Cubit<ImageToPdfState>
     'tiff',
   ];
 
+  final DocumentFilePicker _filePicker;
+  final TaskManager _taskManager;
+  final AppEffectController _appEffectController;
+
   @override
-  final DocumentFilePicker filePicker;
+  DocumentFilePicker get filePicker => _filePicker;
+
   @override
-  final TaskManager taskManager;
+  TaskManager get taskManager => _taskManager;
+
   @override
-  final AppEffectController appEffectController;
+  AppEffectController get appEffectController => _appEffectController;
 
   final ImageToPdfEngine _imageToPdfEngine;
 
