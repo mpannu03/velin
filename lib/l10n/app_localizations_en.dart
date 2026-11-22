@@ -52,22 +52,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTitleEmpty => 'Open your first document';
 
   @override
-  String get homeTitle => 'Pick up where you left off';
-
-  @override
   String get homeSubtitleEmpty =>
       'Open a PDF or drop one on this window. Velin remembers your place on this device.';
-
-  @override
-  String homeSubtitle(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count recent documents',
-      one: '1 recent document',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get homeOpenDocument => 'Open…';
@@ -79,36 +65,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeBrowseTools => 'Browse tools';
 
   @override
-  String get homeContinueReading => 'Continue reading';
+  String get homeJumpBackIn => 'Jump back in';
 
   @override
-  String get homeResume => 'Resume';
+  String get homeColumnFolder => 'Folder';
 
   @override
-  String get homeLibrary => 'Library';
+  String get homeQuickTools => 'Quick tools';
 
   @override
-  String get homeStatDocuments => 'Documents';
+  String get homeAllTools => 'All tools';
 
   @override
-  String get homeStatPagesLeft => 'Pages left';
-
-  @override
-  String homeStatPagesLeftValue(int remaining, int total) {
-    return '$remaining of $total';
-  }
-
-  @override
-  String get homeStatFinished => 'Finished';
+  String get homeAllDocuments => 'All documents';
 
   @override
   String get homeRecent => 'Recent';
-
-  @override
-  String get homeListView => 'List view';
-
-  @override
-  String get homeGridView => 'Grid view';
 
   @override
   String get homeSearchHint => 'Search by name or folder…';
@@ -126,12 +98,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String homeNoMatches(String query) {
     return 'No matches for \"$query\".';
   }
-
-  @override
-  String get homeEmptyTitle => 'No recent documents yet';
-
-  @override
-  String get homeEmptyMessage => 'Documents you open show up here.';
 
   @override
   String homePageProgress(int current, int total) {
@@ -336,7 +302,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolsCategorySecurity => 'Security';
 
   @override
-  String get toolsCategoryAll => 'All';
+  String get toolsSettingsEmptyTitle => 'No options yet';
+
+  @override
+  String get toolsSettingsEmpty =>
+      'Add a file and this tool\'s options will appear here.';
+
+  @override
+  String get toolsSearchHint => 'Find a tool…';
+
+  @override
+  String toolsNoMatches(String query) {
+    return 'No tools match \"$query\".';
+  }
 
   @override
   String get toolsIntro =>
@@ -411,15 +389,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolsChooseOutputFolder => 'Choose an output folder';
 
   @override
-  String get toolsOutputPathHint =>
-      'Select where the output files should be saved.';
-
-  @override
-  String toolsWillSaveAs(String path) {
-    return 'Will save as: $path';
-  }
-
-  @override
   String get toolsMergeButton => 'Merge PDF';
 
   @override
@@ -461,6 +430,37 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String toolsMergePageSelectionInvalid(String file) {
     return 'Check the page selection for $file.';
+  }
+
+  @override
+  String toolsPreviewPageCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pages',
+      one: '1 page',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String toolsPreviewMorePages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '+$count more pages',
+      one: '+1 more page',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get toolsPreviewUnavailable =>
+      'No preview for this file. It may be password protected.';
+
+  @override
+  String toolsPreviewPageLabel(int page) {
+    return 'Page $page';
   }
 
   @override

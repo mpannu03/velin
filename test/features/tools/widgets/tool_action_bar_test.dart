@@ -72,7 +72,7 @@ void main() {
       expect(actionCalled, isTrue);
     });
 
-    testWidgets('shows outlined button when action is unavailable', (
+    testWidgets('keeps a muted filled button when action is unavailable', (
       tester,
     ) async {
       var actionCalled = false;
@@ -91,8 +91,10 @@ void main() {
       );
 
       expect(find.text('Run'), findsOneWidget);
-      expect(find.byType(OutlinedButton), findsOneWidget);
-      expect(find.byType(FilledButton), findsNothing);
+      // Same button, toned down, so the bar does not jump when the action
+      // becomes available.
+      expect(find.byType(FilledButton), findsOneWidget);
+      expect(find.byType(OutlinedButton), findsNothing);
 
       await tester.tap(find.text('Run'));
       await tester.pump();

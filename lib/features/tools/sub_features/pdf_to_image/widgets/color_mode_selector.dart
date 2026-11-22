@@ -17,16 +17,15 @@ class ColorModeSelector extends StatelessWidget {
     final l10n = context.l10n;
 
     return SegmentedButton<PdfImageColorMode>(
-      showSelectedIcon: true,
+      showSelectedIcon: false,
+      expandedInsets: EdgeInsets.zero,
       segments: [
         ButtonSegment(
           value: PdfImageColorMode.color,
-          icon: const Icon(Icons.palette_outlined, size: 18),
           label: Text(l10n.toolsPdfToImageColorModeColor),
         ),
         ButtonSegment(
           value: PdfImageColorMode.grayscale,
-          icon: const Icon(Icons.gradient_outlined, size: 18),
           label: Text(l10n.toolsPdfToImageColorModeGreyscale),
         ),
       ],

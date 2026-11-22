@@ -22,7 +22,9 @@ void main() {
       expect(find.byType(Text), findsNothing);
     });
 
-    testWidgets('renders category label and tool count', (tester) async {
+    testWidgets('renders the category label as a small capitals heading', (
+      tester,
+    ) async {
       final tools = [
         _createTool(ToolId.mergePdf),
         _createTool(ToolId.splitPdf),
@@ -40,8 +42,10 @@ void main() {
 
       final context = tester.element(find.byType(ToolCategorySection));
 
-      expect(find.text(ToolCategory.edit.label(context)), findsOneWidget);
-      expect(find.text('3'), findsOneWidget);
+      expect(
+        find.text(ToolCategory.edit.label(context).toUpperCase()),
+        findsOneWidget,
+      );
     });
 
     testWidgets('renders one ToolCard for each tool', (tester) async {
@@ -125,7 +129,6 @@ void main() {
       );
 
       expect(find.byType(ToolCard), findsOneWidget);
-      expect(find.text('1'), findsOneWidget);
     });
   });
 }

@@ -23,24 +23,19 @@ class PageSizeSelector extends StatelessWidget {
       children: [
         SegmentedButton<ImageToPdfPageSize>(
           key: const ValueKey('image-to-pdf-page-size'),
-          showSelectedIcon: true,
+          showSelectedIcon: false,
+          expandedInsets: EdgeInsets.zero,
           segments: [
             ButtonSegment(
               value: ImageToPdfPageSize.auto,
-              icon: const Icon(
-                Icons.photo_size_select_actual_outlined,
-                size: 18,
-              ),
               label: Text(l10n.toolsImageToPdfPageSizeAuto),
             ),
             ButtonSegment(
               value: ImageToPdfPageSize.a4,
-              icon: const Icon(Icons.description_outlined, size: 18),
               label: Text(l10n.toolsImageToPdfPageSizeA4),
             ),
             ButtonSegment(
               value: ImageToPdfPageSize.letter,
-              icon: const Icon(Icons.description_outlined, size: 18),
               label: Text(l10n.toolsImageToPdfPageSizeLetter),
             ),
           ],

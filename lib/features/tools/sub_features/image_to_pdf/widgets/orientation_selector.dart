@@ -23,21 +23,19 @@ class OrientationSelector extends StatelessWidget {
       children: [
         SegmentedButton<ImageToPdfOrientation>(
           key: const ValueKey('image-to-pdf-orientation'),
-          showSelectedIcon: true,
+          showSelectedIcon: false,
+          expandedInsets: EdgeInsets.zero,
           segments: [
             ButtonSegment(
               value: ImageToPdfOrientation.auto,
-              icon: const Icon(Icons.auto_awesome_outlined, size: 18),
               label: Text(l10n.toolsImageToPdfOrientationAuto),
             ),
             ButtonSegment(
               value: ImageToPdfOrientation.portrait,
-              icon: const Icon(Icons.stay_current_portrait_outlined, size: 18),
               label: Text(l10n.toolsImageToPdfOrientationPortrait),
             ),
             ButtonSegment(
               value: ImageToPdfOrientation.landscape,
-              icon: const Icon(Icons.stay_current_landscape_outlined, size: 18),
               label: Text(l10n.toolsImageToPdfOrientationLandscape),
             ),
           ],

@@ -135,10 +135,51 @@ Page<void> _toolPage({required LocalKey key, required Widget child}) {
       key: key,
       child: child,
       transitionDuration: const Duration(milliseconds: 150),
-      reverseTransitionDuration: const Duration(milliseconds: 150),
+      reverseTransitionDuration: const Duration(milliseconds: 100),
       transitionsBuilder: (_, animation, _, child) =>
-          FadeTransition(opacity: animation, child: child),
+          _PageEntranceTransition(animation: animation, child: child),
     );
   }
   return MaterialPage(key: key, child: child);
+}
+
+/// A desktop page entrance: the page below is covered at once, and the new
+/// page's content fades in while rising a few pixels. Going back fades the
+/// page out quickly over the one below.
+///
+/// Never blends the two pages' content, which reads as a blur on desktop.
+class _PageEntranceTransition extends StatelessWidget {
+  const _PageEntranceTransition({required this.animation, required this.child});
+
+  final Animation<double> animation;
+  final Widget child;
+
+  static const _rise = 8.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final background = Theme.of(context).scaffoldBackgroundColor;
+
+    return AnimatedBuilder(
+      animation: animation,
+      child: child,
+      builder: (context, child) {
+        if (animation.status == AnimationStatus.reverse) {
+          return Opacity(opacity: animation.value, child: child);
+        }
+
+        final t = Curves.easeOutCubic.transform(animation.value);
+        return ColoredBox(
+          color: background,
+          child: Opacity(
+            opacity: t,
+            child: Transform.translate(
+              offset: Offset(0, (1 - t) * _rise),
+              child: child,
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

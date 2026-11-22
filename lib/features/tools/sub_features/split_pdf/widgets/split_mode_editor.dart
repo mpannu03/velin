@@ -38,21 +38,19 @@ class SplitModeEditor extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SegmentedButton<SplitPdfMode>(
-          showSelectedIcon: true,
+          showSelectedIcon: false,
+          expandedInsets: EdgeInsets.zero,
           segments: [
             ButtonSegment(
               value: SplitPdfMode.byPageCount,
-              icon: const Icon(Icons.numbers_outlined, size: 18),
               label: Text(l10n.toolsSplitModeByPageCount),
             ),
             ButtonSegment(
               value: SplitPdfMode.bySelection,
-              icon: const Icon(Icons.tune_outlined, size: 18),
               label: Text(l10n.toolsSplitModeBySelection),
             ),
             ButtonSegment(
               value: SplitPdfMode.extractAllPages,
-              icon: const Icon(Icons.content_copy_outlined, size: 18),
               label: Text(l10n.toolsSplitModeExtractAll),
             ),
           ],

@@ -23,12 +23,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeOpenRequested>(_onOpenRequested);
   }
 
+  /// How many recent documents Home lists: the covers plus the table.
+  static const recentLimit = 100;
+
   final RecentDocumentService _recentDocumentService;
   final DocumentService _documentService;
   final AppEffectController _appEffectController;
 
   Future<void> _onStarted(HomeStarted event, Emitter<HomeState> emit) async {
-    final data = _recentDocumentService.watchRecent(limit: 12);
+    final data = _recentDocumentService.watchRecent(limit: recentLimit);
 
     await emit.onEach(
       data,
