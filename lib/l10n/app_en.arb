@@ -101,9 +101,19 @@
     "description": "Column heading: the folder a recent document is in."
   },
 
-  "homeEarlier": "Earlier",
-  "@homeEarlier": {
-    "description": "Heading of the table of recent documents older than the ones shown as covers."
+  "homeQuickTools": "Quick tools",
+  "@homeQuickTools": {
+    "description": "Heading of the row of common PDF tools on the home page."
+  },
+
+  "homeAllTools": "All tools",
+  "@homeAllTools": {
+    "description": "Link next to the quick tools heading that opens the full Tools page."
+  },
+
+  "homeAllDocuments": "All documents",
+  "@homeAllDocuments": {
+    "description": "Heading of the table listing every recently opened document."
   },
 
   "homeRecent": "Recent",

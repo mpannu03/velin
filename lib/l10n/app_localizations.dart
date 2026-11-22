@@ -214,11 +214,23 @@ abstract class AppLocalizations {
   /// **'Folder'**
   String get homeColumnFolder;
 
-  /// Heading of the table of recent documents older than the ones shown as covers.
+  /// Heading of the row of common PDF tools on the home page.
   ///
   /// In en, this message translates to:
-  /// **'Earlier'**
-  String get homeEarlier;
+  /// **'Quick tools'**
+  String get homeQuickTools;
+
+  /// Link next to the quick tools heading that opens the full Tools page.
+  ///
+  /// In en, this message translates to:
+  /// **'All tools'**
+  String get homeAllTools;
+
+  /// Heading of the table listing every recently opened document.
+  ///
+  /// In en, this message translates to:
+  /// **'All documents'**
+  String get homeAllDocuments;
 
   /// Heading of the recent documents section.
   ///

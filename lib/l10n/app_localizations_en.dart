@@ -71,7 +71,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeColumnFolder => 'Folder';
 
   @override
-  String get homeEarlier => 'Earlier';
+  String get homeQuickTools => 'Quick tools';
+
+  @override
+  String get homeAllTools => 'All tools';
+
+  @override
+  String get homeAllDocuments => 'All documents';
 
   @override
   String get homeRecent => 'Recent';

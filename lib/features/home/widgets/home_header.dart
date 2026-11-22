@@ -2,21 +2,24 @@ import 'package:material_ui/material_ui.dart';
 import 'package:velin/app/theme/theme.dart';
 import 'package:velin/shared/extensions/extensions.dart';
 
-/// A section heading with the Home actions on the right: go to the tools
-/// or open a document.
+/// A section heading with the Home actions on the right: open a document
+/// and, optionally, go to the tools.
 class HomeHeader extends StatelessWidget {
   const HomeHeader({
     required this.title,
     required this.isOpening,
     required this.onOpenDocument,
-    required this.onBrowseTools,
+    this.onBrowseTools,
     super.key,
   });
 
   final String title;
   final bool isOpening;
   final VoidCallback onOpenDocument;
-  final VoidCallback onBrowseTools;
+
+  /// Shows a "Browse tools" button when set; left out when the tools are
+  /// already on the page.
+  final VoidCallback? onBrowseTools;
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +28,14 @@ class HomeHeader extends StatelessWidget {
     return Row(
       children: [
         Expanded(child: HomeSectionTitle(title)),
-        TextButton.icon(
-          onPressed: onBrowseTools,
-          icon: const Icon(Icons.build_outlined, size: 18),
-          label: Text(l10n.homeBrowseTools),
-        ),
-        const SizedBox(width: AppSpacing.sm),
+        if (onBrowseTools != null) ...[
+          TextButton.icon(
+            onPressed: onBrowseTools,
+            icon: const Icon(Icons.build_outlined, size: 18),
+            label: Text(l10n.homeBrowseTools),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+        ],
         HomeOpenButton(isOpening: isOpening, onPressed: onOpenDocument),
       ],
     );
