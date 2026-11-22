@@ -72,6 +72,23 @@ jobs:
       - name: Build
         run: flutter build ${{ matrix.target }} --debug
 
+      # flutter test does not bundle native assets on Linux and macOS (on
+      # Windows the library is found on its own), so point pdfrx at the
+      # pdfium library the build above just bundled into the app.
+      - name: Use the app's pdfium for tests
+        if: runner.os != 'Windows'
+        run: |
+          lib=$(find build -type f \( -name 'libpdfium.so' -o -name 'libpdfium.dylib' -o -name 'pdfium' \) | head -n 1)
+
+          if [ -z "$lib" ]; then
+            echo "::error::No pdfium library in the build output. Candidates:"
+            find build -iname '*pdfium*' | head -n 20
+            exit 1
+          fi
+
+          echo "Using $lib"
+          echo "PDFIUM_PATH=$PWD/$lib" >> "$GITHUB_ENV"
+
       # Only the engine tests carry the pdfium tag. Pointing flutter test at
       # test/engine keeps it from compiling the whole suite to find them.
       - name: Engine tests against native pdfium
