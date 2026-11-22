@@ -784,18 +784,6 @@ abstract class AppLocalizations {
   /// **'Choose an output folder'**
   String get toolsChooseOutputFolder;
 
-  /// Helper text shown when no output folder is selected.
-  ///
-  /// In en, this message translates to:
-  /// **'Select where the output files should be saved.'**
-  String get toolsOutputPathHint;
-
-  /// Shows the full path of the file that will be created.
-  ///
-  /// In en, this message translates to:
-  /// **'Will save as: {path}'**
-  String toolsWillSaveAs(String path);
-
   /// Label for the primary merge action button.
   ///
   /// In en, this message translates to:

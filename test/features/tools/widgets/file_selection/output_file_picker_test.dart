@@ -111,7 +111,7 @@ void main() {
       );
 
       expect(find.text('Choose an output folder'), findsOneWidget);
-      expect(find.byIcon(Icons.folder_open_outlined), findsNWidgets(2));
+      expect(find.byIcon(Icons.folder_outlined), findsOneWidget);
     });
 
     testWidgets('shows directory when selected', (tester) async {
@@ -167,45 +167,7 @@ void main() {
       expect(callCount, 1);
     });
 
-    testWidgets('shows save-as preview when directory and filename exist', (
-      tester,
-    ) async {
-      await pumpApp(
-        tester,
-        OutputFilePicker(
-          directoryPath: '/documents/output',
-          fileName: 'merged.pdf',
-          onChooseFolder: () {},
-        ),
-      );
-
-      expect(
-        find.text('Will save as: /documents/output/merged.pdf'),
-        findsOneWidget,
-      );
-    });
-
-    testWidgets('normalizes directory separators in save-as preview', (
-      tester,
-    ) async {
-      await pumpApp(
-        tester,
-        OutputFilePicker(
-          directoryPath: r'C:\Documents\Output',
-          fileName: 'merged.pdf',
-          onChooseFolder: () {},
-        ),
-      );
-
-      expect(
-        find.text('Will save as: C:/Documents/Output/merged.pdf'),
-        findsOneWidget,
-      );
-    });
-
-    testWidgets('shows directory instead of save-as preview without filename', (
-      tester,
-    ) async {
+    testWidgets('shows the selected directory', (tester) async {
       await pumpApp(
         tester,
         OutputFilePicker(
@@ -214,7 +176,7 @@ void main() {
         ),
       );
 
-      expect(find.text('/documents/output'), findsNWidgets(2));
+      expect(find.text('/documents/output'), findsOneWidget);
     });
 
     testWidgets('hides filename controls when showFileName is false', (
@@ -231,10 +193,6 @@ void main() {
       );
 
       expect(find.byKey(const ValueKey('output-file-name')), findsNothing);
-      expect(
-        find.text('Will save as: /documents/output/merged.pdf'),
-        findsNothing,
-      );
       expect(find.text('/documents/output'), findsOneWidget);
     });
 

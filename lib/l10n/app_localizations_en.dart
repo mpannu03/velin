@@ -389,15 +389,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get toolsChooseOutputFolder => 'Choose an output folder';
 
   @override
-  String get toolsOutputPathHint =>
-      'Select where the output files should be saved.';
-
-  @override
-  String toolsWillSaveAs(String path) {
-    return 'Will save as: $path';
-  }
-
-  @override
   String get toolsMergeButton => 'Merge PDF';
 
   @override

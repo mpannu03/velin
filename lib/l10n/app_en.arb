@@ -596,21 +596,6 @@
     "description": "Hint shown when no output folder has been selected yet."
   },
 
-  "toolsOutputPathHint": "Select where the output files should be saved.",
-  "@toolsOutputPathHint": {
-    "description": "Helper text shown when no output folder is selected."
-  },
-
-  "toolsWillSaveAs": "Will save as: {path}",
-  "@toolsWillSaveAs": {
-    "description": "Shows the full path of the file that will be created.",
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-
   "toolsMergeButton": "Merge PDF",
   "@toolsMergeButton": {
     "description": "Label for the primary merge action button."
