@@ -15,18 +15,24 @@ import 'rotate_pdf_state.dart';
 class RotatePdfCubit extends Cubit<RotatePdfState>
     with ToolTaskRunner<RotatePdfState> {
   RotatePdfCubit({
-    required this.filePicker,
+    required this._filePicker,
     required this._rotatePdfEngine,
-    required this.taskManager,
-    required this.appEffectController,
+    required this._taskManager,
+    required this._appEffectController,
   }) : super(const RotatePdfState());
 
+  final DocumentFilePicker _filePicker;
+  final TaskManager _taskManager;
+  final AppEffectController _appEffectController;
+
   @override
-  final DocumentFilePicker filePicker;
+  DocumentFilePicker get filePicker => _filePicker;
+
   @override
-  final TaskManager taskManager;
+  TaskManager get taskManager => _taskManager;
+
   @override
-  final AppEffectController appEffectController;
+  AppEffectController get appEffectController => _appEffectController;
 
   final RotatePdfEngine _rotatePdfEngine;
 

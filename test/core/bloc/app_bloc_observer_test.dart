@@ -5,6 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:logging/logging.dart';
 import 'package:velin/core/bloc/bloc.dart';
 
+// A throwaway cubit for this test only; it needs no file of its own.
+// ignore: prefer_file_naming_conventions
 class _FailingCubit extends Cubit<int> {
   _FailingCubit() : super(0);
 

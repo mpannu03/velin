@@ -62,7 +62,7 @@ jobs:
         run: iscc /DAppVersion=${{ needs.version.outputs.version }} packaging/windows/Velin.iss
 
       - name: Upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: windows-x64
           path: dist/*.exe
@@ -121,7 +121,7 @@ jobs:
             "dist/Velin-${{ needs.version.outputs.version }}-macos-${{ steps.arch.outputs.arch }}.dmg"
 
       - name: Upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: macos
           path: dist/*.dmg
@@ -222,7 +222,7 @@ jobs:
           dpkg-deb --build deb "dist/Velin-${VERSION}-linux-x86_64.deb"
 
       - name: Upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: linux-x64
           path: |
@@ -238,13 +238,13 @@ jobs:
 
     steps:
       - name: Download installers
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: dist
           merge-multiple: true
 
       - name: Create draft release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.ref_name }}
           name: Velin ${{ github.ref_name }}

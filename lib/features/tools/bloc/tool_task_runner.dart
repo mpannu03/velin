@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart' as p;
 import 'package:velin/app/effects/effects.dart';
@@ -19,8 +20,13 @@ export 'tool_task_handle.dart';
 /// Every method here handles its own errors and never throws, so cubits only
 /// describe *what* to do and *what to say*, not how to recover.
 mixin ToolTaskRunner<S> on Cubit<S> {
+  // Provided by each cubit from its own private, injected fields; only the
+  // mixin and the cubit use them.
+  @protected
   DocumentFilePicker get filePicker;
+  @protected
   TaskManager get taskManager;
+  @protected
   AppEffectController get appEffectController;
 
   /// Status, progress and cancellation of the tool's current task, for the
