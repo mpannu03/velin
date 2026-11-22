@@ -54,7 +54,7 @@ jobs:
             os: windows-latest
             target: windows
           - name: macOS
-            os: macos-14
+            os: macos-15
             target: macos
           - name: Linux
             os: ubuntu-22.04
