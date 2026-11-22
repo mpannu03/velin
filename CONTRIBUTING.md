@@ -12,9 +12,8 @@ Before making a significant change, please consider opening an issue first to di
 
 You will need:
 
-* Flutter
-* Dart
-* A supported desktop development environment
+* Flutter, at the version pinned in `pubspec.yaml` (`environment: flutter:`). CI and releases build with exactly that version, so using the same one locally avoids formatter and analyzer differences.
+* A desktop development environment for your platform (Visual Studio on Windows, Xcode on macOS, or the GTK build tools on Linux; `flutter doctor` lists what is missing).
 
 Check that Flutter is installed correctly:
 
@@ -33,6 +32,12 @@ Install dependencies:
 
 ```
 flutter pub get
+```
+
+Turn on the repository's git hooks (once per clone). The pre-commit hook refuses commits with unformatted Dart files, the same check CI runs:
+
+```
+git config core.hooksPath .githooks
 ```
 
 Run the application:
@@ -54,8 +59,10 @@ flutter analyze
 Run tests:
 
 ```
-flutter test
+flutter test --exclude-tags pdfium
 ```
+
+Tests tagged `pdfium` load the real native PDF libraries. Run them with `flutter test --tags pdfium test/engine`; CI runs them on Windows, macOS and Linux.
 
 Format the code:
 
@@ -261,6 +268,15 @@ In particular:
 
 Velin intentionally avoids unnecessary code generation and abstraction layers. New dependencies or architectural patterns should have a clear reason to exist.
 
+## Continuous Integration
+
+Every pull request runs the `CI` workflow:
+
+* **Checks**: formatting, `flutter analyze` and the unit and widget tests.
+* **Windows**, **macOS** and **Linux**: a debug build of the app on that platform and the `pdfium` engine tests against its native libraries.
+
+All of them must pass, and the branch must be up to date with `main`, before a pull request can be merged. Releases run the same workflow before building the installers.
+
 ## Pull Requests
 
 Before opening a pull request:
@@ -268,7 +284,7 @@ Before opening a pull request:
 1. Make sure your branch is based on the current `main` branch.
 2. Run `dart format .`.
 3. Run `flutter analyze`.
-4. Run `flutter test`.
+4. Run `flutter test --exclude-tags pdfium`.
 5. Verify the application manually when the change affects UI or runtime behavior.
 6. Keep the pull request focused on one logical change.
 

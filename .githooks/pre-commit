@@ -1,0 +1,22 @@
+#!/bin/sh
+# Refuses a commit whose staged Dart files are not formatted, the same check
+# CI runs. Enable once per clone:
+#
+#   git config core.hooksPath .githooks
+#
+# Fix with `dart format .` (or the files listed), then stage and commit again.
+
+files=$(git diff --cached --name-only --diff-filter=ACMR -- '*.dart')
+[ -z "$files" ] && exit 0
+
+# shellcheck disable=SC2086 # word splitting is wanted: one argument per file
+unformatted=$(dart format --output=none --show=changed $files 2>&1 | sed -n 's/^Changed //p')
+
+if [ -n "$unformatted" ]; then
+  echo "These staged files are not formatted:"
+  echo "$unformatted" | sed 's/^/  /'
+  echo
+  echo "Run: dart format $(echo "$unformatted" | tr '\n' ' ')"
+  echo "then stage the changes and commit again."
+  exit 1
+fi
