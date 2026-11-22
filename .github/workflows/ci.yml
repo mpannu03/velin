@@ -1,0 +1,119 @@
+name: CI
+
+# Runs on every pull request to main, and from the Publish workflow before a
+# release is built. main only changes through pull requests, which must be up
+# to date with main and pass here, so after a merge only the Checks job runs
+# again: it records main's coverage, the base Codecov compares pull requests
+# against.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A new push to a pull request replaces the run for the old one.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  checks:
+    name: Checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Lets the Codecov upload sign in with GitHub's OIDC token instead of a
+      # stored secret.
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Flutter
+        uses: ./.github/actions/setup-flutter
+
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: flutter analyze
+
+      # Tests that need the native pdfium binaries run per platform below.
+      - name: Test
+        run: flutter test --exclude-tags pdfium --coverage
+
+      # Informational only (see codecov.yml). Pull requests from forks get no
+      # OIDC token, so a failed upload never fails the job.
+      - name: Upload coverage
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage/lcov.info
+          use_oidc: true
+          fail_ci_if_error: false
+
+  # Every platform Velin ships on, on the same runners as the release builds:
+  # the app must compile there, and the PDF engines must work against that
+  # platform's native libraries. Add Android and iOS here when they ship.
+  platform:
+    name: ${{ matrix.name }}
+    # Already built and tested on the pull request that changed main.
+    if: github.event_name != 'push'
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            os: windows-latest
+            target: windows
+          - name: macOS
+            os: macos-15
+            target: macos
+          - name: Linux
+            os: ubuntu-22.04
+            target: linux
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Flutter
+        uses: ./.github/actions/setup-flutter
+        with:
+          linux-packages: desktop-file-utils
+
+      - name: Build
+        run: flutter build ${{ matrix.target }} --debug
+
+      # flutter test does not bundle native assets on Linux and macOS (on
+      # Windows the library is found on its own), so point pdfrx at the
+      # pdfium library the build above just bundled into the app.
+      - name: Use the app's pdfium for tests
+        if: runner.os != 'Windows'
+        run: |
+          lib=$(find build -type f \( -name 'libpdfium.so' -o -name 'libpdfium.dylib' -o -name 'pdfium' \) | head -n 1)
+
+          if [ -z "$lib" ]; then
+            echo "::error::No pdfium library in the build output. Candidates:"
+            find build -iname '*pdfium*' | head -n 20
+            exit 1
+          fi
+
+          echo "Using $lib"
+          echo "PDFIUM_PATH=$PWD/$lib" >> "$GITHUB_ENV"
+
+      # Only the engine tests carry the pdfium tag. Pointing flutter test at
+      # test/engine keeps it from compiling the whole suite to find them.
+      - name: Engine tests against native pdfium
+        run: flutter test --tags pdfium test/engine
+
+      - name: Validate desktop entry
+        if: matrix.target == 'linux'
+        run: desktop-file-validate packaging/linux/velin.desktop

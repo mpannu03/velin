@@ -28,7 +28,7 @@ Describe how the changes were tested.
 Examples:
 - `flutter test`
 - `flutter analyze`
-- Tested on Windows
+- Tested on Windows / macOS / Linux (say which)
 - Manually tested PDF opening, rendering, etc.
 
 ## Screenshots / Videos
@@ -38,6 +38,7 @@ Examples:
 ## Checklist
 
 - [ ] Code builds successfully
+- [ ] Formatted with `dart format` (the pre-commit hook checks this)
 - [ ] No new warnings or errors introduced
 - [ ] Code follows project style
 - [ ] Documentation updated if required

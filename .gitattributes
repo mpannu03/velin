@@ -1,0 +1,4 @@
+# Shell scripts must keep LF endings on every platform, or "#!/bin/sh"
+# breaks on checkouts with core.autocrlf (the Windows default).
+.githooks/* text eol=lf
+*.sh text eol=lf
