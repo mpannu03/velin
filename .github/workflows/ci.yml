@@ -1,10 +1,14 @@
 name: CI
 
 # Runs on every pull request to main, and from the Publish workflow before a
-# release is built. main itself needs no run of its own: it only changes
-# through pull requests, which must be up to date with main and pass here.
+# release is built. main only changes through pull requests, which must be up
+# to date with main and pass here, so after a merge only the Checks job runs
+# again: it records main's coverage, the base Codecov compares pull requests
+# against.
 on:
   pull_request:
+    branches: [main]
+  push:
     branches: [main]
   workflow_call:
   workflow_dispatch:
@@ -58,6 +62,8 @@ jobs:
   # platform's native libraries. Add Android and iOS here when they ship.
   platform:
     name: ${{ matrix.name }}
+    # Already built and tested on the pull request that changed main.
+    if: github.event_name != 'push'
     runs-on: ${{ matrix.os }}
 
     strategy:
