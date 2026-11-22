@@ -84,23 +84,21 @@ class _TitleBlock extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // A small "← Tools" link above the title. Shifted by the button's
-        // padding so the arrow sits on the title's edge.
+        // A "← Tools" link above the title, at the normal button size.
+        // Shifted by the theme's button padding so the arrow sits on the
+        // title's edge.
         Transform.translate(
-          offset: const Offset(-AppSpacing.sm, 0),
+          offset: const Offset(-AppSpacing.md, 0),
           child: TextButton.icon(
             onPressed: onBack,
-            icon: const Icon(Icons.arrow_back, size: 16),
+            icon: const Icon(Icons.arrow_back, size: 18),
             label: Text(context.l10n.navigationTools),
             style: TextButton.styleFrom(
               foregroundColor: colors.onSurfaceVariant,
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-              minimumSize: const Size(0, 28),
-              visualDensity: VisualDensity.compact,
             ),
           ),
         ),
-        const SizedBox(height: AppSpacing.xs),
+        const SizedBox(height: AppSpacing.sm),
         Text(
           title,
           style: theme.textTheme.titleLarge?.copyWith(
